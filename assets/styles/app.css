@@ -1,3 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-    background-color: skyblue;
+    font-family: 'AvantGardeITCbyBT-Book', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+ #block-block-32 h2, .bg-orange-fleche:hover {
+    background: url("../images/compte-ferme-fleche.png") #ff7e1e no-repeat 10px;
+}
+
+
+ .fond-menu {
+     background: url('../images/fond-menu.png') repeat-x;
+     width: 100%;
+     height: 51px;
+ }
+
+
+.pane-title {
+    background: url('../images/bg-line.png') no-repeat 0 bottom;
+     padding: 0 0 18px 0;
+    margin-bottom: 20px;
+    line-height: normal;
+}
+
+.custom-bg-slide {
+    background: url("../images/sliders/bg-slide.png");
+}
+
+.customer-bg-fleches {
+    width: 330px;
+    padding: 50px 30px 0 30px;
+    background: url('../images/sliders/fleches-recherche-slide.png') no-repeat;
+    height: 320px;
+}
+
+ .views-slideshow-pager-field-item {
+    background: url("../images/sliders/fond-slide-title.png");
+    cursor: pointer;
+     width: 220px;
+     height: 82px;
+}
+
+
+.en-savoir-plus {
+    position: absolute;
+    bottom: -160px;
+    left: 380px;
+    background-color: #f9a645;
+    background-image: linear-gradient(to bottom, #f9a645, #e59230);
+    border: 1px solid #fff;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    border-radius: 3px;
+    height: 31px;
+    margin-left: 10px;
+    color: #fff;
+    font-weight: normal;
+    width: 100px;
+    text-align: center;
+    line-height: 31px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.en-savoir-plus:hover {
+    background-image: linear-gradient(to bottom, #e59230, #f9a645);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.pane-block-22 {
+    background: url('../images/sliders/fleche-rempla-desc.png') no-repeat;
+}
+
+.pane-block-24 {
+    background: rebeccapurple url('../images/sliders/info.png') no-repeat;
+    background-size: cover;
+    padding-top: 20px;
+    padding-left: 65px;
+}
+
+.pane-block-25 {
+    background: rebeccapurple url('../images/sliders/parapluie.png') no-repeat;
+    background-size: cover;
+    padding-top: 20px;
+    padding-left: 65px;
 }

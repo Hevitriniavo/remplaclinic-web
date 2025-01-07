@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
+{% endblock %}
+
+{% block body %}
+
+    <section>
+        <section class="flex flex-row gap-20 px-16 py-4 custom-bg-slide">
+            <div class="flex flex-row">
+                <div>
+                    <ul class="flex flex-col gap-0 bg-[#68b8dc]">
+                        <li>
+                            <a href="/"
+                               class="flex flex-col delay-50 transition duration-300 views-slideshow-pager-field-item  bg-orange-fleche justify-center px-6 hover:pl-12">
+                                <span class="text-[#9e9e9e]">Je suis une</span>
+                                <span class="text-[16px] text-[#666666]">clinique</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/"
+                               class="flex flex-col delay-50 transition views-slideshow-pager-field-item  duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12">
+                                <span class="text-[#9e9e9e]">Je suis une</span>
+                                <span class="text-[16px] text-[#666666]">cabinet médical</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/"
+                               class="flex flex-col delay-50 transition views-slideshow-pager-field-item  duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12">
+                                <span class="text-[#9e9e9e]">Je suis une</span>
+                                <span class="text-[16px] text-[#666666]">remplaçant</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/"
+                               class="flex flex-col delay-50 transition views-slideshow-pager-field-item  duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12">
+                                <span class="text-[#9e9e9e]">Je recherche une</span>
+                                <span class="text-[16px] text-[#666666]">installation</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="relative">
+                    <img
+                            src="{{ asset('images/sliders/cabinet_0_0.png') }}"
+                            width="560"
+                            height="600"
+                            alt="Image d'un cabinet médical"
+                            class="block mx-auto  shadow-lg w-full h-full"
+                    />
+                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal  text-black px-10 py-14">
+                        <h2 class="text-[22px] ">
+                            <span class="text-[#68b8dc]">Un congé, une absence ?</span>
+                        </h2>
+                        <p class="mt-2 text-[14px]">Trouvez le bon médecin remplaçant.</p>
+                        <div class="flex items-end justify-end relative ">
+                            <button
+                                    class=" en-savoir-plus"
+                            >
+                                En savoir plus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="customer-bg-fleches bg-gradient-to-b from-gray-100 to-gray-200 max-w-lg mx-auto ">
+                <div class="text-center mb-5">
+                    <span class="text-2xl font-bold text-orange-500 block">7872</span>
+                    <span class="text-lg text-gray-600">remplaçants</span>
+                    <p class="text-sm text-gray-500 mt-2">disponibles immédiatement</p>
+                </div>
+
+                <form class="space-y-4 mt-5">
+                    <div class="flex items-center justify-center">
+                        <label class="w-full">
+                            <select class="w-full p-2 border border-gray-300 rounded-md bg-white text-base">
+                                <option value="All" selected="selected">Région</option>
+                                <option value="463">Alsace</option>
+                                <option value="464">Aquitaine</option>
+                                <option value="465">Auvergne</option>
+                                <option value="466">Basse-Normandie</option>
+                                <option value="467">Bourgogne</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-center">
+                        <label class="w-full">
+                            <select class="w-full p-2 border border-gray-300 rounded-md bg-white text-base">
+                                <option value="All" selected="selected">Spécialité</option>
+                                <option value="287">Anatomopathologie</option>
+                                <option value="268">Anesthésie-réanimation</option>
+                                <option value="288">Biologie médicale</option>
+                                <option value="269">Cardiologie</option>
+                                <option value="300">Chirurgie maxillo-faciale</option>
+                                <option value="292">Chirurgie plastique</option>
+                                <option value="276">Chirurgie vasculaire</option>
+                                <option value="275">Chirurgie viscérale</option>
+                                <option value="282">Dermatologie</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-center">
+                        <input
+                                type="submit"
+                                value="Rechercher"
+                                class="bg-orange-500 text-white font-bold py-2 px-4 rounded-md cursor-pointer hover:bg-orange-600 transition duration-300"
+                        />
+                    </div>
+                </form>
+            </div>
+
+
+        </section>
+
+        <section class="flex flex-row gap-40 p-6">
+            <div class="pane-block-22 flex-1 pl-40">
+                <h2 class="text-2xl font-semibold mb-4">
+                    <span class="text-blue-600">rempla</span>
+                    <span class="text-green-600">clinic</span>
+                </h2>
+                <p class="text-lg mb-2">Présent à vos côtés depuis 2009 avec :</p>
+                <p class="text-lg mb-2">
+                    Plus de <span class="font-semibold">200 cliniques partenaires</span> proposant des remplacements
+                    réguliers
+                </p>
+                <p class="text-lg mb-2">
+                    Plus de <span class="font-semibold">1200 cabinets médicaux</span> demandeurs de remplaçants
+                </p>
+                <p class="text-lg mb-4">
+                    Plus de <span class="font-semibold">300</span> <strong>offres de remplacements</strong> en temps
+                    réel
+                </p>
+            </div>
+
+            <div class="flex-1 flex justify-center items-center flex-col">
+                <p class="text-lg font-semibold mb-4">Quelques références</p>
+                <div>
+                    <img class="w-[300px] h-[200px] " src="{{ asset('images/sliders/clinea_new-bleu-rvb_002.jpg') }}"
+                         alt="Clinéa"/>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="flex flex-row  gap-10 px-20 pb-10">
+            <div class="bg-[#eceded] w-1/4 p-4">
+                <h2 class="text-[#666666] text-[15px] mb-4">
+                    Derniers remplacements publiés
+                </h2>
+
+                {% for i in 1..4 %}
+                    <div class="flex flex-row gap-3 mb-1 text-[#333333]">
+                        <img src="{{ asset('images/sliders/Mme-remplacement.png') }}" alt="Image de Myriam L.">
+                        <div>
+                            <div class="font-bold">Myriam L.</div>
+                            <div>Anesthésie-réanimation</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="w-1/4 bg-[#5bb7df]">
+                <h2 class="pane-block-24 p-[0_0_18px_0]  text-white text-[18px]">Infos utiles </h2>
+                <p class="text-white p-6">
+                    Que vous soyez remplacé ou remplaçant, pour un remplacement saisonnier ou régulier, retrouvez toutes
+                    les informations utiles selon votre situation…<br>
+                    <a href="/" class="text-[#333333] underline">En savoir plus…</a>
+                </p>
+            </div>
+
+            <div class="w-1/4 bg-[#5bb7df]">
+                <h2 class="pane-block-25 p-[0_0_18px_0]  text-white text-[18px]">Protégez-vous ! </h2>
+                <p class="text-white p-6">
+                    Quelles sont les assurances indispensables ? Sur quoi pouvez vous faire l’impasse.
+                    <br> Tout est expliqué ici…<br>
+                    Retrouvez les réponses de notre partenaire MACSF.
+                    <br>
+                    <a href="/" class="text-[#333333] underline">En savoir plus…</a>
+                </p>
+            </div>
+
+
+            <div class="w-1/4 bg-[#eceded] p-4">
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-[#666666] text-[15px] mb-4">Nos références </h2>
+                    <p>Merci pour toute l’aide que vous nous avez apportée</p>
+                    <div>
+                        <span class="text-[#9e9e9e]">Témoignage</span>
+                        <div>Directrice</div>
+                        <div>Clinique de l'Oseraie</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section></section>
+    </section>
+
+{% endblock %}
+
+
