@@ -1,0 +1,344 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
+{% endblock %}
+
+{% block body %}
+    <main class="flex flex-col justify-between items-start p-12 gap-4">
+        <h1 class="blue-span text-3xl">Comment ça marche ?</h1>
+        <section class="flex flex-row gap-6">
+            <article
+                    class="flex flex-col items-start gap-6"
+            >
+                <div class="flex flex-col items-start p-2 pb-6 bg gap-3">
+                    <h3 class="blue-span">Vos futures demandes de remplacant</h3>
+                    <div class="flex flex-col items-start text gap-4">
+                        <ul>
+                            <li>
+                                Vous représentez un établissement de santé ou un cabinet
+                                médical et vous recherchez un
+                                <strong>médecin remplaçant</strong> occasionnellement, de
+                                façon régulière ou un futur clilaborateur ?
+                            </li>
+                            <li>
+                                Vous souhaitez confier à RemplaClinic une ou plusieurs
+                                missions de recherche de
+                                <strong>médecins remplaçants</strong> au sein de votre
+                                établissement ou de votre cabinet ?
+                            </li>
+                        </ul>
+                        <ul>
+                            <li> RemplaClinic vous propose </li>
+                            <li>
+                                L’accès à une importante base de données d’internes et de
+                                <strong>médecins remplaçants</strong> à partir de vos critères
+                                de choix, spécialité et sous-spécialité(s)
+                            </li>
+                            <li>
+                                Un service de messagerie électronique avec l'envoi automatique
+                                de vos demandes aux potentiels
+                                <strong>médecins remplaçants</strong>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <strong
+                                >Pour avoir accès aux offres de médecins remplaçants
+                                    correspondant à vos critères :</strong
+                                >
+                            </li>
+                            <li>
+                                Vous vous inscrivez en ligne (une inscription par spécialité)
+                            </li>
+                            <li>
+                                Vous serez recontacté sous 24 heures par l’équipe de
+                                RemplaClinic afin d’établir le type d’abonnement qu’il vous
+                                faut
+                            </li>
+                        </ul>
+                        <p>
+                            Dès votre inscription validée, vous pourrez rechercher le
+                            meilleur profil correspondant à votre spécialité, émettre vos
+                            demandes, et suivre l’évolution de vos annonces par le biais
+                            d’un tableau de bord personnalisé. <br />
+                            RemplaClinic se charge d’envoyer vos demandes aux potentiels
+                            <strong>médecins remplaçants</strong> dont les critères
+                            correspondent.
+                            <br />
+                            Ils vous contacteront directement. <br />
+                        </p>
+                        <span class="blue-span mt-5">En cas d'urgence …</span>
+                       <ul>
+                           <li>
+                               Vous souhaitez qu'un de nos collaborateurs gère vos demandes de
+                               <strong>médecins remplaçants</strong> à votre place :
+                           </li>
+                       </ul>
+                        <strong>
+                            Il suffit d'appeler notre équipe au : <br />
+                            <span
+                                    class="reflection text-4xl font-bold blue-span"
+                                    data-text="06 69 05 33 00"
+                            >06 69 05 33 00</span
+                            >
+                            <br />
+                            <span class="mt-6">
+                                ou de remplir le
+                                <span class="blue-span"
+                                ><a href="/">formulaire de contact</a></span
+                                >
+                                . <br />
+                                et remplaclinic vous recontactera
+                            </span>
+                        </strong>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start p-2 pb-6 bg-with gap-3">
+                    <h3 class="blue-span">Je souhaite remplacer</h3>
+                    <div class="text">
+                        <p>Pour les remplaçants, c'est GRATUIT !</p>
+                        <ul>
+                            <li>
+                                Vous remplissez le formulaire d’inscription via un
+                                <strong>module rapide et complet</strong>
+                            </li>
+                            <li>
+                                Dès votre inscription prise en compte, vous recevrez
+                                <strong>en temps réel</strong> dans votre boite mail les
+                                demandes de <strong>remplacement médical</strong>
+                                correspondant à vos critères
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="text">
+                        <p>Les garanties de RemplaClinic</p>
+                        <ul>
+                            <li>
+                                os informations personnelles resteront
+                                <strong> strictement confidentielles</strong>
+                            </li>
+                            <li>
+                                RemplaClinic vérifiera votre statut d’interne ou de médecin
+                                avant la parution de votre profil sur le site
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p>
+                    <strong class="text"
+                    >Être présent sur RemplaClinic, c’est assurer l'efficacité
+                        optimale de vos recherches de remplaçants.</strong
+                    >
+                </p>
+            </article>
+            <article >
+                <aside class="bg-blue p-3 flex flex-col gap-4 items-center">
+                    <div class="text-white flex items-center flex-col">
+              <span>
+                <span class="text-3xl">7873</span
+                ><span class="text-xl">remplaçants</span></span
+              >
+                        <strong class="text-xl">disponiblesimmédiatement</strong>
+                    </div>
+                    <form class="flex flex-col gap-3 items-center w-60">
+                        <div class="flex flex-col gap-2">
+                            <div class="w-56">
+                                <label>
+                                    <select class="p-1 w-full inputShadow text">
+                                        <option value="All" selected="selected">Région</option>
+                                        <option value="463">Alsace</option>
+                                        <option value="464">Aquitaine</option>
+                                        <option value="465">Auvergne</option>
+                                        <option value="466">Basse-Normandie</option>
+                                        <option value="467">Bourgogne</option>
+                                        <option value="468">Bretagne</option>
+                                        <option value="469">Centre</option>
+                                        <option value="470">Champagne-Ardenne</option>
+                                        <option value="471">Corse</option>
+                                        <option value="504">Europe</option>
+                                        <option value="472">Franche-Comté</option>
+                                        <option value="485">Guadeloupe</option>
+                                        <option value="486">Guyane</option>
+                                        <option value="473">Haute-Normandie</option>
+                                        <option value="474">Ile-de-France</option>
+                                        <option value="487">La Réunion</option>
+                                        <option value="475">Languedoc-Roussillon</option>
+                                        <option value="476">Limousin</option>
+                                        <option value="477">Lorraine</option>
+                                        <option value="488">Martinique</option>
+                                        <option value="489">Mayotte</option>
+                                        <option value="478">Midi-Pyrénées</option>
+                                        <option value="479">Nord-Pas-de-Calais</option>
+                                        <option value="490">Nouvelle-Calédonie</option>
+                                        <option value="480">Pays de la Loire</option>
+                                        <option value="481">Picardie</option>
+                                        <option value="482">Poitou-Charentes</option>
+                                        <option value="491">Polynésie Française</option>
+                                        <option value="483">Provence-Alpes-Côte-d'Azur</option>
+                                        <option value="484">Rhône-Alpes</option>
+                                        <option value="492">
+                                            Terres Australes et Antarctiques
+                                        </option>
+                                        <option value="493">Wallis et Futuna</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="w-56">
+                                <label>
+                                    <select class="p-1 inputShadow w-full text">
+                                        <option value="All" selected="selected">Spécialité</option>
+                                        <option value="287">Anatomopathologie</option>
+                                        <option value="268">Anesthésie-réanimation</option>
+                                        <option value="288">Biologie médicale</option>
+                                        <option value="269">Cardiologie</option>
+                                        <option value="300">Chirurgie maxillo-faciale</option>
+                                        <option value="292">Chirurgie plastique</option>
+                                        <option value="276">Chirurgie vasculaire</option>
+                                        <option value="275">Chirurgie viscérale</option>
+                                        <option value="282">Dermatologie</option>
+                                        <option value="284">Endocrinologie-diabétologie</option>
+                                        <option value="289">Gériatrie</option>
+                                        <option value="272">Gynécologie - Obstétrique</option>
+                                        <option value="277">Hépato-Gastro-Enterologie</option>
+                                        <option value="296">Maladies infectieuses</option>
+                                        <option value="297">Médecine du travail</option>
+                                        <option value="285">Médecine générale</option>
+                                        <option value="286">Médecine interne</option>
+                                        <option value="273">Médecine nucléaire</option>
+                                        <option value="293">
+                                            Médecine physique et réadaptation
+                                        </option>
+                                        <option value="499">Médecine vasculaire</option>
+                                        <option value="281">Néphrologie</option>
+                                        <option value="279">Neurologie</option>
+                                        <option value="295">Oncologie</option>
+                                        <option value="278">Ophtalmologie</option>
+                                        <option value="290">ORL</option>
+                                        <option value="267">Orthopédie</option>
+                                        <option value="270">Pédiatrie</option>
+                                        <option value="283">Pneumologie</option>
+                                        <option value="280">Psychiatrie</option>
+                                        <option value="271">Radiologie</option>
+                                        <option value="294">Rhumatologie</option>
+                                        <option value="298">Santé publique</option>
+                                        <option value="301">
+                                            Soins de suite et de réadaptation
+                                        </option>
+                                        <option value="291">Stomatologie</option>
+                                        <option value="299">Toute spécialité</option>
+                                        <option value="274">Urologie</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="bgbouton pl-3 pr-3 p-1 text-xl text-white">
+                            <input type="submit" value="Rechercher" />
+                        </div>
+                    </form>
+                </aside>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <p>Quelques références</p>
+                            </div>
+
+                            <div class="relative w-[270px] h-[130px]">
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_0"
+                                        class="absolute top-0 left-0 hidden z-[6] opacity-0 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/clinea_new-bleu-rvb_002.jpg') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo Clinea"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_1"
+                                        class="absolute top-0 left-0 hidden z-[6] opacity-0 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/ramsay_logo.jpg') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo Ramsay"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_2"
+                                        class="absolute top-0 left-0 hidden z-[6] opacity-0 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/elsan_logo.png') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo Elsan"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_3"
+                                        class="absolute top-0 left-0 hidden z-[6] opacity-0 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/logo-inicea.jpg') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo Inicea"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_4"
+                                        class="absolute top-0 left-0 hidden z-[6] opacity-0 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/logo_c2s_.png') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo C2S"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                        id="views_slideshow_cycle_div_partenaires-block_1_5"
+                                        class="absolute top-0 left-0 block z-[7] opacity-100 w-[270px] h-[130px]"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img
+                                                src="{{ asset('images/macsf.png') }}"
+                                                class="w-[300px] h-[130px]"
+                                                alt="Logo MACSF"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="block-block-36" class="blue-bg flex flex-col gap-4 items-center w-72 text-white">
+                    <h2>Infos utiles</h2>
+
+                    <div class=" bg-blue p-3">
+                        <p>
+                            Que vous soyez remplacé ou remplaçant, pour un remplacement
+                            saisonnier ou régulier, retrouvez toutes les informations utiles
+                            selon votre situation…<br /><a href="/infos-utiles"
+                                                           class="text underline" >En savoir plus…</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+{% endblock %}
+
+

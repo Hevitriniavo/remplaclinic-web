@@ -88,3 +88,52 @@ body {
     padding-top: 20px;
     padding-left: 65px;
 }
+
+
+
+.text{
+    font-size: 14.5px;
+    color: #4E4E4E;
+}
+.blue-span{
+    color: #5BB7DF;
+}
+
+.bg{
+    background-color: #EBEBEB;
+}
+
+.bg-blue{
+    background-color: #57B2DB;
+}
+
+.bg-with{
+    background-color: #E4F5FB;
+}
+
+.blue-bg{
+    background-color: #297FCB;
+}
+
+.reflection {
+    position: relative;
+}
+.reflection::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 70%;
+    left: 0;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.2);
+    transform: scaleY(-1);
+    opacity: 0.5;
+}
+.bgbouton{
+    background-color: #4E4E4E;
+    box-shadow: 0 0 1px 1px #4E4E4E;
+    border: 1px solid #CFCFCF;
+}
+
+.inputShadow{
+    box-shadow: 0 0 1px 1px #4E4E4E;
+}
