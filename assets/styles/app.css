@@ -2,144 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: 'AvantGardeITCbyBT-Book', sans-serif;
+@layer base {
+  @font-face {
+    font-family: 'AvantGardeITCbyBT-Book';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/avantgardebookbt.woff) format('woff');
+  }
+
+  body {
+    font-family: "AvantGardeITCbyBT-Book", sans-serif;
     font-size: 14px;
     line-height: 20px;
-}
- #block-block-32 h2, .bg-orange-fleche:hover {
-    background: url("../images/compte-ferme-fleche.png") #ff7e1e no-repeat 10px;
+    color: #333333;
+  }
 }
 
+/* header */
+.section-1 {
+  background: url(../images/fond-header.png) #fff repeat-x bottom;
+}
 
- .fond-menu {
-     background: url('../images/fond-menu.png') repeat-x;
-     width: 100%;
-     height: 51px;
- }
+.fond-menu {
+  background: url("../images/fond-menu.png") repeat-x;
+  width: 100%;
+  height: 51px;
+  clear: both;
+}
+
+#block-block-32 h2,
+.bg-orange-fleche:hover {
+  background: url("../images/compte-ferme-fleche.png") #ff7e1e no-repeat 10px;
+}
 
 
 .pane-title {
-    background: url('../images/bg-line.png') no-repeat 0 bottom;
-     padding: 0 0 18px 0;
-    margin-bottom: 20px;
-    line-height: normal;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  background: url("../images/bg-line.png") no-repeat 0 bottom;
+  padding: 0 0 18px 0;
+  margin-bottom: 20px;
+  line-height: normal;
 }
 
 .custom-bg-slide {
-    background: url("../images/sliders/bg-slide.png");
+  background: url("../images/sliders/bg-slide.png");
 }
 
 .customer-bg-fleches {
-    width: 330px;
-    padding: 50px 30px 0 30px;
-    background: url('../images/sliders/fleches-recherche-slide.png') no-repeat;
-    height: 320px;
+  width: 330px;
+  padding: 50px 30px 0 30px;
+  background: url("../images/sliders/fleches-recherche-slide.png") no-repeat;
+  height: 320px;
 }
 
- .views-slideshow-pager-field-item {
-    background: url("../images/sliders/fond-slide-title.png");
-    cursor: pointer;
-     width: 220px;
-     height: 82px;
+.views-slideshow-pager-field-item {
+  background: url("../images/sliders/fond-slide-title.png");
+  cursor: pointer;
+  width: 220px;
+  height: 82px;
 }
-
 
 .en-savoir-plus {
-    position: absolute;
-    bottom: -160px;
-    left: 380px;
-    background-color: #f9a645;
-    background-image: linear-gradient(to bottom, #f9a645, #e59230);
-    border: 1px solid #fff;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
-    border-radius: 3px;
-    height: 31px;
-    margin-left: 10px;
-    color: #fff;
-    font-weight: normal;
-    width: 100px;
-    text-align: center;
-    line-height: 31px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  position: absolute;
+  bottom: -160px;
+  left: 380px;
+  background-color: #f9a645;
+  background-image: linear-gradient(to bottom, #f9a645, #e59230);
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+  border-radius: 3px;
+  height: 31px;
+  margin-left: 10px;
+  color: #fff;
+  font-weight: normal;
+  width: 100px;
+  text-align: center;
+  line-height: 31px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .en-savoir-plus:hover {
-    background-image: linear-gradient(to bottom, #e59230, #f9a645);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, #e59230, #f9a645);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-
 .pane-block-22 {
-    background: url('../images/sliders/fleche-rempla-desc.png') no-repeat;
+  background: url("../images/sliders/fleche-rempla-desc.png") no-repeat;
 }
 
 .pane-block-24 {
-    background: rebeccapurple url('../images/sliders/info.png') no-repeat;
-    background-size: cover;
-    padding-top: 20px;
-    padding-left: 65px;
+  background: rebeccapurple url("../images/sliders/info.png") no-repeat;
+  background-size: cover;
+  padding-top: 20px;
+  padding-left: 65px;
 }
 
 .pane-block-25 {
-    background: rebeccapurple url('../images/sliders/parapluie.png') no-repeat;
-    background-size: cover;
-    padding-top: 20px;
-    padding-left: 65px;
+  background: rebeccapurple url("../images/sliders/parapluie.png") no-repeat;
+  background-size: cover;
+  padding-top: 20px;
+  padding-left: 65px;
 }
-
 
 
 .text{
     font-size: 15px;
     color: #4E4E4E;
 }
-.blue-span{
-    color: #5BB7DF;
+
+.blue-span {
+  color: #5bb7df;
 }
 
-.bg{
-    background-color: #EBEBEB;
+.bg {
+  background-color: #ebebeb;
 }
 
-.bg-blue{
-    background-color: #57B2DB;
+.bg-blue {
+  background-color: #57b2db;
 }
 
-.bg-with{
-    background-color: #E4F5FB;
+.bg-with {
+  background-color: #e4f5fb;
 }
 
-.blue-bg{
-    background-color: #297FCB;
+.blue-bg {
+  background-color: #297fcb;
 }
 
 .reflection {
-    position: relative;
+  position: relative;
 }
+
 .reflection::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 70%;
-    left: 0;
-    width: 100%;
-    color: rgba(0, 0, 0, 0.2);
-    transform: scaleY(-1);
-    opacity: 0.5;
+  content: attr(data-text);
+  position: absolute;
+  top: 70%;
+  left: 0;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.2);
+  transform: scaleY(-1);
+  opacity: 0.5;
 }
-.bgbouton{
-    background-color: #4E4E4E;
-    box-shadow: 0 0 1px 1px #4E4E4E;
-    border: 1px solid #CFCFCF;
-}
-
-.inputShadow{
-    box-shadow: 0 0 1px 1px #4E4E4E;
-}
-
-
-
 
 .text-color{
     font-size: 15px;
@@ -240,11 +247,6 @@ body {
     text-decoration: none;
 }
 
-.region-mainbottom ul li {
-    list-style-image: url('../images/puce_footer.png') !important;
-}
-
-
 .picto-clinique {
     background-image: url('../images/picto-clinique.png');
     background-repeat: no-repeat;
@@ -263,4 +265,25 @@ body {
     height: 160px;
     background-position: -5px -5px;
     line-height: 350px;
+}
+
+.bgbouton {
+  background-color: #4e4e4e;
+  box-shadow: 0 0 1px 1px #4e4e4e;
+  border: 1px solid #cfcfcf;
+}
+
+.inputShadow {
+  box-shadow: 0 0 1px 1px #4e4e4e;
+}
+
+/* footer */
+.clearfix {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.custom-menu li {
+  list-style-image: url(../images/puce_footer.png);
 }

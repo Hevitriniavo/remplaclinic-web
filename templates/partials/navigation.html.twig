@@ -1,62 +1,83 @@
 <header>
-    <div class="container-sm mx-auto px-[20px]">
-        <div class="flex flex-col md:flex-row gap-2 justify-between">
-            <section class="flex flex-col items-center  gap-2">
-                <div class="px-10 pt-10">
-                    <a href="{{ path('app_home') }}">
-                        <img src="{{ asset('images/logo.png') }}" alt="logo"/>
+    <section class="section-1">
+        <div class="w-[1170px] mx-auto">
+            <div class="flex flex-col md:flex-row gap-2 justify-between">
+                <div class="flex flex-col items-center gap-2 mr-[20px]">
+                    <div class=" mt-10">
+                        <a href="{{ path('app_home') }}">
+                            <img src="{{ asset('images/logo.png') }}" alt="logo" />
+                        </a>
+                    </div>
+                    <div>
+                        <p>
+                            <a target="_blank" href="http://instalclinic.fr" title="installation médicale"
+                                class="rounded-full underline-node uppercase p-1 px-5 text-sm  bg-[#C5C7C8] text-[#ffff]">Accès
+                                à
+                                instalclinic.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="ml-[35px]">
+                    <a href="{{ path('app_home') }}" class="w-full h-full">
+                        <img src="{{ asset('images/logo-droite-v4.png') }}" alt="annonce medicale, medecin remplacant"
+                            class="w-full h-full object-contain" />
                     </a>
                 </div>
-                <div>
-                    <a
-                            target="_blank"
-                            href="http://instalclinic.fr"
-                            title="installation médicale"
-                            class="rounded-full underline-node uppercase p-[2px] text-sm  bg-[#C5C7C8] text-[#ffff]"
-                    >Accès à instalclinic.com</a>
-                </div>
-            </section>
 
-            <section>
-                <a href="{{ path('app_home') }}" class="w-full h-full">
-                    <img
-                            src="{{ asset('images/logo-droite-v4.png') }}"
-                            alt="annonce medicale, medecin remplacant"
-                            class="w-full h-full object-contain"
-                    />
-                </a>
-            </section>
-
-            <section  id="block-block-32">
-                <h2 class="bg-orange-500 text-center text-white uppercase py-2 px-1">Mon compte</h2>
-                <form class="bg-[#E4E4E6] mb-0 ">
-                    <div class=" flex flex-col px-[12px]  pt-[12px]  gap-4 pr-[20px]">
-                        <label>
-                            <input class="bg-[#eaeaea] border border-t-[#C1C1C1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none" type="text" placeholder="Identifiant"/>
-                        </label>
-
-                        <div class="flex flex-row gap-6">
-                            <label class="w-[calc(100%-110px)]">
-                                <input class="bg-[#eaeaea] mr-2 border border-t-[#C1C1C1] p-1 text-[12px] focus:outline-none" type="password" placeholder="Mot de passe"/>
+                <div id="block-block-32">
+                    <h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">Mon compte</h2>
+                    <form class="bg-[#E4E4E6] mb-0 ">
+                        <div class=" flex flex-col px-[12px]  pt-[12px]  gap-4 pr-[20px]">
+                            <label>
+                                <input
+                                    class="bg-[#eaeaea] border border-t-[#C1C1C1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none"
+                                    type="text" placeholder="Identifiant" />
                             </label>
-                            <button class="border border-[#fff] font-[13px] bg-[#ff7e1e] text-white px-1 h-[29px]">Valider</button>
-                        </div>
 
-                        <span class="flex justify-evenly text-[11px] underline text-[#666666] w-[calc(100%-25px)]">
-                        <a href="#">Mot de passe oublié </a> <span>|</span><a href="#"> Créer un compte</a>
-                    </span>
-                    </div>
-                </form>
-            </section>
+                            <div class="flex flex-row gap-6">
+                                <label class="w-[calc(100%-110px)]">
+                                    <input
+                                        class="bg-[#eaeaea] mr-2 border border-t-[#C1C1C1] p-1 text-[12px] focus:outline-none"
+                                        type="password" placeholder="Mot de passe" />
+                                </label>
+                                <button
+                                    class="border border-[#fff] font-[13px] bg-[#ff7e1e] text-white px-1 h-[29px]">Valider</button>
+                            </div>
+
+                            <div>
+                                <span class="flex justify-start text-[11px] underline text-[#666666]">
+                                    <a href="#">Mot de passe oublié </a><span>|</span><a href="#"> Créer un compte</a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+    </section>
+    <div class="fond-menu flex justify-center items-center">
+        <nav class="p-4 flex justify-center items-center space-x-6 overflow-hidden">
+            <a href="{{ path('app_home') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Accueil</a>
+            <a href="{{ path('app_how_does_it_work') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Comment
+                ça marche ?</a>
+            <a href="http://instalclinic.fr"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Installation
+                médicale</a>
+            <a href="{{ path('app_replacement_search') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Je
+                cherche un remplaçant</a>
+            <a href="{{ path('app_replacement') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Je
+                suis remplaçant</a>
+            <a href="{{ path('app_replacement_licence') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Obtenir
+                sa licence</a>
+            <a href="{{ path('app_contact') }}"
+                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Nous
+                contacter</a>
+        </nav>
     </div>
-    <nav class="bg-[#666666] fond-menu p-4 flex justify-center items-center space-x-6 overflow-hidden">
-        <a href="{{ path('app_home') }}" class="text-white rounded-md hover:bg-[#ff9d32] px-4 py-3 active:underline hover:text-blue-500 font-medium transition duration-300">Accueil</a>
-        <a href="{{ path('app_how_does_it_work') }}" class="text-white rounded-md hover:bg-[#ff9d32] px-4 py-3 active:underline hover:text-blue-500 font-medium transition duration-300">Comment ça marche ?</a>
-        <a href="http://instalclinic.fr/" title class="text-white rounded-md hover:bg-[#ff9d32] px-4 py-3 active:underline hover:text-blue-500 font-medium transition duration-300">Installation médicale</a>
-        <a href="{{ path('app_replacement_search') }}" class="text-white rounded-md hover:bg-[#ff9d32] px-4 py-3 active:underline hover:text-blue-500  font-medium transition duration-300">Je cherche un remplaçant</a>
-        <a href="{{ path('app_replacement') }}" class="text-white rounded-md hover:bg-[#ff9d32] px-4 py-3 active:underline hover:text-blue-500 font-medium transition duration-300">Je suis remplaçant</a>
-        <a href="{{ path('app_replacement_licence') }}" class="text-white rounded-md hover:bg-[#ff9d32] py-3 active:underline hover:text-blue-500  font-medium transition duration-300">Obtenir sa licence</a>
-        <a href="{{ path('app_contact') }}" class="text-white rounded-md hover:bg-[#ff9d32]  py-3 active:underline hover:text-blue-500  font-medium transition duration-300">Nous contacter</a>
-    </nav>
 </header>
