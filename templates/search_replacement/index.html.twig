@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher des remplacants | Remplaclinic{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col justify-between items-start p-12 gap-4">
+
+        <h1 class="p-[10px] font-normal text-[#5bb7df] text-[30px] mb-4">
+            Rechercher des remplaçants
+        </h1>
+
+        <div class="flex flex-row gap-6">
+            <article class="flex flex-col items-start p-4 pb-6 gap-4">
+                <div>
+                    <p class="text-[22px] text-[#2d8eb8] font-normal">
+                        {{ 1026 }} remplaçant(s) correspondent à vos critères de recherche
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        Une fois votre inscription complétée, vous aurez la possibilité de contacter ces remplaçants et d'envoyer automatiquement des demandes de remplacements et/ou d'installation.
+                    </p>
+                   <p class=" text-[24px] p-[30px] mx-auto text-center">
+                        <a href="#" class="text-blue-500 hover:underline font-medium">
+                            Inscrivez-vous pour contacter des remplaçants
+                        </a>
+                   </p>
+                </div>
+
+                <div class="overflow-x-auto w-full">
+                    <table class="min-w-full border border-gray-200 text-sm">
+                        <thead class="bg-gray-100 border-b">
+                        <tr>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold text-gray-700">
+                                Prénom
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold text-gray-700">
+                                Statut
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold text-gray-700">
+                                Sous-spécialités
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b">
+                            <td class="px-4 py-2">Melania Ionela</td>
+                            <td class="px-4 py-2">Autre</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        <tr class="bg-gray-50 border-b">
+                            <td class="px-4 py-2">HAFIZA</td>
+                            <td class="px-4 py-2">Autre</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="px-4 py-2">Isabelle</td>
+                            <td class="px-4 py-2">Médecin remplaçant</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        <tr class="bg-gray-50 border-b">
+                            <td class="px-4 py-2">Laurine</td>
+                            <td class="px-4 py-2">Médecin remplaçant</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Aurélie</td>
+                            <td class="px-4 py-2">Médecin remplaçant</td>
+                            <td class="px-4 py-2">-</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            {{ render(controller('App\\Controller\\PartialController::index')) }}
+        </div>
+    </div>
+{% endblock %}

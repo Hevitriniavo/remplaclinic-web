@@ -184,9 +184,9 @@
 }
 
 .angle_100gratuit_left{
-    position: relative;
-    left: 85%;
-    top: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .form-submit{
@@ -287,3 +287,4 @@
 .custom-menu li {
   list-style-image: url(../images/puce_footer.png);
 }
+
