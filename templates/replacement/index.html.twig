@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Je suis un remplaçant | Remplaclinic
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col justify-between items-start p-12 gap-4">
+        <h1 class="blue-span text-3xl">Je cherche un remplacant</h1>
+        <div class="flex flex-row gap-6">
+            <article class="text-color">
+                <div class="flex flex-row justify-end">
+                    <div class="flex flex-row gap-7 items-center">
+                        <div class="image_candidature picto-remplacant">
+                            <p class="text-center underline text-[#6b21a8]">
+                                <a style="margin: auto" title="Se créer un compte Remplaçant" href="#" class="picto-remplacant">
+                                    Je créé mon compte
+                                </a>
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-5">
+                            <p>&nbsp;</p>
+                            <p>
+                                1 | <strong>Je m’inscris GRATUITEMENT</strong><br />
+                                en cliquant sur le bouton de gauche
+                            </p>
+                            <p>
+                                2 | <strong>Je me connecte</strong> à l’aide de mon
+                                identifiant<br />
+                                (mon adresse email habituelle) et de mon mot de passe
+                            </p>
+                            <p>3 | <strong>Je consulte mon compte</strong></p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <img
+                            alt="100% gratuit pour les remplaçants"
+                            src="{{ asset('images/angle_100gratuit.gif') }}"
+                            class="h-36 w-36"
+                    />
+                    <p>&nbsp;</p>
+                </div>
+                <div class="bg-blue-ciel mt-4 pb-4 p-1">
+                    <strong>Un tableau de bord me permet de faire le point sur :</strong
+                    ><br /><strong>Les demandes de remplacement reçues</strong> par
+                    email et émanant des services ou des médecins libéraux, en fonction
+                    des dates.<br /><em
+                    >Remarque : un simple clic sur le nom ou le bouton dédié me permet
+                        d’afficher les données complètes du service ou du médecin
+                        demandeur.</em
+                    >
+                    <p>
+                        • Je peux
+                        <strong>répondre immédiatement</strong> ou plus tard d'un simple
+                        clic<br />
+                        • Je peux
+                        <strong>obtenir les coordonnées complètes du demandeur</strong
+                        >.<br />
+                        • Je peux
+                        <strong>suivre l'état des demandes</strong> sur mon tableau de
+                        bord.
+                    </p>
+                    <p class="mt-4">
+                        <u><strong>Les réponses que j’ai faites :</strong></u
+                        ><br />
+                        • "Oui", je suis interessé(e) :
+                        <strong
+                        >je contacte le service de l'établissement de santé ou du
+                            cabinet médical pour valider le remplacement.</strong
+                        ><br />
+                        • "Je souhaite plus d'informations", je reçois les coordonnées du
+                        demandeur afin d'obtenir les informations voulues.<br />
+                        • Les demandes en attente.
+                    </p>
+                </div>
+            </article>
+            {{ render(controller('App\\Controller\\PartialController::index')) }}
+        </div>
+    </div>
+{% endblock %}

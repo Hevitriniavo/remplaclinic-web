@@ -92,7 +92,7 @@ body {
 
 
 .text{
-    font-size: 14.5px;
+    font-size: 15px;
     color: #4E4E4E;
 }
 .blue-span{
@@ -136,4 +136,131 @@ body {
 
 .inputShadow{
     box-shadow: 0 0 1px 1px #4E4E4E;
+}
+
+
+
+
+.text-color{
+    font-size: 15px;
+    color: #4E4E4E;
+}
+.blue-span{
+    color: #5BB7DF;
+}
+
+.bg{
+    background-color: #EBEBEB;
+}
+
+.bg-blue{
+    background-color: #5BB7DF;
+}
+
+.bg-blue-ciel{
+    background-color: #E4F5FB;
+}
+
+.bg-with{
+    background-color: #E4F5FB;
+}
+
+.blue-bg{
+    background-color: #297FCB;
+}
+
+.bg-img{
+    background-image: url("../images/sidebar_infos.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50px;
+}
+
+.angle_100gratuit_left{
+    position: relative;
+    left: 85%;
+    top: 100%;
+}
+
+.form-submit{
+    background-color: #4E4E4E;
+    box-shadow: 0 0 1px 1px #4E4E4E;
+    border: 1px solid #CFCFCF;
+    cursor: pointer;
+}
+
+.form-submit:hover{
+    background-color: #807f7f;
+}
+
+.inputShadow{
+    box-shadow: 0 0 1px 1px #4E4E4E;
+}
+
+.form-text{
+    background-color: #EAEAEA;
+    border-top: 1px solid #C1C1C1;
+}
+
+.picto-remplacant {
+    background-image: url('../images/picto-remplacant.png');
+    background-repeat: no-repeat;
+    display: block;
+    height: 160px;
+    background-position: 20px -5px;
+    line-height: 25;
+    width: 212px;
+}
+
+.picto-remplacant:hover {
+    width: 212px;
+    height: 160px;
+    background-position: 20px -175px;
+}
+
+.picto-service-clinique {
+    background-image: url('../images/picto-service-clinique.png');
+    background-repeat: no-repeat;
+    display: block;
+    width: 160px;
+    height: 160px;
+    background-position: -5px -5px;
+    line-height: 350px;
+}
+
+.picto-service-clinique:hover,.picto-cabinet-medical:hover,.picto-clinique:hover  {
+    width: 160px;
+    height: 160px;
+    background-position: -5px -175px;
+}
+
+.picto-service-clinique a {
+    color: #2d8eb8;
+    outline: none;
+    text-decoration: none;
+}
+
+.region-mainbottom ul li {
+    list-style-image: url('../images/puce_footer.png') !important;
+}
+
+
+.picto-clinique {
+    background-image: url('../images/picto-clinique.png');
+    background-repeat: no-repeat;
+    display: block;
+    width: 160px;
+    height: 160px;
+    background-position: -5px -5px;
+    line-height: 350px;
+}
+
+.picto-cabinet-medical {
+    background-image: url('../images/picto-cabinet-medical.png');
+    background-repeat: no-repeat;
+    display: block;
+    width: 160px;
+    height: 160px;
+    background-position: -5px -5px;
+    line-height: 350px;
 }

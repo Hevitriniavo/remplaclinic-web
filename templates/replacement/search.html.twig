@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Je cherche un remplacant | Remplaclinic
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col justify-between items-start p-12 gap-4">
+        <h1 class="blue-span text-3xl">Je cherche un remplacant</h1>
+        <div class="flex flex-row gap-6">
+            <article class="flex flex-col items-start p-2 pb-6 gap-3">
+                <h3 class="blue-span">Je représente</h3>
+                <ul class="w-full flex flex-row gap-4 items-center justify-between">
+                    <li class="blue-span text-center">
+                        <a href="/inscription/creation/5"
+                           class="picto-service-clinique text-[#7c3aed]"
+                        >
+                            Un service d'une clinique
+                        </a>
+                    </li>
+                    <li>OU</li>
+                    <li class="blue-span text-center">
+                        <a href="/inscription/creation/5?clinique=clinique"
+                           class="picto-clinique text-[#7c3aed]"
+                        >
+                            Une clinique
+                        </a>
+                    </li>
+                    <li>OU</li>
+                    <li class="blue-span text-center">
+                        <a href="/inscription/creation/6"
+                         class="picto-cabinet-medical text-[#7c3aed]"
+                        >
+                            Un cabinet médical
+                        </a>
+                    </li>
+                </ul>
+                <p>&nbsp;</p>
+                <p>
+                    <span class="blue-span">1 |</span>
+                    <strong>Je m’inscris ou je me connecte</strong>
+                    à l’aide de mon identifiant (mon adresse mail) et de mon mot de
+                    passe<br /><span class="blue-span">2 |</span>
+                    <strong>Je remplis le formulaire de demande</strong>
+                    (date, nombre de postes…)<br /><span class="blue-span">3 |</span>
+                    <strong>Je choisis ma formule d'abonnement</strong>
+                </p>
+                <p>
+                    RemplaClinic transmet automatiquement ma demande par mail aux
+                    <strong>médecins remplaçants</strong> dont la spécialité correspond
+                    à celle de mon service.
+                </p>
+                <p>
+                    <strong
+                    >Ces (potentiels) médecins remplaçants pourront :<br />
+                        - répondre : "Oui", je postule pour ce remplacement<br />
+                        - répondre : "Souhaite plus d'informations", avant de prendre une
+                        décision<br />
+                        - ne pas répondre (dans ce cas, le statut sera «en
+                        attente»)</strong
+                    >
+                </p>
+                <p>
+                    <em>Remarques :</em><br /><em
+                    >- il y a un tableau de bord par date de remplacement<br />
+                        - ce tableau de bord est accessible à tout moment sur «Mon
+                        compte»</em
+                    >
+                </p>
+                <p>
+                    Sur mon compte, mon tableau de bord est mis à jour.<br />
+                    Il comporte :<br /><span class="blue-span">•</span> la liste des
+                    personnes contactées<br /><span class="blue-span">•</span> les
+                    réponses "oui"<br /><span class="blue-span">•</span> les réponses
+                    "plus d'informations"<br /><span class="blue-span">•</span>
+                    les «non réponses» : en attente
+                </p>
+                <p>
+                    J’affiche si je le souhaite le profil plus complet du
+                    <strong>médecin remplaçant</strong>.<br />
+                    Le
+                    <strong>médecin remplaçant</strong>
+                    potentiel reçoit mes coordonnées.
+                </p>
+            </article>
+            {{ render(controller('App\\Controller\\PartialController::index')) }}
+        </div>
+    </div>
+{% endblock %}
