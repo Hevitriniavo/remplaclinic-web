@@ -33,7 +33,7 @@
 
 #block-block-32 h2,
 .bg-orange-fleche:hover {
-  background: url("../images/compte-ferme-fleche.png") #ff7e1e no-repeat 10px;
+  background: url("../images/sliders/fleche-actif-slide.png") no-repeat 10px, url("../images/sliders/fond-titre-slide-active.png") repeat-x;
 }
 
 
@@ -58,7 +58,7 @@
 }
 
 .views-slideshow-pager-field-item {
-  background: url("../images/sliders/fond-slide-title.png");
+  background: url("../images/sliders/fond-slide-title.png") repeat-x;
   cursor: pointer;
   width: 220px;
   height: 82px;
@@ -66,8 +66,6 @@
 
 .en-savoir-plus {
   position: absolute;
-  bottom: -160px;
-  left: 380px;
   background-color: #f9a645;
   background-image: linear-gradient(to bottom, #f9a645, #e59230);
   border: 1px solid #fff;
@@ -94,23 +92,16 @@
 }
 
 .pane-block-24 {
-  background: rebeccapurple url("../images/sliders/info.png") no-repeat;
-  background-size: cover;
-  padding-top: 20px;
-  padding-left: 65px;
+  background: url("../images/sliders/info.png") no-repeat;
 }
 
 .pane-block-25 {
-  background: rebeccapurple url("../images/sliders/parapluie.png") no-repeat;
-  background-size: cover;
-  padding-top: 20px;
-  padding-left: 65px;
+  background: url("../images/sliders/parapluie.png") no-repeat;
 }
 
-
-.text{
-    font-size: 15px;
-    color: #4E4E4E;
+.text {
+  font-size: 15px;
+  color: #4E4E4E;
 }
 
 .blue-span {
@@ -148,123 +139,126 @@
   opacity: 0.5;
 }
 
-.text-color{
-    font-size: 15px;
-    color: #4E4E4E;
-}
-.blue-span{
-    color: #5BB7DF;
+.text-color {
+  font-size: 15px;
+  color: #4E4E4E;
 }
 
-.bg{
-    background-color: #EBEBEB;
+.blue-span {
+  color: #5BB7DF;
 }
 
-.bg-blue{
-    background-color: #5BB7DF;
+.bg {
+  background-color: #EBEBEB;
 }
 
-.bg-blue-ciel{
-    background-color: #E4F5FB;
+.bg-blue {
+  background-color: #5BB7DF;
 }
 
-.bg-with{
-    background-color: #E4F5FB;
+.bg-blue-ciel {
+  background-color: #E4F5FB;
 }
 
-.blue-bg{
-    background-color: #297FCB;
+.bg-with {
+  background-color: #E4F5FB;
 }
 
-.bg-img{
-    background-image: url("../images/sidebar_infos.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 50px;
+.blue-bg {
+  background-color: #297FCB;
 }
 
-.angle_100gratuit_left{
-    position: absolute;
-    right: 0;
-    top: 0;
+.bg-img {
+  background-image: url("../images/sidebar_infos.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50px;
 }
 
-.form-submit{
-    background-color: #4E4E4E;
-    box-shadow: 0 0 1px 1px #4E4E4E;
-    border: 1px solid #CFCFCF;
-    cursor: pointer;
+.angle_100gratuit_left {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-.form-submit:hover{
-    background-color: #807f7f;
+.form-submit {
+  background-color: #4E4E4E;
+  box-shadow: 0 0 1px 1px #4E4E4E;
+  border: 1px solid #CFCFCF;
+  cursor: pointer;
 }
 
-.inputShadow{
-    box-shadow: 0 0 1px 1px #4E4E4E;
+.form-submit:hover {
+  background-color: #807f7f;
 }
 
-.form-text{
-    background-color: #EAEAEA;
-    border-top: 1px solid #C1C1C1;
+.inputShadow {
+  box-shadow: 0 0 1px 1px #4E4E4E;
+}
+
+.form-text {
+  background-color: #EAEAEA;
+  border-top: 1px solid #C1C1C1;
 }
 
 .picto-remplacant {
-    background-image: url('../images/picto-remplacant.png');
-    background-repeat: no-repeat;
-    display: block;
-    height: 160px;
-    background-position: 20px -5px;
-    line-height: 25;
-    width: 212px;
+  background-image: url('../images/picto-remplacant.png');
+  background-repeat: no-repeat;
+  display: block;
+  height: 160px;
+  background-position: 20px -5px;
+  line-height: 25;
+  width: 212px;
 }
 
 .picto-remplacant:hover {
-    width: 212px;
-    height: 160px;
-    background-position: 20px -175px;
+  width: 212px;
+  height: 160px;
+  background-position: 20px -175px;
 }
 
 .picto-service-clinique {
-    background-image: url('../images/picto-service-clinique.png');
-    background-repeat: no-repeat;
-    display: block;
-    width: 160px;
-    height: 160px;
-    background-position: -5px -5px;
-    line-height: 350px;
+  background-image: url('../images/picto-service-clinique.png');
+  background-repeat: no-repeat;
+  display: block;
+  width: 160px;
+  height: 160px;
+  background-position: -5px -5px;
+  line-height: 350px;
 }
 
-.picto-service-clinique:hover,.picto-cabinet-medical:hover,.picto-clinique:hover  {
-    width: 160px;
-    height: 160px;
-    background-position: -5px -175px;
+.picto-service-clinique:hover,
+.picto-cabinet-medical:hover,
+.picto-clinique:hover {
+  width: 160px;
+  height: 160px;
+  background-position: -5px -175px;
 }
 
 .picto-service-clinique a {
-    color: #2d8eb8;
-    outline: none;
-    text-decoration: none;
+  color: #2d8eb8;
+  outline: none;
+  text-decoration: none;
 }
 
 .picto-clinique {
-    background-image: url('../images/picto-clinique.png');
-    background-repeat: no-repeat;
-    display: block;
-    width: 160px;
-    height: 160px;
-    background-position: -5px -5px;
-    line-height: 350px;
+  background-image: url('../images/picto-clinique.png');
+  background-repeat: no-repeat;
+  display: block;
+  width: 160px;
+  height: 160px;
+  background-position: -5px -5px;
+  line-height: 350px;
 }
 
 .picto-cabinet-medical {
-    background-image: url('../images/picto-cabinet-medical.png');
-    background-repeat: no-repeat;
-    display: block;
-    width: 160px;
-    height: 160px;
-    background-position: -5px -5px;
-    line-height: 350px;
+  background-image: url('../images/picto-cabinet-medical.png');
+  background-repeat: no-repeat;
+  display: block;
+  width: 160px;
+  height: 160px;
+  background-position: -5px -5px;
+  line-height: 350px;
 }
 
 .bgbouton {
@@ -288,3 +282,59 @@
   list-style-image: url(../images/puce_footer.png);
 }
 
+.btn-form-submit {
+  background-color: #5d5d5d;
+  background-image: -moz-linear-gradient(top, #5d5d5d, #3b3b3b);
+  background-image: -ms-linear-gradient(top, #5d5d5d, #3b3b3b);
+  background-image: -o-linear-gradient(top, #5d5d5d, #3b3b3b);
+  background-image: -webkit-gradient(linear, top, bottom, from(#5d5d5d), to(#3b3b3b));
+  background-image: -webkit-linear-gradient(top, #5d5d5d, #3b3b3b);
+  background-image: linear-gradient(top, #5d5d5d, #3b3b3b);
+  border: 2px solid #6b6b6b;
+  border-radius: 3px;
+  font-family: 'ubuntu', sans-serif;
+  line-height: normal;
+  margin-right: 5px;
+  padding: 5px 10px 7px;
+  vertical-align: middle;
+  color: #fff;
+  height: 45px;
+  font-size: 18px;
+  font-weight: normal;
+  text-transform: none;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .7) inset;
+}
+
+.partenaire-1 {
+  background: url(../images/fleche-gauche-partenaire.png) no-repeat right 35px;
+  padding-top: 30px;
+  padding-right: 30px;
+  margin-right: 20px;
+}
+
+.partenaire-2 {
+  background: url(../images/fleche-droite-partenaire.png) no-repeat left 35px;
+  padding-top: 30px;
+  padding-left: 30px;
+  margin-left: 20px;
+}
+
+.btn-partenaires {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: #646464;
+  background-image: -moz-linear-gradient(top, #646464, #171717);
+  background-image: -ms-linear-gradient(top, #646464, #171717);
+  background-image: -o-linear-gradient(top, #646464, #171717);
+  background-image: -webkit-linear-gradient(top,#646464,#171717)
+}
+
+.btn-partenaires a {
+  float: left;
+  padding: 15px 30px 30px 30px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 18px;
+}
