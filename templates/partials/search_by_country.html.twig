@@ -7,7 +7,7 @@
             </span>
             <strong class="text-xl">disponibles immédiatement</strong>
         </div>
-        <form class="flex flex-col gap-3 items-center w-60">
+        <form class="flex flex-col gap-3 items-center w-60" action="{{ path('search_replacement') }}">
             <div class="flex flex-col gap-2">
                 <div class="w-56">
                     <label>
@@ -58,7 +58,7 @@
             <p>
                 Que vous soyez remplacé ou remplaçant, pour un remplacement saisonnier ou régulier,
                 retrouvez toutes les informations utiles selon votre situation…<br />
-                <a href="/infos-utiles" class="text-color underline">En savoir plus…</a>
+                <a href="{{ path('app_information_utile') }}" class="text-color underline">En savoir plus…</a>
             </p>
         </div>
     </div>

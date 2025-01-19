@@ -38,4 +38,9 @@ class PartialController extends AbstractController
             'nombreRemplacants' => 7873,
         ]);
     }
+
+    public function renderAsideRegister(): Response
+    {
+        return $this->render('partials/register_aside.html.twig');
+    }
 }
