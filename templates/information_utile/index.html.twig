@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Infos utiles | Remplaclinic
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col justify-between items-start p-12 gap-4">
+        <h1 class="blue-span text-3xl">Infos utiles</h1>
+        <div class="flex flex-row gap-6">
+            <div class="flex flex-col items-start p-2 pb-6 gap-3">
+                <h3 class="blue-span">
+                    1/ L'accessibilité des cabinets médicaux auxpersonnes handicapées :
+                    êtes-vous prêt ?
+                </h3>
+                <p>
+                    La loi du 11 février 2005 pour l'égalité des droits, des chances, la
+                    participation à la citoyenneté des personnes handicapées a mis en
+                    place de nouvelles dispositions modifiant les conditions
+                    d'accessibilité des établissements recevant du public aux personnes
+                    handicapées. Les cabinets médicaux sont directement concernés :
+                    places de stationnement, escaliers, marches, accès aux toilettes…
+                    quelles sont les normes à respecter et les délais ?
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/accessibilite-cabinets-medicaux-handicapes.html"
+                            class="blue-span" >Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">
+                    2/ Un praticien libéral a-t-il le libre choix de son patient ?
+                </h3>
+                <p>
+                    En France, le patient a le droit de choisir librement le praticien à
+                    qui il se confie. Mais, de son côté, le praticien libéral peut-il «
+                    choisir » ses patients ? Tour d’horizon des refus de soins licites,
+                    illicites et « limite ».
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/praticien-liberal-choix-du-patient.html"
+                            class="blue-span">Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">3/ Un soignant peut-il recevoir le don d’un patient ?</h3>
+                <p>
+                    Il n’est pas si rare qu’un patient reconnaissant souhaite remercier
+                    son soignant en lui léguant un bien. Mais ce geste peut-être
+                    considéré comme suspect par les héritiers. Que dit la loi sur ce
+                    sujet ?
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/soignant-don-d-un-patient.html"
+                            class="blue-span" >Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">4/ Remplacement mode d’emploi</h3>
+                <p>
+                    Que vous soyez remplacé ou remplaçant, vous devez respecter
+                    certaines formalités et vérifier, l’un et l’autre, qu’elles ont été
+                    respectées.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/remplacement-mode-emploi.html"
+                            class="blue-span" >Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">5/ La fiscalité du remplacement</h3>
+                <p>
+                    Quel est le statut du médecin remplaçant ? Quelles sont les
+                    obligations fiscales du médecin remplacé et du médecin remplaçant ?
+                    Comment déclarer ses revenus ? Retrouvez toutes les réponses sur le
+                    site macsf.fr.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/fiscalite-remplacement.html"
+                            class="blue-span">Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">6/ Fiscalité du médecin remplaçant</h3>
+                <p>
+                    Le médecin remplaçant exerce son activité médicale à titre libéral
+                    dès lors que les modalités du contrat de remplacement ne le placent
+                    pas dans une situation de subordination. Il perçoit des honoraires.
+                    Il ne s’agit en aucun cas d’un salarié. C’est un travailleur
+                    indépendant.
+                </p>
+                <p>
+                    <a
+                            href="http://www.vieliberale.fr/remplacement-professionnels-sante-liberaux/remplacement-medecin-fiscalite.html"
+                            class="blue-span">Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">7/ Le contrat de remplacement</h3>
+                <p>
+                    Vous êtes médecin remplaçant exerçant en libéral ? Répertorier et
+                    planifier les démarches et formalités obligatoires peut vous éviter
+                    bien des tracas inutiles.
+                </p>
+                <p>
+                    <a
+                            href="http://www.vieliberale.fr/remplacement-professionnels-sante-liberaux/contrat-de-remplacement-medecin.html"
+                            class="blue-span">Lire l'article</a
+                    >
+                </p>
+                <h3 class="blue-span">8/ Démarches et formalités du médecinremplacé</h3>
+                <p>
+                    Si vous êtes médecin remplacé, vous devez respecter certaines
+                    formalités et vérifier qu’elles ont été respectées.
+                </p>
+                <p>
+                    <a
+                            href="http://www.vieliberale.fr/remplacement-professionnels-sante-liberaux/contrat-de-remplacement-medecin-liberal.html"
+                            class="blue-span">Lire l'article</a
+                    >
+                </p>
+                <p>
+                    Les articles juridiques sont écrits par des juristes experts du Sou
+                    Médical Groupe MACSF, disponibles sur les sites dugroupe MACSF :
+                    <a href="/www.macsf.fr/vous-informer" class="blue-span">www.macsf.fr/vous-informer</a>
+                    et <a href="/www.vieliberale.fr" class="blue-span">www.vieliberale.fr</a>
+                </p>
+                <div class="flex flex-row w-full justify-center pt-24 pb-20">
+                    <img src="{{ asset('images/macsf.png') }}" alt="macsf" class="w-auto h-20">
+                    <img src="{{ asset('images/logo-vieliberale-droite.png') }}" alt="logo-vieliberale-droite" class="w-auto h-20">
+                </div>
+            </div>
+            {{ render(controller('App\\Controller\\PartialController::index')) }}
+        </div>
+    </div>
+{% endblock %}
