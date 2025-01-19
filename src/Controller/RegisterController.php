@@ -15,7 +15,7 @@ class RegisterController extends AbstractController
     }
 
 
-    #[Route('/user/67087/edit', name: 'app_register_clinic')]
+    #[Route('/clinic', name: 'app_register_clinic')]
     public function createClinic(): Response
     {
         return $this->render('register/new_clinic.html.twig');
@@ -23,13 +23,13 @@ class RegisterController extends AbstractController
 
 
 
-    #[Route('/register', name: 'app_register_doctor')]
+    #[Route('/doctor', name: 'app_register_doctor')]
     public function createDoctor(): Response
     {
         return $this->render('register/new_doctor.html.twig');
     }
 
-    #[Route('/register', name: 'app_register_service_clinic')]
+    #[Route('/clinic/service', name: 'app_register_service_clinic')]
     public function createServiceClinic(): Response
     {
         return $this->render('register/new_service_clinic.html.twig');

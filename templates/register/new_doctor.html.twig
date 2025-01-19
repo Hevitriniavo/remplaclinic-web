@@ -3,5 +3,380 @@
 {% block title %}Nex doctor{% endblock %}
 
 {% block body %}
-<h1>New doctor</h1>
+
+
+    <div class="flex flex-col justify-between items-start p-12 gap-4">
+        <h1 class="blue-span text-3xl">Je crée mon compte médicin</h1>
+        <div class="flex flex-row gap-6 text-color justify-between">
+            <div class="flex flex-col gap-2">
+                <div class="w-[870px] h-[430px] flex flex-col p-3 gap-6 border">
+                    <h2 class="text-2xl pb-4"><b>Informations générales</b></h2>
+                    <div class="flex flex-row justify-between">
+                        <div
+                                class="w-[430px] flex flex-col gap-4 justify-start items-end"
+                        >
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="civilite" class="form-label">
+                                    Civilité <span class="required">*</span>
+                                </label>
+                                <select
+                                        id="civilite"
+                                        name="civilite"
+                                        class="form-text p-1 w-64 outline-none"
+                                >
+                                    <option value="">- Choisir une valeur -</option>
+                                    <option value="M">Monsieur</option>
+                                    <option value="Mme">Madame</option>
+                                    <option value="Mlle">Mademoiselle</option>
+                                </select>
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="prenom"
+                                >Prénom <span class="required">*</span></label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-text p-1 w-64 outline-none"
+                                        id="prenom"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="nom">Nom <span class="required">*</span></label>
+                                <input
+                                        type="text"
+                                        class="form-text p-1 w-64 outline-none"
+                                        id="nom"
+                                />
+                            </div>
+                            <div class="flex flex-row gap-2">
+                                <label for="numero-inscription"
+                                >Numéro d'inscription au <br />conseil de l'Ordre</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-text p-1 w-64 outline-none"
+                                        id="numero-inscription"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-4 justify-start items-start">
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="telephone">
+                                    Téléphone
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="tel"
+                                        class="form-text p-1 w-64 outline-none"
+                                        id="telephone"
+                                        placeholder="Ex : 0142260032"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="mobile">
+                                    Mobile
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="tel"
+                                        class="form-text p-1 w-64 outline-none"
+                                        id="mobile"
+                                        placeholder="Ex : 0642260032"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="fax" class="form-label">Fax</label>
+                                <input
+                                        type="text"
+                                        id="fax"
+                                        name="code_postal"
+                                        class="form-text p-1 w-64 outline-none"
+                                        maxlength="10"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="bg-blue-ciel border-blue-ciel text-sm p-4 flex gap-4 flex-col"
+                    >
+                        <div class="flex flex-row justify-between">
+                            <div>
+                                <label for="edit-mail"
+                                >E-mail
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        type="text"
+                                        id="edit-mail"
+                                        name="mail"
+                                        class="form-text required p-2"
+                                />
+                            </div>
+                            <div>
+                                <div class="password-strength"></div>
+                                <label for="edit-pass-pass1"
+                                >Mot de passe
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        class="password-field form-text required password-processed p-2"
+                                        type="password"
+                                        id="edit-pass-pass1"
+                                        name="pass[pass1]"
+                                />
+                            </div>
+                            <div>
+                                <label for="edit-pass-pass2"
+                                >Confirmer
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        class="password-confirm form-text required p-2"
+                                        type="password"
+                                        id="edit-pass-pass2"
+                                        name="pass[pass2]"
+                                />
+                            </div>
+                        </div>
+                        <div class="blue-span">
+                            <i>
+                                Un mot de passe de votre choix, composé de lettres ou de
+                                chiffres, minimum 6 caractères, sans espace ni caractère
+                                "exotique"...<br />et dont vous vous souviendrez
+                                facilement...</i
+                            >
+                        </div>
+                    </div>
+                </div>
+                <!-- ---------------------------------------------------------------- -->
+                <div class="w-[870px] pb-7 flex flex-col p-3 gap-7 border">
+                    <h2 class="text-2xl"><b>Etablissement</b></h2>
+                    <div class="flex flex-row justify-between">
+                        <div
+                                class="w-[430px] flex flex-col gap-4 justify-start items-end"
+                        >
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-specialite-und" class="form-label">
+                                    Spécialité <span class="required">*</span>
+                                </label>
+                                <select
+                                        id="edit-field-specialite-und"
+                                        name="field_specialite[und]"
+                                        class="form-text p-1 w-64 outline-none"
+                                >
+                                    <option value="287">Anatomopathologie</option>
+                                    <option value="268">Anesthésie-réanimation</option>
+                                    <option value="288">Biologie médicale</option>
+                                    <option value="269">Cardiologie</option>
+                                    <option value="300">Chirurgie maxillo-faciale</option>
+                                    <option value="292">Chirurgie plastique</option>
+                                    <option value="502">Chirurgie thoracique</option>
+                                    <option value="276">Chirurgie vasculaire</option>
+                                    <option value="275">Chirurgie viscérale</option>
+                                    <option value="282">Dermatologie</option>
+                                    <option value="284">Endocrinologie-diabétologie</option>
+                                    <option value="289">Gériatrie</option>
+                                    <option value="272">Gynécologie - Obstétrique</option>
+                                    <option value="429">Hématologie</option>
+                                    <option value="277">Hépato-Gastro-Enterologie</option>
+                                    <option value="296">Maladies infectieuses</option>
+                                    <option value="503">Médecin nutritionniste</option>
+                                    <option value="297">Médecine du travail</option>
+                                    <option value="285">Médecine générale</option>
+                                    <option value="286">Médecine interne</option>
+                                    <option value="273">Médecine nucléaire</option>
+                                    <option value="293">
+                                        Médecine physique et réadaptation
+                                    </option>
+                                    <option value="498">Médecine Urgences</option>
+                                    <option value="499">Médecine vasculaire</option>
+                                    <option value="281">Néphrologie</option>
+                                    <option value="279">Neurologie</option>
+                                    <option value="295">Oncologie</option>
+                                    <option value="278">Ophtalmologie</option>
+                                    <option value="290">ORL</option>
+                                    <option value="267">Orthopédie</option>
+                                    <option value="270">Pédiatrie</option>
+                                    <option value="501">Pédopsychiatrie</option>
+                                    <option value="283">Pneumologie</option>
+                                    <option value="280">Psychiatrie</option>
+                                    <option value="271">Radiologie</option>
+                                    <option value="500">Réanimation</option>
+                                    <option value="294">Rhumatologie</option>
+                                    <option value="298">Santé publique</option>
+                                    <option value="301">
+                                        Soins de suite et de réadaptation
+                                    </option>
+                                    <option value="291">Stomatologie</option>
+                                    <option value="299">Toute spécialité</option>
+                                    <option value="274">Urologie</option>
+                                    <option value="497">Vétérinaire</option>
+                                </select>
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-site-internet-und-0-value"
+                                >Site internet
+                                </label>
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        type="text"
+                                        id="edit-field-site-internet-und-0-value"
+                                        name="field_site_internet[und][0][value]"
+                                        value=""
+                                        size="60"
+                                        maxlength="255"
+                                />
+                            </div>
+                            <div class="w-auto flex flex-row justify-end gap-2">
+                                <label for="edit-field-nombre-de-consultations"
+                                >Nombre de consultations
+                                </label>
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        type="text"
+                                        id="edit-field-nombre-de-consultations"
+                                        name="field_nombre_de_lits[und][0][value]"
+                                        value=""
+                                        size="60"
+                                        maxlength="255"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-par-und" class="form-label">
+                                    Par <span class="required">*</span>
+                                </label>
+                                <select
+                                        id="edit-field-par-und"
+                                        name="field_par[und]"
+                                        class="form-text p-1 w-64 outline-none">
+                                    <option value="_none">- Choisir une valeur -</option>
+                                    <option value="jour">jour</option>
+                                    <option value="semaine">semaine</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-4 justify-start items-start">
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-adresse-und-0-thoroughfare"
+                                >Adresse
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        autocomplete="address-line1"
+                                        type="text"
+                                        id="edit-field-adresse-und-0-thoroughfare"
+                                        name="field_adresse[und][0][thoroughfare]"
+                                        value=""
+                                        size="30"
+                                        maxlength="255"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-adresse-und-0-premise"> </label>
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        autocomplete="address-line2"
+                                        type="text"
+                                        id="edit-field-adresse-und-0-premise"
+                                        name="field_adresse[und][0][premise]"
+                                        value=""
+                                        size="30"
+                                        maxlength="255"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-adresse-und-0-postal-code"
+                                >Code postal
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        autocomplete="postal-code"
+                                        type="text"
+                                        id="edit-field-adresse-und-0-postal-code"
+                                        name="field_adresse[und][0][postal_code]"
+                                        value=""
+                                        size="10"
+                                        maxlength="255"
+                                />
+                            </div>
+                            <div class="w-96 flex flex-row justify-end gap-2">
+                                <label for="edit-field-adresse-und-0-locality"
+                                >Ville
+                                    <span class="form-required" title="This field is required"
+                                    >*</span
+                                    ></label
+                                >
+                                <input
+                                        class="form-text p-1 w-64 outline-none"
+                                        autocomplete="address-level2"
+                                        type="text"
+                                        id="edit-field-adresse-und-0-locality"
+                                        name="field_adresse[und][0][locality]"
+                                        value=""
+                                        size="30"
+                                        maxlength="255"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ----------------------------------------------------------------------------------- -->
+                <div class="bg-blue p-4 flex flex-col gap-10">
+                    <h1 class="text-xl"><b>Validation</b></h1>
+                    <div class="flex flex-row gap-2">
+                        <input
+                                type="checkbox"
+                                id="edit-field-cgu-und"
+                                name="field_cgu[und]"
+                                value="1"
+                                class="form-checkbox"
+                        />
+                        <div>
+                            J'accepte les
+                            <a href="/node/990" target="_blank" class="text-blue-500"
+                            >conditions générales d'utilisation</a
+                            >
+                            et m'engage à les respecter. *
+                        </div>
+                    </div>
+                    <div>
+                        <div class="w-full flex justify-center" id="edit-actions">
+                            <input
+                                    type="submit"
+                                    id="edit-submit"
+                                    name="op"
+                                    value="Valider"
+                                    class="text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10"
+                            />
+                        </div>
+                        <div class="w-full flex justify-between items-end">
+                            <div class="donnees-obligatoire">* Données obligatoire</div>
+                            <a
+                                    href="/user/supprimer-compte"
+                                    id="btn-se-desinscrire"
+                                    class="custom-submit text-white p-3 pt-1 pb-1 rounded text-xl"
+                            >Me désinscrire</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ render(controller('App\\Controller\\PartialController::renderAsideRegister')) }}
+        </div>
+    </div>
+
 {% endblock %}
