@@ -338,3 +338,30 @@
   text-align: center;
   font-size: 18px;
 }
+/** ---------------- INSCRIPTION ----------------**/
+.picto-group {
+  background-image: url('../images/picto-directeur-cliniques.png');
+  background-repeat: no-repeat;
+  width: 160px;
+  height: 160px;
+  background-position: -5px -5px;
+  justify-content: center;
+  align-items: flex-end;
+  display: flex;
+}
+.picto-group  span {
+  margin-top: 350px !important;
+  background-color: rebeccapurple;
+}
+
+.picto-group:hover {
+  width: 160px;
+  height: 160px;
+  background-position: -5px -175px;
+}
+
+.picto-group a {
+  color: #2d8eb8;
+  outline: none;
+  text-decoration: none;
+}

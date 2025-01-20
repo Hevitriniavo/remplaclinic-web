@@ -6,97 +6,180 @@
 
 {% block body %}
     <div class="flex flex-col justify-between items-start p-12 gap-4">
-        <h1 class="blue-span text-3xl">Protégez-vous</h1>
-
+        <h1 class="blue-span text-3xl">Protégez vous</h1>
         <div class="flex flex-row gap-6">
-            <div class="content flex flex-col items-start p-2 pb-6 gap-3">
-                <div class="article-section" style="padding:10px;">
-                    <p>
-                        RemplaClinic a interrogé la MACSF, Mutuelle d’Assurances du Corps de Santé Français,
-                        pour connaître les besoins en assurance des remplaçants et des remplacés.
-                    </p>
-
-                    <h3 class="blue-span">En tant que remplaçant, à quoi sert une assurance de Responsabilité Civile Professionnelle (RCP) ?</h3>
-                    <p>
-                        Un remplaçant exerce son art en toute indépendance et est seul responsable vis-à-vis des patients
-                        et des tiers des conséquences de son exercice professionnel. À ce titre, il conserve seul la
-                        responsabilité de son activité professionnelle pour laquelle il s’assure personnellement à ses frais.<br>
-                        L'assurance RCP vous protège des actions en responsabilité qu’un patient pourrait intenter à votre encontre.
-                    </p>
-                    <p>
-                        En l’absence d’assurance RCP, vous supporterez personnellement l’intégralité de l’indemnisation.<br>
-                        En souscrivant une assurance RCP, c’est votre assureur qui prend en charge les frais de procédure,
-                        d’expertise, et l’indemnisation de la victime.
-                    </p>
-                    <p class="blue-span"><a href="http://www.macsf.fr/nos-produits-et-services/responsabilite-civile-profession-sante-liberaux.html">En savoir plus</a></p>
-
-                    <h3 class="blue-span">En tant que remplacé, à quoi sert une assurance de Responsabilité Civile Professionnelle (RCP) ?</h3>
-                    <p>
-                        Le contrat de remplacement rappelle qu’un remplaçant exerce en toute indépendance et est seul responsable
-                        de son activité professionnelle. Cependant, le médecin remplacé pourrait aussi être poursuivi si :
-                    </p>
-                    <ul>
-                        <li>Il a choisi le remplaçant avec légèreté.</li>
-                        <li>Il n’a pas fourni toutes les informations nécessaires pour assurer la continuité des soins.</li>
-                        <li>Il a permis un remplacement par un praticien non qualifié.</li>
-                    </ul>
-                    <p class="blue-span"><a href="http://www.macsf.fr/nos-produits-et-services/responsabilite-civile-profession-sante-liberaux.html">En savoir plus</a></p>
-
-                    <h3 class="blue-span">Quelles sont les autres assurances indispensables ?</h3>
-                    <p>
-                        Si le remplaçant utilise la voiture de son confrère, il devra vérifier si l’assurance le couvre.
-                        Pour son propre véhicule, une vérification de la couverture pour les déplacements professionnels est nécessaire.
-                    </p>
-                    <p class="blue-span"><a href="http://www.macsf.fr/nos-produits-et-services/assurance-auto.html">En savoir plus sur l’assurance Auto proposée par la MACSF</a></p>
-
-                    <h3 class="blue-span">Pourquoi choisir la MACSF ?</h3>
-                    <p>
-                        La MACSF, premier assureur des professionnels de Santé, offre une gamme étendue de services,
-                        de l’assurance RCP aux facilités de financement personnel.
-                    </p>
-                    <ul>
-                        <li>Plus de 75 ans d’expérience</li>
-                        <li>750 000 sociétaires</li>
-                        <li>1 950 000 contrats</li>
-                        <li>CA annuel de 2,1 milliards d’euros</li>
-                    </ul>
-
-                    <h3>Quelles assurances pour les médecins remplaçants ou remplacés ?</h3>
-                    <ol>
-                        <li>
-                            <strong>Assurance Auto :</strong> mobilité garantie en toutes circonstances.
-                            <a href="http://www.macsf.fr/nos-produits-et-services/assurance-auto.html">Lien produit</a>
-                        </li>
-                        <li>
-                            <strong>Assurance Habitation :</strong> protection des biens précieux.
-                            <a href="http://www.macsf.fr/nos-produits-et-services/assurance-habitation.html">Lien produit</a>
-                        </li>
-                        <li>
-                            <strong>Complémentaire Santé Responsable :</strong> adaptée à vos besoins.
-                            <a href="http://www.macsf.fr/nos-produits-et-services/complementaire-sante-macsf.html">Lien produit</a>
-                        </li>
-                        <li>
-                            <strong>Assurance Vie :</strong> performances exceptionnelles depuis 40 ans.
-                            <a href="http://www.macsf.fr/nos-produits-et-services/res-assurance-vie-en-euros.html">Lien produit</a>
-                        </li>
-                    </ol>
-
-                    <h3>Foire aux questions :</h3>
-                    <ul>
-                        <li>Peut-on dispenser des soins à un mineur sans l'accord de ses parents ?</li>
-                        <li>Qui est responsable en cas de chute du patient dans le cabinet médical ?</li>
-                        <li>Un médecin peut-il refuser de prendre en charge un patient ?</li>
-                        <li>Que faire face à un patient dont le traitement contre-indique la conduite automobile ?</li>
-                    </ul>
-                    <p>
-                        Retrouvez toutes les réponses sur le site MACSF :
-                        <a href="http://www.macsf.fr/vous-informer/questions-reponses-juridiques-medecin-generaliste.html">
-                            FAQ MACSF
-                        </a>
-                    </p>
-                </div>
+            <div class="flex flex-col gap-5">
+                <p>
+                    RemplaClinic a interrogé la MACSF, Mutuelle d’Assurances du Corps de
+                    Santé Français, pour connaître les besoins en assurance des
+                    remplaçants et des remplacés.
+                </p>
+                <h3 class="blue-span">
+                    En tant que remplaçant, à quoi sert une assurance de Responsabilité
+                    Civile Professionnelle (RCP) ?
+                </h3>
+                <p>
+                    Un remplaçant exerce son art en tout indépendance, et est seul
+                    responsable vis-à-vis des patients et des tiers des conséquences de
+                    son exercice professionnel. A ce titre, il conserve seul la
+                    responsabilité de son activité professionnelle pour laquelle il
+                    s’assure personnellement à ses frais.<br />
+                    L'assurance RCP vous protège ainsi des actions en responsabilité
+                    qu’un patient pourrait intenter à votre encontre et mettant en cause
+                    des soins que vous réalisez dans le cadre de vos fonctions de
+                    remplaçant.
+                </p>
+                <p>
+                    Ainsi, en l’absence d’assurance RCP, vous supporterez
+                    personnellement l’intégralité de l’indemnisation.<br />
+                    En souscrivant une assurance de RCP, c’est votre assureur qui prend
+                    en charge les sommes correspondant aux frais de procédures,
+                    d’expertise, et à l’indemnisation de la victime.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/nos-produits-et-services/responsabilite-civile-profession-sante-liberaux.html"
+                            class="blue-span">En savoir plus</a
+                    >
+                </p>
+                <h3 class="blue-span">
+                    En tant que remplacé, à quoi sert une assurance de Responsabilité
+                    Civile Professionnelle (RCP) ?
+                </h3>
+                <p>
+                    Le contrat de remplacement devra rappeler qu’un remplaçant exerce
+                    son art en toute indépendance, et est seul responsable vis-à-vis des
+                    patients et des tiers des conséquences de son exercice professionnel
+                    et qu’à ce titre, il conserve seul la responsabilité de son activité
+                    professionnelle pour laquelle il s’assure personnellement à ses
+                    frais.<br />
+                    Dans certaines circonstances, la mise en cause de la responsabilité
+                    d’un remplaçant n’écarte pas pour autant toute action en
+                    responsabilité à l’encontre du médecin remplacé. Celui-ci pourrait
+                    être personnellement poursuivi par un malade victime de la faute de
+                    son remplaçant, soit parce qu’il aurait choisi celui-ci avec
+                    légèreté, soit parce qu’il ne lui aurait pas donné toutes les
+                    informations nécessaires pour assurer la continuité des soins ou
+                    pour faire fonctionner un appareil.<br />
+                    Le remplacement d’un médecin par un praticien non-qualifié dans les
+                    disciplines du remplacé, ou encore le défaut d’expérience pour
+                    exercer la spécialité et la permanence des soins dans des conditions
+                    satisfaisantes, ont donné lieu à des condamnations à des dommages et
+                    intérêts au titre d’une responsabilité entière ou partagée.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/nos-produits-et-services/responsabilite-civile-profession-sante-liberaux.html"
+                            class="blue-span">En savoir plus</a
+                    >
+                </p>
+                <h3 class="blue-span">Quelles sont les autres assurances indispensables ?</h3>
+                <p>
+                    Si le remplaçant utilise la voiture de son confrère, il devra
+                    vérifier si l’assurance de ce dernier le couvre. S’il utilise son
+                    propre véhicule, le remplaçant devra vérifier qu’il est bien couvert
+                    pour des déplacements professionnels.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/nos-produits-et-services/assurance-auto.html"
+                            class="blue-span">En savoir plus sur l’assurance Auto proposée par la MACSF</a
+                    >
+                </p>
+                <p>Vidéo : quand le médecin se trompe</p>
+                <p>
+                    Non respect du secret médical, retard de diagnostic, non-assistance
+                    à personne en danger, non diagnostic de grossesse et prescription
+                    dangereuse, consultation téléphonique. Les mises en cause possibles
+                    des médecins sont multiples. Découvrez la bande-annonce d'un film
+                    s'inspirant de cas réels et présentant des cas concrets de mise en
+                    cause de médecin.
+                </p>
+                <p>
+                    <a
+                            href="http://www.macsf.fr/vous-informer/video-quand-le-medecin-se-trompe.html"
+                            class="blue-span" >Lien</a
+                    >
+                </p>
+                <h3 class="blue-span">Pourquoi choisir la MACSF ?</h3>
+                <p>
+                    La MACSF, Mutuelle d'Assurances du Corps de Santé français, est le
+                    premier assureur des professionnels de Santé.<br />
+                    Souscrire une assurance MACSF, c’est tout d’abord choisir un
+                    assureur au service des professionnels de santé depuis plus d’un
+                    siècle.
+                </p>
+                <p>
+                    Depuis 1935, la MACSF assure et accompagne tous les professionnels
+                    de la santé tout au long de leur vie professionnelle et
+                    personnelle.<br />
+                    Parcequ’elle maîtrise parfaitement les spécificités du métier de
+                    professionnel de la santé, elle vous offre aujourd’hui une gamme
+                    élargie de services, de l’assurance Responsabilité Civile
+                    Professionnelle aux facilités de financement personnel.<br />
+                    Pour vous et votre famille, faites le choix de la simplicité et de
+                    la sérénité, avec la MACSF.
+                </p>
+                <h3 class="blue-span">Quels sont ses atouts ?</h3>
+                <p>
+                    Plus de 75 ans d’expérience<br />
+                    Plus de 750 000 sociétaires… soit près d’1 professionnel de la santé
+                    sur 2 !<br />
+                    Plus de 1 400 collaborateurs<br />
+                    Plus de 1 950 000 contrats…<br />
+                    Un CA annuel de 2.1 milliards d’euros soit plus de 18.5 milliards
+                    d’euros en gestion !
+                </p>
+                <h3 class="blue-span">
+                    Quelles sont les assurances proposées par la MACSF aux médecins
+                    remplaçants ou remplacés ?
+                </h3>
+                <p>
+                    1/ L’Assurance Auto : pour vous assurer 100 % de mobilité quelles
+                    que soient les circonstances.<br /><a
+                            href="http://www.macsf.fr/nos-produits-et-services/assurance-auto.html"
+                            class="blue-span" >Lien produit</a
+                    >
+                </p>
+                <p>
+                    2/ L'Assurance Habitation : pour protéger les biens qui vous sont
+                    chers<br /><a
+                            href="http://www.macsf.fr/nos-produits-et-services/assurance-habitation.html"
+                            class="blue-span">Lien produit</a
+                    >
+                </p>
+                <p>
+                    3/ La Complémentaire Santé Responsable adaptée à vos besoins et au
+                    meilleur prix : pour vous protéger ainsi que votre famille<br /><a
+                            href="http://www.macsf.fr/nos-produits-et-services/complementaire-sante-macsf.html"
+                            class="blue-span" >Lien produit</a
+                    >
+                </p>
+                <p>
+                    4/ L’Assurance Vie en euros : des performances exceptionnelles
+                    depuis 40 ans<br /><a
+                            href="http://www.macsf.fr/nos-produits-et-services/res-assurance-vie-en-euros.html"
+                            class="blue-span" >Lien produit</a
+                    >
+                </p>
+                <p>
+                    Foire aux questions :<br />
+                    Peut-on dispenser des soins à un mineur sans l'accord de ses parents
+                    ?<br />
+                    Qui est responsable en cas de chute du patient dans le cabinet
+                    médical ?<br />
+                    Un médecin peut-il refuser de prendre en charge un patient ?<br />
+                    Que faire face à un patient dont la pathologie ou le traitement
+                    contre-indique la conduite automobile, mais qui continue à utiliser
+                    son véhicule ?
+                </p>
+                <p>
+                    Retrouvez tous les réponses sur le site macsf.fr<br /><a
+                            href="http://www.macsf.fr/vous-informer/questions-reponses-juridiques-medecin-generaliste.html"
+                            class="blue-span">http://www.macsf.fr/vous-informer/questions-reponses-juridiques-medecin-generaliste.html</a
+                    >
+                </p>
             </div>
-
             {{ render(controller('App\\Controller\\PartialController::index')) }}
         </div>
     </div>
