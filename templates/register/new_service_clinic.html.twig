@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New service clinic{% endblock %}
+{% block title %}
+    Création de compte | Remplaclinic
+{% endblock %}
 
 {% block body %}
 
@@ -377,7 +379,7 @@
                         </label>
                         <div>
                             J'accepte les
-                            <a href="/node/990" target="_blank"
+                            <a href="{{ path('app_node') }}" target="_blank"
                                class="text-blue-500">conditions générales d'utilisation</a
                             >
                             et m'engage à les respecter. *
@@ -396,7 +398,7 @@
                         <div class="w-full flex justify-between items-end">
                             <div class="donnees-obligatoire">* Données obligatoire</div>
                             <a
-                                    href="/user/supprimer-compte"
+                                    href="{{ path('app_user_delete') }}"
                                     id="btn-se-desinscrire"
                                     class="custom-submit text-white p-3 pt-1 pb-1 rounded text-xl"
                             >Me désinscrire</a

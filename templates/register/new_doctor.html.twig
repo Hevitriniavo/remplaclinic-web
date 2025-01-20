@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nex doctor{% endblock %}
+{% block title %}
+    Création de compte | Remplaclinic
+{% endblock %}
 
 {% block body %}
 
@@ -334,20 +336,20 @@
                         </div>
                     </div>
                 </div>
-                <!-- ----------------------------------------------------------------------------------- -->
                 <div class="bg-blue p-4 flex flex-col gap-10">
                     <h1 class="text-xl"><b>Validation</b></h1>
                     <div class="flex flex-row gap-2">
-                        <input
+                        <label for="edit-field-cgu-und"><input
                                 type="checkbox"
                                 id="edit-field-cgu-und"
                                 name="field_cgu[und]"
                                 value="1"
                                 class="form-checkbox"
                         />
+                        </label>
                         <div>
                             J'accepte les
-                            <a href="/node/990" target="_blank" class="text-blue-500"
+                            <a href="{{ path('app_node') }}" target="_blank" class="text-blue-500"
                             >conditions générales d'utilisation</a
                             >
                             et m'engage à les respecter. *
@@ -366,7 +368,7 @@
                         <div class="w-full flex justify-between items-end">
                             <div class="donnees-obligatoire">* Données obligatoire</div>
                             <a
-                                    href="/user/supprimer-compte"
+                                    href="{{ path('app_user_delete') }}"
                                     id="btn-se-desinscrire"
                                     class="custom-submit text-white p-3 pt-1 pb-1 rounded text-xl"
                             >Me désinscrire</a
