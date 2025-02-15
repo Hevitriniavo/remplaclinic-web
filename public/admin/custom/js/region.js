@@ -1,37 +1,27 @@
-function openSpecialityModal(id, url, detailUrl) {
-  $('#speciality-modal').modal('show');
-  const inputName = $('#speciality-name');
-  const inputSpecialityParent = $('#speciality-parent-id');
-  const formSpeciality = $('#speciality-form-detail');
-  const btnSaveSpeciality = $('#btn-speciality-detail-save');
+function openRegionModal(id, url, detailUrl) {
+  $('#region-modal').modal('show');
+  const inputName = $('#region-name');
+  const formRegion = $('#region-form-detail');
+  const btnSaveRegion = $('#btn-region-detail-save');
 
   inputName[0].classList.remove('is-valid', 'is-invalid');
-  inputSpecialityParent[0].classList.remove('is-valid', 'is-invalid');
-  formSpeciality[0].classList.remove('was-validated');
+  formRegion[0].classList.remove('was-validated');
   
-  btnSaveSpeciality.attr('data-url', url);
+  btnSaveRegion.attr('data-url', url);
   if (id && detailUrl) {
-    btnSaveSpeciality.attr('data-method', 'PUT');
+    btnSaveRegion.attr('data-method', 'PUT');
     axios.get(detailUrl)
       .then(res => {
         inputName.val(res.data.name);
-        if (res.data.specialityParent) {
-          inputSpecialityParent.val(res.data.specialityParent.id);
-        } else {
-          inputSpecialityParent.val('');
-        }
-        inputSpecialityParent.change();
       })
   } else {
-    btnSaveSpeciality.attr('data-method', 'POST');
+    btnSaveRegion.attr('data-method', 'POST');
     inputName.val('');
-    inputSpecialityParent.val('');
-    inputSpecialityParent.change();
   }
 }
 
-function hideSpecialityModal() {
-  $('#speciality-modal').modal('hide');
+function hideRegionModal() {
+  $('#region-modal').modal('hide');
 }
 
 function getCleanUrl(url, id)
@@ -45,11 +35,11 @@ function getCleanUrl(url, id)
 
 $(function () {
   const tblDom = $("#tbl-specilities");
-  const btnNew = $('#btn-speciality-new');
-  const btnSaveSpeciality = $('#btn-speciality-detail-save');
-  const formSpeciality = $('#speciality-form-detail');
+  const btnNew = $('#btn-region-new');
+  const btnSaveRegion = $('#btn-region-detail-save');
+  const formRegion = $('#region-form-detail');
 
-  const specialityDatatable = tblDom.DataTable({
+  const regionDatatable = tblDom.DataTable({
     paging: true,
     searching: true,
     ordering: true,
@@ -74,18 +64,10 @@ $(function () {
       {
         targets: 1,
         data: "name",
-        width: '40%',
+        width: '80%',
       },
       {
         targets: 2,
-        data: 'name',
-        width: '40%',
-        render: function (data, type, row, meta) {
-          return row.specialityParent ? row.specialityParent.name : '';
-        }
-      },
-      {
-        targets: 3,
         data: "id",
         orderable: false,
         className: "text-right",
@@ -112,7 +94,7 @@ $(function () {
 
   // delete
   $(document).on('deletedEvent', function() {
-    specialityDatatable.draw();
+    regionDatatable.draw();
   })
 
   $(document).on('click', '.btn-edit', function() {
@@ -120,41 +102,32 @@ $(function () {
     const id = btn.data('id');
     const url = getCleanUrl(btn.data('url'), id);
     const detailUrl = getCleanUrl(btn.data('detail-url'), id);
-    openSpecialityModal(id, url, detailUrl);
+    openRegionModal(id, url, detailUrl);
   })
 
   // the modal
   btnNew.on('click', function (e) {
-    openSpecialityModal(null, $(this).data('url'));
+    openRegionModal(null,  $(this).data('url'));
   });
 
-  $('.speciality-parent').select2({
-    theme: 'bootstrap4',
-    allowClear: true,
-    placeholder: 'Choisir une spécialité'
-  });
-
-  btnSaveSpeciality.on('click', function(e) {
-    if (!formSpeciality[0].checkValidity()) {
+  btnSaveRegion.on('click', function(e) {
+    if (!formRegion[0].checkValidity()) {
       e.preventDefault()
       e.stopPropagation()
-      formSpeciality[0].classList.add('was-validated');
+      formRegion[0].classList.add('was-validated');
     } else {
-      const inputs = new FormData(formSpeciality[0]);
+      const inputs = new FormData(formRegion[0]);
       const payload = {
         name: inputs.get('name'),
       }
-      if (inputs.get('specialityParent')) {
-        payload.specialityParent = parseInt(inputs.get('specialityParent'));
-      }
       axios.request({
-        url: btnSaveSpeciality.attr('data-url'),
-        method: btnSaveSpeciality.attr('data-method'),
+        url: btnSaveRegion.attr('data-url'),
+        method: btnSaveRegion.attr('data-method'),
         data: payload,
       })
         .then(() => {
-          hideSpecialityModal()
-          specialityDatatable.draw();
+          hideRegionModal()
+          regionDatatable.draw();
         });
     }
   });
