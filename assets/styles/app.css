@@ -31,7 +31,10 @@
   clear: both;
 }
 
-#block-block-32 h2,
+#block-block-32 h2 {
+  background: url(../images/compte-ferme-fleche.png) #ff7e1e no-repeat 10px
+}
+  
 .bg-orange-fleche:hover {
   background: url("../images/sliders/fleche-actif-slide.png") no-repeat 10px, url("../images/sliders/fond-titre-slide-active.png") repeat-x;
 }

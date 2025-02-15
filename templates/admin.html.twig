@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Remplaclinic | Admin{% endblock %}</title>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('admin/plugins/adminlte/adminlte.min.css') }}">
+
+    {% block javascripts %}
+    {% block importmap %}{{ importmap('admin-app') }}{% endblock %}
+    {% endblock %}
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        {% include 'admin/partials/navbar.html.twig' %}
+        {% include 'admin/partials/sidenav.html.twig' %}
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">{% block page_title %}{% endblock %}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            {% if breadcrumbs is defined and breadcrumbs is iterable %}
+                            <ol class="breadcrumb float-sm-right">
+                                {% for breadcrumb in breadcrumbs %}
+                                    <li class="breadcrumb-item {{ loop.last ? 'active' : ''}}">
+                                        {% if breadcrumb.url is defined %}
+                                            <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
+                                        {% else %}
+                                            <span>{{ breadcrumb }}</span>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    {% block body %}{% endblock %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="modal fade" id="delete-modal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger">
+                                            <h4 class="modal-title">Confirmation pour la suppression</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                                <span aria-hidden="true" class="text-white">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Vous êtes en train de supprimer un élément de votre base de données.</p>
+                                            <form class="needs-validation" id="form-delete-id" novalidate>
+                                                <input type="hidden" id="id">
+                                                <div class="form-group">
+                                                    <label for="delete-id">Veuillez saisir son identifiant [ID] si vous êtes conscient de votre action</label>
+                                                    <input type="text" class="form-control" id="typed-id" required name="typed_id">
+                                                    <div class="invalid-feedback">
+                                                        L'ID doit être equivalent de l'ID choisis pour supprimer
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                                <i class="fas fa-times"></i> Annuler
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-flat" id="btn-delete">
+                                                <i class="fas fa-trash"></i> Supprimer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="{{ asset('admin/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {% block bodyjs %}{% endblock %}
+    <script src="{{ asset('admin/plugins/adminlte/adminlte.min.js') }}"></script>
+</body>
+
+</html>

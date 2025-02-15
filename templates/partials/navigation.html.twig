@@ -1,7 +1,7 @@
 <header>
     <section class="section-1">
         <div class="w-[1170px] mx-auto">
-            <div class="flex flex-col md:flex-row gap-2 justify-between">
+            <div class="flex flex-col md:flex-row justify-between pb-2">
                 <div class="flex flex-col items-center gap-2 mr-[20px]">
                     <div class=" mt-10">
                         <a href="{{ path('app_home') }}">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="ml-[35px]">
+                <div class="ml-[35px] pt-2">
                     <a href="{{ path('app_home') }}" class="w-full h-full">
                         <img src="{{ asset('images/logo-droite-v4.png') }}" alt="annonce medicale, medecin remplacant"
                             class="w-full h-full object-contain" />
@@ -26,32 +26,33 @@
                 </div>
 
                 <div id="block-block-32">
-                    <h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">Mon compte</h2>
-                    <form class="bg-[#E4E4E6] mb-0 ">
-                        <div class=" flex flex-col px-[12px]  pt-[12px]  gap-4 pr-[20px]">
-                            <label>
-                                <input
-                                    class="bg-[#eaeaea] border border-t-[#C1C1C1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none"
-                                    type="text" placeholder="Identifiant" />
-                            </label>
-
-                            <div class="flex flex-row gap-6">
-                                <label class="w-[calc(100%-110px)]">
+                    <div class="min-w-[245px] max-w-[245px]">
+                        <h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">Mon compte</h2>
+                        <form class="bg-[#E4E4E6] mb-0 ">
+                            <div class="flex flex-col px-[12px] pt-[12px] pr-[20px]">
+                                <label class="mb-[14px]">
                                     <input
-                                        class="bg-[#eaeaea] mr-2 border border-t-[#C1C1C1] p-1 text-[12px] focus:outline-none"
-                                        type="password" placeholder="Mot de passe" />
+                                        class="bg-[#eaeaea] border-solid border-[1px] border-[#e5e5e5] border-t-[#c1c1c1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none"
+                                        type="text" placeholder="Identifiant" />
                                 </label>
-                                <button
-                                    class="border border-[#fff] font-[13px] bg-[#ff7e1e] text-white px-1 h-[29px]">Valider</button>
-                            </div>
 
-                            <div>
-                                <span class="flex justify-start text-[11px] underline text-[#666666]">
-                                    <a href="#">Mot de passe oublié </a><span>|</span><a href="{{ path('app_register') }}"> Créer un compte</a>
-                                </span>
+                                <div class="flex flex-row gap-6 mb-[10px]">
+                                    <label class="w-[calc(100%-110px)]">
+                                        <input
+                                            class="bg-[#eaeaea] mr-2 border border-t-[#c1c1c1] p-1 text-[12px] focus:outline-none"
+                                            type="password" placeholder="Mot de passe" />
+                                    </label>
+                                    <button
+                                        class="border border-[#fff] font-[13px] bg-[#f9a645] text-white px-1 h-[31px] rounded-[3px]">Valider</button>
+                                </div>
+                                <div>
+                                    <span class="flex justify-start text-[11px] text-[#666666]">
+                                        <a href="#" class="underline">Mot de passe oublié </a><span>|</span><a href="{{ path('app_register') }}" class="underline"> Créer un compte</a>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,104 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Spécialité
+{% endblock %}
+
+{% block page_title %}
+Spécialité
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <a class="btn btn-secondary btn-flat" id="btn-speciality-new">
+                                    <i class="fas fa-plus"></i> Ajouter une spécialité
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="tbl-specilities" class="table table-hover"
+                                    data-url="{{ path('api_speciality_get') }}"
+                                    data-delete-url="{{ path('api_speciality_delete', {id: '0000000000'}) }}"
+                                    data-detail-url="{{ path('api_speciality_detail', {id: '0000000000'}) }}"
+                                    data-edit-url="{{ path('api_speciality_update', {id: '0000000000'}) }}">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>#Spécialité</th>
+                                            <th>#Famille de</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="modal fade" id="speciality-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h4 class="modal-title">Détail d'une spécialité</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true" class="text-white">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="speciality-form-detail" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <label for="speciality-name">Nom de la spécialité</label>
+                                        <input type="text" class="form-control" id="speciality-name"
+                                            placeholder="Nome de la spécialité" required name="name">
+                                        <div class="invalid-feedback">
+                                            Une spécialité doit avoir un nom
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Famille de</label>
+                                        <twig:SelectSpeciality class="form-control speciality-parent" name="specialityParent" id="speciality-parent-id">
+                                            <option></option>
+                                        </twig:SelectSpeciality>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                    <i class="fas fa-times"></i> Annuler
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-flat" id="btn-speciality-detail-save" data-url="{{ path('api_speciality_new') }}" data-method="POST">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/speciality.js') }}"></script>
+{% endblock %}

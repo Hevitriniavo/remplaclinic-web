@@ -1,0 +1,37 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="{{ path('app_home') }}" class="brand-link">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-bold text-uppercase">&nbsp;</span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-header">ACCUEIL</li>
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_speciality') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user-tag"></i>
+                        <p class="text-uppercase">
+                            Spécialité
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_region') }}" class="nav-link">
+                        <i class="nav-icon fas fa-map"></i>
+                        <p class="text-uppercase">
+                            Région
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_reference') }}" class="nav-link">
+                        <i class="nav-icon fas fa-handshake"></i>
+                        <p class="text-uppercase">
+                            Référence
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

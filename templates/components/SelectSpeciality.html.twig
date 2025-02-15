@@ -1,0 +1,6 @@
+<select {{ attributes }}>
+    {% block content %} {% endblock %}
+    {% for speciality in this.specialities %}
+        <option value="{{ speciality.id }}">{{ speciality.name }}</option>
+    {% endfor %}
+</select>
