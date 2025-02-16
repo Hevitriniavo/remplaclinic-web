@@ -1,0 +1,65 @@
+<div class="row" id="root">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-8">
+                        {% if reference is defined %}
+                        <form ref="formEvidenceEl" action="{{ path('api_reference_update', {id: reference.id}) }}"
+                            data-detail-url="{{ path('api_reference_detail', {id: reference.id}) }}">
+                            {% else %}
+                            <form ref="formEvidenceEl" action="{{ path('api_reference_new') }}">
+                                {% endif %}
+                                <div class="form-group">
+                                    <label for="reference-title">Titre</label>
+                                    <input type="text" class="form-control" id="reference-title"
+                                        placeholder="Temoignage di directeur du clinique Doe" name="title"
+                                        v-bind:class="[getErrorClass('title')]" v-model="evidenceData.title">
+                                    <div class="invalid-feedback">
+                                        Le titre est requis
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="reference-speciality-name">Statut</label>
+                                        <input type="text" class="form-control" id="reference-speciality-name"
+                                            name="specialityName" placeholder="Medecin remplacant"
+                                            v-bind:class="[getErrorClass('specialityName')]"
+                                            v-model="evidenceData.specialityName">
+                                        <div class="invalid-feedback">
+                                            Le statut est requis
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="reference-clinic-name">Nom du clinique</label>
+                                        <input type="text" class="form-control" id="reference-clinic-name"
+                                            name="clinicName" placeholder="Clinique Doe"
+                                            v-bind:class="[getErrorClass('clinicName')]"
+                                            v-model="evidenceData.clinicName">
+                                        <div class="invalid-feedback">
+                                            Le nom du clinique est requis
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reference-body">Temoignage</label>
+                                    <textarea class="form-control" id="reference-body" rows="10"
+                                        v-bind:class="[getErrorClass('body')]" v-model="evidenceData.body"></textarea>
+                                    <div class="invalid-feedback">
+                                        La temoignage du clinique est requis
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-secondary btn-flat"
+                                        v-bind:disabled="requesting" id="btn-speciality-detail-save"
+                                        v-on:click="onCreateEvidence">
+                                        <i class="fas fa-save"></i> Enregistrer
+                                    </button>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

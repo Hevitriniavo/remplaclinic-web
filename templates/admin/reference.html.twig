@@ -8,6 +8,49 @@ Remplaclinic :: Admin :: Référence
     Référence
 {% endblock %}
 
-{% block body %}
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
 
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <a class="btn btn-secondary btn-flat" id="btn-reference-new" href="{{ path('app_admin_reference_new') }}">
+                            <i class="fas fa-plus"></i> Ajouter un temoignage
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tbl-references" class="table table-hover"
+                            data-url="{{ path('api_reference_get') }}"
+                            data-delete-url="{{ path('api_reference_delete', {id: '0000000000'}) }}"
+                            data-detail-url="{{ path('app_admin_reference_show', {id: '0000000000'}) }}">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>#Clinique</th>
+                                    <th>#Statut</th>
+                                    <th>#Titre</th>
+                                    <th>#Temoignage</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/reference.js') }}"></script>
 {% endblock %}
