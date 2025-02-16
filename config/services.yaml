@@ -29,3 +29,9 @@ services:
             $env: '%kernel.environment%'
             $appVersion: '%app.version%'
         tags: [ 'twig.extension' ]
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
+    App\Service\FileCleaner:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'

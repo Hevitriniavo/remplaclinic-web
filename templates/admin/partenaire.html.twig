@@ -1,0 +1,97 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Partenaire
+{% endblock %}
+
+{% block page_title %}
+    Partenaire
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <a class="btn btn-secondary btn-flat" id="btn-partenaire-new"
+                                    data-url="{{ path('api_partenaire_new') }}">
+                                    <i class="fas fa-plus"></i> Ajouter un partenaire
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="tbl-partenaires" class="table table-hover"
+                                    data-url="{{ path('api_partenaire_get') }}"
+                                    data-delete-url="{{ path('api_partenaire_delete', {id: '0000000000'}) }}"
+                                    data-detail-url="{{ path('api_partenaire_detail', {id: '0000000000'}) }}"
+                                    data-edit-url="{{ path('api_partenaire_update', {id: '0000000000'}) }}"
+                                    data-image-url="{{ asset('uploads') }}">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>#Nom</th>
+                                            <th>#Logo</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="modal fade" id="partenaire-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h4 class="modal-title">Détail d'un partenaire</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true" class="text-white">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="partenaire-form-detail" class="needs-validation" novalidate enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="partenaire-name">Nom du partenaire</label>
+                                        <input type="text" class="form-control" id="partenaire-name"
+                                            placeholder="Nome du partenaire" required name="name">
+                                        <div class="invalid-feedback">
+                                            Un partenaire doit avoir un nom
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="partenaire-logo-file">Logo du partenaire</label>
+                                        <input type="file" class="form-control-file" id="partenaire-logo-file" name="logo" accept="image/png,image/jpeg">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                    <i class="fas fa-times"></i> Annuler
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-flat" id="btn-partenaire-detail-save">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/partenaire.js') }}"></script>
+{% endblock %}

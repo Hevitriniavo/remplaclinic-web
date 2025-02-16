@@ -13,3 +13,12 @@ LEFT JOIN taxonomy_term_data AS parent ON h.parent = parent.tid
 INNER JOIN taxonomy_vocabulary AS v ON child.vid = v.vid
 WHERE child.vid = 5 -- sp_cialit_
 ORDER BY child.tid;
+
+-- abned: 11/02/2025
+-- get all regions
+SELECT 
+    child.tid AS id,
+    child.name AS 'name'
+FROM taxonomy_term_data AS child
+WHERE child.vid = 6 -- r_gion
+ORDER BY child.tid;
