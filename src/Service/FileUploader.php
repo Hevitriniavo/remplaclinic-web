@@ -12,15 +12,18 @@ class FileUploader
         private SluggerInterface $slugger,
     ) {}
 
-    public function upload(UploadedFile $file): string
+    public function upload(?UploadedFile $file): ?string
     {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        if (!empty($file)) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $this->slugger->slug($originalFilename);
+            $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-        $file->move($this->getTargetDirectory(), $fileName);
+            $file->move($this->getTargetDirectory(), $fileName);
 
-        return $fileName;
+            return $fileName;
+        }
+        return null;
     }
 
     public function getTargetDirectory(): string

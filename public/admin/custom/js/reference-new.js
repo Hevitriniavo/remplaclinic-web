@@ -40,9 +40,9 @@ const app = createApp({
 
     function getEvidenceDetail() {
       const url = formEvidenceEl.value.dataset.detailUrl;
-      if (detailUrl) {
+      if (url) {
         requesting.value = true;
-        return axios.get(url, evidenceData.value)
+        return axios.get(url)
             .then((res) => {
               evidenceData.value = res.data;
               requesting.value = false;

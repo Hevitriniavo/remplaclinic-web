@@ -1,0 +1,6 @@
+<select {{ attributes }}>
+    {% block content %} {% endblock %}
+    {% for region in this.regions %}
+        <option value="{{ region.id }}">{{ region.name }}</option>
+    {% endfor %}
+</select>

@@ -22,3 +22,12 @@ SELECT
 FROM taxonomy_term_data AS child
 WHERE child.vid = 6 -- r_gion
 ORDER BY child.tid;
+
+-- abned: 12/02/2025
+-- get all roles
+INSERT INTO `user_role` (`id`, `role`) VALUE(4, 'Remplaçant');
+INSERT INTO `user_role` (`id`, `role`) VALUE(5, 'Clinique / Service clinique');
+INSERT INTO `user_role` (`id`, `role`) VALUE(6, 'Cabinet');
+INSERT INTO `user_role` (`id`, `role`) VALUE(7, 'Directeur');
+INSERT INTO `user_role` (`id`, `role`) VALUE(3, 'Administrator');
+INSERT INTO `user_role` (`id`, `role`) VALUE(8, 'Webmaster');

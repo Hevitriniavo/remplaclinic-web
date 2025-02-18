@@ -1,0 +1,21 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Directeur
+{% endblock %}
+
+{% block page_title %}
+Directeur
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-12"></div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/user-list.js') }}"></script>
+{% endblock %}

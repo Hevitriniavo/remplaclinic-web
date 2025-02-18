@@ -30,6 +30,4 @@ class ReplacementController extends AbstractController
         return $this->render('replacement/licence.html.twig');
     }
 
-
-
 }
