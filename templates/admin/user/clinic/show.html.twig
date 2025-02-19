@@ -1,0 +1,35 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Clinique détail
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.min.js"></script>
+{% endblock %}
+
+{% block page_title %}
+<a class="btn btn-secondary btn-flat" id="btn-clinic-list" href="{{ path('app_admin_clinic') }}">
+    <i class="fas fa-arrow-left"></i> Retourner
+</a>
+Détail d'un clinique
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
+{% endblock %}
+
+{% block body %}
+{% include 'admin/user/clinic/_form.html.twig' %}
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/clinic-new.js') }}"></script>
+{% endblock %}

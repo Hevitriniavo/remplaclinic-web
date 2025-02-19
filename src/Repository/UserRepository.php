@@ -19,7 +19,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAllReplacementDataTables(DataTableParams $params): DataTableResponse
+    public function findAllDataTables(?int $roleId, DataTableParams $params): DataTableResponse
     {
         $sortBy = $params->getOrderColumn(['u.id', 'u.status', 'u.name', 'u.email', 'u.createdAt', 's.name'], 'u.id');
         
@@ -29,11 +29,22 @@ class UserRepository extends ServiceEntityRepository
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset);
 
+        if (!is_null($roleId)) {
+            $qb->join('u.roles', 'r')
+                ->where('r.id = :roleId')
+                ->setParameter('roleId', $roleId);
+        }
+        
         if (!empty($params->value)) {
-            $qb->where('u.name LIKE :value')
-                ->orWhere('u.surname LIKE :value')
-                ->orWhere('u.email LIKE :value')
-                ->orWhere('s.name LIKE :value')
+            $qb
+                ->where(
+                    $qb->expr()->orX(
+                        'u.name LIKE :value',
+                        'u.surname LIKE :value',
+                        'u.email LIKE :value',
+                        's.name LIKE :value'
+                    )
+                )
                 ->setParameter('value', '%' . $params->value . '%');
         }
         

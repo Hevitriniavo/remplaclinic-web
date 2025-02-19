@@ -63,7 +63,7 @@ class User
     private ?string $telephone = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone2 = null;
 
     #[Groups(['datatable'])]
@@ -96,10 +96,6 @@ class User
     #[Groups(['datatable'])]
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $currentSpeciality = null;
-
-    #[Groups(['datatable'])]
-    #[ORM\ManyToOne]
-    private ?Region $mobility = null;
 
     #[Groups(['datatable'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -146,6 +142,10 @@ class User
      */
     #[ORM\ManyToMany(targetEntity: Region::class)]
     private Collection $mobilities;
+
+    #[Groups(['datatable'])]
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserSubscription $subscription = null;
 
     public function __construct()
     {
@@ -399,18 +399,6 @@ class User
         return $this;
     }
 
-    public function getMobility(): ?Region
-    {
-        return $this->mobility;
-    }
-
-    public function setMobility(?Region $mobility): static
-    {
-        $this->mobility = $mobility;
-
-        return $this;
-    }
-
     public function getComment(): ?string
     {
         return $this->comment;
@@ -573,6 +561,18 @@ class User
     {
         $this->subSpecialities = new ArrayCollection();
         
+        return $this;
+    }
+
+    public function getSubscription(): ?UserSubscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?UserSubscription $subscription): static
+    {
+        $this->subscription = $subscription;
+
         return $this;
     }
 }

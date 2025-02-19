@@ -9,7 +9,6 @@ use App\Repository\UserRepository;
 use App\Service\User\Registration;
 use App\Service\User\UserUpdate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +17,8 @@ use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 
 class ReplacementController extends AbstractController
 {
+    const ROLE_REPLACEMENT_ID = 4;
+
     public function __construct(
         private UserRepository $userRepository,
     ) {}
@@ -26,7 +27,7 @@ class ReplacementController extends AbstractController
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
-        return $this->json($this->userRepository->findAllReplacementDataTables($params), 200, [], ['groups' => 'datatable']);
+        return $this->json($this->userRepository->findAllDataTables(self::ROLE_REPLACEMENT_ID, $params), 200, [], ['groups' => 'datatable']);
     }
 
     #[Route('/api/replacements', name: 'api_replacement_new', methods: ['POST'])]

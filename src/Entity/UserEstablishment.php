@@ -36,6 +36,14 @@ class UserEstablishment
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $per = null;
 
+    #[Groups(['datatable'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $serviceName = null;
+
+    #[Groups(['datatable'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $chiefServiceName = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -97,6 +105,30 @@ class UserEstablishment
     public function setPer(?string $per): static
     {
         $this->per = $per;
+
+        return $this;
+    }
+
+    public function getServiceName(): ?string
+    {
+        return $this->serviceName;
+    }
+
+    public function setServiceName(?string $serviceName): static
+    {
+        $this->serviceName = $serviceName;
+
+        return $this;
+    }
+
+    public function getChiefServiceName(): ?string
+    {
+        return $this->chiefServiceName;
+    }
+
+    public function setChiefServiceName(?string $chiefServiceName): static
+    {
+        $this->chiefServiceName = $chiefServiceName;
 
         return $this;
     }

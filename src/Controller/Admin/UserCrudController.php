@@ -33,7 +33,7 @@ class UserCrudController extends AbstractController
     #[Route('/admin/clinics', name: 'app_admin_clinic')]
     public function clinic(): Response
     {
-        $breadcrumbs = $this->getBreadcrumbs('Médecin');
+        $breadcrumbs = $this->getBreadcrumbs('Clinique');
         return $this->render('admin/user/clinic.html.twig', [
             'breadcrumbs' => $breadcrumbs,
         ]);
@@ -77,6 +77,40 @@ class UserCrudController extends AbstractController
         ];
         $breadcrumbs[] = sprintf('User #%d: %s', $user->getId(), $user->getName());
         return $this->render('admin/user/replacement/show.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/admin/clinic/new', name: 'app_admin_clinic_new')]
+    public function newClinic(): Response
+    {
+        $breadcrumbs = $this->getBreadcrumbs('Clinique');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_clinic'),
+            'text' => 'Clinique',
+        ];
+        $breadcrumbs[] = 'Nouveau Clinique';
+        return $this->render('admin/user/clinic/new.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+    }
+
+    #[Route('/admin/clinic/detail/{id}', name: 'app_admin_clinic_show', requirements: ['id' => '\d+'])]
+    public function showClinic(int $id): Response
+    {
+        $user = $this->userRepository->find($id);
+        if (empty($user)) {
+            throw new EntityNotFoundException('No entity found for #' . $id);
+        }
+
+        $breadcrumbs = $this->getBreadcrumbs('Clinique');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_clinic'),
+            'text' => 'Clinique',
+        ];
+        $breadcrumbs[] = sprintf('User #%d: %s', $user->getId(), $user->getName());
+        return $this->render('admin/user/clinic/show.html.twig', [
             'breadcrumbs' => $breadcrumbs,
             'user' => $user,
         ]);

@@ -22,8 +22,6 @@ class ReplacementController extends AbstractController
         return $this->render('replacement/search.html.twig');
     }
 
-
-
     #[Route('/obtenir-sa-licence-de-remplacement', name: 'app_replacement_licence')]
     public function getLicence(): Response
     {

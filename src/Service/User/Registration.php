@@ -2,10 +2,14 @@
 
 namespace App\Service\User;
 
+use App\Common\DateUtil;
+use App\Dto\User\ClinicDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
 use App\Entity\User;
 use App\Entity\UserAddress;
+use App\Entity\UserEstablishment;
+use App\Entity\UserSubscription;
 use App\Repository\RegionRepository;
 use App\Repository\SpecialityRepository;
 use App\Repository\UserRepository;
@@ -96,6 +100,70 @@ class Registration
                     throw new EntityNotFoundException('No region found for ' . $mobilityId);
                 }
                 $user->addMobility($region);
+            }
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    public function registerClinic(ClinicDto $clinicDto)
+    {
+        $user = new User();
+        $userAddress = new UserAddress();
+        $userEstablishment = new UserEstablishment();
+        $userSubscription = new UserSubscription();
+        
+        $userAddress
+            ->setCountry('FR')
+            ->setThoroughfare($clinicDto->thoroughfare)
+            ->setPremise($clinicDto->premise)
+            ->setPostalCode($clinicDto->postalCode)
+            ->setLocality($clinicDto->locality)
+        ;
+
+        $userEstablishment
+            ->setServiceName($clinicDto->serviceName)
+            ->setChiefServiceName($clinicDto->chiefServiceName)
+            ->setName($clinicDto->establishmentName)
+            ->setBedsCount($clinicDto->bedsCount)
+            ->setSiteWeb($clinicDto->siteWeb)
+        ;
+
+        $userSubscription
+            ->setEndAt(DateUtil::parseDate('d/m/Y', $clinicDto->subscriptionEndAt))
+            ->setStatus($clinicDto->subscriptionStatus)
+            ->setEndNotification($clinicDto->subscriptionEndNotification)
+            ->setInstallationCount($clinicDto->installationCount)
+        ;
+
+        $user
+            ->setPosition($clinicDto->position)
+            ->setCivility($clinicDto->civility)
+            ->setSurname($clinicDto->surname)
+            ->setName($clinicDto->name)
+            ->setEmail($clinicDto->email)
+            ->setTelephone($clinicDto->telephone)
+            ->setTelephone2($clinicDto->telephone2)
+            ->setPassword($clinicDto->password)
+            ->setStatus($clinicDto->status)
+            ->setFax($clinicDto->fax)
+            ->setComment($clinicDto->comment)
+            ->setAddress($userAddress)
+            ->setEstablishment($userEstablishment)
+            ->setSubscription($userSubscription)
+            ->setCreateAt(new DateTime())
+        ;
+
+        if (is_array($clinicDto->roles)) {
+            foreach ($clinicDto->roles as $roleId) {
+                $role = $this->userRoleRepository->find($roleId);
+                if (is_null($role)) {
+                    throw new EntityNotFoundException('No role found for ' . $roleId);
+                }
+                $user->addRole($role);
             }
         }
 
