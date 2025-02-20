@@ -1,7 +1,7 @@
 {% extends 'admin.html.twig' %}
 
 {% block title %}
-Remplaclinic :: Admin :: Clinique détail
+Remplaclinic :: Admin :: Médecin détail
 {% endblock %}
 
 {% block javascripts %}
@@ -10,22 +10,21 @@ Remplaclinic :: Admin :: Clinique détail
 {% endblock %}
 
 {% block page_title %}
-<a class="btn btn-secondary btn-flat" id="btn-clinic-list" href="{{ path('app_admin_clinic') }}">
+<a class="btn btn-secondary btn-flat" id="btn-doctor-list" href="{{ path('app_admin_doctor') }}">
     <i class="fas fa-arrow-left"></i> Retourner
 </a>
-Détail d'un clinique
+Détail d'un médecin
 {% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
-<link rel="stylesheet" href="{{ asset('admin/plugins/datepicker/css/bootstrap-datepicker3.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
 {% endblock %}
 
 {% block body %}
-{% include 'admin/user/clinic/_form.html.twig' %}
+{% include 'admin/user/doctor/_form.html.twig' %}
 {% endblock %}
 
 {% block bodyjs %}
@@ -33,5 +32,5 @@ Détail d'un clinique
 <script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
 <script src="{{ asset('admin/plugins/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-<script src="{{ versioned_asset('admin/custom/js/clinic-new.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/doctor-new.js') }}"></script>
 {% endblock %}

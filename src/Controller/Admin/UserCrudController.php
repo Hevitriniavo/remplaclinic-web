@@ -116,6 +116,40 @@ class UserCrudController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/doctor/new', name: 'app_admin_doctor_new')]
+    public function newDoctor(): Response
+    {
+        $breadcrumbs = $this->getBreadcrumbs('Médecin');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_doctor'),
+            'text' => 'Médecin',
+        ];
+        $breadcrumbs[] = 'Nouveau Médecin';
+        return $this->render('admin/user/doctor/new.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+    }
+
+    #[Route('/admin/doctor/detail/{id}', name: 'app_admin_doctor_show', requirements: ['id' => '\d+'])]
+    public function showDoctor(int $id): Response
+    {
+        $user = $this->userRepository->find($id);
+        if (empty($user)) {
+            throw new EntityNotFoundException('No entity found for #' . $id);
+        }
+        
+        $breadcrumbs = $this->getBreadcrumbs('Médecin');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_doctor'),
+            'text' => 'Médecin',
+        ];
+        $breadcrumbs[] = sprintf('User #%d: %s', $user->getId(), $user->getName());
+        return $this->render('admin/user/doctor/show.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+            'user' => $user,
+        ]);
+    }
+
     private function getBreadcrumbs(string $title)
     {
         return  [

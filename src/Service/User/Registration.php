@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 use App\Common\DateUtil;
 use App\Dto\User\ClinicDto;
+use App\Dto\User\DoctorDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
 use App\Entity\User;
@@ -11,9 +12,7 @@ use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
 use App\Repository\RegionRepository;
-use App\Repository\SpecialityRepository;
 use App\Repository\UserRepository;
-use App\Repository\UserRoleRepository;
 use App\Service\FileUploader;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,8 +23,8 @@ class Registration
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
-        private UserRoleRepository $userRoleRepository,
-        private SpecialityRepository $specialityRepository,
+        private RoleService $roleService,
+        private SpecialityService $specialityService,
         private RegionRepository $regionRepository,
         private FileUploader $fileUploader,
     ) {}
@@ -65,32 +64,17 @@ class Registration
             ->setCreateAt(new DateTime())
         ;
 
-        if (is_array($replacementDto->roles)) {
-            foreach ($replacementDto->roles as $roleId) {
-                $role = $this->userRoleRepository->find($roleId);
-                if (is_null($role)) {
-                    throw new EntityNotFoundException('No role found for ' . $roleId);
-                }
-                $user->addRole($role);
-            }
+        foreach ($this->roleService->getRoles($replacementDto->roles) as $role) {
+            $user->addRole($role);
         }
 
         if (!empty($replacementDto->speciality)) {
-            $speciality = $this->specialityRepository->find($replacementDto->speciality);
-            if (is_null($speciality)) {
-                throw new EntityNotFoundException('No speciality found for ' . $replacementDto->speciality);
-            }
-            $user->setSpeciality($speciality);
+            $specialities = $this->specialityService->getSpecialities([$replacementDto->speciality]);
+            $user->setSpeciality($specialities[0]);
         }
 
-        if (is_array($replacementDto->subSpecialities)) {
-            foreach ($replacementDto->subSpecialities as $specialityId) {
-                $speciality = $this->specialityRepository->find($specialityId);
-                if (is_null($speciality)) {
-                    throw new EntityNotFoundException('No speciality found for ' . $specialityId);
-                }
-                $user->addSubSpeciality($speciality);
-            }
+        foreach ($this->specialityService->getSpecialities($replacementDto->subSpecialities) as $speciality) {
+            $user->addSubSpeciality($speciality);
         }
 
         if (is_array($replacementDto->mobility)) {
@@ -157,14 +141,69 @@ class Registration
             ->setCreateAt(new DateTime())
         ;
 
-        if (is_array($clinicDto->roles)) {
-            foreach ($clinicDto->roles as $roleId) {
-                $role = $this->userRoleRepository->find($roleId);
-                if (is_null($role)) {
-                    throw new EntityNotFoundException('No role found for ' . $roleId);
-                }
-                $user->addRole($role);
-            }
+        foreach ($this->roleService->getRoles($clinicDto->roles) as $role) {
+            $user->addRole($role);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    public function registerDoctor(DoctorDto $doctorDto)
+    {
+        $user = new User();
+        $userAddress = new UserAddress();
+        $userEstablishment = new UserEstablishment();
+        $userSubscription = new UserSubscription();
+        
+        $userAddress
+            ->setCountry('FR')
+            ->setThoroughfare($doctorDto->thoroughfare)
+            ->setPremise($doctorDto->premise)
+            ->setPostalCode($doctorDto->postalCode)
+            ->setLocality($doctorDto->locality)
+        ;
+
+        $userEstablishment
+            ->setConsultationCount($doctorDto->consultationCount)
+            ->setPer($doctorDto->per)
+            ->setSiteWeb($doctorDto->siteWeb)
+        ;
+
+        $userSubscription
+            ->setEndAt(DateUtil::parseDate('d/m/Y', $doctorDto->subscriptionEndAt))
+            ->setStatus($doctorDto->subscriptionStatus)
+            ->setEndNotification($doctorDto->subscriptionEndNotification)
+            ->setInstallationCount($doctorDto->installationCount)
+        ;
+
+        $user
+            ->setOrdinaryNumber($doctorDto->ordinaryNumber)
+            ->setCivility($doctorDto->civility)
+            ->setSurname($doctorDto->surname)
+            ->setName($doctorDto->name)
+            ->setEmail($doctorDto->email)
+            ->setTelephone($doctorDto->telephone)
+            ->setTelephone2($doctorDto->telephone2)
+            ->setPassword($doctorDto->password)
+            ->setStatus($doctorDto->status)
+            ->setFax($doctorDto->fax)
+            ->setComment($doctorDto->comment)
+            ->setAddress($userAddress)
+            ->setEstablishment($userEstablishment)
+            ->setSubscription($userSubscription)
+            ->setCreateAt(new DateTime())
+        ;
+
+        foreach ($this->roleService->getRoles($doctorDto->roles) as $role) {
+            $user->addRole($role);
+        }
+
+        if (!empty($doctorDto->speciality)) {
+            $specialities = $this->specialityService->getSpecialities([$doctorDto->speciality]);
+            $user->setSpeciality($specialities[0]);
         }
 
         $this->entityManager->persist($user);

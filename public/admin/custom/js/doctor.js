@@ -7,23 +7,8 @@ function getCleanUrl(url, id)
   return result;
 }
 
-function formatDate(data, withHour = true) {
-  const date = new Date(data);
-  const options = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  };
-  if (withHour) {
-    options['hour'] = '2-digit';
-    options['minute'] = '2-digit';
-  }
-  const formatter = new Intl.DateTimeFormat("fr-FR", options);
-  return formatter.format(date);
-}
-
 $(function () {
-  const tblDom = $("#tbl-clinics");
+  const tblDom = $("#tbl-doctors");
 
   const specialityDatatable = tblDom.DataTable({
     paging: true,
@@ -58,7 +43,7 @@ $(function () {
       {
         targets: 2,
         data: "name",
-        width: '15%',
+        width: '30%',
         render: function (data, type, row, meta) {
           if (!data) {
             return '';
@@ -71,37 +56,31 @@ $(function () {
       },
       {
         targets: 3,
-        data: 'establishment',
+        data: "email",
         width: '15%',
-        render: function (data, type, row, meta) {
-          if (!data) {
-            return '';
-          }
-
-          return (
-            "<div>" + data.name + "</div>"
-          );
-        }
       },
       {
         targets: 4,
-        data: "email",
-        width: '10%',
-      },
-      {
-        targets: 5,
         data: 'createAt',
-        width: '12%',
+        width: '15%',
         render: function(data, type, row, meta) {
           if (!data) {
             return '';
           }
 
-          return formatDate(data);
+          const date = new Date(data);
+          const formatter = new Intl.DateTimeFormat("fr-FR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: '2-digit',
+              minute: '2-digit'
+          });
+          return formatter.format(date);
         }
       },
       {
-        targets: 6,
+        targets: 5,
         data: 'speciality',
         width: '15%',
         render: function (data, type, row, meta) {
@@ -115,18 +94,7 @@ $(function () {
         }
       },
       {
-        targets: 7,
-        data: 'subscription',
-        width: '10%',
-        render: function(data, type, row, meta) {
-          if (!data) {
-            return '';
-          }
-          return formatDate(data.endAt, false);
-        }
-      },
-      {
-        targets: 8,
+        targets: 6,
         data: 'subscription',
         width: '5%',
         render: function(data, type, row, meta) {
@@ -137,11 +105,11 @@ $(function () {
         }
       },
       {
-        targets: 9,
+        targets: 7,
         data: "id",
         orderable: false,
         className: "text-right",
-        width: '8%',
+        width: '10%',
         render: function (data, type, row, meta) {
           const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id']);
           const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
