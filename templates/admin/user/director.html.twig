@@ -11,11 +11,43 @@ Directeur
 
 {% block body %}
 <div class="row">
-    <div class="col-12"></div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <a class="btn btn-secondary btn-flat" id="btn-director-new" href="{{ path('app_admin_director_new') }}">
+                            <i class="fas fa-plus"></i> Ajouter un directeur
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tbl-directors" class="table table-hover"
+                            data-url="{{ path('api_director_get') }}"
+                            data-delete-url="{{ path('api_user_delete', {id: '0000000000'}) }}"
+                            data-detail-url="{{ path('app_admin_director_show', {id: '0000000000'}) }}">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>#ACTIF</th>
+                                    <th class="text-uppercase">#Nom - Prénom</th>
+                                    <th>#COURRIEL</th>
+                                    <th>#DATE D'INCRIPTION</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block bodyjs %}
 {{ parent() }}
-<script src="{{ versioned_asset('admin/custom/js/user-list.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/director.js') }}"></script>
 {% endblock %}

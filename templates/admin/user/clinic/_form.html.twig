@@ -169,7 +169,8 @@
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="clinic-role-7" value="7">
+                                                                    id="clinic-role-7" value="7"
+                                                                    v-model="userData.roles">
                                                                 <label class="form-check-label" for="clinic-role-7">
                                                                     Directeur
                                                                 </label>
@@ -334,31 +335,35 @@
                                                         <div class="col-6">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="clinic-subscription-status"
-                                                                    true-value="1"
+                                                                    id="clinic-subscription-status" true-value="1"
                                                                     false-value="0"
                                                                     v-model="userData.subscriptionStatus">
-                                                                <label class="form-check-label" for="clinic-subscription-status">
+                                                                <label class="form-check-label"
+                                                                    for="clinic-subscription-status">
                                                                     Abonnement actif
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="clinic-subscription-notification"
-                                                                    true-value="1"
+                                                                    id="clinic-subscription-notification" true-value="1"
                                                                     false-value="0"
                                                                     v-model="userData.subscriptionEndNotification">
-                                                                <label class="form-check-label" for="clinic-subscription-notification">
+                                                                <label class="form-check-label"
+                                                                    for="clinic-subscription-notification">
                                                                     Email fin abonnement
                                                                 </label>
                                                             </div>
                                                             <div class="form-group mt-3">
-                                                                <label for="clinic-subscription-end">Valable jusqu'au</label>
-                                                                <div class="input-group date" id="clinic-subscription-end"
+                                                                <label for="clinic-subscription-end">Valable
+                                                                    jusqu'au</label>
+                                                                <div class="input-group date"
+                                                                    id="clinic-subscription-end"
                                                                     data-target-input="nearest">
                                                                     <input type="text"
                                                                         class="form-control datetimepicker-input"
-                                                                        data-target="#clinic-subscription-end" id="clinic-subscription-end-input" v-model="userData.subscriptionEndAt" />
+                                                                        data-target="#clinic-subscription-end"
+                                                                        id="clinic-subscription-end-input"
+                                                                        v-model="userData.subscriptionEndAt" />
                                                                     <div class="input-group-append"
                                                                         data-target="#clinic-subscription-end"
                                                                         data-toggle="datetimepicker">
@@ -368,9 +373,11 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="clinic-installation-count">Demande d'installation restante</label>
+                                                                <label for="clinic-installation-count">Demande
+                                                                    d'installation restante</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="clinic-installation-count" v-model="userData.installationCount">
+                                                                    id="clinic-installation-count"
+                                                                    v-model="userData.installationCount">
                                                             </div>
                                                         </div>
                                                     </div>

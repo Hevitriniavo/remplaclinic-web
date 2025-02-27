@@ -2,10 +2,10 @@
     <div class="col-12">
         <div class="card">
             {% if user is defined %}
-            <div class="card-body" ref="formEl" data-url="{{ path('api_doctor_update', {id: user.id}) }}"
-                data-detail-url="{{ path('api_doctor_detail', {id: user.id}) }}">
+            <div class="card-body" ref="formEl" data-url="{{ path('api_director_update', {id: user.id}) }}"
+                data-detail-url="{{ path('api_director_detail', {id: user.id}) }}">
                 {% else %}
-                <div class="card-body" ref="formEl" data-url="{{ path('api_doctor_new') }}">
+                <div class="card-body" ref="formEl" data-url="{{ path('api_director_new') }}">
                     {% endif %}
                     <div class="row justify-content-center">
                         <div class="col-10">
@@ -29,16 +29,16 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="form-group">
-                                                                <label for="doctor-ordinary-number">Numéro
-                                                                    d'inscription au
-                                                                    conseil de l'Ordre</label>
+                                                                <label for="director-position">Fonction / Nom du chef de
+                                                                    service</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="doctor-ordinary-number"
-                                                                    v-model="userData.ordinaryNumber">
+                                                                    id="director-position" placeholder="John / RH"
+                                                                    v-model="userData.position"
+                                                                    :class="getErrorClass('position')">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="doctor-civility">Civilité *</label>
-                                                                <select id="doctor-civility" class="form-control"
+                                                                <label for="director-civility">Civilité *</label>
+                                                                <select id="director-civility" class="form-control"
                                                                     v-model="userData.civility"
                                                                     :class="getErrorClass('civility')">
                                                                     <option selected disabled v-bind:value="null">-
@@ -50,64 +50,98 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="doctor-surname">Prénom *</label>
+                                                                <label for="director-surname">Prénom *</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="doctor-surname" placeholder="John"
+                                                                    id="director-surname" placeholder="John"
                                                                     v-model="userData.surname"
                                                                     :class="getErrorClass('surname')">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="doctor-name">Nom *</label>
-                                                                <input type="text" class="form-control" id="doctor-name"
-                                                                    placeholder="Doe" v-model="userData.name"
+                                                                <label for="director-name">Nom *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-name" placeholder="Doe"
+                                                                    v-model="userData.name"
                                                                     :class="getErrorClass('name')">
                                                             </div>
-                                                        </div>
-                                                        <div class="col-6 pl-5">
                                                             <div class="form-group">
-                                                                <label for="doctor-telephone">Téléphone *</label>
+                                                                <label for="director-telephone">Téléphone *</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="doctor-telephone" placeholder="Ex : 0642260032"
+                                                                    id="director-telephone"
+                                                                    placeholder="Ex : 0642260032"
                                                                     v-model="userData.telephone"
                                                                     :class="getErrorClass('telephone')">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="doctor-telephone2">Mobile</label>
+                                                                <label for="director-telephone2">Mobile</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="doctor-telephone2" placeholder="Ex : 0642260032"
+                                                                    id="director-telephone2"
+                                                                    placeholder="Ex : 0642260032"
                                                                     v-model="userData.telephone2">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="doctor-fax">Fax</label>
-                                                                <input type="text" class="form-control" id="doctor-fax"
-                                                                    v-model="userData.fax">
+                                                                <label for="director-fax">Fax</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-fax" v-model="userData.fax">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="director-organisme">Organisme</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-organisme"
+                                                                    v-model="userData.organisme">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 pl-5">
+                                                            <div class="form-group">
+                                                                <label for="director-address">Adresse *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-address" placeholder="1234 Main Street"
+                                                                    v-model="userData.thoroughfare"
+                                                                    :class="getErrorClass('thoroughfare')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="director-premise">Adresse 2</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-premise" v-model="userData.premise">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="director-postal-code">Code postal *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-postal-code"
+                                                                    v-model="userData.postalCode"
+                                                                    :class="getErrorClass('postalCode')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="director-locality">Ville *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="director-locality" v-model="userData.locality"
+                                                                    :class="getErrorClass('locality')">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-4">
                                                             <div class="form-group">
-                                                                <label for="doctor-email">E-mail *</label>
+                                                                <label for="director-email">E-mail *</label>
                                                                 <input type="email" class="form-control"
-                                                                    id="doctor-email" placeholder="john.doe@mail.com"
+                                                                    id="director-email" placeholder="john.doe@mail.com"
                                                                     v-model="userData.email"
                                                                     :class="getErrorClass('email')">
                                                             </div>
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="form-group">
-                                                                <label for="doctor-password">Mot de passe *</label>
+                                                                <label for="director-password">Mot de passe *</label>
                                                                 <input type="password" class="form-control"
-                                                                    id="doctor-password" v-model="userData.password"
+                                                                    id="director-password" v-model="userData.password"
                                                                     :class="getErrorClass('password')">
                                                             </div>
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="form-group">
-                                                                <label for="doctor-password-confirmation">Confirmer
+                                                                <label for="director-password-confirmation">Confirmer
                                                                     *</label>
                                                                 <input type="password" class="form-control"
-                                                                    id="doctor-password-confirmation"
+                                                                    id="director-password-confirmation"
                                                                     v-model="userData.passwordConfirmation"
                                                                     :class="getErrorClass('passwordConfirmation')">
                                                             </div>
@@ -120,17 +154,17 @@
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="doctorStatus" id="doctorStatus1" value="1"
+                                                                    name="directorStatus" id="directorStatus1" value="1"
                                                                     v-model="userData.status">
-                                                                <label class="form-check-label" for="doctorStatus1">
+                                                                <label class="form-check-label" for="directorStatus1">
                                                                     Actif
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="doctorStatus" id="doctorStatus2" value="0"
+                                                                    name="directorStatus" id="directorStatus2" value="0"
                                                                     v-model="userData.status">
-                                                                <label class="form-check-label" for="doctorStatus2">
+                                                                <label class="form-check-label" for="directorStatus2">
                                                                     Bloqué
                                                                 </label>
                                                             </div>
@@ -145,155 +179,55 @@
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-4" value="4"
+                                                                    id="director-role-4" value="4"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-4">
+                                                                <label class="form-check-label" for="director-role-4">
                                                                     Remplaçant
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-5" value="5"
+                                                                    id="director-role-5" value="5"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-5">
+                                                                <label class="form-check-label" for="director-role-5">
                                                                     Clinique / Service clinique
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-6" value="6"
+                                                                    id="director-role-6" value="6"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-6">
+                                                                <label class="form-check-label" for="director-role-6">
                                                                     Cabinet
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-7" value="7"
+                                                                    id="director-role-7" value="7"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-7">
+                                                                <label class="form-check-label" for="director-role-7">
                                                                     Directeur
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-3" value="3"
+                                                                    id="director-role-3" value="3"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-3">
+                                                                <label class="form-check-label" for="director-role-3">
                                                                     Administrator
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-role-8" value="8"
+                                                                    id="director-role-8" value="8"
                                                                     v-model="userData.roles">
-                                                                <label class="form-check-label" for="doctor-role-8">
+                                                                <label class="form-check-label" for="director-role-8">
                                                                     Webmaster
                                                                 </label>
                                                             </div>
                                                             <div v-if="getErrorClass('roles') === 'is-invalid'"
                                                                 class="text-danger">
                                                                 Choisir un role
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Transition>
-                                    </div>
-                                    <div>
-                                        <div id="establishment-information">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-secondary"
-                                                    v-on:click="changeCollapse(2)">
-                                                    <i class="fas mr-2"
-                                                        v-bind:class="[shownCollapse == -1 || shownCollapse == 2 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
-                                                    Etablissement
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <Transition name="collapse">
-                                            <div v-show="shownCollapse == -1 || shownCollapse == 2">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <label for="doctor-speciality">Spécialité
-                                                                </label>
-                                                                <twig:SelectSpeciality
-                                                                    class="form-control select2-input"
-                                                                    id="doctor-speciality"
-                                                                    v-model="userData.speciality">
-                                                                    <option></option>
-                                                                </twig:SelectSpeciality>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-consultation-count">Nombre de
-                                                                    consultations</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-consultation-count"
-                                                                    v-model="userData.consultationCount"
-                                                                    :class="getErrorClass('consultationCount')">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <div>
-                                                                    <label>Par *</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="doctorPer" id="doctor-per-jour"
-                                                                        value="jour" v-model="userData.per">
-                                                                    <label class="form-check-label"
-                                                                        for="doctor-per-jour">
-                                                                        Jour
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="doctorPer" id="doctor-per-semaine"
-                                                                        value="semaine" v-model="userData.per">
-                                                                    <label class="form-check-label"
-                                                                        for="doctor-per-semaine">
-                                                                        Semaine
-                                                                    </label>
-                                                                </div>
-                                                                <div v-if="getErrorClass('per') === 'is-invalid'"
-                                                                    class="text-danger">
-                                                                    Choisir par jour ou par semaine
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-site-web">Site internet</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-site-web" v-model="userData.siteWeb"
-                                                                    :class="getErrorClass('siteWeb')">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 pl-5">
-                                                            <div class="form-group">
-                                                                <label for="doctor-address">Adresse *</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-address" placeholder="1234 Main Street"
-                                                                    v-model="userData.thoroughfare"
-                                                                    :class="getErrorClass('thoroughfare')">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-premise">Adresse 2</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-premise" v-model="userData.premise">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-postal-code">Code postal *</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-postal-code"
-                                                                    v-model="userData.postalCode"
-                                                                    :class="getErrorClass('postalCode')">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-locality">Ville *</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-locality" v-model="userData.locality"
-                                                                    :class="getErrorClass('locality')">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -318,9 +252,9 @@
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <label for="doctor-comment">Commentaire</label>
+                                                                <label for="director-comment">Commentaire</label>
                                                                 <textarea class="form-control editor"
-                                                                    id="doctor-comment" rows="10"
+                                                                    id="director-comment" rows="10"
                                                                     v-model="userData.comment"></textarea>
                                                             </div>
                                                         </div>
@@ -347,49 +281,42 @@
                                                         <div class="col-6">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-subscription-status" true-value="1"
+                                                                    id="director-subscription-status" true-value="1"
                                                                     false-value="0"
                                                                     v-model="userData.subscriptionStatus">
                                                                 <label class="form-check-label"
-                                                                    for="doctor-subscription-status">
+                                                                    for="director-subscription-status">
                                                                     Abonnement actif
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    id="doctor-subscription-notification" true-value="1"
-                                                                    false-value="0"
+                                                                    id="director-subscription-notification"
+                                                                    true-value="1" false-value="0"
                                                                     v-model="userData.subscriptionEndNotification">
                                                                 <label class="form-check-label"
-                                                                    for="doctor-subscription-notification">
+                                                                    for="director-subscription-notification">
                                                                     Email fin abonnement
                                                                 </label>
                                                             </div>
                                                             <div class="form-group mt-3">
-                                                                <label for="doctor-subscription-end">Valable
+                                                                <label for="director-subscription-end">Valable
                                                                     jusqu'au</label>
                                                                 <div class="input-group date"
-                                                                    id="doctor-subscription-end"
+                                                                    id="director-subscription-end"
                                                                     data-target-input="nearest">
                                                                     <input type="text"
                                                                         class="form-control datetimepicker-input"
-                                                                        data-target="#doctor-subscription-end"
-                                                                        id="doctor-subscription-end-input"
+                                                                        data-target="#director-subscription-end"
+                                                                        id="director-subscription-end-input"
                                                                         v-model="userData.subscriptionEndAt" />
                                                                     <div class="input-group-append"
-                                                                        data-target="#doctor-subscription-end"
+                                                                        data-target="#director-subscription-end"
                                                                         data-toggle="datetimepicker">
                                                                         <div class="input-group-text"><i
                                                                                 class="fa fa-calendar"></i></div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="doctor-installation-count">Demande
-                                                                    d'installation restante</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="doctor-installation-count"
-                                                                    v-model="userData.installationCount">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -401,12 +328,12 @@
                             </div>
                             <div class="row mt-5">
                                 <div class="col-12 pl-3">
-                                    <button type="button" class="btn btn-secondary btn-flat" id="btn-doctor-save"
+                                    <button type="button" class="btn btn-secondary btn-flat" id="btn-director-save"
                                         v-on:click="onCreateUser">
                                         <i class="fas fa-save"></i> Enregistrer
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary btn-flat ml-3"
-                                        id="btn-doctor-save" v-on:click="changeCollapse(-1)">
+                                        id="btn-director-save" v-on:click="changeCollapse(-1)">
                                         <i class="fas fa-envelope-open"></i> $% shownCollapse == -1 ? 'Cacher tout' :
                                         'Afficher tout' %$
                                     </button>

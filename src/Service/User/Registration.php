@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 use App\Common\DateUtil;
 use App\Dto\User\ClinicDto;
+use App\Dto\User\DirectorDto;
 use App\Dto\User\DoctorDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
@@ -204,6 +205,54 @@ class Registration
         if (!empty($doctorDto->speciality)) {
             $specialities = $this->specialityService->getSpecialities([$doctorDto->speciality]);
             $user->setSpeciality($specialities[0]);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    public function registerDirector(DirectorDto $directorDto)
+    {
+        $user = new User();
+        $userAddress = new UserAddress();
+        $userSubscription = new UserSubscription();
+        
+        $userAddress
+            ->setCountry('FR')
+            ->setThoroughfare($directorDto->thoroughfare)
+            ->setPremise($directorDto->premise)
+            ->setPostalCode($directorDto->postalCode)
+            ->setLocality($directorDto->locality)
+        ;
+
+        $userSubscription
+            ->setEndAt(DateUtil::parseDate('d/m/Y', $directorDto->subscriptionEndAt))
+            ->setStatus($directorDto->subscriptionStatus)
+            ->setEndNotification($directorDto->subscriptionEndNotification)
+        ;
+
+        $user
+            ->setPosition($directorDto->position)
+            ->setCivility($directorDto->civility)
+            ->setSurname($directorDto->surname)
+            ->setName($directorDto->name)
+            ->setEmail($directorDto->email)
+            ->setTelephone($directorDto->telephone)
+            ->setTelephone2($directorDto->telephone2)
+            ->setPassword($directorDto->password)
+            ->setStatus($directorDto->status)
+            ->setFax($directorDto->fax)
+            ->setOrganism($directorDto->organism)
+            ->setComment($directorDto->comment)
+            ->setAddress($userAddress)
+            ->setSubscription($userSubscription)
+            ->setCreateAt(new DateTime())
+        ;
+
+        foreach ($this->roleService->getRoles($directorDto->roles) as $role) {
+            $user->addRole($role);
         }
 
         $this->entityManager->persist($user);

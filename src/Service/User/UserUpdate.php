@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 use App\Common\DateUtil;
 use App\Dto\User\ClinicDto;
+use App\Dto\User\DirectorDto;
 use App\Dto\User\DoctorDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
@@ -241,6 +242,64 @@ class UserUpdate
         if (!empty($doctorDto->speciality)) {
             $specialities = $this->specialityService->getSpecialities([$doctorDto->speciality]);
             $user->setSpeciality($specialities[0]);
+        }
+
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    public function updateDirector(User $user, DirectorDto $directorDto)
+    {
+        $userAddress = $user->getAddress();
+        $userSubscription = $user->getSubscription();
+
+        if (empty($userAddress)) {
+            $userAddress = (new UserAddress())
+                ->setCountry('FR')
+            ;
+        }
+
+        if (empty($userSubscription)) {
+            $userSubscription = (new UserSubscription())
+                ->setInstallationCount(0)
+            ;
+        }
+
+        $updated1 = $this->updateAttribute($userAddress, 'setThoroughfare', $directorDto->thoroughfare);
+        $updated2 = $this->updateAttribute($userAddress, 'setPremise', $directorDto->premise);
+        $updated3 = $this->updateAttribute($userAddress, 'setPostalCode', $directorDto->postalCode);
+        $updated4 = $this->updateAttribute($userAddress, 'setLocality', $directorDto->locality);
+        
+        if ($updated1 || $updated2 || $updated3 || $updated4) {
+            $user->setAddress($userAddress);
+        }
+
+        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $directorDto->subscriptionEndAt, true));
+        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $directorDto->status);
+        $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $directorDto->subscriptionEndNotification);
+        
+        if ($updated1 || $updated2 || $updated3 || $updated4) {
+            $user->setSubscription($userSubscription);
+        }
+
+        $this->updateAttribute($user, 'setPosition', $directorDto->position);
+        $this->updateAttribute($user, 'setCivility', $directorDto->civility);
+        $this->updateAttribute($user, 'setSurname', $directorDto->surname);
+        $this->updateAttribute($user, 'setName', $directorDto->name);
+        $this->updateAttribute($user, 'setEmail', $directorDto->email);
+        $this->updateAttribute($user, 'setTelephone', $directorDto->telephone);
+        $this->updateAttribute($user, 'setTelephone2', $directorDto->telephone2);
+        $this->updateAttribute($user, 'setStatus', $directorDto->status);
+        $this->updateAttribute($user, 'setFax', $directorDto->fax);
+        $this->updateAttribute($user, 'setOrganism', $directorDto->organism);
+        $this->updateAttribute($user, 'setComment', $directorDto->comment);
+
+        if (is_array($directorDto->roles)) {
+            $user->clearRole();
+            foreach ($this->roleService->getRoles($directorDto->roles) as $role) {
+                $user->addRole($role);
+            }
         }
 
         $this->entityManager->flush();

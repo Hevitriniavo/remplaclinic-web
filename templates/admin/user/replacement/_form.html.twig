@@ -2,397 +2,428 @@
     <div class="col-12">
         <div class="card">
             {% if user is defined %}
-            <div class="card-body" ref="formEl" data-url="{{ path('api_replacement_update', {id: user.id}) }}" data-detail-url="{{ path('api_replacement_detail', {id: user.id}) }}">
-            {% else %}
-            <div class="card-body" ref="formEl" data-url="{{ path('api_replacement_new') }}">
-            {% endif %}
-                <div class="row justify-content-center">
-                    <div class="col-10">
-                        <div class="row">
-                            <div class="col-12">
-                                <div>
-                                    <div id="personal-information">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link text-secondary" v-on:click="changeCollapse(1)">
-                                                <i class="fas mr-2"
-                                                    v-bind:class="[shownCollapse == -1 || shownCollapse == 1 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
-                                                Vos informations personnelles
-                                            </button>
-                                        </h5>
-                                    </div>
+            <div class="card-body" ref="formEl" data-url="{{ path('api_replacement_update', {id: user.id}) }}"
+                data-detail-url="{{ path('api_replacement_detail', {id: user.id}) }}">
+                {% else %}
+                <div class="card-body" ref="formEl" data-url="{{ path('api_replacement_new') }}">
+                    {% endif %}
+                    <div class="row justify-content-center">
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <div id="personal-information">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link text-secondary"
+                                                    v-on:click="changeCollapse(1)">
+                                                    <i class="fas mr-2"
+                                                        v-bind:class="[shownCollapse == -1 || shownCollapse == 1 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
+                                                    Vos informations personnelles
+                                                </button>
+                                            </h5>
+                                        </div>
 
-                                    <Transition name="collapse">
-                                        <div v-show="shownCollapse == -1 || shownCollapse == 1">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="form-group">
-                                                            <label for="replacement-civility">Civilité *</label>
-                                                            <select id="replacement-civility" class="form-control"
-                                                                v-model="userData.civility"
-                                                                :class="getErrorClass('civility')">
-                                                                <option selected disabled v-bind:value="null">- Choisir
-                                                                    une valeur -</option>
-                                                                <option value="M">Monsieur</option>
-                                                                <option value="Mme">Madame</option>
-                                                                <option value="Mlle">Mademoiselle</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-surname">Prénom *</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-surname" placeholder="John"
-                                                                v-model="userData.surname"
-                                                                :class="getErrorClass('surname')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-name">Nom *</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-name" placeholder="Doe"
-                                                                v-model="userData.name" :class="getErrorClass('name')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-ordinary-number">Numéro
-                                                                d'inscription au
-                                                                conseil de l'Ordre</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-ordinary-number" placeholder="17/0000"
-                                                                v-model="userData.ordinaryNumber">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-telephone">Téléphone *</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-telephone" placeholder="Ex : 0642260032"
-                                                                v-model="userData.telephone"
-                                                                :class="getErrorClass('telephone')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-telephone2">Mobile</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-telephone2"
-                                                                placeholder="Ex : 0642260032"
-                                                                v-model="userData.telephone2">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="form-group">
-                                                            <label for="replacement-address">Adresse *</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-address" placeholder="1234 Main Street"
-                                                                v-model="userData.thoroughfare"
-                                                                :class="getErrorClass('thoroughfare')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-premise">Adresse 2</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-premise" v-model="userData.premise">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-postal-code">Code postal</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-postal-code"
-                                                                v-model="userData.postalCode"
-                                                                :class="getErrorClass('postalCode')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-locality">Ville</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-locality" v-model="userData.locality"
-                                                                :class="getErrorClass('locality')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-year-of-birth">Année de naissance
-                                                                *</label>
-                                                            <input type="number" class="form-control"
-                                                                id="replacement-year-of-birth" placeholder="ex 1997"
-                                                                v-model="userData.yearOfBirth"
-                                                                :class="getErrorClass('yearOfBirth')">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-nationality">Nationalité *</label>
-                                                            <input type="text" class="form-control"
-                                                                id="replacement-nationality" placeholder="FR"
-                                                                v-model="userData.nationality"
-                                                                :class="getErrorClass('nationality')">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <div class="form-group">
-                                                            <label for="replacement-email">E-mail *</label>
-                                                            <input type="email" class="form-control"
-                                                                id="replacement-email" placeholder="john.doe@mail.com"
-                                                                v-model="userData.email"
-                                                                :class="getErrorClass('email')">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-group">
-                                                            <label for="replacement-password">Mot de passe *</label>
-                                                            <input type="password" class="form-control"
-                                                                id="replacement-password" v-model="userData.password"
-                                                                :class="getErrorClass('password')">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="form-group">
-                                                            <label for="replacement-password-confirmation">Confirmer
-                                                                *</label>
-                                                            <input type="password" class="form-control"
-                                                                id="replacement-password-confirmation"
-                                                                v-model="userData.passwordConfirmation"
-                                                                :class="getErrorClass('passwordConfirmation')">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div>
-                                                            <label>Statut</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="replacementStatus" id="replacementStatus1"
-                                                                value="1" v-model="userData.status">
-                                                            <label class="form-check-label" for="replacementStatus1">
-                                                                Actif
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="replacementStatus" id="replacementStatus2"
-                                                                value="0" v-model="userData.status">
-                                                            <label class="form-check-label" for="replacementStatus2">
-                                                                Bloqué
-                                                            </label>
-                                                        </div>
-                                                        <div v-if="getErrorClass('status') === 'is-invalid'"
-                                                            class="text-danger">
-                                                            Choisir un statut
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div>
-                                                            <label>Rôles</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-4" value="4"
-                                                                v-model="userData.roles">
-                                                            <label class="form-check-label" for="replacement-role-4">
-                                                                Remplaçant
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-5" value="5"
-                                                                v-model="userData.roles">
-                                                            <label class="form-check-label" for="replacement-role-5">
-                                                                Clinique / Service clinique
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-6" value="6"
-                                                                v-model="userData.roles">
-                                                            <label class="form-check-label" for="replacement-role-6">
-                                                                Cabinet
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-7" value="7">
-                                                            <label class="form-check-label" for="replacement-role-7">
-                                                                Directeur
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-3" value="3"
-                                                                v-model="userData.roles">
-                                                            <label class="form-check-label" for="replacement-role-3">
-                                                                Administrator
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="replacement-role-8" value="8"
-                                                                v-model="userData.roles">
-                                                            <label class="form-check-label" for="replacement-role-8">
-                                                                Webmaster
-                                                            </label>
-                                                        </div>
-                                                        <div v-if="getErrorClass('roles') === 'is-invalid'"
-                                                            class="text-danger">
-                                                            Choisir un role
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Transition>
-                                </div>
-                                <div>
-                                    <div id="profil-information">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link text-secondary" v-on:click="changeCollapse(2)">
-                                                <i class="fas mr-2"
-                                                    v-bind:class="[shownCollapse == -1 || shownCollapse == 2 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
-                                                Informations de votre profil
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <Transition name="collapse">
-                                        <div v-show="shownCollapse == -1 || shownCollapse == 2">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="form-group">
-                                                            <label for="replacement-year-internat">Année d'obtention de
-                                                                l'internat</label>
-                                                            <input type="number" class="form-control"
-                                                                id="replacement-year-internat" placeholder="ex: 2020"
-                                                                v-model="userData.yearOfResidency">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-current-speciality">Statut actuel *
-                                                            </label>
-                                                            <select id="replacement-current-speciality"
-                                                                class="form-control"
-                                                                v-model="userData.currentSpeciality"
-                                                                :class="getErrorClass('currentSpeciality')">
-                                                                <option value="33">Assistant</option>
-                                                                <option value="31">Chef de clinique</option>
-                                                                <option value="34">Interne</option>
-                                                                <option value="494">Médecin remplaçant</option>
-                                                                <option value="32">Praticien hospitalier</option>
-                                                                <option value="35">Autre</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-speciality">Spécialité
-                                                            </label>
-                                                            <twig:SelectSpeciality class="form-control select2-input"
-                                                                id="replacement-speciality"
-                                                                v-model="userData.speciality">
-                                                                <option></option>
-                                                            </twig:SelectSpeciality>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="form-group">
-                                                            <label for="replacement-sub-specialities">Sous spécialité
-                                                            </label>
-                                                            <twig:SelectSpeciality class="form-control select2-input"
-                                                                multiple="true" id="replacement-sub-specialities"
-                                                                v-model="userData.subSpecialities">
-                                                                <option></option>
-                                                            </twig:SelectSpeciality>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-mobility">Mobilité *
-                                                            </label>
-                                                            <twig:SelectRegion class="form-control select2-input"
-                                                                multiple="true" id="replacement-mobility"
-                                                                v-model="userData.mobility">
-                                                                <option></option>
-                                                            </twig:SelectRegion>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Transition>
-                                </div>
-                                <div>
-                                    <div id="supplementary-information">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link text-secondary" v-on:click="changeCollapse(3)">
-                                                <i class="fas mr-2"
-                                                    v-bind:class="[shownCollapse == -1 || shownCollapse == 3 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
-                                                Informations supplémentaires
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <Transition name="collapse">
-                                        <div v-show="shownCollapse == -1 || shownCollapse == 3">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label for="replacement-cv">CV</label>
-                                                                <input type="file" class="form-control-file"
-                                                                    id="replacement-cv"
-                                                                    v-on:change="handleFileUpload('cv', $event)">
+                                        <Transition name="collapse">
+                                            <div v-show="shownCollapse == -1 || shownCollapse == 1">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="replacement-civility">Civilité *</label>
+                                                                <select id="replacement-civility" class="form-control"
+                                                                    v-model="userData.civility"
+                                                                    :class="getErrorClass('civility')">
+                                                                    <option selected disabled v-bind:value="null">-
+                                                                        Choisir
+                                                                        une valeur -</option>
+                                                                    <option value="M">Monsieur</option>
+                                                                    <option value="Mme">Madame</option>
+                                                                    <option value="Mlle">Mademoiselle</option>
+                                                                </select>
                                                             </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label for="replacement-diplom">Diplôme</label>
-                                                                <input type="file" class="form-control-file"
-                                                                    id="replacement-diplom"
-                                                                    v-on:change="handleFileUpload('diplom', $event)">
+                                                            <div class="form-group">
+                                                                <label for="replacement-surname">Prénom *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-surname" placeholder="John"
+                                                                    v-model="userData.surname"
+                                                                    :class="getErrorClass('surname')">
                                                             </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label for="replacement-licence">Licence de
-                                                                    remplacement</label>
-                                                                <input type="file" class="form-control-file"
-                                                                    id="replacement-licence"
-                                                                    v-on:change="handleFileUpload('licence', $event)">
+                                                            <div class="form-group">
+                                                                <label for="replacement-name">Nom *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-name" placeholder="Doe"
+                                                                    v-model="userData.name"
+                                                                    :class="getErrorClass('name')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-ordinary-number">Numéro
+                                                                    d'inscription au
+                                                                    conseil de l'Ordre</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-ordinary-number"
+                                                                    placeholder="17/0000"
+                                                                    v-model="userData.ordinaryNumber">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-telephone">Téléphone *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-telephone"
+                                                                    placeholder="Ex : 0642260032"
+                                                                    v-model="userData.telephone"
+                                                                    :class="getErrorClass('telephone')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-telephone2">Mobile</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-telephone2"
+                                                                    placeholder="Ex : 0642260032"
+                                                                    v-model="userData.telephone2">
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="replacement-comment">Commentaire</label>
-                                                            <textarea class="form-control editor"
-                                                                id="replacement-comment" rows="10"
-                                                                v-model="userData.comment"></textarea>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="replacement-address">Adresse *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-address"
+                                                                    placeholder="1234 Main Street"
+                                                                    v-model="userData.thoroughfare"
+                                                                    :class="getErrorClass('thoroughfare')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-premise">Adresse 2</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-premise" v-model="userData.premise">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-postal-code">Code postal</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-postal-code"
+                                                                    v-model="userData.postalCode"
+                                                                    :class="getErrorClass('postalCode')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-locality">Ville</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-locality"
+                                                                    v-model="userData.locality"
+                                                                    :class="getErrorClass('locality')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-year-of-birth">Année de
+                                                                    naissance
+                                                                    *</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="replacement-year-of-birth" placeholder="ex 1997"
+                                                                    v-model="userData.yearOfBirth"
+                                                                    :class="getErrorClass('yearOfBirth')">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-nationality">Nationalité
+                                                                    *</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="replacement-nationality" placeholder="FR"
+                                                                    v-model="userData.nationality"
+                                                                    :class="getErrorClass('nationality')">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="replacement-email">E-mail *</label>
+                                                                <input type="email" class="form-control"
+                                                                    id="replacement-email"
+                                                                    placeholder="john.doe@mail.com"
+                                                                    v-model="userData.email"
+                                                                    :class="getErrorClass('email')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="replacement-password">Mot de passe *</label>
+                                                                <input type="password" class="form-control"
+                                                                    id="replacement-password"
+                                                                    v-model="userData.password"
+                                                                    :class="getErrorClass('password')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="replacement-password-confirmation">Confirmer
+                                                                    *</label>
+                                                                <input type="password" class="form-control"
+                                                                    id="replacement-password-confirmation"
+                                                                    v-model="userData.passwordConfirmation"
+                                                                    :class="getErrorClass('passwordConfirmation')">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div>
+                                                                <label>Statut</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="replacementStatus" id="replacementStatus1"
+                                                                    value="1" v-model="userData.status">
+                                                                <label class="form-check-label"
+                                                                    for="replacementStatus1">
+                                                                    Actif
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="replacementStatus" id="replacementStatus2"
+                                                                    value="0" v-model="userData.status">
+                                                                <label class="form-check-label"
+                                                                    for="replacementStatus2">
+                                                                    Bloqué
+                                                                </label>
+                                                            </div>
+                                                            <div v-if="getErrorClass('status') === 'is-invalid'"
+                                                                class="text-danger">
+                                                                Choisir un statut
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div>
+                                                                <label>Rôles</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-4" value="4"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-4">
+                                                                    Remplaçant
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-5" value="5"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-5">
+                                                                    Clinique / Service clinique
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-6" value="6"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-6">
+                                                                    Cabinet
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-7" value="7"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-7">
+                                                                    Directeur
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-3" value="3"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-3">
+                                                                    Administrator
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="replacement-role-8" value="8"
+                                                                    v-model="userData.roles">
+                                                                <label class="form-check-label"
+                                                                    for="replacement-role-8">
+                                                                    Webmaster
+                                                                </label>
+                                                            </div>
+                                                            <div v-if="getErrorClass('roles') === 'is-invalid'"
+                                                                class="text-danger">
+                                                                Choisir un role
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </Transition>
-                                </div>
-                                <div>
-                                    <div id="comment-information">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link text-secondary" v-on:click="changeCollapse(4)">
-                                                <i class="fas mr-2"
-                                                    v-bind:class="[shownCollapse == -1 || shownCollapse == 4 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
-                                                Vos commentaires
-                                            </button>
-                                        </h5>
+                                        </Transition>
                                     </div>
-                                    <Transition name="collapse">
-                                        <div v-show="shownCollapse == -1 || shownCollapse == 4">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="replacement-comments">Commentaires</label>
-                                                            <textarea class="form-control editor"
-                                                                id="replacement-comments" rows="10"
-                                                                v-model="userData.userComment"></textarea>
+                                    <div>
+                                        <div id="profil-information">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link text-secondary"
+                                                    v-on:click="changeCollapse(2)">
+                                                    <i class="fas mr-2"
+                                                        v-bind:class="[shownCollapse == -1 || shownCollapse == 2 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
+                                                    Informations de votre profil
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <Transition name="collapse">
+                                            <div v-show="shownCollapse == -1 || shownCollapse == 2">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="replacement-year-internat">Année d'obtention
+                                                                    de
+                                                                    l'internat</label>
+                                                                <input type="number" class="form-control"
+                                                                    id="replacement-year-internat"
+                                                                    placeholder="ex: 2020"
+                                                                    v-model="userData.yearOfResidency">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-current-speciality">Statut
+                                                                    actuel *
+                                                                </label>
+                                                                <select id="replacement-current-speciality"
+                                                                    class="form-control"
+                                                                    v-model="userData.currentSpeciality"
+                                                                    :class="getErrorClass('currentSpeciality')">
+                                                                    <option value="33">Assistant</option>
+                                                                    <option value="31">Chef de clinique</option>
+                                                                    <option value="34">Interne</option>
+                                                                    <option value="494">Médecin remplaçant</option>
+                                                                    <option value="32">Praticien hospitalier</option>
+                                                                    <option value="35">Autre</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-speciality">Spécialité
+                                                                </label>
+                                                                <twig:SelectSpeciality
+                                                                    class="form-control select2-input"
+                                                                    id="replacement-speciality"
+                                                                    v-model="userData.speciality">
+                                                                    <option></option>
+                                                                </twig:SelectSpeciality>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="replacement-sub-specialities">Sous
+                                                                    spécialité
+                                                                </label>
+                                                                <twig:SelectSpeciality
+                                                                    class="form-control select2-input" multiple="true"
+                                                                    id="replacement-sub-specialities"
+                                                                    v-model="userData.subSpecialities">
+                                                                    <option></option>
+                                                                </twig:SelectSpeciality>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-mobility">Mobilité *
+                                                                </label>
+                                                                <twig:SelectRegion class="form-control select2-input"
+                                                                    multiple="true" id="replacement-mobility"
+                                                                    v-model="userData.mobility">
+                                                                    <option></option>
+                                                                </twig:SelectRegion>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </Transition>
+                                    </div>
+                                    <div>
+                                        <div id="supplementary-information">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link text-secondary"
+                                                    v-on:click="changeCollapse(3)">
+                                                    <i class="fas mr-2"
+                                                        v-bind:class="[shownCollapse == -1 || shownCollapse == 3 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
+                                                    Informations supplémentaires
+                                                </button>
+                                            </h5>
                                         </div>
-                                    </Transition>
+                                        <Transition name="collapse">
+                                            <div v-show="shownCollapse == -1 || shownCollapse == 3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="replacement-cv">CV</label>
+                                                                    <input type="file" class="form-control-file"
+                                                                        id="replacement-cv"
+                                                                        v-on:change="handleFileUpload('cv', $event)">
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="replacement-diplom">Diplôme</label>
+                                                                    <input type="file" class="form-control-file"
+                                                                        id="replacement-diplom"
+                                                                        v-on:change="handleFileUpload('diplom', $event)">
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="replacement-licence">Licence de
+                                                                        remplacement</label>
+                                                                    <input type="file" class="form-control-file"
+                                                                        id="replacement-licence"
+                                                                        v-on:change="handleFileUpload('licence', $event)">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="replacement-comment">Commentaire</label>
+                                                                <textarea class="form-control editor"
+                                                                    id="replacement-comment" rows="10"
+                                                                    v-model="userData.comment"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
+                                    </div>
+                                    <div>
+                                        <div id="comment-information">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link text-secondary"
+                                                    v-on:click="changeCollapse(4)">
+                                                    <i class="fas mr-2"
+                                                        v-bind:class="[shownCollapse == -1 || shownCollapse == 4 ? 'fa-arrow-circle-down' : 'fa-arrow-circle-right']"></i>
+                                                    Vos commentaires
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <Transition name="collapse">
+                                            <div v-show="shownCollapse == -1 || shownCollapse == 4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="replacement-comments">Commentaires</label>
+                                                                <textarea class="form-control editor"
+                                                                    id="replacement-comments" rows="10"
+                                                                    v-model="userData.userComment"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col-12 pl-3">
-                                <button type="button" class="btn btn-secondary btn-flat" id="btn-replacement-save"
-                                    v-on:click="onCreateUser">
-                                    <i class="fas fa-save"></i> Enregistrer
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-flat ml-3"
-                                    id="btn-replacement-save" v-on:click="changeCollapse(-1)">
-                                    <i class="fas fa-envelope-open"></i> $% shownCollapse == -1 ? 'Cacher tout' :
-                                    'Afficher tout' %$
-                                </button>
+                            <div class="row mt-5">
+                                <div class="col-12 pl-3">
+                                    <button type="button" class="btn btn-secondary btn-flat" id="btn-replacement-save"
+                                        v-on:click="onCreateUser">
+                                        <i class="fas fa-save"></i> Enregistrer
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-flat ml-3"
+                                        id="btn-replacement-save" v-on:click="changeCollapse(-1)">
+                                        <i class="fas fa-envelope-open"></i> $% shownCollapse == -1 ? 'Cacher tout' :
+                                        'Afficher tout' %$
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -400,20 +431,19 @@
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    .collapse-enter-active {
-        transition: all 0.3s ease-out;
-    }
+    <style>
+        .collapse-enter-active {
+            transition: all 0.3s ease-out;
+        }
 
-    .collapse-leave-active {
-        transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-    }
+        .collapse-leave-active {
+            transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+        }
 
-    .collapse-enter-from,
-    .collapse-leave-to {
-        transform: translateX(20px);
-        opacity: 0;
-    }
-</style>
+        .collapse-enter-from,
+        .collapse-leave-to {
+            transform: translateX(20px);
+            opacity: 0;
+        }
+    </style>

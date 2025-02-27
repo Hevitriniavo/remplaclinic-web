@@ -137,7 +137,7 @@ class UserCrudController extends AbstractController
         if (empty($user)) {
             throw new EntityNotFoundException('No entity found for #' . $id);
         }
-        
+
         $breadcrumbs = $this->getBreadcrumbs('Médecin');
         $breadcrumbs[1] = [
             'url' => $this->generateUrl('app_admin_doctor'),
@@ -145,6 +145,40 @@ class UserCrudController extends AbstractController
         ];
         $breadcrumbs[] = sprintf('User #%d: %s', $user->getId(), $user->getName());
         return $this->render('admin/user/doctor/show.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/admin/director/new', name: 'app_admin_director_new')]
+    public function newDirector(): Response
+    {
+        $breadcrumbs = $this->getBreadcrumbs('Directeur');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_director'),
+            'text' => 'Directeur',
+        ];
+        $breadcrumbs[] = 'Nouveau Directeur';
+        return $this->render('admin/user/director/new.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+    }
+
+    #[Route('/admin/director/detail/{id}', name: 'app_admin_director_show', requirements: ['id' => '\d+'])]
+    public function showDirector(int $id): Response
+    {
+        $user = $this->userRepository->find($id);
+        if (empty($user)) {
+            throw new EntityNotFoundException('No entity found for #' . $id);
+        }
+
+        $breadcrumbs = $this->getBreadcrumbs('Directeur');
+        $breadcrumbs[1] = [
+            'url' => $this->generateUrl('app_admin_director'),
+            'text' => 'Directeur',
+        ];
+        $breadcrumbs[] = sprintf('User #%d: %s', $user->getId(), $user->getName());
+        return $this->render('admin/user/director/show.html.twig', [
             'breadcrumbs' => $breadcrumbs,
             'user' => $user,
         ]);
