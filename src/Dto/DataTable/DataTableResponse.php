@@ -6,23 +6,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class DataTableResponse
 {
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'request:datatable'])]
     public $draw;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'request:datatable'])]
     public $recordsTotal;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'request:datatable'])]
     public $recordsFiltered;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'request:datatable'])]
     public $data;
 
-    public static function fromPaginator(Paginator $paginator, $draw): self
+    public static function fromPaginator(Paginator $paginator, $draw, $skipData = false): self
     {
         $result = new DataTableResponse;
         $result->draw = $draw;
-        $result->data = iterator_to_array($paginator);
+        if (!$skipData) {
+            $result->data = iterator_to_array($paginator);
+        }
         $result->recordsFiltered = count($paginator);
         $result->recordsTotal = count($paginator);
         return $result;

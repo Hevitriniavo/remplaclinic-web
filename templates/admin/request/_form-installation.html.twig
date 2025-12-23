@@ -1,0 +1,106 @@
+<div class="row" id="root">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center">Informations sur la proposition d'installation</h1>
+            </div>
+            <div class="card-body" ref="formEl" data-url="{{ path('api_request_installation_new') }}">
+                <div class="row justify-content-center">
+                    <div class="col-10">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="request-applicant">Demandeur *</label>
+                                    <twig:SelectClinic class="form-control select2-input" id="request-applicant"
+                                        v-model="requestData.applicant">
+                                        <option></option>
+                                    </twig:SelectClinic>
+                                    <div class="text-danger" v-if="getErrorClass('applicant') === 'is-invalid'">Choisir
+                                        un demandeur</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="request-speciality">Spécialité *</label>
+                                    <twig:SelectSpeciality class="form-control select2-input" id="request-speciality"
+                                        v-model="requestData.speciality">
+                                        <option></option>
+                                    </twig:SelectSpeciality>
+                                    <div class="text-danger" v-if="getErrorClass('speciality') === 'is-invalid'">Choisir
+                                        une spécialité</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="request-region">Mobilité *</label>
+                                    <twig:SelectRegion class="form-control select2-input" id="request-region"
+                                        v-model="requestData.region">
+                                        <option></option>
+                                    </twig:SelectRegion>
+                                    <div class="text-danger" v-if="getErrorClass('region') === 'is-invalid'">Choisir une
+                                        région</div>
+                                </div>
+                            </div>
+                            <div class="col-6 pl-5">
+                                <div class="form-group">
+                                    <label for="request-remuneration">Salaire (en €) ou Chiffre d'affaires potentiel</label>
+                                    <input type="text" class="form-control" id="request-remuneration"
+                                        v-model="requestData.remuneration">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="request-started-at">Date de début *</label>
+                                    <div class="input-group date" id="request-started-at" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                            data-target="#request-started-at" id="request-started-at-input"
+                                            v-model="requestData.startedAt" />
+                                        <div class="input-group-append" data-target="#request-started-at"
+                                            data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-danger" v-if="getErrorClass('startedAt') === 'is-invalid'">Choisir
+                                        une date</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-12">
+                                <div>
+                                    <label>Raison *</label>
+                                </div>
+                                <div class="form-check" v-for="raison in raisons" :key="raison.id">
+                                    <input class="form-check-input" type="checkbox"
+                                        :id="'request-raison-' + raison.id" :value="raison.label"
+                                        v-model="requestData.raison">
+                                    <label class="form-check-label" :for="'request-raison-' + raison.id">
+                                        $% raison.label %$
+                                    </label>
+                                </div>
+                                <div class="form-group" v-if="otherChoosen">
+                                    <input type="text" class="form-control" id="request-raison-value"
+                                    v-model="requestData.raisonValue">
+                                </div>
+                                <div v-if="getErrorClass('raison') === 'is-invalid'" class="text-danger">
+                                    Choisir une raison
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="request-comment">Commentaire</label>
+                                    <textarea class="form-control editor" id="request-comment" rows="10"
+                                        v-model="requestData.comment"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-secondary btn-flat" id="btn-request-save"
+                                    v-on:click="onCreateRequest">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

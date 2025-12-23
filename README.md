@@ -58,3 +58,38 @@ user_establishment
 - site_internet
 - consultation_count
 - per
+
+
+requests
+- applicant [ManyToOne -> User]
+- title (varchar)
+- status [enum: a valider, en cours, archive]
+- startedAt [datetime]
+- showEndAt [boolean]
+- endAt [datetime]
+- lastSentAt [datetime]
+- region [ManyToOne -> Region]
+- speciality [ManyToOne -> Speciality]
+- requestType [enum: replacement/installation]
+- remuneration [string]
+- comment [text]
+
+- subSpecialities [ManyToMany -> Speciality]
+- positionCount [integer]
+- accomodationIncluded [enum: oui/non/a debattre]
+- transportCostRefunded [enum: oui/non/a debattre]
+- retrocession [string]
+- replacementType [enum: regular/ponctuel]
+
+- raison [string]
+- raisonValue [string]
+
+annoce_histories
+- date
+
+request_responses
+- status [enum: en cours/accepte/infos_plus]
+- user [ManyToOne -> User]
+- request [ManyToOne -> Request]
+- updatedAt [datetime]
+- createdAt [datetime]

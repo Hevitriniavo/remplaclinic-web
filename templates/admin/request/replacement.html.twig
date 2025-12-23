@@ -1,0 +1,64 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Demande de remplaçement
+{% endblock %}
+
+{% block page_title %}
+Demande de remplaçement
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <a class="btn btn-secondary btn-flat" id="btn-request-replacement-new" href="{{ path('app_admin_request_replacement_new') }}">
+                            <i class="fas fa-plus"></i> Ajouter une demande remplaçement
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table id="tbl-requests" class="table table-hover"
+                            data-url="{{ path('api_request_replacement_get') }}"
+                            data-delete-url="{{ path('api_request_delete', {id: '0000000000'}) }}"
+                            data-detail-url="{{ path('app_admin_request_replacement_show', {id: '0000000000'}) }}"
+                            data-clinic-url="{{ path('app_admin_clinic_show', {id: '0000000000'}) }}"
+                            data-doctor-url="{{ path('app_admin_doctor_show', {id: '0000000000'}) }}"
+                            style="width: 100%;"
+                            >
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>#STATUT</th>
+                                    <th>#TYPE</th>
+                                    <th>#DEMANDEUR</th>
+                                    <th class="text-uppercase">#Spécialité</th>
+                                    <th>#DATE DE PUBLICATION</th>
+                                    <th>#PERIODE</th>
+                                    <th class="text-uppercase">#Date dernières envois</th>
+                                    <th class="text-uppercase">#Nombres de réponses</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/request.js') }}"></script>
+{% endblock %}

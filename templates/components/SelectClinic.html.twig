@@ -1,0 +1,6 @@
+<select {{ attributes }}>
+    {% block content %} {% endblock %}
+    {% for user in this.users %}
+        <option value="{{ user.id }}">{{ user.name ~ ' ' ~ user.surname }}</option>
+    {% endfor %}
+</select>

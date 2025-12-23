@@ -196,6 +196,16 @@ const app = createApp({
     onMounted(() => {
       jQuery(".editor").summernote({
         height: 200,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'italic', 'clear']],
+          ['fontname', ['fontname']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']],
+        ],
       });
 
       getUserDetail().then(() => {

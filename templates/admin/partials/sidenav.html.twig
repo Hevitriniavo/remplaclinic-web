@@ -1,14 +1,15 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-secondary elevation-4">
     <a href="{{ path('app_home') }}" class="brand-link">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-bold text-uppercase">&nbsp;</span>
     </a>
     <div class="sidebar">
         <nav class="mt-2">
+            {% set currentRoute = app.request.attributes.get('_route') %}
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-header">ACCUEIL</li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_speciality') }}" class="nav-link">
+                    <a href="{{ path('app_admin_speciality') }}" class="nav-link {{ currentRoute == 'app_admin_speciality' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-tag"></i>
                         <p class="text-uppercase">
                             Spécialité
@@ -16,7 +17,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_region') }}" class="nav-link">
+                    <a href="{{ path('app_admin_region') }}" class="nav-link {{ currentRoute == 'app_admin_region' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-map"></i>
                         <p class="text-uppercase">
                             Région
@@ -24,7 +25,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_partenaire') }}" class="nav-link">
+                    <a href="{{ path('app_admin_partenaire') }}" class="nav-link {{ currentRoute == 'app_admin_partenaire' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-handshake"></i>
                         <p class="text-uppercase">
                             Partenaire
@@ -32,7 +33,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_reference') }}" class="nav-link">
+                    <a href="{{ path('app_admin_reference') }}" class="nav-link {{ currentRoute == 'app_admin_reference' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-quote-left"></i>
                         <p class="text-uppercase">
                             Référence
@@ -41,7 +42,7 @@
                 </li>
                 <li class="nav-header">USERS</li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_replacement') }}" class="nav-link">
+                    <a href="{{ path('app_admin_replacement') }}" class="nav-link {{ currentRoute == 'app_admin_replacement' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-nurse"></i>
                         <p class="text-uppercase">
                             remplaçant
@@ -49,7 +50,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_clinic') }}" class="nav-link">
+                    <a href="{{ path('app_admin_clinic') }}" class="nav-link {{ currentRoute == 'app_admin_clinic' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-hospital"></i>
                         <p class="text-uppercase">
                             clinique
@@ -57,7 +58,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_doctor') }}" class="nav-link">
+                    <a href="{{ path('app_admin_doctor') }}" class="nav-link {{ currentRoute == 'app_admin_doctor' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-md"></i>
                         <p class="text-uppercase">
                             médecin
@@ -65,10 +66,27 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_admin_director') }}" class="nav-link">
+                    <a href="{{ path('app_admin_director') }}" class="nav-link {{ currentRoute == 'app_admin_director' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-shield"></i>
                         <p class="text-uppercase">
                             directeur
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">DEMANDE</li>
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_request_replacement') }}" class="nav-link {{ currentRoute == 'app_admin_request_replacement' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-handshake"></i>
+                        <p class="text-uppercase">
+                            Remplaçement
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_request_installation') }}" class="nav-link {{ currentRoute == 'app_admin_request_installation' ? 'active' : '' }}">
+                        <i class="nav-icon fab fa-instalod"></i>
+                        <p class="text-uppercase">
+                            Installation
                         </p>
                     </a>
                 </li>

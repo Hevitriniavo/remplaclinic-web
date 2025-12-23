@@ -11,13 +11,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SpecialityRepository::class)]
 class Speciality
 {
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'speciality:simple'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'speciality:simple'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

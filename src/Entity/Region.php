@@ -4,18 +4,19 @@ namespace App\Entity;
 
 use App\Repository\RegionRepository;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RegionRepository::class)]
 class Region
 {
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'full'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'full'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

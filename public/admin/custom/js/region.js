@@ -24,15 +24,6 @@ function hideRegionModal() {
   $('#region-modal').modal('hide');
 }
 
-function getCleanUrl(url, id)
-{
-  let result = url;
-  if (result) {
-    result = result.replace('0000000000', id);
-  }
-  return result;
-}
-
 $(function () {
   const tblDom = $("#tbl-specilities");
   const btnNew = $('#btn-region-new');

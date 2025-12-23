@@ -58,26 +58,27 @@
         </div>
     </section>
     <div class="fond-menu flex justify-center items-center">
+        {% set currentRoute = app.request.attributes.get('_route') %}
         <nav class="p-4 flex justify-center items-center space-x-6 overflow-hidden">
             <a href="{{ path('app_home') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Accueil</a>
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_home' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Accueil</a>
             <a href="{{ path('app_how_does_it_work') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Comment
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_how_does_it_work' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Comment
                 ça marche ?</a>
             <a href="http://instalclinic.fr"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Installation
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 hover:bg-[#ff9d32]">Installation
                 médicale</a>
             <a href="{{ path('app_replacement_search') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Je
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_replacement_search' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Je
                 cherche un remplaçant</a>
             <a href="{{ path('app_replacement') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Je
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_replacement' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Je
                 suis remplaçant</a>
             <a href="{{ path('app_replacement_licence') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Obtenir
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_replacement_licence' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Obtenir
                 sa licence</a>
             <a href="{{ path('app_contacts') }}"
-                class="text-white rounded-md hover:bg-[#ff9d32] px-2 py-3 xl:px-4 active:underline font-bold transition duration-300">Nous
+                class="text-white rounded-md px-2 py-3 xl:px-4 active:underline font-bold transition duration-300 {{ currentRoute == 'app_contacts' ? 'bg-[#ff9d32]' : 'hover:bg-[#ff9d32]' }}">Nous
                 contacter</a>
         </nav>
     </div>

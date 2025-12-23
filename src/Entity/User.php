@@ -13,7 +13,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
-    #[Groups(['datatable'])]
+    const ROLE_REPLACEMENT_ID = 4;
+    const ROLE_CLINIC_ID = 5;
+    const ROLE_DOCTOR_ID = 6;
+    const ROLE_DIRECTOR_ID = 7;
+
+    #[Groups(['datatable', 'user:simple'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,11 +32,11 @@ class User
     #[ORM\Column(length: 10)]
     private ?string $civility = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'user:simple'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $surname = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'user:simple'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -109,7 +114,7 @@ class User
     #[ORM\ManyToOne(targetEntity: self::class)]
     private ?self $clinic = null;
 
-    #[Groups(['full'])]
+    #[Groups(['full', 'user:simple'])]
     /**
      * @var Collection<int, UserRole>
      */

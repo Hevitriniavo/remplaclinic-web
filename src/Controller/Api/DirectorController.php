@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\User\DirectorDto;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\Registration;
 use App\Service\User\UserUpdate;
@@ -15,8 +16,6 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 class DirectorController extends AbstractController
 {
-    const ROLE_DIRECTOR_ID = 7;
-
     public function __construct(
         private UserRepository $userRepository,
     ) {}
@@ -25,7 +24,7 @@ class DirectorController extends AbstractController
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
-        return $this->json($this->userRepository->findAllDataTables(self::ROLE_DIRECTOR_ID, $params), 200, [], ['groups' => 'datatable']);
+        return $this->json($this->userRepository->findAllDataTables(User::ROLE_DIRECTOR_ID, $params), 200, [], ['groups' => 'datatable']);
     }
 
     #[Route('/api/directors', name: 'api_director_new', methods: ['POST'])]

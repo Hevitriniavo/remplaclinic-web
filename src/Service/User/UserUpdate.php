@@ -13,7 +13,6 @@ use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
 use App\Repository\RegionRepository;
-use App\Repository\UserRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -22,7 +21,6 @@ class UserUpdate
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository,
         private RoleService $roleService,
         private SpecialityService $specialityService,
         private RegionRepository $regionRepository,
@@ -72,7 +70,7 @@ class UserUpdate
             }
         }
 
-        if (!empty($doctorDto->speciality)) {
+        if (!empty($replacementDto->speciality)) {
             $specialities = $this->specialityService->getSpecialities([$replacementDto->speciality]);
             $user->setSpeciality($specialities[0]);
         }

@@ -1,27 +1,3 @@
-function getCleanUrl(url, id)
-{
-  let result = url;
-  if (result) {
-    result = result.replace('0000000000', id);
-  }
-  return result;
-}
-
-function formatDate(data, withHour = true) {
-  const date = new Date(data);
-  const options = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  };
-  if (withHour) {
-    options['hour'] = '2-digit';
-    options['minute'] = '2-digit';
-  }
-  const formatter = new Intl.DateTimeFormat("fr-FR", options);
-  return formatter.format(date);
-}
-
 $(function () {
   const tblDom = $("#tbl-clinics");
 

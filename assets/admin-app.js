@@ -43,4 +43,54 @@ function initDeleteButtons() {
   });
 }
 
-initDeleteButtons();
+function initToggleSidebar() {
+  $('body').on('collapsed.lte.pushmenu', () => {
+    updateSidebarState(true);
+  });
+
+  $('body').on('shown.lte.pushmenu', () => {
+    updateSidebarState(false);
+  });
+
+  function updateSidebarState(collapsed) {
+    const saveUrl = document.body.dataset.sidebarUrlSave;
+
+    axios.put(
+      saveUrl,
+      new URLSearchParams({
+          collapsed: collapsed ? 1 : 0
+      })
+    );
+  }
+  
+}
+
+window.getCleanUrl = (url, id) =>
+{
+  let result = url;
+  if (result) {
+    result = result.replace('0000000000', id);
+  }
+  return result;
+}
+
+window.formatDate = (data, withHour = true) => {
+  const date = new Date(data);
+  const options = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  };
+  if (withHour) {
+    options['hour'] = '2-digit';
+    options['minute'] = '2-digit';
+  }
+  const formatter = new Intl.DateTimeFormat("fr-FR", options);
+  return formatter.format(date);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDeleteButtons();
+
+  initToggleSidebar();
+})

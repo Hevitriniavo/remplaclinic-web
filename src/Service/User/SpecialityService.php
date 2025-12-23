@@ -1,6 +1,7 @@
 <?php
 namespace App\Service\User;
 
+use App\Entity\Speciality;
 use App\Repository\SpecialityRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -21,5 +22,13 @@ class SpecialityService
             }
         }
         return $specialities;
+    }
+
+    public function getSpeciality(?int $specialityId): ?Speciality
+    {
+        if (is_null($specialityId)) {
+            return null;
+        }
+        return $this->getSpecialities([$specialityId])[0];
     }
 }
