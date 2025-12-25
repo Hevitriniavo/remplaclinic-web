@@ -6,6 +6,7 @@ use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -53,13 +54,14 @@ class UserRepository extends ServiceEntityRepository
         return DataTableResponse::fromPaginator($paginator, $params->draw + 1);
     }
 
-    public function findAllDataTablesForRequest(?int $roleId, ?DataTableParams $params = null, ?string $searchValue = null): DataTableResponse
+    public function findAllDataTablesForRequest(?int $roleId, ?DataTableParams $params = null, array $queryParams = []): DataTableResponse
     {
-        $searchParam = $searchValue;
+        $searchParam = empty($queryParams['search']) ? '' : $queryParams['search'];
 
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
-            ->leftJoin('u.mobilities', 'm');
+            ->leftJoin('u.mobilities', 'm')
+            ->andWhere('u.status = 1');
         
         if (!is_null($params)) {
             $sortBy = $params->getOrderColumn(['u.id', 'u.name', 'u.surname', 's.name', 'm.name'], 'u.id');
@@ -89,6 +91,8 @@ class UserRepository extends ServiceEntityRepository
                 )
                 ->setParameter('value', '%' . $searchParam . '%');
         }
+
+        $this->addQueryParameters($qb, $queryParams);
         
         $paginator = new Paginator($qb->getQuery());
 
@@ -122,12 +126,13 @@ class UserRepository extends ServiceEntityRepository
         return $response;
     }
 
-    public function findAllIdsForRequest(?int $roleId, ?string $searchValue = null): array
+    public function findAllIdsForRequest(?int $roleId, array $params = []): array
     {
         $qb = $this->createQueryBuilder('u')
             ->select('DISTINCT(u.id)')
             ->leftJoin('u.speciality', 's')
-            ->leftJoin('u.mobilities', 'm');
+            ->leftJoin('u.mobilities', 'm')
+            ->andWhere('u.status = 1');
 
         if (!is_null($roleId)) {
             $qb->join('u.roles', 'r')
@@ -135,6 +140,7 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('roleId', $roleId);
         }
         
+        $searchValue = empty($params['search']) ? '' : $params['search'];
         if (!empty($searchValue)) {
             $qb
                 ->andWhere(
@@ -148,7 +154,48 @@ class UserRepository extends ServiceEntityRepository
                 )
                 ->setParameter('value', '%' . $searchValue . '%');
         }
+
+        $this->addQueryParameters($qb, $params);
         
         return $qb->getQuery()->getSingleColumnResult();
+    }
+
+    private function addQueryParameters(QueryBuilder $qb, array $params) {
+        $speciality = empty($params['speciality']) ? '' : $params['speciality'];
+        $mobility = empty($params['mobility']) ? '' : $params['mobility'];
+        $subSpeciality = empty($params['sousSpeciality']) ? '' : $params['sousSpeciality'];
+        $conditionTpe = empty($params['condition_type']) ? '' : $params['condition_type'];
+
+        $expr = $conditionTpe === 'or' ? $qb->expr()->orX() : $qb->expr()->andX();
+
+        if (!empty($speciality)) {
+            $expr->add('s.id = :speciality_id');
+
+            $qb
+                ->setParameter('speciality_id', $speciality);
+        }
+
+        if (!empty($mobility)) {
+            $expr->add('m.id = :mobility_id');
+
+            $qb
+                ->setParameter('mobility_id', $mobility);
+        }
+
+        $subSpeciality = empty($params['sousSpeciality']) ? '' : $params['sousSpeciality'];
+        if (!empty($subSpeciality)) {
+            $sousSpecialityQb = $this->createQueryBuilder('subU')
+                ->select('DISTINCT(subU.id)')
+                ->leftJoin('subU.subSpecialities', 'sub')
+                ->andWhere('sub.id = :sub_speciality_id')
+                ->getDQL();
+            
+            $expr->add('u.id IN (' . $sousSpecialityQb . ')');
+
+            $qb
+                ->setParameter('sub_speciality_id', $subSpeciality);
+        }
+
+        $qb->andWhere($expr);
     }
 }

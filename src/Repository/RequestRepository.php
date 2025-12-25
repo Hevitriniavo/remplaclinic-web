@@ -29,6 +29,7 @@ class RequestRepository extends ServiceEntityRepository
             ->select('COUNT(o.id)')
             ->from(RequestResponse::class, 'o')
             ->where('o.request = u.id')
+            ->andWhere('o.status = ' . RequestResponse::ACCEPTED)
             ->getDQL();
 
 

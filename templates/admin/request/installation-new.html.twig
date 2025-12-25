@@ -1,4 +1,4 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin-datatable.html.twig' %}
 
 {% block title %}
 Remplaclinic :: Admin :: Nouvelle proposition d'installation
@@ -27,6 +27,7 @@ Nouvelle proposition d'installation
 
 {% block body %}
     {% include 'admin/request/_form-installation.html.twig' %}
+    {% include 'admin/request/_form-select-user.html.twig' %}
 {% endblock %}
 
 {% block bodyjs %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RequestResponseRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: RequestResponseRepository::class)]
 class RequestResponse
 {
+    const CREATED = 0;
     const ACCEPTED = 3;
 
     #[ORM\Id]
@@ -32,6 +34,12 @@ class RequestResponse
 
     #[ORM\ManyToOne]
     private ?Request $request = null;
+
+    public function __construct()
+    {
+        $this->createAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

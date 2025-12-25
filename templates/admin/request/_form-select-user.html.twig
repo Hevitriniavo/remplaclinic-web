@@ -15,27 +15,42 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-12 mb-3">
+                            <div class="col-12">
+                                Sélectionner les remplaçants qui ont la meme
+                            </div>
+                            <div class="col-12 mb-3 pl-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="select-user-speciality" value="0">
                                     <label class="form-check-label" for="select-user-speciality">
-                                        Sélectionner les remplaçants qui a la meme spécialité
+                                        Spécialité
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="select-user-sous-speciality" value="0">
                                     <label class="form-check-label" for="select-user-sous-speciality">
-                                        Sélectionner les remplaçants qui a la meme sous spécialité
+                                        Sous spécialité
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="select-user-mobility" value="0">
                                     <label class="form-check-label" for="select-user-mobility">
-                                        Sélectionner les remplaçants qui a la meme mobilité
+                                        Mobilité
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="select-user-or" value="0">
+                                    <label class="form-check-label" for="select-user-or">
+                                        Une des conditions precedentes (OU)
                                     </label>
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-12 text-bold">
+                                <span id="select-user-count">0</span> remplaçants choisis.
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <table
@@ -66,7 +81,12 @@
                         <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
                             <i class="fas fa-times"></i> Annuler
                         </button>
-                        <button type="button" class="btn btn-secondary btn-flat" id="btn-select-user-save">
+                        <button
+                            type="button"
+                            class="btn btn-secondary btn-flat"
+                            id="btn-select-user-save"
+                            data-request-url="{{ path('api_request_personne_contacte_add', {requestId: '0000000000'}) }}"
+                        >
                             <i class="fas fa-save"></i> Enregistrer
                         </button>
                     </div>

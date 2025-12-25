@@ -136,23 +136,22 @@ const app = createApp({
     }
 
     function onCreateRequest() {
-      openSelectUserModal()
-      // requestData.value.comment = jQuery("#request-comment").summernote("code")
+      requestData.value.comment = jQuery("#request-comment").summernote("code")
 
-      // const payload = toFormData()
+      const payload = toFormData()
 
-      // if (!validateFormData()) {
-      //   requesting.value = true
-      //   const action = formEl.value.dataset.url
-      //   axios
-      //     .post(action, payload)
-      //     .then(() => {
-      //       jQuery("#btn-request-list")[0].click()
-      //     })
-      //     .catch(() => {
-      //       requesting.value = false
-      //     })
-      // }
+      if (!validateFormData()) {
+        requesting.value = true
+        const action = formEl.value.dataset.url
+        axios
+          .post(action, payload)
+          .then((res) => {
+            openSelectUserModal(res.data.id, requestData.value.speciality, requestData.value.region)
+          })
+          .catch(() => {
+            requesting.value = false
+          })
+      }
     }
 
     function getDateDesEnvois () {
@@ -220,9 +219,9 @@ const app = createApp({
                 const editUrl = getCleanUrl(tblDom.data('edit-url'), row['id'])
                 return (
                   "<div>" +
-                  '<a class="btn btn-sm btn-outline-info btn-answer" data-url="'+ editUrl +'" data-statut="0" data-id="'+ row['id'] +'"><i class="fas fa-reply"></i></a>' +
-                  '<a class="btn btn-sm btn-outline-info btn-answer" data-url="'+ editUrl +'" data-statut="1" data-id="'+ row['id'] +'"><i class="fas fa-info"></i></a>' +
-                  '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
+                  '<a class="btn btn-sm btn-outline-info btn-answer" data-url="'+ editUrl +'" data-statut="0" data-id="'+ row['id'] +'" title="Repondre"><i class="fas fa-reply"></i></a>' +
+                  '<a class="btn btn-sm btn-outline-info btn-answer ml-2" data-url="'+ editUrl +'" data-statut="1" data-id="'+ row['id'] +'" title="Plus d\'info"><i class="fas fa-info"></i></a>' +
+                  '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'" title="Supprimer"><i class="fas fa-trash"></i></a>' +
                   "</div>"
                 )
               },
@@ -327,8 +326,33 @@ app.mount("#root")
 const selectedUsersId = new Set()
 let tableSelectionUsers = null
 
-function openSelectUserModal() {
+/**
+ * @param {string} requestId L'ID de la demande
+ * @param {string} speciality La specialite selectionne
+ * @param {string} mobility La region selectionne 
+ */
+function openSelectUserModal(requestId, speciality, mobility) {
   $('#select-user-modal').modal('show')
+
+  $('#btn-select-user-save').attr('data-request-id', requestId)
+
+  // MAJ de la valeur des filtres
+  $('#select-user-speciality').val(speciality)
+  $('#select-user-sous-speciality').val(speciality)
+  $('#select-user-mobility').val(mobility)
+
+  // Ajout event handlers aux filtres
+  const filtres = [
+    '#select-user-speciality',
+    '#select-user-sous-speciality',
+    '#select-user-mobility',
+    '#select-user-or',
+  ]
+  filtres.forEach(filtreId => {
+    $(filtreId).on('change', () => {
+      tableSelectionUsers.draw()
+    })
+  })
 
   const tblDom = $('#tbl-select-users')
   const listPersonneUrl = tblDom.data('listUrl')
@@ -398,6 +422,12 @@ function openSelectUserModal() {
     ajax: {
       url: listPersonneUrl,
       type: "GET",
+      data: (params) => {
+        return {
+          ...params,
+          ...getFiltreParametres(),
+        }
+      },
     },
   })
 }
@@ -411,10 +441,22 @@ function hideSelectUserModal(redirect = false) {
 }
 
 function saveSelectedUsers() {
-  console.log('SELECTED USERS: ', selectedUsersId)
+  const btnSave = $('#btn-select-user-save')
+  const requestUrl = btnSave.attr('data-request-url')
+  const requestId = btnSave.attr('data-request-id')
+
+  const url = getCleanUrl(requestUrl, requestId)
+
+  axios.post(url, {
+    users: Array.from(selectedUsersId),
+  })
+    .then(() => {})
+    .catch(() => {})
+  
+  hideSelectUserModal(true)
 }
 
-function toggleSelectedUserId(userId, isSelected) {
+function toggleSelectedUserId(userId, isSelected, updateCount = true) {
   const alreadySelected = selectedUsersId.has(userId)
 
   // select
@@ -426,41 +468,82 @@ function toggleSelectedUserId(userId, isSelected) {
   if (!isSelected && alreadySelected) {
     selectedUsersId.delete(userId)
   }
+
+  if (updateCount) {
+    $('#select-user-count').text(selectedUsersId.size)
+  }
 }
 
-async function getUserIdFor() {
+/**
+ * Recuperer les IDs des utilisateur pour pouvoir les selectionner.
+ * 
+ * @param {number} checked La valeur du checkbox (selectionner ou pas?)
+ */
+async function getUserIdFor(checked) {
   const idsUrl = $('#select-user-modal').data('idsUrl')
 
-  const searchValue = $('#tbl-select-users_filter input').val()
-  const speciality = $('#select-user-speciality')
-  const sousSpeciality = $('#select-user-sous-speciality')
-  const mobility = $('#select-user-mobility')
-
-  const params = {}
+  const params = getFiltreParametres()
   
+  // search value
+  const searchValue = $('#tbl-select-users_filter input').val()
+
   if (searchValue) {
     params.search = searchValue
   }
-
-  if (speciality.prop('checked')) {
-    params.speciality = speciality.val()
-  }
-
-  if (sousSpeciality.prop('checked')) {
-    params.sousSpeciality = sousSpeciality.val()
-  }
-
-  if (mobility.prop('checked')) {
-    params.mobility = mobility.val()
-  }
-
-  console.log("PARAMS: ", params)
 
   const response = await axios.get(idsUrl, {
     params: params
   })
 
-  return response.data
+  response.data.forEach(userId => {
+    toggleSelectedUserId(userId, checked, false)
+  })
+
+  // update counter text
+  $('#select-user-count').text(selectedUsersId.size)
+
+  // actualiser le tableau
+  if (tableSelectionUsers) {
+    tableSelectionUsers.draw()
+  }
+}
+
+/**
+ * Recuperer les parametres correspondant aux filtres.
+ * 
+ * @return {{
+ *  speciality: String,
+ *  sousSpeciality: String,
+ *  mobility: String,
+ *  condition_type: String
+ * }}
+ */
+function getFiltreParametres() {
+  const params = {
+    condition_type: 'and'
+  }
+
+  const speciality = $('#select-user-speciality')
+  if (speciality.prop('checked')) {
+    params.speciality = speciality.val()
+  }
+
+  const sousSpeciality = $('#select-user-sous-speciality')
+  if (sousSpeciality.prop('checked')) {
+    params.sousSpeciality = sousSpeciality.val()
+  }
+
+  const mobility = $('#select-user-mobility')
+  if (mobility.prop('checked')) {
+    params.mobility = mobility.val()
+  }
+
+  const conditionTypeOr = $('#select-user-or')
+  if (conditionTypeOr.prop('checked')) {
+    params.condition_type = 'or'
+  }
+
+  return params
 }
 
 $('#select-user-modal').on('hidden.bs.modal', () => {
@@ -470,22 +553,13 @@ $('#select-user-modal').on('hidden.bs.modal', () => {
 })
 
 $(document).on('change', '.select-user-checkbox', (e) => {
-  const el = e.target
   const value = e.target.value
   const checked = e.target.checked
 
   if (value === 'tout') {
-    getUserIdFor()
-      .then(userIds => {
-        userIds.forEach(userId => {
-          toggleSelectedUserId(userId, checked)
-        })
-
-        if (tableSelectionUsers) {
-          tableSelectionUsers.draw()
-        }
-      })
-
+    getUserIdFor(checked)
+      .then(() => {})
+      .catch(() => {})
   } else {
     const userId = +value
     toggleSelectedUserId(userId, checked)

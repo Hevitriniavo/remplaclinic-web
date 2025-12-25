@@ -9,6 +9,7 @@ use App\Dto\Request\NewReplacementDto;
 use App\Entity\Request;
 use App\Entity\RequestReason;
 use App\Entity\RequestReplacementType;
+use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use App\Repository\RequestRepository;
 use App\Service\User\RegionService;
@@ -97,6 +98,24 @@ class RequestService
             return true;
         }
         return false;
+    }
+
+    public function initRequestResponse(Request $request, array $usersId): void
+    {
+        $users = $this->userService->getUsers($usersId);
+
+        foreach($users as $user) {
+            $reqResp = new RequestResponse();
+            $reqResp
+                ->setStatus(RequestResponse::CREATED)
+                ->setRequest($request)
+                ->setUser($user)
+            ;
+
+            $this->entityManager->persist($reqResp);
+        }
+
+        $this->entityManager->flush();
     }
 
     private function getRequestTitle(RequestType $type, $start, $end = null): string
