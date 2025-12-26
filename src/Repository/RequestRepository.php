@@ -32,7 +32,6 @@ class RequestRepository extends ServiceEntityRepository
             ->andWhere('o.status = ' . RequestResponse::ACCEPTED)
             ->getDQL();
 
-
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
             ->leftJoin('u.region', 'r')

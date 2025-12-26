@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\RequestResponse;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -68,5 +69,33 @@ class RequestResponseRepository extends ServiceEntityRepository
         $response = DataTableResponse::fromPaginator($paginator, $params->draw + 1, true);
         $response->data = $result;
         return $response;
+    }
+
+    public function findAllUserNotAddedTo(int $requestId, ?string $searchTerm = ''): array
+    {
+        $sql = 'FROM `user` AS u';
+        $sql .= ' JOIN `user_user_role` AS r ON r.user_id = u.id';
+        $sql .= ' LEFT JOIN `request_response` as rr ON rr.user_id = u.id AND rr.request_id = :request_id'; // join to request response with the given ID
+        $sql .= ' WHERE rr.id IS NULL';
+        $sql .= ' AND u.status = 1'; // only active
+        $sql .= ' AND r.user_role_id = ' . User::ROLE_REPLACEMENT_ID; // only user replacement
+
+        $params = [
+            'request_id' => $requestId,
+        ];
+
+        if (!empty($searchTerm)) {
+            $sql .= ' AND (u.name LIKE :search_value OR u.surname LIKE :search_value OR u.email LIKE :search_value)';
+            $params['search_value'] = '%' . $searchTerm .'%';
+        }
+
+        $sql = 'SELECT DISTINCT u.id, u.name, u.surname ' . $sql . ' ORDER BY u.name ASC, u.surname ASC, u.id DESC';
+
+        $connection = $this->getEntityManager()->getConnection();
+        $statement = $connection->prepare($sql);
+        
+        $result = $statement->executeQuery($params);
+
+        return $result->fetchAllAssociative();
     }
 }

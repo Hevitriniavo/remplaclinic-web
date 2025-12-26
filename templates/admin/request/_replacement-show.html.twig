@@ -255,20 +255,47 @@
                     class="row justify-content-center"
                 >
                     <div class="col-12 mt-3">
-                        <table id="tbl-personne-contacte" class="table table-hover"
-                            data-list-url="{{ path('api_request_personne_contacte_list', { requestId: '0000000000' }) }}"
-                        >
-                            <thead>
-                                <tr>
-                                    <th>#Nom</th>
-                                    <th>#Prénom</th>
-                                    <th>#Spécialité</th>
-                                    <th>#Statut</th>
-                                    <th>#</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <select
+                                        class="form-control"
+                                        id="request-user-new"
+                                        data-url="{{ path('api_request_personne_contacte_missing', {requestId: request.id}) }}"
+                                        v-model="personneContacteNew"
+                                    >
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <button
+                                    class="btn btn-flat btn-secondary"
+                                    :disabled="!personneContacteNew"
+                                    v-on:click="onAddMissingRequest"
+                                    data-url="{{ path('api_request_personne_contacte_add', {requestId: request.id}) }}"
+                                >Valider</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="tbl-personne-contacte" class="table table-hover"
+                                    data-list-url="{{ path('api_request_personne_contacte_list', { requestId: '0000000000' }) }}"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>#Id</th>
+                                            <th>#Nom</th>
+                                            <th>#Prénom</th>
+                                            <th>#Spécialité</th>
+                                            <th>#Statut</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -67,4 +67,14 @@ class UserRequestController extends AbstractController
 
         return $this->json('ok');
     }
+
+    #[Route('/api/requests/{requestId}/personne-contacte/missing', name: 'api_request_personne_contacte_missing', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function getUsersNotAttachedToRequest(int $requestId, Request $request): Response
+    {
+        $searchTerm = $request->query->get('search', '');
+
+        $users = $this->requestResponseRepository->findAllUserNotAddedTo($requestId, $searchTerm);
+
+        return $this->json($users);
+    }
 }

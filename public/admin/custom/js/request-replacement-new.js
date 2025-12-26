@@ -1,4 +1,4 @@
-const { createApp, ref, onMounted, nextTick } = Vue
+const { createApp, ref, onMounted, nextTick, shallowRef } = Vue
 
 const app = createApp({
   setup() {
@@ -42,6 +42,8 @@ const app = createApp({
     })
 
     const requestDateEnvois = ref([])
+    const personneContacteDatatable = shallowRef(null)
+    const personneContacteNew = ref(null)
 
     function getErrorClass(fieldName) {
       if (requestErrors.value.error && requestErrors.value.validated) {
@@ -165,7 +167,7 @@ const app = createApp({
         const tblDom = $("#tbl-personne-contacte")
         const url = getCleanUrl(tblDom.data("listUrl"), requestData.value.id)
 
-        const personneContacteDatatable = tblDom.DataTable({
+        personneContacteDatatable.value = tblDom.DataTable({
           paging: true,
           searching: true,
           ordering: true,
@@ -184,16 +186,21 @@ const app = createApp({
           columnDefs: [
             {
               targets: 0,
+              data: "id",
+              width: '5%',
+            },
+            {
+              targets: 1,
               data: "user.name",
               width: '25%',
             },
             {
-              targets: 1,
+              targets: 2,
               data: "user.surname",
               width: '25%',
             },
             {
-              targets: 2,
+              targets: 3,
               data: 'user.speciality.name',
               width: '25%',
               // render: function (data, type, row, meta) {
@@ -201,15 +208,15 @@ const app = createApp({
               // }
             },
             {
-              targets: 3,
+              targets: 4,
               data: 'statut',
-              width: '15%',
+              width: '10%',
               // render: function (data, type, row, meta) {
               //   return row.specialityParent ? row.specialityParent.name : ''
               // }
             },
             {
-              targets: 4,
+              targets: 5,
               data: "id",
               orderable: false,
               className: "text-right",
@@ -236,10 +243,37 @@ const app = createApp({
 
         // delete
         $(document).on('deletedEvent', function() {
-          personneContacteDatatable.draw()
+          personneContacteDatatable.value.draw()
         })
 
-        resolve(personneContacteDatatable)
+        // add user to a request
+        jQuery("#request-user-new").select2({
+          theme: "bootstrap4",
+          allowClear: true,
+          placeholder: "- Choisir une option -",
+          ajax: {
+            beforeSend: null,
+            url: $('#request-user-new').data("url"),
+            type: "get",
+            dataType: "json",
+            delay: 200,
+            data: (params) => {
+              return {
+                search: params.term
+              }
+            },
+            processResults: function(data) {
+              return {
+                results: data.map(user => ({ id: user.id, text: `${user.name} ${user.surname}` }))
+              }
+            }
+          },
+        })
+        jQuery("#request-user-new").on('change', function() {
+          personneContacteNew.value = jQuery(this).val()
+        })
+
+        resolve(true)
       })
     }
 
@@ -257,6 +291,20 @@ const app = createApp({
 
         await actions[navigationTab]()
       }
+    }
+
+    async function onAddMissingRequest(e) {
+      axios.post(e.target.dataset.url, { users: [personneContacteNew.value]})
+        .then(() => {
+          // personneContacteNew.value = null
+          $('#request-user-new').val('')
+          $('#request-user-new').trigger('change')
+
+          if (personneContacteDatatable.value) {
+            personneContacteDatatable.value.draw()
+          }
+        })
+        .catch(() => {})
     }
 
     onMounted(() => {
@@ -309,10 +357,12 @@ const app = createApp({
       formEl,
       formNavigationTab,
       requestDateEnvois,
+      personneContacteNew,
 
       getErrorClass,
       onCreateRequest,
       onChangeNavigationTab,
+      onAddMissingRequest,
     }
   },
 })
