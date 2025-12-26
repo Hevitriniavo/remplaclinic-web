@@ -25,6 +25,7 @@
         "symfony/http-client": "7.2.*",
         "symfony/intl": "7.2.*",
         "symfony/mailer": "7.2.*",
+        "symfony/messenger": "7.2.*",
         "symfony/mime": "7.2.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "7.2.*",
@@ -58,7 +59,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "App\\DrupalDataMigration\\": "drupal-data-migration/src/"
         }
     },
     "autoload-dev": {

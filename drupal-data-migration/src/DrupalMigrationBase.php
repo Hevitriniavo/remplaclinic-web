@@ -1,0 +1,61 @@
+<?php
+
+namespace App\DrupalDataMigration;
+
+use Doctrine\DBAL\Connection;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+abstract class DrupalMigrationBase implements DrupalMigration
+{
+    const DRUPAL_MIGRATION_BASE_URI = 'http://remplaclinic-fr-local/migrations.php';
+
+    protected Connection $connection;
+    protected HttpClientInterface $httpClient;
+    
+    public function __construct(array $options = [])
+    {
+        $this->connection = $options['connection'] ?: null;
+        $this->httpClient = $options['http'] ?: null;
+    }
+
+    abstract public function migrate();
+
+    protected function getData(array $queryParams = []): array
+    {
+        if (is_null($this->httpClient)) {
+            return [];
+        }
+
+        $response = $this->httpClient->request(
+            'GET',
+            self::DRUPAL_MIGRATION_BASE_URI,
+            [
+                'query' => $queryParams,
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode !== 200) {
+            throw new \RuntimeException('Failed to fetch roles from Drupal migration endpoint.');
+        }
+
+        return $response->toArray();
+    }
+
+    protected function keyData(array $data, string $keyPath, mixed $defaultValue = null): mixed
+    {
+        $keys = explode('.', $keyPath);
+        $dataValues = $data;
+
+        foreach($keys as $key) {
+            if (!array_key_exists($key, $dataValues)) {
+                return $defaultValue;
+            }
+
+            $dataValues = $dataValues[$key];
+        }
+
+        return $dataValues;
+    }
+}
