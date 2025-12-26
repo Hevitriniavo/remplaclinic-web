@@ -42,7 +42,7 @@ class EditRequestDto
 
         public ?string $replacementType,
 
-        public ?string $raison,
+        public ?array $raison,
 
         public ?string $raisonValue,
 

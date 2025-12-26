@@ -84,9 +84,74 @@ class RequestService
         return $request;
     }
 
-    public function updateRequest(Request $request, EditRequestDto $requestDto): ?Request
+    public function updateReplacement(Request $request, EditRequestDto $requestDto): ?Request
     {
-        return null;
+        if ($request->getRequestType() !== RequestType::REPLACEMENT) {
+            return $request;
+        }
+
+        $request->setApplicant($this->userService->getUser($requestDto->applicant))
+            ->setSpeciality($this->specialityService->getSpeciality($requestDto->speciality))
+            ->setRegion($this->regionService->getRegion($requestDto->region))
+            ->setPositionCount($requestDto->positionCount)
+            ->setAccomodationIncluded($requestDto->accomodationIncluded)
+            ->setTransportCostRefunded($requestDto->transportCostRefunded)
+            ->setRemuneration($requestDto->remuneration)
+            ->setRetrocession($requestDto->retrocession)
+            ->setComment($requestDto->comment)
+            ->setStartedAt(DateUtil::parseDate('d/m/Y', $requestDto->startedAt, true))
+            ->setEndAt(DateUtil::parseDate('d/m/Y', $requestDto->endAt, true))
+            ->setReplacementType(RequestReplacementType::tryFrom($requestDto->replacementType))
+            ->setTitle($requestDto->title)
+            ->setShowEndAt(!is_null($requestDto->endAt))
+            ->setStatus($requestDto->status)
+        ;
+
+        if (!empty($requestDto->subSpecialities)) {
+            $subSpecialities = $this->specialityService->getSpecialities($requestDto->subSpecialities);
+
+            $request->clearSubSpeciality();
+
+            foreach($subSpecialities as $speciality) {
+                $request->addSubSpeciality($speciality);
+            }
+        }
+
+        $this->entityManager->flush();
+
+        return $request;
+    }
+
+    public function updateInstallation(Request $request, EditRequestDto $requestDto): ?Request
+    {
+        if ($request->getRequestType() !== RequestType::INSTALLATION) {
+            return $request;
+        }
+
+        $request->setApplicant($this->userService->getUser($requestDto->applicant))
+            ->setSpeciality($this->specialityService->getSpeciality($requestDto->speciality))
+            ->setRegion($this->regionService->getRegion($requestDto->region))
+            ->setRemuneration($requestDto->remuneration)
+            ->setComment($requestDto->comment)
+            ->setStartedAt(DateUtil::parseDate('d/m/Y', $requestDto->startedAt, true))
+            ->setTitle($requestDto->title)
+            ->setShowEndAt(!is_null($requestDto->endAt))
+            ->setStatus($requestDto->status)
+        ;
+
+        $this->populateReasons($request, $requestDto->raison, $requestDto->raisonValue);
+
+        foreach($request->getReasons() as $reason) {
+            $this->entityManager->persist($reason);
+        }
+
+        if (!is_null($requestDto->endAt)) {
+            $request->setEndAt(DateUtil::parseDate('d/m/Y', $requestDto->endAt, true));
+        }
+
+        $this->entityManager->flush();
+
+        return $request;
     }
 
     public function deleteRequest(int $requestId): bool

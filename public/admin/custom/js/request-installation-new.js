@@ -6,11 +6,13 @@ const app = createApp({
     const requestData = ref({
       id: null,
       title: null,
+      status: null,
       applicant: null,
       speciality: null,
       region: null,
       remuneration: null,
       startedAt: null,
+      endAt: null,
       raison: [],
       raisonValue: null,
       comment: null,
@@ -95,7 +97,7 @@ const app = createApp({
               result.append(`${key}[${index}]`, aValue)
               index++
             }
-          } else if (value) {
+          } else if (value !== null && value !== undefined) {
             result.append(key, value)
           }
         }
@@ -117,11 +119,13 @@ const app = createApp({
         requestData.value = {
           id: response.data.id,
           title: response.data.title,
+          status: response.data.status,
           applicant: response.data.applicant.id,
           speciality: response.data.speciality.id,
           region: response.data.region.id,
           remuneration: response.data.remuneration,
           startedAt: formatDate(response.data.startedAt, false),
+          endAt: response.data.endAt ? formatDate(response.data.endAt, false) : null,
           raison: [],
           raisonValue: '',
         }
@@ -145,6 +149,16 @@ const app = createApp({
       }
     }
 
+    function onSaveRequest() {
+      const estModification = requestData.value.id !== null
+
+      if (estModification) {
+        onEditRequest()
+      } else {
+        onCreateRequest()
+      }
+    }
+
     function onCreateRequest() {
       requestData.value.comment = jQuery("#request-comment").summernote("code")
 
@@ -156,7 +170,28 @@ const app = createApp({
         axios
           .post(action, payload)
           .then((res) => {
+            requesting.value = false
             openSelectUserModal(res.data.id, requestData.value.speciality, requestData.value.region)
+          })
+          .catch(() => {
+            requesting.value = false
+          })
+      }
+    }
+
+    function onEditRequest() {
+      requestData.value.comment = jQuery("#request-comment").summernote("code")
+
+      const payload = toFormData()
+
+      if (!validateFormData()) {
+        requesting.value = true
+        const action = $('#root').data('updateUrl')
+        axios
+          .post(action, payload)
+          .then(() => {
+            requesting.value = false
+            jQuery("#btn-request-list")[0].click()
           })
           .catch(() => {
             requesting.value = false
@@ -347,12 +382,15 @@ const app = createApp({
           requestData.value.region = jQuery(this).val()
         })
 
-        jQuery("#request-started-at").datepicker({
+        jQuery("#request-started-at, #request-end-at").datepicker({
           format: "dd/mm/yyyy",
           autoclose: true,
         })
         jQuery("#request-started-at-input").on("change", function () {
           requestData.value.startedAt = jQuery(this).val()
+        })
+        jQuery("#request-end-at-input").on("change", function () {
+          requestData.value.endAt = jQuery(this).val()
         })
       })
     })
@@ -368,7 +406,9 @@ const app = createApp({
       personneContacteNew,
 
       getErrorClass,
+      onSaveRequest,
       onCreateRequest,
+      onEditRequest,
       onChangeNavigationTab,
       onAddMissingRequest,
     }

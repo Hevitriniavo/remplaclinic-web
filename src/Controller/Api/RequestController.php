@@ -73,7 +73,7 @@ class RequestController extends AbstractController
         );
     }
 
-    #[Route('/api/requests/{id}', name: 'api_request_update', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/api/request-replacements/{id}', name: 'api_request_replacement_update', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function update(
         RequestService $requestService,
         int $id,
@@ -87,7 +87,31 @@ class RequestController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
-        $requestService->updateRequest($request, $requestDto);
+        $requestService->updateReplacement($request, $requestDto);
+
+        return $this->json(
+            $request,
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'datatable']
+        );
+    }
+
+    #[Route('/api/request-installations/{id}', name: 'api_request_installation_update', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function updateRequestInstallation(
+        RequestService $requestService,
+        int $id,
+        #[MapRequestPayload(
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )] EditRequestDto $requestDto
+    ): Response {
+        $request = $this->requestRepository->find($id);
+
+        if (is_null($request)) {
+            return $this->json(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $requestService->updateInstallation($request, $requestDto);
 
         return $this->json(
             $request,

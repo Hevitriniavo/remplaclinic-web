@@ -297,6 +297,13 @@ class Request
         return $this;
     }
 
+    public function clearSubSpeciality(): static
+    {
+        $this->subSpecialities = new ArrayCollection();
+
+        return $this;
+    }
+
     public function removeSubSpeciality(Speciality $subSpeciality): static
     {
         $this->subSpecialities->removeElement($subSpeciality);

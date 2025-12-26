@@ -6,6 +6,7 @@ const app = createApp({
     const requestData = ref({
       id: null,
       title: null,
+      status: null,
       applicant: null,
       speciality: null,
       region: null,
@@ -18,6 +19,7 @@ const app = createApp({
       accomodationIncluded: null,
       transportCostRefunded: null,
       comment: null,
+      subSpecialities: []
     })
     const requestValidators = {
       applicant: (value) => !!value,
@@ -28,7 +30,7 @@ const app = createApp({
       retrocession: (value, form) => !!value || !!form.remuneration,
       startedAt: (value) => !!value,
       endAt: (value) => !!value,
-      replacementType: (value) => value === "pontual" || value === "regular",
+      replacementType: (value) => value === "ponctual" || value === "regular",
     }
     const requestErrors = ref({
       validated: false,
@@ -94,7 +96,7 @@ const app = createApp({
               result.append(`${key}[${index}]`, aValue)
               index++
             }
-          } else if (value) {
+          } else if (value !== null && value !== undefined) {
             result.append(key, value)
           }
         }
@@ -116,6 +118,7 @@ const app = createApp({
         requestData.value = {
           id: response.data.id,
           title: response.data.title,
+          status: response.data.status,
           applicant: response.data.applicant.id,
           speciality: response.data.speciality.id,
           region: response.data.region.id,
@@ -127,13 +130,29 @@ const app = createApp({
           replacementType: response.data.replacementType,
           accomodationIncluded: response.data.accomodationIncluded,
           transportCostRefunded: response.data.transportCostRefunded,
+          subSpecialities: [],
         }
 
         jQuery("#request-comment").summernote("code", response.data.comment)
 
+        // sub specialities
+        if (response.data.subSpecialities) {
+          requestData.value.subSpecialities = response.data.subSpecialities.map(s => s.id)
+        }
+
         // update date envoi
         const requestDateEnvoisList = response.data.sentDates || []
         requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi))
+      }
+    }
+
+    function onSaveRequest() {
+      const estModification = requestData.value.id !== null
+
+      if (estModification) {
+        onEditRequest()
+      } else {
+        onCreateRequest()
       }
     }
 
@@ -148,7 +167,28 @@ const app = createApp({
         axios
           .post(action, payload)
           .then((res) => {
+            requesting.value = false
             openSelectUserModal(res.data.id, requestData.value.speciality, requestData.value.region)
+          })
+          .catch(() => {
+            requesting.value = false
+          })
+      }
+    }
+
+    function onEditRequest() {
+      requestData.value.comment = jQuery("#request-comment").summernote("code")
+
+      const payload = toFormData()
+
+      if (!validateFormData()) {
+        requesting.value = true
+        const action = $('#root').data('updateUrl')
+        axios
+          .post(action, payload)
+          .then(() => {
+            requesting.value = false
+            jQuery("#btn-request-list")[0].click()
           })
           .catch(() => {
             requesting.value = false
@@ -337,6 +377,10 @@ const app = createApp({
         jQuery("#request-region").on('change', function() {
           requestData.value.region = jQuery(this).val()
         })
+        
+        jQuery("#request-sub-specialities").on('change', function() {
+          requestData.value.subSpecialities = jQuery(this).val().filter(val => !!val)
+        })
 
         jQuery("#request-started-at, #request-end-at").datepicker({
           format: "dd/mm/yyyy",
@@ -360,7 +404,9 @@ const app = createApp({
       personneContacteNew,
 
       getErrorClass,
+      onSaveRequest,
       onCreateRequest,
+      onEditRequest,
       onChangeNavigationTab,
       onAddMissingRequest,
     }
