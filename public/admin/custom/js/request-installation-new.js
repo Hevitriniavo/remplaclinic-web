@@ -1,9 +1,11 @@
-const { createApp, ref, onMounted, computed } = Vue
+const { createApp, ref, onMounted, computed, shallowRef, nextTick } = Vue
 
 const app = createApp({
   setup() {
     const requesting = ref(false)
     const requestData = ref({
+      id: null,
+      title: null,
       applicant: null,
       speciality: null,
       region: null,
@@ -37,6 +39,14 @@ const app = createApp({
     ]
 
     const formEl = ref(null)
+    const formNavigationTab = ref({
+      active: 'modifier', // modifier - date-envoi - personne-contacte
+    })
+
+    const requestDateEnvois = ref([])
+    const personneContacteDatatable = shallowRef(null)
+    const personneContacteNew = ref(null)
+
     const otherChoosen = computed(() => {
       const hasOther = requestData.value.raison.some(r => r === 'Autre')
       return hasOther
@@ -93,8 +103,46 @@ const app = createApp({
       return result
     }
 
-    function getRequestDetail() {
-      return Promise.resolve()
+    async function getRequestDetail() {
+      const url = $('#root').data('detailUrl')
+
+      if (!url) {
+        // create new request
+        return Promise.resolve()
+      }
+
+      const response = await axios.get(url)
+
+      if (response.data) {
+        requestData.value = {
+          id: response.data.id,
+          title: response.data.title,
+          applicant: response.data.applicant.id,
+          speciality: response.data.speciality.id,
+          region: response.data.region.id,
+          remuneration: response.data.remuneration,
+          startedAt: formatDate(response.data.startedAt, false),
+          raison: [],
+          raisonValue: '',
+        }
+
+        jQuery("#request-comment").summernote("code", response.data.comment)
+
+        // raison
+        if (response.data.reasons) {
+          response.data.reasons.forEach(reason => {
+            requestData.value.raison.push(reason.reason)
+
+            if (reason.reason === 'Autre') {
+              requestData.value.raisonValue = reason.reasonValue
+            }
+          })
+        }
+
+        // update date envoi
+        const requestDateEnvoisList = response.data.sentDates || []
+        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi))
+      }
     }
 
     function onCreateRequest() {
@@ -114,6 +162,157 @@ const app = createApp({
             requesting.value = false
           })
       }
+    }
+
+    function getDateDesEnvois () {
+      // data loaded with getRequestDetail
+
+      return Promise.resolve()
+    }
+
+    function getPersonneContactes () {
+      return new Promise((resolve) => {
+        const tblDom = $("#tbl-personne-contacte")
+        const url = getCleanUrl(tblDom.data("listUrl"), requestData.value.id)
+
+        personneContacteDatatable.value = tblDom.DataTable({
+          paging: true,
+          searching: true,
+          ordering: true,
+          responsive: true,
+          language: {
+            lengthMenu: "Afficher _MENU_ ligne par page",
+            zeroRecords: "Aucun entré trouvé",
+            infoFiltered: "(Nombre de lignes: _MAX_)",
+            infoEmpty: "",
+            info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
+            paginate: {
+              previous: "<<",
+              next: ">>",
+            },
+          },
+          columnDefs: [
+            {
+              targets: 0,
+              data: "id",
+              width: '5%',
+            },
+            {
+              targets: 1,
+              data: "user.name",
+              width: '25%',
+            },
+            {
+              targets: 2,
+              data: "user.surname",
+              width: '25%',
+            },
+            {
+              targets: 3,
+              data: 'user.speciality.name',
+              width: '25%',
+              // render: function (data, type, row, meta) {
+              //   return row.specialityParent ? row.specialityParent.name : ''
+              // }
+            },
+            {
+              targets: 4,
+              data: 'statut',
+              width: '10%',
+              // render: function (data, type, row, meta) {
+              //   return row.specialityParent ? row.specialityParent.name : ''
+              // }
+            },
+            {
+              targets: 5,
+              data: "id",
+              orderable: false,
+              className: "text-right",
+              width: '10%',
+              render: function (data, type, row, meta) {
+                const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id'])
+                const editUrl = getCleanUrl(tblDom.data('edit-url'), row['id'])
+                return (
+                  "<div>" +
+                  '<a class="btn btn-sm btn-outline-info btn-answer" data-url="'+ editUrl +'" data-statut="0" data-id="'+ row['id'] +'" title="Repondre"><i class="fas fa-reply"></i></a>' +
+                  '<a class="btn btn-sm btn-outline-info btn-answer ml-2" data-url="'+ editUrl +'" data-statut="1" data-id="'+ row['id'] +'" title="Plus d\'info"><i class="fas fa-info"></i></a>' +
+                  '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'" title="Supprimer"><i class="fas fa-trash"></i></a>' +
+                  "</div>"
+                )
+              },
+            },
+          ],
+          serverSide: true,
+          ajax: {
+            url: url,
+            type: "GET",
+          },
+        })
+
+        // delete
+        $(document).on('deletedEvent', function() {
+          personneContacteDatatable.value.draw()
+        })
+
+        // add user to a request
+        jQuery("#request-user-new").select2({
+          theme: "bootstrap4",
+          allowClear: true,
+          placeholder: "- Choisir une option -",
+          ajax: {
+            beforeSend: null,
+            url: $('#request-user-new').data("url"),
+            type: "get",
+            dataType: "json",
+            delay: 200,
+            data: (params) => {
+              return {
+                search: params.term
+              }
+            },
+            processResults: function(data) {
+              return {
+                results: data.map(user => ({ id: user.id, text: `${user.name} ${user.surname}` }))
+              }
+            }
+          },
+        })
+        jQuery("#request-user-new").on('change', function() {
+          personneContacteNew.value = jQuery(this).val()
+        })
+
+        resolve(true)
+      })
+    }
+
+    async function onChangeNavigationTab(navigationTab) {
+      if (['modifier', 'date-envoi', 'personne-contacte'].includes(navigationTab)) {
+        formNavigationTab.value.active = navigationTab
+        
+        await nextTick()
+
+        const actions = {
+          modifier: getRequestDetail,
+          'date-envoi': getDateDesEnvois,
+          'personne-contacte': getPersonneContactes,
+        }
+
+        await actions[navigationTab]()
+      }
+    }
+
+    async function onAddMissingRequest(e) {
+      axios.post(e.target.dataset.url, { users: [personneContacteNew.value]})
+        .then(() => {
+          // personneContacteNew.value = null
+          $('#request-user-new').val('')
+          $('#request-user-new').trigger('change')
+
+          if (personneContacteDatatable.value) {
+            personneContacteDatatable.value.draw()
+          }
+        })
+        .catch(() => {})
     }
 
     onMounted(() => {
@@ -148,15 +347,12 @@ const app = createApp({
           requestData.value.region = jQuery(this).val()
         })
 
-        jQuery("#request-started-at, #request-end-at").datepicker({
+        jQuery("#request-started-at").datepicker({
           format: "dd/mm/yyyy",
           autoclose: true,
         })
         jQuery("#request-started-at-input").on("change", function () {
           requestData.value.startedAt = jQuery(this).val()
-        })
-        jQuery("#request-end-at-input").on("change", function () {
-          requestData.value.endAt = jQuery(this).val()
         })
       })
     })
@@ -167,9 +363,14 @@ const app = createApp({
       formEl,
       raisons,
       otherChoosen,
+      formNavigationTab,
+      requestDateEnvois,
+      personneContacteNew,
 
       getErrorClass,
       onCreateRequest,
+      onChangeNavigationTab,
+      onAddMissingRequest,
     }
   },
 })
