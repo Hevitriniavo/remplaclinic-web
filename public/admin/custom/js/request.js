@@ -17,14 +17,29 @@ $(function () {
         next: ">>",
       },
     },
+    order: [[1, 'desc']],
     columnDefs: [
       {
         targets: 0,
+        data: "id",
+        width: '3%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          return `
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input custom-control-input-secondary request-selection" type="checkbox" id="request-selection-${data}" value="${data}">
+              <label for="request-selection-${data}" class="custom-control-label"></label>
+            </div>
+          `
+        }
+      },
+      {
+        targets: 1,
         data: "request.id",
         width: "5%",
       },
       {
-        targets: 1,
+        targets: 2,
         data: "request.status",
         width: "5%",
         render: function (data, type, row, meta) {
@@ -33,7 +48,7 @@ $(function () {
         },
       },
       {
-        targets: 2,
+        targets: 3,
         data: "request.requestType",
         width: "10%",
         render: function (data, type, row, meta) {
@@ -50,9 +65,9 @@ $(function () {
         },
       },
       {
-        targets: 3,
+        targets: 4,
         data: "request.applicant",
-        width: "15%",
+        width: "12%",
         render: function (data, type, row, meta) {
           if (!data) {
             return "";
@@ -79,7 +94,7 @@ $(function () {
         },
       },
       {
-        targets: 4,
+        targets: 5,
         data: "request.speciality",
         width: "15%",
         render: function (data, type, row, meta) {
@@ -91,7 +106,7 @@ $(function () {
         },
       },
       {
-        targets: 5,
+        targets: 6,
         data: "request.createdAt",
         width: "10%",
         render: function (data, type, row, meta) {
@@ -103,7 +118,7 @@ $(function () {
         },
       },
       {
-        targets: 6,
+        targets: 7,
         data: "request.startedAt",
         width: "8%",
         render: function (data, type, row, meta) {
@@ -119,7 +134,7 @@ $(function () {
         },
       },
       {
-        targets: 7,
+        targets: 8,
         data: "request.lastSentAt",
         width: "8%",
         render: function (data, type, row, meta) {
@@ -131,12 +146,12 @@ $(function () {
         },
       },
       {
-        targets: 8,
+        targets: 9,
         data: "responseCount",
         width: "5%",
       },
       {
-        targets: 9,
+        targets: 10,
         data: "request.id",
         orderable: false,
         className: "text-right",

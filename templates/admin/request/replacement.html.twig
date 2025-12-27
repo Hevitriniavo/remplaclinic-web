@@ -16,6 +16,21 @@ Demande de remplaçement
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-12">
+                        <div class="btn-group mr-3">
+                            <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="#">Valider</a>
+                                <a class="dropdown-item" href="#">Cloturer</a>
+                                <a class="dropdown-item" href="#">Relancer</a>
+                                <a class="dropdown-item" href="#">Archiver</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-delete" href="#" data-url="{{ path('api_user_delete_multiple') }}" data-multiple="true" data-selector=".request-selection">Supprimer</a>
+                            </div>
+                        </div>
+
                         <a class="btn btn-secondary btn-flat" id="btn-request-replacement-new" href="{{ path('app_admin_request_replacement_new') }}">
                             <i class="fas fa-plus"></i> Ajouter une demande remplaçement
                         </a>
@@ -34,6 +49,12 @@ Demande de remplaçement
                             >
                             <thead>
                                 <tr>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input custom-control-input-secondary checkbox-selection-tout" type="checkbox" id="request-selection-tout" data-selector=".request-selection">
+                                            <label for="request-selection-tout" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
                                     <th>#ID</th>
                                     <th>#STATUT</th>
                                     <th>#TYPE</th>

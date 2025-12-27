@@ -23,7 +23,7 @@ class RequestRepository extends ServiceEntityRepository
 
     public function findAllDataTables(?RequestType $requestType, DataTableParams $params): DataTableResponse
     {
-        $sortBy = $params->getOrderColumn(['u.id', 'u.status', 'u.requestType', 'a.name', 's.name', 'u.createdAt', 'u.startedAt', 'u.lastSentAt', 'responseCount'], 'u.id');
+        $sortBy = $params->getOrderColumn(['u.id', 'u.id', 'u.status', 'u.requestType', 'a.name', 's.name', 'u.createdAt', 'u.startedAt', 'u.lastSentAt', 'responseCount'], 'u.id');
         
         $countResponseQuery = $this->getEntityManager()->createQueryBuilder()
             ->select('COUNT(o.id)')
