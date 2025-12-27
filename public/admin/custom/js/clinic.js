@@ -17,14 +17,29 @@ $(function () {
         next: ">>",
       },
     },
+    order: [[1, 'desc']],
     columnDefs: [
       {
         targets: 0,
         data: "id",
-        width: '5%',
+        width: '3%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          return `
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input custom-control-input-secondary clinic-selection" type="checkbox" id="clinic-selection-${data}" value="${data}">
+              <label for="clinic-selection-${data}" class="custom-control-label"></label>
+            </div>
+          `
+        }
       },
       {
         targets: 1,
+        data: "id",
+        width: '5%',
+      },
+      {
+        targets: 2,
         data: "status",
         width: '5%',
         render: function (data, type, row, meta) {
@@ -32,7 +47,7 @@ $(function () {
         }
       },
       {
-        targets: 2,
+        targets: 3,
         data: "name",
         width: '15%',
         render: function (data, type, row, meta) {
@@ -46,7 +61,7 @@ $(function () {
         }
       },
       {
-        targets: 3,
+        targets: 4,
         data: 'establishment',
         width: '15%',
         render: function (data, type, row, meta) {
@@ -60,12 +75,12 @@ $(function () {
         }
       },
       {
-        targets: 4,
+        targets: 5,
         data: "email",
         width: '10%',
       },
       {
-        targets: 5,
+        targets: 6,
         data: 'createAt',
         width: '12%',
         render: function(data, type, row, meta) {
@@ -77,9 +92,9 @@ $(function () {
         }
       },
       {
-        targets: 6,
+        targets: 7,
         data: 'speciality',
-        width: '15%',
+        width: '12%',
         render: function (data, type, row, meta) {
           if (!data) {
             return '';
@@ -91,7 +106,7 @@ $(function () {
         }
       },
       {
-        targets: 7,
+        targets: 8,
         data: 'subscription',
         width: '10%',
         render: function(data, type, row, meta) {
@@ -102,7 +117,7 @@ $(function () {
         }
       },
       {
-        targets: 8,
+        targets: 9,
         data: 'subscription',
         width: '5%',
         render: function(data, type, row, meta) {
@@ -113,7 +128,7 @@ $(function () {
         }
       },
       {
-        targets: 9,
+        targets: 10,
         data: "id",
         orderable: false,
         className: "text-right",
@@ -123,8 +138,8 @@ $(function () {
           const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
           return (
             "<div>" +
-            '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'"><i class="fas fa-edit"></i></a>' +
-            '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
+            '<a class="btn btn-sm btn-outline-info btn-edit mb-2" href="'+ detailUrl +'"><i class="fas fa-edit"></i></a>' +
+            '<a class="btn btn-sm btn-outline-danger mb-2 ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
             "</div>"
           );
         },

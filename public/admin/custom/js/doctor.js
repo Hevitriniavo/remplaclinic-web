@@ -17,14 +17,29 @@ $(function () {
         next: ">>",
       },
     },
+    order: [[1, 'desc']],
     columnDefs: [
       {
         targets: 0,
         data: "id",
-        width: '5%',
+        width: '3%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          return `
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input custom-control-input-secondary doctor-selection" type="checkbox" id="doctor-selection-${data}" value="${data}">
+              <label for="doctor-selection-${data}" class="custom-control-label"></label>
+            </div>
+          `
+        }
       },
       {
         targets: 1,
+        data: "id",
+        width: '5%',
+      },
+      {
+        targets: 2,
         data: "status",
         width: '5%',
         render: function (data, type, row, meta) {
@@ -32,7 +47,7 @@ $(function () {
         }
       },
       {
-        targets: 2,
+        targets: 3,
         data: "name",
         width: '30%',
         render: function (data, type, row, meta) {
@@ -46,14 +61,14 @@ $(function () {
         }
       },
       {
-        targets: 3,
+        targets: 4,
         data: "email",
         width: '15%',
       },
       {
-        targets: 4,
+        targets: 5,
         data: 'createAt',
-        width: '15%',
+        width: '12%',
         render: function(data, type, row, meta) {
           if (!data) {
             return '';
@@ -71,7 +86,7 @@ $(function () {
         }
       },
       {
-        targets: 5,
+        targets: 6,
         data: 'speciality',
         width: '15%',
         render: function (data, type, row, meta) {
@@ -85,7 +100,7 @@ $(function () {
         }
       },
       {
-        targets: 6,
+        targets: 7,
         data: 'subscription',
         width: '5%',
         render: function(data, type, row, meta) {
@@ -96,7 +111,7 @@ $(function () {
         }
       },
       {
-        targets: 7,
+        targets: 8,
         data: "id",
         orderable: false,
         className: "text-right",

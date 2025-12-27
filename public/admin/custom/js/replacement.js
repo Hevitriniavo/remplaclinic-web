@@ -27,8 +27,8 @@ $(function () {
         render: function (data, type, row, meta) {
           return `
             <div class="custom-control custom-checkbox">
-              <input class="custom-control-input custom-control-input-secondary replacement-selection" type="checkbox" id="replacement-selelction-${data}" value="${data}">
-              <label for="replacement-selelction-${data}" class="custom-control-label"></label>
+              <input class="custom-control-input custom-control-input-secondary replacement-selection" type="checkbox" id="replacement-selection-${data}" value="${data}">
+              <label for="replacement-selection-${data}" class="custom-control-label"></label>
             </div>
           `
         }

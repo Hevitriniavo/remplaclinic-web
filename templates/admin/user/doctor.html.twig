@@ -16,6 +16,19 @@ Médecin
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-12">
+                        <div class="btn-group mr-3">
+                            <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="#">Activer</a>
+                                <a class="dropdown-item" href="#">Desactiver</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-delete" href="#" data-url="{{ path('api_user_delete_multiple') }}" data-multiple="true" data-selector=".doctor-selection">Supprimer</a>
+                            </div>
+                        </div>
+
                         <a class="btn btn-secondary btn-flat" id="btn-doctor-new" href="{{ path('app_admin_doctor_new') }}">
                             <i class="fas fa-plus"></i> Ajouter un médecin
                         </a>
@@ -29,6 +42,12 @@ Médecin
                             data-detail-url="{{ path('app_admin_doctor_show', {id: '0000000000'}) }}">
                             <thead>
                                 <tr>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input custom-control-input-secondary checkbox-selection-tout" type="checkbox" id="doctor-selection-tout" data-selector=".doctor-selection">
+                                            <label for="doctor-selection-tout" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
                                     <th>#ID</th>
                                     <th>#ACTIF</th>
                                     <th class="text-uppercase">#Nom - Prénom</th>

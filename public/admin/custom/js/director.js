@@ -17,14 +17,29 @@ $(function () {
         next: ">>",
       },
     },
+    order: [[1, 'desc']],
     columnDefs: [
       {
         targets: 0,
         data: "id",
-        width: '5%',
+        width: '3%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          return `
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input custom-control-input-secondary director-selection" type="checkbox" id="director-selection-${data}" value="${data}">
+              <label for="director-selection-${data}" class="custom-control-label"></label>
+            </div>
+          `
+        }
       },
       {
         targets: 1,
+        data: "id",
+        width: '5%',
+      },
+      {
+        targets: 2,
         data: "status",
         width: '5%',
         render: function (data, type, row, meta) {
@@ -32,7 +47,7 @@ $(function () {
         }
       },
       {
-        targets: 2,
+        targets: 3,
         data: "name",
         width: '35%',
         render: function (data, type, row, meta) {
@@ -46,14 +61,14 @@ $(function () {
         }
       },
       {
-        targets: 3,
+        targets: 4,
         data: "email",
         width: '25%',
       },
       {
-        targets: 4,
+        targets: 5,
         data: 'createAt',
-        width: '20%',
+        width: '17%',
         render: function(data, type, row, meta) {
           if (!data) {
             return '';
@@ -71,7 +86,7 @@ $(function () {
         }
       },
       {
-        targets: 5,
+        targets: 6,
         data: "id",
         orderable: false,
         className: "text-right",
