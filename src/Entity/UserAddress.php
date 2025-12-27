@@ -21,11 +21,11 @@ class UserAddress
     private ?string $country = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $locality = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $postal_code = null;
 
     #[Groups(['datatable'])]

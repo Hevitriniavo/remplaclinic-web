@@ -58,4 +58,13 @@ abstract class DrupalMigrationBase implements DrupalMigration
 
         return $dataValues;
     }
+
+    protected function truncValue(?string $value, int $length = 255): ?string
+    {
+        if (is_string($value) && strlen($value) > $length) {
+            return substr($value, 0, $length);
+        }
+        
+        return $value;
+    }
 }

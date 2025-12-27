@@ -13,6 +13,8 @@ class DrupalDataMigrator
         'regions' => DrupalMigrationRegions::class,
         'logo_partenaires' => DrupalMigrationLogoPartenaires::class,
         'references' => DrupalMigrationReferences::class,
+        'users' => DrupalMigrationUsers::class,
+        'user_clinics' => DrupalMigrationUserClinics::class,
     ];
 
     public function __construct(

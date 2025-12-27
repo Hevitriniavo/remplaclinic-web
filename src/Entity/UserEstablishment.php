@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserEstablishmentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,11 +22,11 @@ class UserEstablishment
     private ?string $name = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(nullable: true)]
-    private ?int $bedsCount = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bedsCount = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $siteWeb = null;
 
     #[Groups(['datatable'])]
@@ -36,6 +37,7 @@ class UserEstablishment
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $per = null;
 
+    // @TODO: Delete this property because it's the same as speciality
     #[Groups(['datatable'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceName = null;
@@ -61,12 +63,12 @@ class UserEstablishment
         return $this;
     }
 
-    public function getBedsCount(): ?int
+    public function getBedsCount(): ?string
     {
         return $this->bedsCount;
     }
 
-    public function setBedsCount(?int $bedsCount): static
+    public function setBedsCount(?string $bedsCount): static
     {
         $this->bedsCount = $bedsCount;
 

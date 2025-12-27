@@ -8,7 +8,7 @@ class DrupalMigrationRegions extends DrupalMigrationBase
     {
         $regions = $this->getData([
             'q' => 'taxonomies',
-            'vocabulary' => 'sp_cialit_',
+            'vocabulary' => 'r_gion',
         ]);
 
         // insert content into table region

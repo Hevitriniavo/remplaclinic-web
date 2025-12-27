@@ -3,7 +3,6 @@
 namespace App\Service\User;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Service\FileCleaner;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -12,7 +11,7 @@ class UserDelete
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository,
+        private UserService $userService,
         private FileCleaner $fileCleaner,
     ) {}
     
@@ -21,10 +20,7 @@ class UserDelete
         /**
          * @var User
          */
-        $user = $this->userRepository->find($id);
-        if (is_null($user)) {
-            throw new EntityNotFoundException('No user found for ' . $id);
-        }
+        $user = $this->userService->getUser($id);
 
         $this->entityManager->remove($user);
         $this->entityManager->flush();
@@ -32,6 +28,26 @@ class UserDelete
         $this->fileCleaner->remove($user->getCv());
         $this->fileCleaner->remove($user->getDiplom());
         $this->fileCleaner->remove($user->getLicence());
+
+        return true;
+    }
+
+    public function removeMultiple(array $ids)
+    {
+        /**
+         * @var User[]
+         */
+        $users = $this->userService->getUsers($ids);
+
+        foreach($users as $user) {
+            $this->entityManager->remove($user);
+            
+            $this->fileCleaner->remove($user->getCv());
+            $this->fileCleaner->remove($user->getDiplom());
+            $this->fileCleaner->remove($user->getLicence());
+        }
+
+        $this->entityManager->flush();
 
         return true;
     }

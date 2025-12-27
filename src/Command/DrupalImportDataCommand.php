@@ -21,9 +21,10 @@ class DrupalImportDataCommand extends Command
         'roles',
         'specialities',
         'regions',
-        'logo_partenaires',
+        'logo_partenaires', // copy logo file after this
         'references',
         'users',
+        'user_clinics', // copy user cv after this
         'requests'
     ];
 
@@ -38,7 +39,7 @@ class DrupalImportDataCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('entity_name', InputArgument::REQUIRED, 'Le nom de l\'entite a importer. Les valeurs possibles sont: ' . implode(', ', self::ENTITY_NAMES))
+            ->addArgument('entity_name', InputArgument::REQUIRED, 'Le nom de l\'entite a importer. Les valeurs possibles sont: ' . implode(', ', self::ENTITY_NAMES) . '. La valeur peut etre multiple en separant par virgule (e.g: roles,specialities,regions,users)')
         ;
     }
 
@@ -48,22 +49,28 @@ class DrupalImportDataCommand extends Command
 
         $entityName = $input->getArgument('entity_name');
 
-        if (in_array($entityName, self::ENTITY_NAMES)) {
-            
-            $migrator = new \App\DrupalDataMigration\DrupalDataMigrator(
-                $this->connection,
-                $this->httpClient
-            );
+        $entityNames = explode(',', $entityName);
 
-            $migrator->migrate($entityName);
+        // check if all entity names are valid
+        foreach($entityNames as $ename) {
+            if (!in_array($ename, self::ENTITY_NAMES)) {
+                $io->error('L\'entite ' .  $ename . ' est invalide!');
 
-            $io->success('L\'entite ' .  $entityName . ' a ete importe!');
-
-            return Command::SUCCESS;
+                return Command::FAILURE;
+            }
         }
-        
-        $io->error('L\'entite ' .  $entityName . ' est invalide!');
 
-        return Command::FAILURE;
+        $migrator = new \App\DrupalDataMigration\DrupalDataMigrator(
+            $this->connection,
+            $this->httpClient
+        );
+
+        foreach($entityNames as $ename) {
+            $migrator->migrate($ename);
+
+            $io->success('L\'entite ' .  $ename . ' a ete importe!');
+        }
+
+        return Command::SUCCESS;
     }
 }

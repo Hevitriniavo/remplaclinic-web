@@ -25,11 +25,11 @@ class User
     private ?int $id = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $ordinaryNumber = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $civility = null;
 
     #[Groups(['datatable', 'user:simple'])]
@@ -41,11 +41,11 @@ class User
     private ?string $name = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(nullable: true)]
-    private ?int $yearOfBirth = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $yearOfBirth = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
     #[Groups(['datatable'])]
@@ -64,7 +64,7 @@ class User
     private ?UserAddress $address = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone = null;
 
     #[Groups(['datatable'])]
@@ -72,7 +72,7 @@ class User
     private ?string $telephone2 = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $fax = null;
 
     #[Groups(['datatable'])]
@@ -95,11 +95,11 @@ class User
     private Collection $subSpecialities;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(nullable: true)]
-    private ?int $yearOfAlternance = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $yearOfAlternance = null;
 
     #[Groups(['datatable'])]
-    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $currentSpeciality = null;
 
     #[Groups(['datatable'])]
@@ -212,12 +212,12 @@ class User
         return $this;
     }
 
-    public function getYearOfBirth(): ?int
+    public function getYearOfBirth(): ?string
     {
         return $this->yearOfBirth;
     }
 
-    public function setYearOfBirth(?int $yearOfBirth): static
+    public function setYearOfBirth(?string $yearOfBirth): static
     {
         $this->yearOfBirth = $yearOfBirth;
 
@@ -380,12 +380,12 @@ class User
         return $this;
     }
 
-    public function getYearOfAlternance(): ?int
+    public function getYearOfAlternance(): ?string
     {
         return $this->yearOfAlternance;
     }
 
-    public function setYearOfAlternance(?int $yearOfAlternance): static
+    public function setYearOfAlternance(?string $yearOfAlternance): static
     {
         $this->yearOfAlternance = $yearOfAlternance;
 
