@@ -21,7 +21,7 @@ $(function () {
     columnDefs: [
       {
         targets: 0,
-        data: "id",
+        data: "request.id",
         width: '3%',
         orderable: false,
         render: function (data, type, row, meta) {

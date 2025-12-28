@@ -165,6 +165,22 @@ class RequestService
         return false;
     }
 
+    public function deleteMultipleRequest(array $requestsId): bool
+    {
+        $requests = $this->requestRepository->findBy(['id' => $requestsId]);
+        if (!empty($requests)) {
+
+            foreach($requests as $request) {
+                $this->entityManager->remove($request);
+            }
+
+            $this->entityManager->flush();
+
+            return true;
+        }
+        return false;
+    }
+
     public function initRequestResponse(Request $request, array $usersId): void
     {
         $users = $this->userService->getUsers($usersId);
@@ -172,7 +188,7 @@ class RequestService
         foreach($users as $user) {
             $reqResp = new RequestResponse();
             $reqResp
-                ->setStatus(RequestResponse::CREATED)
+                ->setStatus(RequestResponse::EN_COURS)
                 ->setRequest($request)
                 ->setUser($user)
             ;

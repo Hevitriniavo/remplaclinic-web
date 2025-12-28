@@ -145,7 +145,7 @@ const app = createApp({
 
         // update date envoi
         const requestDateEnvoisList = response.data.sentDates || []
-        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi))
+        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi.sentAt))
       }
     }
 

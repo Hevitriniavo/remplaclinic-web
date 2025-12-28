@@ -12,8 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: RequestResponseRepository::class)]
 class RequestResponse
 {
-    const CREATED = 0;
-    const ACCEPTED = 3;
+    const EN_COURS = 0;
+    const ACCEPTE = 1;
+    const PLUS_D_INFOS = 2;
+    const EXCLU = 3;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

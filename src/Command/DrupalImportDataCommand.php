@@ -7,6 +7,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -25,7 +26,8 @@ class DrupalImportDataCommand extends Command
         'references',
         'users',
         'user_clinics', // copy user cv after this
-        'requests'
+        'requests',
+        'request_responses'
     ];
 
     public function __construct(
@@ -40,6 +42,13 @@ class DrupalImportDataCommand extends Command
     {
         $this
             ->addArgument('entity_name', InputArgument::REQUIRED, 'Le nom de l\'entite a importer. Les valeurs possibles sont: ' . implode(', ', self::ENTITY_NAMES) . '. La valeur peut etre multiple en separant par virgule (e.g: roles,specialities,regions,users)')
+            ->addOption('base_uri', 'uri', InputOption::VALUE_OPTIONAL, 'L\URL du site drupal a importer.')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Le nombre d\'element a traiter par page.')
+            ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Le nombre d\'element a ignorer avant le debut du traitement.')
+            ->addOption('id', 'id', InputOption::VALUE_OPTIONAL, 'Pour traiter un seul element par son id.')
+            ->addOption('gt_id', 'gi', InputOption::VALUE_OPTIONAL, 'Pour limiter le traitement aux elements dont son id est superieur a l\'id fourni.')
+            ->addOption('max_count', 'mc', InputOption::VALUE_OPTIONAL, 'Le nombre maximale d\'element a traiter. Necessaire pour ne pas traiter en une seule fois un gros volume de donnee (e.g: candidature).')
+            ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Pour filtrer les elements par son type. Type disponible: requests (demande_de_remplacement, demande_d_installation), request_response (candidature_installation, candidature_remplacement).')
         ;
     }
 
@@ -62,7 +71,8 @@ class DrupalImportDataCommand extends Command
 
         $migrator = new \App\DrupalDataMigration\DrupalDataMigrator(
             $this->connection,
-            $this->httpClient
+            $this->httpClient,
+            $input->getOptions()
         );
 
         foreach($entityNames as $ename) {

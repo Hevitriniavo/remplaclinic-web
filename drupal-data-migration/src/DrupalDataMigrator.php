@@ -15,11 +15,14 @@ class DrupalDataMigrator
         'references' => DrupalMigrationReferences::class,
         'users' => DrupalMigrationUsers::class,
         'user_clinics' => DrupalMigrationUserClinics::class,
+        'requests' => DrupalMigrationRequests::class,
+        'request_responses' => DrupalMigrationRequestResponses::class,
     ];
 
     public function __construct(
         private readonly Connection $connection,
-        private readonly HttpClientInterface $httpClient
+        private readonly HttpClientInterface $httpClient,
+        private readonly ?array $options = []
     )
     {}
 
@@ -38,6 +41,7 @@ class DrupalDataMigrator
             $options = [
                 'connection' => $this->connection,
                 'http' => $this->httpClient,
+                'cmd_options' => $this->options,
             ];
 
             return new $migration($options);

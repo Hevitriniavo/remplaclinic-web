@@ -11,11 +11,13 @@ abstract class DrupalMigrationBase implements DrupalMigration
 
     protected Connection $connection;
     protected HttpClientInterface $httpClient;
+    protected array $extraOptions;
     
     public function __construct(array $options = [])
     {
         $this->connection = $options['connection'] ?: null;
         $this->httpClient = $options['http'] ?: null;
+        $this->extraOptions = empty($options['cmd_options']) ? [] : $options['cmd_options'];
     }
 
     abstract public function migrate();
@@ -28,7 +30,7 @@ abstract class DrupalMigrationBase implements DrupalMigration
 
         $response = $this->httpClient->request(
             'GET',
-            self::DRUPAL_MIGRATION_BASE_URI,
+            $this->getOption('base_uri', self::DRUPAL_MIGRATION_BASE_URI),
             [
                 'query' => $queryParams,
             ]
@@ -66,5 +68,28 @@ abstract class DrupalMigrationBase implements DrupalMigration
         }
         
         return $value;
+    }
+
+    protected function hasOption(string $name): bool
+    {
+        return !empty($this->extraOptions[$name]);
+    }
+
+    protected function getOption(string $name, mixed $defaultValue = null): mixed
+    {
+        if ($this->hasOption($name)) {
+            return $this->extraOptions[$name];
+        }
+
+        return $defaultValue;
+    }
+
+    protected function addExtraCriteria(&$params, string $optionName, string $paramName, $defaultValue = null)
+    {
+        $value = $this->getOption($optionName, $defaultValue);
+        
+        if (!empty($value)) {
+            $params[$paramName] = $value;
+        }
     }
 }

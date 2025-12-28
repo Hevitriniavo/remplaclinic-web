@@ -126,7 +126,7 @@ const app = createApp({
           remuneration: response.data.remuneration,
           retrocession: response.data.retrocession,
           startedAt: formatDate(response.data.startedAt, false),
-          endAt: formatDate(response.data.endAt, false),
+          endAt: response.data.endAt ? formatDate(response.data.endAt, false) : null,
           replacementType: response.data.replacementType,
           accomodationIncluded: response.data.accomodationIncluded,
           transportCostRefunded: response.data.transportCostRefunded,
@@ -142,7 +142,7 @@ const app = createApp({
 
         // update date envoi
         const requestDateEnvoisList = response.data.sentDates || []
-        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi))
+        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi.sentAt))
       }
     }
 

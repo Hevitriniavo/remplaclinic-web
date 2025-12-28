@@ -6,6 +6,7 @@ use App\Dto\DataTable\DataTableParams;
 use App\Dto\Request\EditRequestDto;
 use App\Dto\Request\NewInstallationDto;
 use App\Dto\Request\NewReplacementDto;
+use App\Dto\Request\RequestsIdDto;
 use App\Entity\RequestType;
 use App\Repository\RequestRepository;
 use App\Service\Request\RequestService;
@@ -125,6 +126,22 @@ class RequestController extends AbstractController
     public function remove(int $id, RequestService $requestService): Response
     {
         $deleted = $requestService->deleteRequest($id);
+
+        return $this->json(
+            '',
+            $deleted ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
+        );
+    }
+
+    #[Route('/api/requests/delete-multiple', name: 'api_request_delete_multiple', methods: ['DELETE'])]
+    public function removeMultiple(
+        RequestService $requestService,
+         #[MapRequestPayload(
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )] RequestsIdDto $requests
+    ): Response
+    {
+        $deleted = $requestService->deleteMultipleRequest($requests->ids);
 
         return $this->json(
             '',

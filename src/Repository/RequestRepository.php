@@ -29,14 +29,14 @@ class RequestRepository extends ServiceEntityRepository
             ->select('COUNT(o.id)')
             ->from(RequestResponse::class, 'o')
             ->where('o.request = u.id')
-            ->andWhere('o.status = ' . RequestResponse::ACCEPTED)
+            ->andWhere('o.status = ' . RequestResponse::ACCEPTE)
             ->getDQL();
 
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
             ->leftJoin('u.region', 'r')
             ->leftJoin('u.applicant', 'a')
-            ->leftJoin('u.responses', 'resp', 'resp.request = u.id AND res.status = ' . RequestResponse::ACCEPTED)
+            // ->leftJoin('u.responses', 'resp', 'resp.request = u.id AND res.status = ' . RequestResponse::ACCEPTE)
             ->addSelect('(' . $countResponseQuery . ') AS responseCount')
             ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
