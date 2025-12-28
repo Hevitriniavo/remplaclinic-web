@@ -4,6 +4,65 @@
 Remplaclinic :: Admin
 {% endblock %}
 
-{% block body %}
+{% block page_title %}
+Tableau de bord
+{% endblock %}
 
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('admin/libs/vue.global.prod.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row" id="root">
+    <vue-dashboard-app
+        icon-remplacant="{{ asset('icons/picto-remplacant-hover.png') }}"
+        icon-doctor="{{ asset('icons/picto-cabinet-medical-hover.png') }}"
+        icon-director="{{ asset('icons/picto-directeur-cliniques-hover.png') }}"
+        icon-clinic="{{ asset('icons/picto-clinique-hover.png') }}"
+        url-replacement="{{ path('app_admin_request_replacement') }}"
+        url-installation="{{ path('app_admin_request_installation') }}"
+        url-user="{{ path('app_admin_replacement') }}"
+        api-url="{{ path('api_home_dashboard') }}"
+        v-slot="dashboard"
+    >
+        <div class="col-12" v-if="dashboard.isLoaded">
+            <div class="row">
+                <vue-dashboard-user-count
+                    :box-items="dashboard.data.users"
+                ></vue-dashboard-user-count>
+            </div>
+            
+            <div class="row mt-3 mb-5">
+                <vue-dashboard-request-count
+                    :box-items="dashboard.data.requests"
+                ></vue-dashboard-request-count>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <vue-dashboard-chart-inscription
+                        :data-current-week="dashboard.data.inscription.currentWeek"
+                        :data-last-week="dashboard.data.inscription.lastWeek"
+                        :chart-data="dashboard.data.inscription.chartData"
+                    ></vue-dashboard-chart-inscription>
+                </div>
+
+                <div class="col-lg-6">
+                    <vue-dashboard-chart-reponse
+                        :data-current-week="dashboard.data.response.currentWeek"
+                        :data-last-week="dashboard.data.response.lastWeek"
+                        :chart-data="dashboard.data.response.chartData"
+                    ></vue-dashboard-chart-reponse>
+                </div>
+            </div>
+        </div>
+    </vue-dashboard-app>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ asset('admin/plugins/chart.js/Chart.min.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/dashboard.js') }}"></script>
 {% endblock %}

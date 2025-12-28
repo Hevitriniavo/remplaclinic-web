@@ -38,6 +38,7 @@ class RequestRepository extends ServiceEntityRepository
             ->leftJoin('u.applicant', 'a')
             // ->leftJoin('u.responses', 'resp', 'resp.request = u.id AND res.status = ' . RequestResponse::ACCEPTE)
             ->addSelect('(' . $countResponseQuery . ') AS responseCount')
+            // ->addSelect('0 AS responseCount')
             ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset);
