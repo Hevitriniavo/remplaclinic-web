@@ -1,0 +1,6 @@
+<select {{ attributes }}>
+    {% block content %} {% endblock %}
+    {% for emailEvent in this.events %}
+        <option value="{{ emailEvent }}">{{ emailEvent }}</option>
+    {% endfor %}
+</select>

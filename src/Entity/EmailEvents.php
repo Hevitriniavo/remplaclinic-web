@@ -1,0 +1,37 @@
+<?php
+namespace App\Entity;
+
+class EmailEvents
+{
+    // user
+    const USER_INSCRIPTION = 'user:inscription';
+    const USER_DESINSCRIPTION = 'user:desinscription';
+
+    // request
+    const REQUEST_CREATION = 'demande:creation';
+    const REQUEST_CLOTURATION = 'demande:cloturation';
+    const REQUEST_VALIDATION = 'demande:validation';
+    const REQUEST_RENVOIE = 'demande:renvoie';
+    const REQUEST_ARCHIVAGE = 'demande:archivage';
+    const REQUEST_RELANCE = 'demande:relance';
+
+    // response
+    const REQUEST_REPONSE = 'demande:renponse';
+
+    public static function all(): array
+    {
+        return [
+            self::USER_INSCRIPTION,
+            self::USER_DESINSCRIPTION,
+
+            self::REQUEST_CREATION,
+            self::REQUEST_CLOTURATION,
+            self::REQUEST_VALIDATION,
+            self::REQUEST_RENVOIE,
+            self::REQUEST_ARCHIVAGE,
+            self::REQUEST_RELANCE,
+
+            self::REQUEST_REPONSE,
+        ];
+    }
+}
