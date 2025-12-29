@@ -22,7 +22,7 @@ class RequestResponseRepository extends ServiceEntityRepository
 
     public function findAllDataTables(int $requestId, DataTableParams $params): DataTableResponse
     {
-        $sortBy = $params->getOrderColumn(['u.name', 'u.surname', 's.name', 'a.status'], 'a.id');
+        $sortBy = $params->getOrderColumn(['a.id', 'a.id', 'u.name', 'u.surname', 's.name', 'a.status'], 'a.id');
 
         $qb = $this->createQueryBuilder('a')
             ->leftJoin('a.user', 'u')

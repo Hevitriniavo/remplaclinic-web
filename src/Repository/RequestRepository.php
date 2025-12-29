@@ -52,6 +52,7 @@ class RequestRepository extends ServiceEntityRepository
             $qb
                 ->andWhere(
                     $qb->expr()->orX(
+                        'u.id LIKE :value',
                         'u.title LIKE :value',
                         'u.startedAt LIKE :value',
                         'u.endAt LIKE :value',

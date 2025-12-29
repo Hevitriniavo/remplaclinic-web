@@ -205,7 +205,7 @@ const app = createApp({
     function getPersonneContactes () {
       return new Promise((resolve) => {
         const tblDom = $("#tbl-personne-contacte")
-        const url = getCleanUrl(tblDom.data("listUrl"), requestData.value.id)
+        const url = tblDom.data("listUrl")
 
         personneContacteDatatable.value = tblDom.DataTable({
           paging: true,
@@ -223,24 +223,39 @@ const app = createApp({
               next: ">>",
             },
           },
+          order: [[1, 'desc']],
           columnDefs: [
             {
               targets: 0,
               data: "id",
-              width: '5%',
+              width: '6%',
+              orderable: false,
+              render: function (data, type, row, meta) {
+                return `
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input custom-control-input-secondary personne-contacte-selection" type="checkbox" id="personne-contacte-selection-${data}" value="${data}">
+                    <label for="personne-contacte-selection-${data}" class="custom-control-label"></label>
+                  </div>
+                `
+              }
             },
             {
               targets: 1,
-              data: "user.name",
-              width: '25%',
+              data: "id",
+              width: '9%',
             },
             {
               targets: 2,
-              data: "user.surname",
-              width: '25%',
+              data: "user.name",
+              width: '20%',
             },
             {
               targets: 3,
+              data: "user.surname",
+              width: '20%',
+            },
+            {
+              targets: 4,
               data: 'user.speciality.name',
               width: '25%',
               // render: function (data, type, row, meta) {
@@ -248,15 +263,22 @@ const app = createApp({
               // }
             },
             {
-              targets: 4,
+              targets: 5,
               data: 'statut',
               width: '10%',
-              // render: function (data, type, row, meta) {
-              //   return row.specialityParent ? row.specialityParent.name : ''
-              // }
+              render: function (data, type, row, meta) {
+                const statutMap = {
+                  '0': 'En cours',
+                  '1': 'Accepte',
+                  '2': 'Plus d\'infos',
+                  '3': 'Exclu',
+                }
+
+                return statutMap[data] ? statutMap[data] : 'En cours'
+              }
             },
             {
-              targets: 5,
+              targets: 6,
               data: "id",
               orderable: false,
               className: "text-right",

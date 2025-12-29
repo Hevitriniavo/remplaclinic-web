@@ -294,22 +294,49 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-4">
                                 <button
                                     class="btn btn-flat btn-secondary"
                                     :disabled="!personneContacteNew"
                                     v-on:click="onAddMissingRequest"
                                     data-url="{{ path('api_request_personne_contacte_add', {requestId: request.id}) }}"
                                 >Valider</button>
+
+                                <div class="btn-group ml-3">
+                                    <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                                    <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                        data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" href="#">Accepter</a>
+                                        <a class="dropdown-item" href="#">Plus d'infos</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item btn-delete" href="#"
+                                            data-url="{{ path('api_request_personne_contacte_delete_multiple', {requestId: request.id}) }}" data-multiple="true"
+                                            data-selector=".personne-contacte-selection">Supprimer</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
                                 <table id="tbl-personne-contacte" class="table table-hover"
-                                    data-list-url="{{ path('api_request_personne_contacte_list', { requestId: '0000000000' }) }}"
+                                    data-list-url="{{ path('api_request_personne_contacte_list', { requestId: request.id }) }}"
+                                    data-delete-url="{{ path('api_request_personne_contacte_delete', { requestId: request.id, id: '0000000000' }) }}"
                                 >
                                     <thead>
                                         <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input
+                                                        class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                        type="checkbox" id="personne-contacte-selection-tout"
+                                                        data-selector=".personne-contacte-selection">
+                                                    <label for="personne-contacte-selection-tout"
+                                                        class="custom-control-label"></label>
+                                                </div>
+                                            </th>
                                             <th>#Id</th>
                                             <th>#Nom</th>
                                             <th>#Prénom</th>

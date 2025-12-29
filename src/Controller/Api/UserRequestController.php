@@ -2,11 +2,13 @@
 namespace App\Controller\Api;
 
 use App\Dto\DataTable\DataTableParams;
+use App\Dto\IdListDto;
 use App\Dto\Request\AddUsersToDto;
 use App\Entity\User;
 use App\Repository\RequestRepository;
 use App\Repository\RequestResponseRepository;
 use App\Repository\UserRepository;
+use App\Service\Request\DeleteRequestResponseService;
 use App\Service\Request\RequestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +26,7 @@ class UserRequestController extends AbstractController
         private UserRepository $userRepository,
     ) {}
 
-    #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
     public function getPersonneContacteForRequest(Request $request, int $requestId): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -48,7 +50,7 @@ class UserRequestController extends AbstractController
         return $this->json($this->userRepository->findAllIdsForRequest(User::ROLE_REPLACEMENT_ID, $params));
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_add', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_add', methods: ['POST'], requirements: ['requestId' => '\d+'])]
     public function addUsersIdForRequest(
         RequestService $requestService,
         int $requestId,
@@ -68,7 +70,7 @@ class UserRequestController extends AbstractController
         return $this->json('ok');
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte/missing', name: 'api_request_personne_contacte_missing', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/api/requests/{requestId}/personne-contacte/missing', name: 'api_request_personne_contacte_missing', methods: ['GET'], requirements: ['requestId' => '\d+'])]
     public function getUsersNotAttachedToRequest(int $requestId, Request $request): Response
     {
         $searchTerm = $request->query->get('search', '');
@@ -76,5 +78,33 @@ class UserRequestController extends AbstractController
         $users = $this->requestResponseRepository->findAllUserNotAddedTo($requestId, $searchTerm);
 
         return $this->json($users);
+    }
+
+    #[Route('/api/requests/{requestId}/personne-contacte/{id}', name: 'api_request_personne_contacte_delete', methods: ['DELETE'], requirements: ['id' => '\d+', 'requestId' => '\d+'])]
+    public function remove(int $id, DeleteRequestResponseService $deleteRequestResponse): Response
+    {
+        $deleted = $deleteRequestResponse->delete($id);
+
+        return $this->json(
+            '',
+            $deleted ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
+        );
+    }
+
+    #[Route('/api/requests/{requestId}/personne-contacte/delete-multiple', name: 'api_request_personne_contacte_delete_multiple', methods: ['DELETE'], requirements: ['requestId' => '\d+'])]
+    public function removeMultiple(
+        DeleteRequestResponseService $deleteRequestResponse,
+        #[MapRequestPayload(
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )] IdListDto $idList
+    ): Response
+    {
+
+        $deleted = $deleteRequestResponse->deleteMultiple($idList->ids);
+
+        return $this->json(
+            '',
+            !empty($deleted) ? Response::HTTP_OK : Response::HTTP_CONFLICT
+        );
     }
 }
