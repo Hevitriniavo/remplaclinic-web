@@ -1,7 +1,7 @@
 $(function () {
   const tblDom = $("#tbl-requests");
 
-  const specialityDatatable = tblDom.DataTable({
+  const requestDatatable = tblDom.DataTable({
     paging: true,
     searching: true,
     ordering: true,
@@ -225,14 +225,19 @@ $(function () {
       },
     ],
     serverSide: true,
-    ajax: {
-      url: tblDom.data("url"),
-      type: "GET",
+    // ajax: {
+    //   url: tblDom.data("url"),
+    //   type: "GET",
+    // },
+    ajax: function (data, callback) {
+      axios.get(tblDom.data("url"), { params: data })
+          .then(response => callback(response.data))
+          .catch(() => callback({ data: [] }))
     },
   });
 
   // delete
   $(document).on("deletedEvent", function () {
-    specialityDatatable.draw();
+    requestDatatable.draw();
   });
 });

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
     {% block stylesheets %}{% endblock %}
     <link rel="stylesheet" href="{{ asset('admin/plugins/adminlte/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ versioned_asset('admin/custom/css/admin-loader.css') }}">
 
     {% block javascripts %}
     {% block importmap %}{{ importmap('admin-app') }}{% endblock %}
@@ -54,6 +55,7 @@
                     {% block body %}{% endblock %}
                     <div class="row">
                         <div class="col-12">
+                            <!-- delete modal -->
                             <div class="modal fade" id="delete-modal">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -86,6 +88,11 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- loader -->
+                            <div id="top-loader">
+                                <div class="top-loader-bar"></div>
                             </div>
                         </div>
                     </div>

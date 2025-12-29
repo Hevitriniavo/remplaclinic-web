@@ -104,11 +104,11 @@ function initToggleSidebar() {
     axios.put(
       saveUrl,
       new URLSearchParams({
-          collapsed: collapsed ? 1 : 0
+        collapsed: collapsed ? 1 : 0
       })
     )
   }
-  
+
 }
 
 function initSelectionToutCheckbox() {
@@ -121,6 +121,17 @@ function initSelectionToutCheckbox() {
     }
   })
 }
+
+function showLoader() {
+    $('#top-loader').fadeIn(100)
+}
+
+function hideLoader() {
+    $('#top-loader').fadeOut(200, function () {
+        $('.top-loader-bar').css('width', '0%')
+    })
+}
+
 
 window.getCleanUrl = (url, id) => {
   let result = url
@@ -152,3 +163,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initSelectionToutCheckbox()
 })
+
+/**************************/
+/**** Add axios loader ****/
+/**************************/
+axios.interceptors.request.use(
+  function (config) {
+    showLoader()
+    return config
+  },
+  function (error) {
+    hideLoader()
+    return Promise.reject(error)
+  }
+)
+
+axios.interceptors.response.use(
+  function (response) {
+    hideLoader()
+    return response
+  },
+  function (error) {
+    hideLoader()
+    return Promise.reject(error)
+  }
+)
