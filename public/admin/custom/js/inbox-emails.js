@@ -1,7 +1,7 @@
 $(function () {
-  const tblDom = $("#tbl-replacements");
+  const tblDom = $("#tbl-inbox-emails");
 
-  const replacementDatatable = tblDom.DataTable({
+  const inboxEmailsDatatable = tblDom.DataTable({
     paging: true,
     searching: true,
     ordering: true,
@@ -27,8 +27,8 @@ $(function () {
         render: function (data, type, row, meta) {
           return `
             <div class="custom-control custom-checkbox">
-              <input class="custom-control-input custom-control-input-secondary replacement-selection" type="checkbox" id="replacement-selection-${data}" value="${data}">
-              <label for="replacement-selection-${data}" class="custom-control-label"></label>
+              <input class="custom-control-input custom-control-input-secondary inbox-email-selection" type="checkbox" id="inbox-email-selection-${data}" value="${data}">
+              <label for="inbox-email-selection-${data}" class="custom-control-label"></label>
             </div>
           `
         }
@@ -40,67 +40,80 @@ $(function () {
       },
       {
         targets: 2,
-        data: "status",
-        width: '5%',
-        render: function (data, type, row, meta) {
-          return data == 1 ? 'Actif' : 'Bloqué';
-        }
+        data: "event",
+        width: '10%',
       },
       {
         targets: 3,
-        data: "name",
-        width: '27%',
-        render: function (data, type, row, meta) {
-          if (!data) {
-            return '';
-          }
-          
-          return (
-            "<div>" + data + " " + row['surname'] + "</div>"
-          );
-        }
-      },
-      {
-        targets: 4,
-        data: "email",
-        width: '20%',
-      },
-      {
-        targets: 5,
-        data: 'createAt',
-        width: '15%',
+        data: 'sentAt',
+        width: '12%',
         render: function(data, type, row, meta) {
           if (!data) {
             return '';
           }
 
-          const date = new Date(data);
-          const formatter = new Intl.DateTimeFormat("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: '2-digit',
-              minute: '2-digit'
-          });
-          return formatter.format(date);
+          return formatDate(data);
+        }
+      },
+      {
+        targets: 4,
+        data: "subject",
+        orderable: false,
+        width: '20%',
+      },
+      {
+        targets: 5,
+        data: "html",
+        width: '6%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          return data ? 'HTML' : 'TEXT'
         }
       },
       {
         targets: 6,
-        data: 'speciality',
-        width: '15%',
+        data: 'sender',
+        width: '8%',
+        orderable: false,
         render: function (data, type, row, meta) {
           if (!data) {
             return '';
           }
 
           return (
-            "<div>" + data.name + "</div>"
+            "<div>" + data.email + "</div>"
           );
         }
       },
       {
         targets: 7,
+        data: 'target',
+        width: '13%',
+      },
+      {
+        targets: 8,
+        data: 'cc',
+        width: '13%',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          const result = []
+          // cc
+          if (row.cc) {
+            result.push(row.cc)
+          }
+
+          // bcc
+          if (row.bcc) {
+            result.push(row.bcc)
+          }
+
+          return (
+            result.length > 0 ? "<div>" + result.join(' - ') + "</div>" : ''
+          );
+        }
+      },
+      {
+        targets: 9,
         data: "id",
         orderable: false,
         className: "text-right",
@@ -110,7 +123,7 @@ $(function () {
           const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
           return (
             "<div>" +
-            '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'"><i class="fas fa-edit"></i></a>' +
+            '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'" target="_blank"><i class="fas fa-eye"></i></a>' +
             '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
             "</div>"
           );
@@ -126,6 +139,6 @@ $(function () {
 
   // delete
   $(document).on('deletedEvent', function() {
-    replacementDatatable.draw();
+    inboxEmailsDatatable.draw();
   });
 });

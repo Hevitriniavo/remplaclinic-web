@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use App\Dto\User\UsersIdDto;
+use App\Dto\IdListDto;
 use App\Service\User\UserDelete;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +25,9 @@ class UserController extends AbstractController
     #[Route('/api/users/delete-multiple', name: 'api_user_delete_multiple', methods: ['DELETE'])]
     public function removeMultiple(
         UserDelete $userDelete,
-         #[MapRequestPayload(
+        #[MapRequestPayload(
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
-        )] UsersIdDto $users
+        )] IdListDto $users
     ): Response
     {
         $deleted = $userDelete->removeMultiple($users->ids);

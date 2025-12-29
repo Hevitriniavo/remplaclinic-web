@@ -1,0 +1,98 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Test d'envoi d'email
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('admin/libs/vue.global.prod.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}
+<a class="btn btn-secondary btn-flat" id="btn-inbox-list" href="{{ path('app_admin_emails_inbox') }}">
+    <i class="fas fa-arrow-left"></i> Retourner
+</a>
+Test d'envoi d'email
+{% endblock %}
+
+{% block body %}
+<div class="row" id="root">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Composer votre message</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inbox-email-to">Destinataire :</label>
+                            <input class="form-control" placeholder="To:" id="inbox-email-to" v-model="emailData.to" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inbox-email-cc">Copie a :</label>
+                            <input class="form-control" placeholder="Cc:" id="inbox-email-cc" v-model="emailData.cc" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inbox-email-bcc">Copie cache a :</label>
+                            <input class="form-control" placeholder="Bcc:" id="inbox-email-bcc" v-model="emailData.bcc" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="inbox-email-subject">Sujet:</label>
+                            <input class="form-control" placeholder="Subject:" id="inbox-email-subject" v-model="emailData.subject">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input custom-control-input-secondary" type="checkbox" id="admin-email-status" name="status" v-model="emailData.html">
+                                <label for="admin-email-status" class="custom-control-label">Text plain?</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group" v-if="emailData.html">
+                            <textarea id="compose-textarea" class="form-control" v-model="emailData.bodyHtml"></textarea>
+                        </div>
+                        <div class="form-group" v-else>
+                            <textarea class="form-control" rows="15" v-model="emailData.body"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="float-right">
+                    <button type="submit" class="btn btn-secondary btn-flat" v-on:click="onValidateCompose('{{ path('api_inbox_emails_compose') }}')" v-bind:disabled="!sentEnable"><i class="far fa-envelope"></i>
+                        Envoyer</button>
+                </div>
+                <button type="reset" class="btn btn-flat btn-default" v-on:click="onCancelCompose"><i class="fas fa-times"></i> Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ asset('admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<script src="{{ versioned_asset('admin/custom/js/inbox-compose.js') }}"></script>
+{% endblock %}

@@ -100,7 +100,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ path('app_admin_emails_inbox') }}" class="nav-link {{ currentRoute == 'app_admin_emails_inbox' or currentRoute == 'app_admin_emails_compose' ? 'active' : '' }}">
                         <i class="nav-icon far fa-envelope"></i>
                         <p class="text-uppercase">
                             Envoyes

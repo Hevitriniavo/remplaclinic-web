@@ -1,0 +1,75 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Emails Envoyes
+{% endblock %}
+
+{% block page_title %}
+Emails Envoyes
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="btn-group mr-3">
+                            <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="#">Renvoyer</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-delete" href="#" data-url="{{ path('api_inbox_emails_delete_multiple') }}" data-multiple="true" data-selector=".inbox-email-selection">Supprimer</a>
+                            </div>
+                        </div>
+
+                        <a class="btn btn-secondary btn-flat" id="btn-inbox-emails-new" href="{{ path('app_admin_emails_compose') }}">
+                            <i class="fas fa-envelope"></i> Tester l'envoi d'email
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tbl-inbox-emails" class="table table-hover"
+                            data-url="{{ path('api_inbox_email_get') }}"
+                            data-delete-url="{{ path('api_inbox_emails_delete', {id: '0000000000'}) }}"
+                            data-detail-url="{{ path('app_admin_emails_body_view', {id: '0000000000'}) }}">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input custom-control-input-secondary checkbox-selection-tout" type="checkbox" id="inbox-email-selection-tout" data-selector=".inbox-email-selection">
+                                            <label for="inbox-email-selection-tout" class="custom-control-label"></label>
+                                        </div>
+                                    </th>
+                                    <th>#ID</th>
+                                    <th>#EVENT</th>
+                                    <th>#DATE</th>
+                                    <th>#SUJET</th>
+                                    <th>#TYPE</th>
+                                    <th>#DESTINATAIRE</th>
+                                    <th>#EXPEDITEUR</th>
+                                    <th>#COPIE A</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/inbox-emails.js') }}"></script>
+{% endblock %}

@@ -18,7 +18,8 @@ Proposition d'installation
                     <div class="col-12">
                         <div class="btn-group mr-3">
                             <button type="button" class="btn btn-default btn-flat">Action multiple</button>
-                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                data-toggle="dropdown">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
@@ -28,11 +29,14 @@ Proposition d'installation
                                 <a class="dropdown-item" href="#">Cloturer</a>
                                 <a class="dropdown-item" href="#">Archiver</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item btn-delete" href="#" data-url="{{ path('api_request_delete_multiple') }}" data-multiple="true" data-selector=".request-selection">Supprimer</a>
+                                <a class="dropdown-item btn-delete" href="#"
+                                    data-url="{{ path('api_request_delete_multiple') }}" data-multiple="true"
+                                    data-selector=".request-selection">Supprimer</a>
                             </div>
                         </div>
 
-                        <a class="btn btn-secondary btn-flat" id="btn-request-installation-new" href="{{ path('app_admin_request_installation_new') }}">
+                        <a class="btn btn-secondary btn-flat" id="btn-request-installation-new"
+                            href="{{ path('app_admin_request_installation_new') }}">
                             <i class="fas fa-plus"></i> Ajouter une proposition d'installation
                         </a>
                     </div>
@@ -41,42 +45,44 @@ Proposition d'installation
                     <div class="col-12">
                         <div class="table-responsive">
                             <table id="tbl-requests" class="table table-hover"
-                            data-url="{{ path('api_request_installation_get') }}"
-                            data-delete-url="{{ path('api_request_delete', {id: '0000000000'}) }}"
-                            data-detail-url="{{ path('app_admin_request_installation_show', {id: '0000000000'}) }}"
-                            data-clinic-url="{{ path('app_admin_clinic_show', {id: '0000000000'}) }}"
-                            data-doctor-url="{{ path('app_admin_doctor_show', {id: '0000000000'}) }}"
-                            style="width: 100%;"
-                            >
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input custom-control-input-secondary checkbox-selection-tout" type="checkbox" id="request-selection-tout" data-selector=".request-selection">
-                                            <label for="request-selection-tout" class="custom-control-label"></label>
-                                        </div>
-                                    </th>
-                                    <th>#ID</th>
-                                    <th>#STATUT</th>
-                                    <th>#TYPE</th>
-                                    <th>#DEMANDEUR</th>
-                                    <th class="text-uppercase">#Spécialité</th>
-                                    <th>#DATE DE PUBLICATION</th>
-                                    <th>#PERIODE</th>
-                                    <th class="text-uppercase">#Date dernières envois</th>
-                                    <th class="text-uppercase">#Nombres de réponses</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                                data-url="{{ path('api_request_installation_get') }}"
+                                data-delete-url="{{ path('api_request_delete', {id: '0000000000'}) }}"
+                                data-detail-url="{{ path('app_admin_request_installation_show', {id: '0000000000'}) }}"
+                                data-clinic-url="{{ path('app_admin_clinic_show', {id: '0000000000'}) }}"
+                                data-doctor-url="{{ path('app_admin_doctor_show', {id: '0000000000'}) }}"
+                                style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input
+                                                    class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                    type="checkbox" id="request-selection-tout"
+                                                    data-selector=".request-selection">
+                                                <label for="request-selection-tout"
+                                                    class="custom-control-label"></label>
+                                            </div>
+                                        </th>
+                                        <th>#ID</th>
+                                        <th>#STATUT</th>
+                                        <th>#TYPE</th>
+                                        <th>#DEMANDEUR</th>
+                                        <th class="text-uppercase">#Spécialité</th>
+                                        <th>#DATE DE PUBLICATION</th>
+                                        <th>#PERIODE</th>
+                                        <th class="text-uppercase">#Date dernières envois</th>
+                                        <th class="text-uppercase">#Nombres de réponses</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}
 
