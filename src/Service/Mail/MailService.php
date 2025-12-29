@@ -2,6 +2,7 @@
 namespace App\Service\Mail;
 
 use App\Entity\MailLog;
+use App\Service\Taches\AppConfigurationService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -11,6 +12,7 @@ class MailService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly HttpClientInterface $httpClient,
+        private readonly AppConfigurationService $appConfig,
     )
     {}
 
@@ -39,8 +41,8 @@ class MailService
 
         if (empty($mail->getSender())) {
             $mail->setSender([
-                'name' => 'Abned',
-                'email' => 'fanabned@gmail.com'
+                'name' => $this->appConfig->getValue('APP_EMAIL_FROM_NAME'),
+                'email' => $this->appConfig->getValue('APP_EMAIL_FROM_EMAIL')
             ]);
         }
     }

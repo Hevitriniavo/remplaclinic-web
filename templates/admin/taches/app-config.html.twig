@@ -1,0 +1,139 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Configurations
+{% endblock %}
+
+{% block page_title %}
+    Configurations
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="taches-app-configurations-required"
+                                    data-required-names="{{ requiredConfigurations }}"
+                                    data-missing-values="{{ missingConfigurations }}"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="btn-group mr-3">
+                                    <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                                    <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                        data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" href="#">Activer</a>
+                                        <a class="dropdown-item" href="#">Desactiver</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item btn-delete" href="#"
+                                            data-url="{{ path('api_taches_configurations_delete_multiple') }}" data-multiple="true"
+                                            data-selector=".taches-app-config-selection">Supprimer</a>
+                                    </div>
+                                </div>
+                                
+                                <a class="btn btn-secondary btn-flat" id="btn-taches-app-config-new"
+                                    data-url="{{ path('api_taches_configurations_new') }}">
+                                    <i class="fas fa-plus"></i> Ajouter
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="tbl-taches-app-configs" class="table table-hover"
+                                    data-url="{{ path('api_taches_configurations_get') }}"
+                                    data-delete-url="{{ path('api_taches_configurations_delete', {id: '0000000000'}) }}"
+                                    data-detail-url="{{ path('api_taches_configurations_detail', {id: '0000000000'}) }}"
+                                    data-edit-url="{{ path('api_taches_configurations_update', {id: '0000000000'}) }}">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input
+                                                        class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                        type="checkbox" id="taches-app-config-selection-tout"
+                                                        data-selector=".taches-app-config-selection">
+                                                    <label for="taches-app-config-selection-tout"
+                                                        class="custom-control-label"></label>
+                                                </div>
+                                            </th>
+                                            <th>#ID</th>
+                                            <th>#Nom</th>
+                                            <th>#Valeur</th>
+                                            <th>#Statut</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="modal fade" id="taches-app-config-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h4 class="modal-title">Détail d'une configuration</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true" class="text-white">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="taches-app-config-form-detail" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <label for="taches-app-config-name">Nom</label>
+                                        <input type="text" class="form-control" id="taches-app-config-name" required name="name">
+                                        <div class="invalid-feedback">
+                                            Une configuration doit avoir un nom
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taches-app-config-value">Valeur</label>
+                                        <input type="text" class="form-control" id="taches-app-config-value" required name="value">
+                                        <div class="invalid-feedback">
+                                            La valeur doit etre precisee
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input custom-control-input-secondary" type="checkbox" id="taches-app-config-status" name="status">
+                                            <label for="taches-app-config-status" class="custom-control-label">Statut</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                    <i class="fas fa-times"></i> Annuler
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-flat" id="btn-taches-app-config-detail-save">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/taches-app-config.js') }}"></script>
+{% endblock %}

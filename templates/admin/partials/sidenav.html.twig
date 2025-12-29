@@ -107,7 +107,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ currentRoute == 'app_admin_taches_list' ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-exclamation-triangle"></i>
                         <p class="text-uppercase">
@@ -118,7 +118,7 @@
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ path('app_admin_taches_list') }}" class="nav-link {{ currentRoute == 'app_admin_taches_list' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Configurations
