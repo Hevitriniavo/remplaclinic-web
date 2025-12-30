@@ -84,7 +84,7 @@ class AdminEmailRepository extends ServiceEntityRepository
             ->from('admin_email', 'a')
             ->where('a.status = 1')
             ->andWhere('a.events LIKE :event_name')
-            ->setParameter('event_name', '%,' . $eventName .',%');
+            ->setParameter('event_name', '%' . $eventName .'%');
 
         $result = $qb->executeQuery()->fetchFirstColumn();
         

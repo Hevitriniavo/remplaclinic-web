@@ -53,6 +53,7 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
         $ccAndBcc = $this->adminEmailRepository->findAllCcAndBcc($eventName);
 
         $mailLog
+            ->setEvent($eventName)
             ->setBcc(implode(',', $ccAndBcc['bcc']))
             ->setCc(implode(',', $ccAndBcc['cc']));
 
