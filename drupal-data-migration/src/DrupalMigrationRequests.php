@@ -63,6 +63,8 @@ class DrupalMigrationRequests extends DrupalMigrationBase
                     $regionId = $this->storeRegion($request);
                     $specialityId = $this->storeSpeciality($request);
 
+                    $endDate = $this->keyData($request, 'field_date_demande.und.0.value2');
+
                     $requestData = [
                         'id' => $request['nid'],
                         'applicant_id' => $applicantId,
@@ -71,9 +73,8 @@ class DrupalMigrationRequests extends DrupalMigrationBase
                         'title' => $request['title'],
                         'status' => $this->getStatut($request),
                         'started_at' => $this->keyData($request, 'field_date_demande.und.0.value'),
-                        // @TODO: check those fields on prod -> they can't change in local env
-                        // 'show_end_at' => ,
-                        // 'end_at' => ,
+                        'show_end_at' => !empty($endDate),
+                        'end_at' => $endDate,
                         'last_sent_at' => $this->getLastSentDate($request),
                         'request_type' => $this->getRequestType($request),
                         'remuneration' => $this->getRemuneration($request),

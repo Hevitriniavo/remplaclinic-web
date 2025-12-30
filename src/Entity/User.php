@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -448,6 +448,35 @@ class User
         return $this->roles;
     }
 
+    public function getRole(): ?UserRole
+    {
+        $roleUser = null;
+
+        foreach ($this->roles as $role) {
+            if ($role->getId() != 2) {
+                $roleUser = $role;
+            }
+        }
+
+        if (!empty($roleUser)) {
+            return $roleUser;
+        }
+
+        return null;
+    }
+
+    public function getRoleAsString(): string
+    {
+        $role = $this->getRole();
+        $roles = self::allRoles();
+
+        if (array_key_exists($role->getId(), $roles)) {
+            throw new Exception('No role found for #' . $role->getId());
+        }
+
+        return $roles[$role->getId()];
+    }
+
     public function addRole(UserRole $role): static
     {
         if (!$this->roles->contains($role)) {
@@ -462,6 +491,16 @@ class User
         $this->roles->removeElement($role);
 
         return $this;
+    }
+
+    public static function allRoles(): array
+    {
+        return [
+            self::ROLE_REPLACEMENT_ID => 'REPLACEMENT',
+            self::ROLE_DOCTOR_ID => 'DOCTOR',
+            self::ROLE_CLINIC_ID => 'CLINIC',
+            self::ROLE_DIRECTOR_ID => 'DIRECTOR',
+        ];
     }
 
     public function clearRole(): static
@@ -579,5 +618,49 @@ class User
         $this->subscription = $subscription;
 
         return $this;
+    }
+
+    public function getApplicantName(): string
+    {
+        $role = $this->getRole();
+        
+        if (!is_null($role)) {
+            if ($role->getId() == 5) {
+                return $this->getEstablishment()->getName();
+            }
+
+            if ($role->getId() == 6) {
+                return 'Docteur '. $this->getName();
+            }
+        }
+
+        return $this->getName();
+    }
+
+    public function getEstablishmentName(): string
+    {
+        $role = $this->getRole();
+        
+        if (!is_null($role)) {
+            if ($role->getId() == 5 || $role->getId() == 6) {
+                if (!empty($this->getEstablishment()?->getName())) {
+                    return $this->getEstablishment()->getName();
+                }
+
+                $names = [];
+
+                if (!empty($this->getSurname())) {
+                    $names[] = $this->getSurname();
+                }
+
+                if (!empty($this->getName())) {
+                    $names[] = $this->getName();
+                }
+
+                return implode(' ', $names);
+            }
+        }
+
+        return '';
     }
 }

@@ -1,0 +1,86 @@
+{% extends 'mails/requests/base.html.twig' %}
+
+{% block body %}
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Ils cherchent un candidat : c'est à vous de répondre !</td>
+	</tr>
+	<tr style='max-width:700px'>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;max-width:700px;">
+			Bonjour
+			{{ prenom }}
+			{{ nom }},
+			<br><br>
+			Une proposition d'installation en
+			<b>{{ specialite_demande }}</b>
+			de
+			<b>{{ nom_demandeur }}</b>
+			à
+			<b>{{ ville_demandeur }}</b>
+			vient d'arriver sur le site Instalclinic.
+			<br><br>
+			<span style="text-decoration:underline;">Dates de l'installation :
+			</span>
+			<br>
+			- à partir du
+			<b>{{ date_debut_demande }}</b>
+			<br><br>
+			<span style="text-decoration:underline;">Raison(s) :
+			</span>
+			<br>
+			{% for raison in raisons %}
+				{% if raison.reason == 'Autre' %}
+					<br/>
+					-
+					{{ raison.raisonValue }}
+				{% else %}
+					<br/>
+					-
+					{{ raison.reason }}
+				{% endif %}
+			{% endfor %}
+			<br><br>
+			<span style="text-decoration:underline;">Salaire (en €) ou Chiffre d'affaire potentiel :
+			</span>
+			<br>
+			{{ remuneration }}
+			&euro;
+			<br><br>
+			<span style="text-decoration:underline;">Précisions sur la proposition :
+			</span>
+
+			<br>
+			{{ commentaires_demande|raw }}
+			<br><br>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;font-family:'ubuntu', sans-serif;padding:15px;font-size:18px;">
+			Vous pouvez dès à présent
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;" colspan="2">
+			<a href="{{ url('app_user_request_response_answer', { userId: user_id, requestId: request_id, responseStatus: 1 }) }}">
+				<img src="{{ asset('imgs/mails/postuler.jpg') }}" alt="postuler" title="Postuler" width="234" height="73"/>
+			</a>
+		</td>
+
+	</tr>
+	<tr>
+		<td colspan="2" style="text-align:center;font-family:'ubuntu',sans-serif;padding:15px;">
+			Vous pouvez aussi consulter les offres directement depuis votre tableau de bord ou partager l'annonce à vos contacts :
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+			<a href="{{ url('app_user_request_response_installation_list') }}">
+				<img src="{{ asset('imgs/mails/tdb.jpg') }}" alt="tableau de bord" title="Tableau de bord" width="176" height="55"/>
+			</a>
+		</td>
+		<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+			<a href="{{ url('app_user_request_installation_share', {requestId: request_id}) }}">
+				<img src="{{ asset('imgs/mails/partager.jpg') }}" alt="partager" title="Partager" width="176" height="55"/>
+			</a>
+		</td>
+	</tr>
+{% endblock %}

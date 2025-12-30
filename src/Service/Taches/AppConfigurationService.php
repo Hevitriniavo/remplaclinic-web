@@ -55,6 +55,9 @@ class AppConfigurationService
         $resultAssoc = [];
 
         foreach($result as $row) {
+            // reload to avoid proxy object
+            $this->em->refresh($row);
+
             $resultAssoc[$row->getName()] = $row->getValue();
 
             if ($cacheResult) {
@@ -65,9 +68,9 @@ class AppConfigurationService
         return $resultAssoc;
     }
 
-    public function getValue(string $name, bool $inludeInactive = false, bool $throwExceptionIfNotFound = false): ?string
+    public function getValue(string $name, bool $inludeInactive = false, bool $throwExceptionIfNotFound = false, bool $ignoreCache = false): ?string
     {
-        if (!array_key_exists($name, $this->configurations)) {
+        if (!array_key_exists($name, $this->configurations) || $ignoreCache) {
             $this->loadAll([$name], true, $inludeInactive);
         }
 
@@ -91,6 +94,51 @@ class AppConfigurationService
         }
 
         return $missing;
+    }
+
+    public function setValue(string $name, ?string $value, bool $active = true): AppConfiguration
+    {
+        $repo = $this->em->getRepository(AppConfiguration::class);
+        $config = $repo->findOneBy(['name' => $name]);
+
+        if (is_null($config)) {
+            $config = new AppConfiguration();
+            $config->setName($name);
+        }
+
+        $config->setValue($value);
+        $config->setActive($active);
+
+        $this->em->persist($config);
+        $this->em->flush();
+
+        // update cache
+        $this->configurations[$name] = $value;
+
+        return $config;
+    }
+
+    public function deleteValue(string $name): void
+    {
+        $repo = $this->em->getRepository(AppConfiguration::class);
+        $config = $repo->findOneBy(['name' => $name]);
+
+        if (!is_null($config)) {
+            $this->em->remove($config);
+            $this->em->flush();
+        }
+
+        // update cache
+        if (array_key_exists($name, $this->configurations)) {
+            unset($this->configurations[$name]);
+        }
+    }
+
+    public function hasValue(string $name, bool $inludeInactive = false): bool
+    {
+        $value = $this->getValue($name, $inludeInactive);
+
+        return !is_null($value);
     }
 
     public function resetCache()

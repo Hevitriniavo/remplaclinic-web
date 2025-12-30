@@ -2,12 +2,13 @@
 namespace App\Service\Mail;
 
 use App\Entity\MailLog;
+use App\Message\Request\RequestMessageMailSenderInterface;
 use App\Service\Taches\AppConfigurationService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class MailService
+class MailService implements RequestMessageMailSenderInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $em,

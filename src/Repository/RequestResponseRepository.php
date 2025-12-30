@@ -73,29 +73,77 @@ class RequestResponseRepository extends ServiceEntityRepository
 
     public function findAllUserNotAddedTo(int $requestId, ?string $searchTerm = ''): array
     {
-        $sql = 'FROM `user` AS u';
-        $sql .= ' JOIN `user_user_role` AS r ON r.user_id = u.id';
-        $sql .= ' LEFT JOIN `request_response` as rr ON rr.user_id = u.id AND rr.request_id = :request_id'; // join to request response with the given ID
-        $sql .= ' WHERE rr.id IS NULL';
-        $sql .= ' AND u.status = 1'; // only active
-        $sql .= ' AND r.user_role_id = ' . User::ROLE_REPLACEMENT_ID; // only user replacement
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $params = [
-            'request_id' => $requestId,
-        ];
+        $qb
+            ->select('u.id, u.name, u.surname')
+            ->from('user', 'u')
+            ->join('u', 'user_user_role', 'r', 'r.user_id = u.id')
+            ->leftJoin('u', 'request_response', 'rr', 'rr.user_id = u.id AND rr.request_id = :request_id')
+            ->where('rr.id IS NULL')
+            ->andWhere('u.status = 1')
+            ->andWhere('r.user_role_id =' . User::ROLE_REPLACEMENT_ID)
+            ->setParameter('request_id', $requestId)
+        ;
 
         if (!empty($searchTerm)) {
-            $sql .= ' AND (u.name LIKE :search_value OR u.surname LIKE :search_value OR u.email LIKE :search_value)';
-            $params['search_value'] = '%' . $searchTerm .'%';
+            $qb
+                ->andWhere($qb->expr()->or(
+                    'u.name LIKE :search_value',
+                    'u.surname LIKE :search_value',
+                    'u.email LIKE :search_value'
+                ))
+                ->setParameter('search_value', '%' . $searchTerm .'%')
+            ;
         }
 
-        $sql = 'SELECT DISTINCT u.id, u.name, u.surname ' . $sql . ' ORDER BY u.name ASC, u.surname ASC, u.id DESC';
+        return $qb->executeQuery()->fetchAllAssociative();
+    }
 
-        $connection = $this->getEntityManager()->getConnection();
-        $statement = $connection->prepare($sql);
-        
-        $result = $statement->executeQuery($params);
+    /**
+     * Find user id matched to a given request
+     * 
+     * @param int $requestId
+     * 
+     * @return array Liste des ids utilisateur (on prend seulement id pour de raison de performence en memoire).
+     */
+    public function findAllUserIdsFor(int $requestId): array
+    {
+        // @TODO: what if user delete? change region? change speciality?
+        // @TODO: what if request change speciality? region?
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        return $result->fetchAllAssociative();
+        $qb
+            ->select('c.user_id')
+            ->from('request_response', 'c')
+            ->where('c.request_id = :request_id')
+            ->setParameter('request_id', $requestId)
+            ->orderBy('c.user_id', 'desc')
+        ;
+
+        return $qb->executeQuery()->fetchFirstColumn();
+    }
+
+    /**
+     * Get all users who apply for the request
+     * 
+     * @param int $requestId
+     * 
+     * @return User[]
+     */
+    public function findAllUserWhoAccept(int $requestId): array
+    {
+        $responses = $this->createQueryBuilder('a')
+            ->join('a.user', 'u')
+            ->join('a.request', 'r')
+            ->where('a.status = :status')
+            ->andWhere('r.id  = :request_id')
+            ->setParameter('status', RequestResponse::ACCEPTE)
+            ->setParameter('request_id', $requestId)
+            ->orderBy('a.updatedAt', 'desc')
+            ->getQuery()
+            ->getResult();
+
+        return array_map(fn(RequestResponse $item) => $item->getUser(), $responses);
     }
 }

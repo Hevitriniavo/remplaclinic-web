@@ -33,6 +33,10 @@ class AdminEmail
     #[ORM\Column]
     private ?bool $status = null;
 
+    // #[Groups(['datatable'])]
+    // #[ORM\Column]
+    // private ?bool $visible = null;
+
     public function getId(): ?int
     {
         return $this->id;

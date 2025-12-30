@@ -191,7 +191,7 @@ $(function () {
           if (row['request']['status'] === 0) {
             actions.push(
               '<a class="btn btn-sm btn-outline-secondary ml-2 btn-edit" href="' +
-                resendUrl +
+                validateUrl +
                 '" title="Valider"><i class="fas fa-check-double"></i></a>'
             );
           } else {
@@ -209,7 +209,7 @@ $(function () {
           );
           actions.push(
             '<a class="btn btn-sm btn-outline-secondary ml-2 btn-edit" href="' +
-              resendApplicantUrl +
+              closeUrl +
               '" title="Cloturer la demande"><i class="fas fa-times"></i></a>'
           );
           actions.push(

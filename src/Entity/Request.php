@@ -165,6 +165,14 @@ class Request
         return $this->startedAt;
     }
 
+    public function getStartedAtFr(bool $includeTime = true): ?string
+    {
+        if (empty($this->startedAt)) {
+            return '';
+        }
+        return $this->startedAt->format($includeTime ? 'd/m/Y H:i' : 'd/m/Y');
+    }
+
     public function setStartedAt(?\DateTimeInterface $startedAt): static
     {
         $this->startedAt = $startedAt;
@@ -187,6 +195,14 @@ class Request
     public function getEndAt(): ?\DateTimeInterface
     {
         return $this->endAt;
+    }
+
+    public function getEndAtFr(bool $includeTime = true): ?string
+    {
+        if (empty($this->endAt)) {
+            return '';
+        }
+        return $this->endAt->format($includeTime ? 'd/m/Y H:i' : 'd/m/Y');
     }
 
     public function setEndAt(?\DateTimeInterface $endAt): static

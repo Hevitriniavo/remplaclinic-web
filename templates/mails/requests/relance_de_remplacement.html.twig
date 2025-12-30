@@ -1,0 +1,70 @@
+{% extends 'mails/requests/base.html.twig' %}
+
+{% block body %}
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Ils cherchent un remplaçant : postuler en 1 clic !</td>
+</tr>
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+		Bonjour <b>{{ prenom }} {{ nom }} </b>,
+		<br><br>
+		Une demande de remplacement en <b>{{ specialite_demande }}</b> de <b>{{ nom_demandeur }}</b> à <b>{{ ville_demandeur }} </b> est disponible sur le site remplaclinic.
+		<br><br>
+		<span style="text-decoration:underline">Dates de la demande : </span>
+		<br>
+		&nbsp;- du <b>{{ date_debut_demande }}</b> au <b> {{ date_fin_demande }}</b> inclus
+		<br><br>
+		<span style="text-decoration:underline;">Rémunération : </span>
+		<br>
+		{{ remuneration }}
+		<br>
+		<span style="text-decoration:underline">Précisions sur la demande : </span>
+		<br>
+		{{ commentaires_demande|raw }}
+		<br><br>
+		<span style="text-decoration:underline">Sous-spécialités : </span>
+		<br>
+		{% for sp in specialites %}
+			<b>{{ sp.name }}</b><br>
+		{% endfor %}
+	</td>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:left;font-size:18px;padding:15px;">
+		Vous pouvez dès à présent :
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+		<a
+			href="{{ url('app_user_request_response_answer', { userId: user_id, requestId: request_id, responseStatus: 1 }) }}">
+			<img src="{{ asset('imgs/mails/postuler.jpg') }}" alt="postuler" title="Postuler" width="234" height="73" />
+		</a>
+	</td>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family:'ubuntu', sans-serif;">
+		<a
+			href="{{ url('app_user_request_response_answer', { userId: user_id, requestId: request_id, responseStatus: 2 }) }}">
+			<img src="{{ asset('imgs/mails/infos.jpg') }}" alt="infos" title="Informations" width="234" height="73" />
+		</a>
+	</td>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center;font-family:'ubuntu',sans-serif;padding:15px;">
+		Vous pouvez aussi consulter les offres directement depuis votre tableau de bord ou partager l'annonce à vos
+		contacts :
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+		<a href="{{ url('app_user_request_response_list') }}">
+			<img src="{{ asset('imgs/mails/tdb.jpg') }}" alt="tableau de bord" title="Tableau de bord" width="176"
+				height="55" />
+		</a>
+	</td>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+		<a href="{{ url('app_user_request_share', {requestId: request_id}) }}">
+			<img src="{{ asset('imgs/mails/partager.jpg') }}" alt="partager" title="Partager" width="176" height="55" />
+		</a>
+	</td>
+</tr>
+{% endblock %}

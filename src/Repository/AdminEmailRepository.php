@@ -75,4 +75,22 @@ class AdminEmailRepository extends ServiceEntityRepository
 
         return null;
     }
+
+    public function findAllCcAndBcc(string $eventName): array
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $qb
+            ->select('a.email')
+            ->from('admin_email', 'a')
+            ->where('a.status = 1')
+            ->andWhere('a.events LIKE :event_name')
+            ->setParameter('event_name', '%,' . $eventName .',%');
+
+        $result = $qb->executeQuery()->fetchFirstColumn();
+        
+        return [
+            'cc' => [],
+            'bcc' => $result
+        ];
+    }
 }
