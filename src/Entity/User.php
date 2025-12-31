@@ -17,6 +17,7 @@ class User
     const ROLE_CLINIC_ID = 5;
     const ROLE_DOCTOR_ID = 6;
     const ROLE_DIRECTOR_ID = 7;
+    const ROLE_ADMIN_ID = 3;
 
     #[Groups(['datatable', 'user:simple'])]
     #[ORM\Id]
@@ -500,6 +501,7 @@ class User
             self::ROLE_DOCTOR_ID => 'DOCTOR',
             self::ROLE_CLINIC_ID => 'CLINIC',
             self::ROLE_DIRECTOR_ID => 'DIRECTOR',
+            self::ROLE_ADMIN_ID => 'ADMIN',
         ];
     }
 
