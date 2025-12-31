@@ -10,6 +10,7 @@ class AppConfigurationService
     const REQUIRED = [
         'APP_EMAIL_FROM_NAME',
         'APP_EMAIL_FROM_EMAIL',
+        'DRUPAL_SITE_MIGRATION_URL',
     ];
 
     /**

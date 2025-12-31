@@ -62,8 +62,6 @@ function toggleTachesAppConfigurations(name, isDeleteOp) {
     }
   }
 
-  console.log('MISSINGS: ', { missings, names, isDeleteOp })
-
   let html = []
   for(let name of missings) {
     html.push(`<span class="text-bold text-white">${name}</span>`)

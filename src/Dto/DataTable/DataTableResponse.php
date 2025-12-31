@@ -29,4 +29,15 @@ class DataTableResponse
         $result->recordsTotal = count($paginator);
         return $result;
     }
+
+    public static function fromData(array $data = []): DataTableResponse
+    {
+        $result = new DataTableResponse();
+        $result->recordsFiltered = count($data);
+        $result->recordsTotal = count($data);
+        $result->draw = 0;
+        $result->data = $data;
+
+        return $result;
+    }
 }

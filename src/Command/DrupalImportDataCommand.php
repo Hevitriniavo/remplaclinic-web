@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(
@@ -48,14 +47,13 @@ class DrupalImportDataCommand extends Command
             ->addOption('id', 'id', InputOption::VALUE_OPTIONAL, 'Pour traiter un seul element par son id.')
             ->addOption('gt_id', 'gi', InputOption::VALUE_OPTIONAL, 'Pour limiter le traitement aux elements dont son id est superieur a l\'id fourni.')
             ->addOption('max_count', 'mc', InputOption::VALUE_OPTIONAL, 'Le nombre maximale d\'element a traiter. Necessaire pour ne pas traiter en une seule fois un gros volume de donnee (e.g: candidature).')
+            ->addOption('app_importation_id', 'app', InputOption::VALUE_OPTIONAL, 'L\'ID du script d\'imortation.')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Pour filtrer les elements par son type. Type disponible: requests (demande_de_remplacement, demande_d_installation), request_response (candidature_installation, candidature_remplacement).')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
         $entityName = $input->getArgument('entity_name');
 
         $entityNames = explode(',', $entityName);
@@ -63,7 +61,7 @@ class DrupalImportDataCommand extends Command
         // check if all entity names are valid
         foreach($entityNames as $ename) {
             if (!in_array($ename, self::ENTITY_NAMES)) {
-                $io->error('L\'entite ' .  $ename . ' est invalide!');
+                $output->writeln('<error>L\'entite ' .  $ename . ' est invalide!</error>');
 
                 return Command::FAILURE;
             }
@@ -78,7 +76,7 @@ class DrupalImportDataCommand extends Command
         foreach($entityNames as $ename) {
             $migrator->migrate($ename);
 
-            $io->success('L\'entite ' .  $ename . ' a ete importe!');
+            $output->writeln('<info>L\'entite ' .  $ename . ' a ete importe!</info>');
         }
 
         return Command::SUCCESS;

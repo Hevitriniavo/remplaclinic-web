@@ -28,4 +28,52 @@ class TachesController extends AbstractController
 
         return $this->render('admin/taches/app-config.html.twig', $viewData);
     }
+
+    #[Route('/admin/taches/evenements', name: 'app_admin_taches_messages')]
+    public function getAllMessages(): Response
+    {
+        $breadcrumbs = [
+            [
+                'url' => $this->generateUrl('app_admin_home'),
+                'text' => 'Home',
+            ],
+            'Messages',
+        ];
+
+        return $this->render('admin/taches/messengers.html.twig', [
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
+
+    #[Route('/admin/taches/importations', name: 'app_admin_taches_importations')]
+    public function getAllImportations(): Response
+    {
+        $breadcrumbs = [
+            [
+                'url' => $this->generateUrl('app_admin_home'),
+                'text' => 'Home',
+            ],
+            'Importations',
+        ];
+
+        return $this->render('admin/taches/importations.html.twig', [
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
+
+    #[Route('/admin/taches/schedulers', name: 'app_admin_taches_schedulers')]
+    public function getAllSchedulers(): Response
+    {
+        $breadcrumbs = [
+            [
+                'url' => $this->generateUrl('app_admin_home'),
+                'text' => 'Home',
+            ],
+            'Schedulers',
+        ];
+
+        return $this->render('admin/taches/schedulers.html.twig', [
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
 }

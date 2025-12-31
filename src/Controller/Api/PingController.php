@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class PingContoller extends AbstractController
+class PingController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $messageBus,
@@ -41,6 +41,6 @@ class PingContoller extends AbstractController
         return $this->json([
             'status' => 'DOWN',
             'worker' => 'NOT_RESPONDING',
-        ], 503);
+        ]);
     }
 }

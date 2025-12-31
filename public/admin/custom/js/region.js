@@ -25,7 +25,7 @@ function hideRegionModal() {
 }
 
 $(function () {
-  const tblDom = $("#tbl-specilities");
+  const tblDom = $("#tbl-regions");
   const btnNew = $('#btn-region-new');
   const btnSaveRegion = $('#btn-region-detail-save');
   const formRegion = $('#region-form-detail');

@@ -11,12 +11,14 @@ abstract class DrupalMigrationBase implements DrupalMigration
 
     protected Connection $connection;
     protected HttpClientInterface $httpClient;
+    protected ?DrupalMigrationEventHandlerInterface $eventHandler;
     protected array $extraOptions;
     
     public function __construct(array $options = [])
     {
         $this->connection = $options['connection'] ?: null;
         $this->httpClient = $options['http'] ?: null;
+        $this->eventHandler = empty($options['event_handler']) ? null : $options['event_handler'];
         $this->extraOptions = empty($options['cmd_options']) ? [] : $options['cmd_options'];
     }
 
@@ -90,6 +92,13 @@ abstract class DrupalMigrationBase implements DrupalMigration
         
         if (!empty($value)) {
             $params[$paramName] = $value;
+        }
+    }
+
+    protected function dispatchEvent(string $eventName, array $options = [])
+    {
+        if (!is_null($this->eventHandler)) {
+            $this->eventHandler->handleEvent($eventName, $options);
         }
     }
 }

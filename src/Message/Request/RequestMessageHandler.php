@@ -37,6 +37,5 @@ class RequestMessageHandler
                 $this->mailSender->send($this->mailBuilder->build($eventName, $request, $user));
             }
         }
-
     }
 }

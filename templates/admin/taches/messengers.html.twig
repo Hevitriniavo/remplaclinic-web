@@ -1,0 +1,87 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Evenements
+{% endblock %}
+
+{% block page_title %}
+Evenements
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="taches-messages-status"></div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="btn-group mr-3">
+                                    <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                                    <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                        data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item btn-delete" href="#"
+                                            data-url="{{ path('api_admin_taches_delete_multiple', {tachePage: 'evenement'}) }}" data-multiple="true"
+                                            data-selector=".taches-messengers-selection">Supprimer</a>
+                                    </div>
+                                </div>
+                                
+                                <a class="btn btn-secondary btn-flat" id="btn-messengers-check"
+                                    data-url="{{ path('api_admin_messenger_ping') }}">
+                                    <i class="fas fa-check"></i> Verifier le statut du worker
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="tbl-taches-messengers" class="table table-hover"
+                                    data-url="{{ path('api_admin_taches_list', { tachePage: 'evenement'}) }}"
+                                    data-delete-url="{{ path('api_admin_taches_delete', {id: '0000000000', tachePage: 'evenement'}) }}"
+                                    data-detail-replacement-url="{{ path('app_admin_request_replacement_show', {id: '0000000000'}) }}"
+                                    data-detail-installation-url="{{ path('app_admin_request_installation_show', {id: '0000000000'}) }}"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input
+                                                        class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                        type="checkbox" id="taches-messengers-selection-tout"
+                                                        data-selector=".taches-messengers-selection">
+                                                    <label for="taches-messengers-selection-tout"
+                                                        class="custom-control-label"></label>
+                                                </div>
+                                            </th>
+                                            <th>#ID</th>
+                                            <th>#Evenement</th>
+                                            <th>#Payload</th>
+                                            <th>#Cree le</th>
+                                            <th>#Delivre le</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/taches-messengers.js') }}"></script>
+{% endblock %}

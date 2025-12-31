@@ -107,7 +107,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item {{ currentRoute == 'app_admin_taches_list' ? 'menu-open' : '' }}">
+                <li class="nav-item {{ currentRoute == 'app_admin_taches_list' or currentRoute == 'app_admin_taches_messages' or currentRoute == 'app_admin_taches_importations' or currentRoute == 'app_admin_taches_schedulers' ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-exclamation-triangle"></i>
                         <p class="text-uppercase">
@@ -126,7 +126,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ path('app_admin_taches_importations') }}" class="nav-link {{ currentRoute == 'app_admin_taches_importations' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Importations
@@ -134,7 +134,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ path('app_admin_taches_messages') }}" class="nav-link {{ currentRoute == 'app_admin_taches_messages' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Evenements
@@ -142,7 +142,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ path('app_admin_taches_schedulers') }}" class="nav-link {{ currentRoute == 'app_admin_taches_schedulers' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Schedulers

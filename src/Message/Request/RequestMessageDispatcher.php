@@ -33,6 +33,7 @@ class RequestMessageDispatcher
                 $this->messageBus->dispatch(new RequestMessage(
                     $eventName,
                     $request->getId(),
+                    $request->getRequestType(),
                     $bloc
                 ));
                 
@@ -45,6 +46,7 @@ class RequestMessageDispatcher
             $this->messageBus->dispatch(new RequestMessage(
                 $eventName,
                 $request->getId(),
+                $request->getRequestType(),
                 $bloc
             ));
         }

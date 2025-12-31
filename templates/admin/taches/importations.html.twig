@@ -1,0 +1,176 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Script d'importation
+{% endblock %}
+
+{% block page_title %}
+Script d'importation
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="btn-group mr-3">
+                                    <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                                    <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                        data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item btn-delete" href="#"
+                                            data-url="{{ path('api_admin_taches_delete_multiple', {tachePage: 'importation'}) }}" data-multiple="true"
+                                            data-selector=".taches-importations-selection">Supprimer</a>
+                                    </div>
+                                </div>
+
+                                <a class="btn btn-secondary btn-flat mr-3" id="btn-taches-importations-new"
+                                    data-url="{{ path('api_admin_taches_importations_create') }}">
+                                    <i class="fas fa-plus"></i> Ajouter un script
+                                </a>
+
+                                <a class="btn btn-default btn-flat" id="btn-taches-importations-generate"
+                                    data-url="{{ path('api_admin_taches_generate_default', { tachePage: 'importation' }) }}">
+                                    <i class="fas fa-copy"></i> Generer les scripts par defaut
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="tbl-taches-importations" class="table table-hover"
+                                        data-url="{{ path('api_admin_taches_list', { tachePage: 'importation' }) }}"
+                                        data-delete-url="{{ path('api_admin_taches_delete', {id: '0000000000', tachePage: 'importation'}) }}"
+                                        data-detail-url="{{ path('api_admin_taches_detail', {id: '0000000000', tachePage: 'importation'}) }}"
+                                        data-execute-url="{{ path('api_admin_taches_execute', {id: '0000000000', tachePage: 'importation'}) }}"
+                                        style="width: 100%;"
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input
+                                                            class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                            type="checkbox" id="taches-importations-selection-tout"
+                                                            data-selector=".taches-importations-selection">
+                                                        <label for="taches-importations-selection-tout"
+                                                            class="custom-control-label"></label>
+                                                    </div>
+                                                </th>
+                                                <th>#ID</th>
+                                                <th>#Libellé</th>
+                                                <th>#Script</th>
+                                                <th>#Options</th>
+                                                <th>#Status</th>
+                                                <th>#Dernier ID</th>
+                                                <th>#Dernier Nombre</th>
+                                                <th>#Execute le</th>
+                                                <th>#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="modal fade" id="taches-importations-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h4 class="modal-title">Détail d'un script</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true" class="text-white">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="taches-importations-form-detail" class="needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <label for="taches-importations-label">Libellé du script *</label>
+                                        <input type="text" class="form-control" id="taches-importations-label"
+                                            placeholder="Libellé du script" required name="label">
+                                        <div class="invalid-feedback">
+                                            Un script doit avoir un libellé
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taches-importations-script">Le script *</label>
+                                        <input type="text" class="form-control" id="taches-importations-script"
+                                            placeholder="Le script sans bin/console (e.g: app:drupal-import-data roles)" required name="script">
+                                        <div class="invalid-feedback">
+                                            Le script est obligatoire
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taches-importations-options">Les options</label>
+                                        <input type="text" class="form-control" id="taches-importations-options"
+                                            placeholder="Les options du script separé par virgule (double le virgule si dans une valeur)" name="options">
+                                        <div class="invalid-feedback">
+                                            Les options ne sont pas valide
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taches-importations-last-id">Importer a partir de cet ID</label>
+                                        <input type="text" class="form-control" id="taches-importations-last-id"
+                                            placeholder="ID du debut de l'importation" name="last-id">
+                                        <div class="invalid-feedback">
+                                            L'option ID n'est pas valide
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                    <i class="fas fa-times"></i> Annuler
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-flat" id="btn-taches-importations-detail-save">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal fade" id="taches-importations-output-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h4 class="modal-title">Résultat de sortie d'un script</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                    <span aria-hidden="true" class="text-white">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="taches-importations-ouput" rows="20" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-end">
+                                <button type="button" class="btn btn-secondary btn-flat" data-dismiss="modal">
+                                    <i class="fas fa-times"></i> Fermer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/taches-importations.js') }}"></script>
+{% endblock %}

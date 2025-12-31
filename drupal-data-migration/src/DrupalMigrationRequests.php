@@ -73,7 +73,7 @@ class DrupalMigrationRequests extends DrupalMigrationBase
                         'title' => $request['title'],
                         'status' => $this->getStatut($request),
                         'started_at' => $this->keyData($request, 'field_date_demande.und.0.value'),
-                        'show_end_at' => !empty($endDate),
+                        'show_end_at' => empty($endDate) ? 0 : 1,
                         'end_at' => $endDate,
                         'last_sent_at' => $this->getLastSentDate($request),
                         'request_type' => $this->getRequestType($request),
