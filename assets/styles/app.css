@@ -121,6 +121,30 @@
 }
 /* end slide partenaire logo */
 
+/* slide partenaire logo */
+.slide-partenaire-logo-item {
+  display: none;
+}
+
+.slide-partenaire-logo-item.active {
+  display: block;
+}
+/* end slide partenaire logo */
+
+/* slide reference logo */
+.slide-evidence-item {
+  display: none;
+}
+
+.slide-evidence-item p {
+  margin: 0 0 15px 0;
+}
+
+.slide-evidence-item.active {
+  display: block;
+}
+/* end slide reference logo */
+
 .pane-block-22 {
   background: url("../images/sliders/fleche-rempla-desc.png") no-repeat;
 }

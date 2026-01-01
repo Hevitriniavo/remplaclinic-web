@@ -87,4 +87,15 @@ class EvidenceRepository extends ServiceEntityRepository
 
         return false;
     }
+
+    /**
+     * @return Evidence[]
+     */
+    public function findAllOrderByIdDesc(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 }

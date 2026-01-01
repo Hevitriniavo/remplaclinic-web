@@ -1,9 +1,10 @@
 import './styles/app.css'
 
 import createHomeSlider from './js/home-slider.js'
-import createPartenaireLogoSlider from './js/partenaire-logo-slider.js'
+import createRemplaItemSlider from './js/rempla-item-slider.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     createHomeSlider()
-    createPartenaireLogoSlider()
+    createRemplaItemSlider('.slide-partenaire-logo', 10000)
+    createRemplaItemSlider('.slide-evidence', 5000)
 })

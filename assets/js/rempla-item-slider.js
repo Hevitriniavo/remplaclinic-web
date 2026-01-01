@@ -1,8 +1,9 @@
-class PartenaireLogoSlide {
-    constructor(slideContainer) {
-        this.slideItems = slideContainer.querySelectorAll('.slide-partenaire-logo-item')
+class RemplaItemSlide {
+    constructor(slideContainer, duration = 5000, parentSelector = '.slide-rempla') {
+        this.slideItems = slideContainer.querySelectorAll(parentSelector + '-item')
         this.slideItemActiveIndex = 0
         this.slideTimer = null
+        this.duration = duration
 
         this.initSlideTimer(0)
     }
@@ -22,7 +23,7 @@ class PartenaireLogoSlide {
             }
 
             this.setSlideItemActive(this.slideItemActiveIndex)
-        }, 5000)
+        }, this.duration)
     }
 
     setSlideItemActive(index) {
@@ -38,9 +39,9 @@ class PartenaireLogoSlide {
     }
 }
 
-export default function createPartenaireLogoSlider() {
-    const partenaireLogoContainers = document.querySelectorAll('.slide-partenaire-logo')
-    partenaireLogoContainers.forEach(partenaireLogoContainer => {
-        new PartenaireLogoSlide(partenaireLogoContainer)
+export default function createRemplaItemSlider(selector, duration = 5000) {
+    const itemContainers = document.querySelectorAll(selector)
+    itemContainers.forEach(itemContainer => {
+        new RemplaItemSlide(itemContainer, duration, selector)
     })
 }
