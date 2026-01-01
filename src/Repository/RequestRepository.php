@@ -80,4 +80,22 @@ class RequestRepository extends ServiceEntityRepository
         $response->data = $result;
         return $response;
     }
+
+    /**
+     * @return Request[]
+     */
+    public function findLatestByCreatedAt(int $size): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.speciality', 's')
+            ->leftJoin('u.applicant', 'a')
+            ->where('u.status = :status_in_progress')
+            ->setParameter('status_in_progress', Request::IN_PROGRESS)
+            ->andWhere('u.requestType = :request_type')
+            ->setParameter('request_type', RequestType::REPLACEMENT)
+            ->orderBy('u.createdAt', 'desc')
+            ->setMaxResults($size)
+            ->getQuery()
+            ->getResult();
+    }
 }

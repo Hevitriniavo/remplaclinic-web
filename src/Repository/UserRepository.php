@@ -7,6 +7,7 @@ use App\Dto\DataTable\DataTableResponse;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Query\QueryBuilder as NativeQueryBuilder;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -33,8 +34,7 @@ class UserRepository extends ServiceEntityRepository
             ->setFirstResult($params->offset);
 
         if (!is_null($roleId)) {
-            $qb->join('u.roles', 'r')
-                ->andWhere('r.id = :roleId')
+            $qb->join('u.roles', 'r', Expr\Join::WITH, 'r.id = :roleId')
                 ->setParameter('roleId', $roleId);
         }
         
@@ -225,6 +225,23 @@ class UserRepository extends ServiceEntityRepository
         return  $result[0];
     }
 
+    /**
+     * @return User[]
+     */
+    public function findLatestOrderByCreatedAt(int $size): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.speciality', 's')
+            ->join('u.roles', 'r', Expr\Join::WITH, 'r.id = :role_replacement_id')
+            ->where('u.status = :status_active')
+            ->setParameter('status_active', true)
+            ->setParameter('role_replacement_id', User::ROLE_REPLACEMENT_ID)
+            ->orderBy('u.createAt', 'desc')
+            ->setMaxResults($size)
+            ->getQuery()
+            ->getResult();
+    }
+
     private function _createNativeQuerySearch(?int $role = User::ROLE_REPLACEMENT_ID, ?int $regionId = null, ?int $specialityId = null): NativeQueryBuilder
     {
         $qb = $this->getEntityManager()->getConnection()
@@ -243,7 +260,7 @@ class UserRepository extends ServiceEntityRepository
 
         if (!is_null($regionId)) {
             $qb
-                ->where('u.region_id = :region_id')
+                ->join('u', 'user_region', 'ur', 'ur.user_id = u.id AND u.region_id = :region_id')
                 ->setParameter('region_id', $regionId)
             ;
         }

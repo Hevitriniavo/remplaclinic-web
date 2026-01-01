@@ -665,4 +665,18 @@ class User
 
         return '';
     }
+
+    public function isFemale(): bool
+    {
+        if (empty($this->civility)) {
+            return true;
+        }
+
+        return in_array($this->civility, [
+            'Mlle',
+            'Mme',
+            'Mademoiselle',
+            'Madame',
+        ]);
+    }
 }

@@ -1,0 +1,13 @@
+<div>
+    {% for request in this.requests %}
+        <div class="flex flex-row gap-3 mb-1 text-[#333333]">
+            <div class="flex items-center">
+                <img class="object-cover" src="{{ asset('images/sliders/' ~ (request.applicant.female ? 'Mme-remplacement.png' : 'M-remplacement.png')) }}" alt="{{ request.applicant.applicantName }}">
+            </div>
+            <div>
+                <div class="font-bold">{{ request.applicant.applicantName }}</div>
+                <div>{{ request.speciality.name }}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

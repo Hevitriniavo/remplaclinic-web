@@ -157,15 +157,7 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
                         Derniers remplacements publiés
                     </h2>
         
-                    {% for i in 1..4 %}
-                    <div class="flex flex-row gap-3 mb-1 text-[#333333]">
-                        <img src="{{ asset('images/sliders/Mme-remplacement.png') }}" alt="Image de Myriam L.">
-                        <div>
-                            <div class="font-bold">Myriam L.</div>
-                            <div>Anesthésie-réanimation</div>
-                        </div>
-                    </div>
-                    {% endfor %}
+                    <twig:RequestLatestPublished></twig:RequestLatestPublished>
                 </div>
         
         

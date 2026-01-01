@@ -2,9 +2,11 @@
     {% for evidence in this.evidences %}            
         <div class="flex flex-col gap-6 slide-evidence-item {{ loop.first ? 'active' : '' }}">
             <h2 class="text-[##666666] text-[15px] mb-4 font-bold">Nos références</h2>
-            {{ evidence.body|raw }}
             <div>
-                <span class="text-[#3184b6] font-bold">{{ evidence.title }}</span>
+                {{ evidence.body|raw }}
+            </div>
+            <div>
+                <div><span class="text-[#3184b6] font-bold">{{ evidence.title }}</span></div>
                 <div>{{ evidence.specialityName }}</div>
                 <div>{{ evidence.clinicName }}</div>
             </div>
