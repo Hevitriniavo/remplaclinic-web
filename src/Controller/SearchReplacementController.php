@@ -12,7 +12,6 @@ class SearchReplacementController extends AbstractController
     #[Route('/rechercher-remplacants', name: 'search_replacement')]
     public function index (Request $request): Response
     {
-        dump($request->query);
         return $this->render('search_replacement/index.html.twig');
     }
 }

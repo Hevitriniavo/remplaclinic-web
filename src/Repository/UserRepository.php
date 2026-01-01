@@ -6,6 +6,8 @@ use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Query\QueryBuilder as NativeQueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -197,5 +199,55 @@ class UserRepository extends ServiceEntityRepository
         }
 
         $qb->andWhere($expr);
+    }
+
+    public function findAllByRole(?int $roleId): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->join('a.roles', 'r', Join::ON, 'r.id = :role_id')
+            ->setParameter('role_id', $roleId);
+        
+        return $qb->select('a')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAllByRole(?int $roleId): int
+    {
+        $qb = $this->_createNativeQuerySearch($roleId);
+
+        $result = $qb
+            ->select('COUNT(u.id) AS total')
+            ->executeQuery()
+            ->fetchNumeric()
+        ;
+
+        return  $result[0];
+    }
+
+    private function _createNativeQuerySearch(?int $role = User::ROLE_REPLACEMENT_ID, ?int $regionId = null, ?int $specialityId = null): NativeQueryBuilder
+    {
+        $qb = $this->getEntityManager()->getConnection()
+            ->createQueryBuilder()
+            ->from('user', 'u')
+            ->join('u', 'user_user_role', 'r', 'u.id = r.user_id AND r.user_role_id = :role_id')
+            ->where('u.status = 1')
+            ->setParameter('role_id', $role);
+        
+        if (!is_null($specialityId)) {
+            $qb
+                ->where('u.speciality_id = :speciality_id')
+                ->setParameter('speciality_id', $specialityId)
+            ;
+        }
+
+        if (!is_null($regionId)) {
+            $qb
+                ->where('u.region_id = :region_id')
+                ->setParameter('region_id', $regionId)
+            ;
+        }
+
+        return $qb;
     }
 }

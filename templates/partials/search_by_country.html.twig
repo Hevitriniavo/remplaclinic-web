@@ -1,37 +1,6 @@
 <article class="flex flex-col gap-5">
     <aside class="bg-blue p-3 pt-5 pb-5 flex flex-col gap-4 items-center">
-        <div class="text-white flex items-center flex-col">
-            <span>
-                <span class="text-3xl">{{ nombreRemplacants }}</span>
-                <span class="text-xl">remplaçants</span>
-            </span>
-            <strong class="text-xl">disponibles immédiatement</strong>
-        </div>
-        <form class="flex flex-col gap-3 items-center w-60" action="{{ path('search_replacement') }}">
-            <div class="flex flex-col gap-2">
-                <div class="w-56">
-                    <label>
-                        <select class="p-1 w-full inputShadow text-color">
-                            {% for region in regions %}
-                                <option value="{{ region.value }}">{{ region.label }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                </div>
-                <div class="w-56">
-                    <label>
-                        <select class="p-1 inputShadow w-full text-color">
-                            {% for specialite in specialites %}
-                                <option value="{{ specialite.value }}">{{ specialite.label }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div>
-                <input type="submit" value="Rechercher" class="form-submit pl-3 pr-3 p-1 text-xl text-white" />
-            </div>
-        </form>
+        <twig:FormRechercheRemplacant></twig:FormRechercheRemplacant>
     </aside>
 
     <div>

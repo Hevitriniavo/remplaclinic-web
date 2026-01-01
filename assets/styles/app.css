@@ -34,11 +34,6 @@
 #login-root h2 {
   background: url(../images/compte-ferme-fleche.png) #ff7e1e no-repeat 10px
 }
-  
-.bg-orange-fleche:hover {
-  background: url("../images/sliders/fleche-actif-slide.png") no-repeat 10px, url("../images/sliders/fond-titre-slide-active.png") repeat-x;
-}
-
 
 .pane-title {
   font-family: 'Open Sans', sans-serif;
@@ -60,11 +55,36 @@
   height: 320px;
 }
 
-.views-slideshow-pager-field-item {
+/********* Slide **********/
+.slide-item-titre-content {
   background: url("../images/sliders/fond-slide-title.png") repeat-x;
   cursor: pointer;
   width: 220px;
   height: 82px;
+}
+
+.slide-item.active .slide-item-titre-content {
+  background: url("../images/sliders/fleche-actif-slide.png") no-repeat 10px, url("../images/sliders/fond-titre-slide-active.png") repeat-x;
+}
+
+.slide-item.active .slide-item-titre-content .haut-titre {
+  color: #ffffff;
+}
+
+.slide-item.active .slide-item-titre-content {
+  padding-left: 55px;
+}
+
+.slide-container-item {
+  display: none;
+}
+
+.slide-container-item.active {
+  display: block;
+}
+
+.slide-container-item .slide-container-item-body {
+  width: 300px;
 }
 
 .en-savoir-plus {

@@ -8,44 +8,66 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
 <div>
     <section class="flex flex-row gap-20 px-16 py-4 custom-bg-slide h-[340px] overflow-y-hidden">
         <div class="w-[1170px] mx-auto">
-            <div class="w-[780px] float-left flex flex-row">
-                <div>
-                    <ul class="flex flex-col gap-0 bg-[#68b8dc]">
-                        <li class="w-[220px] h-[75px]">
+            <div class="w-[780px] float-left flex flex-row slide-container">
+                <div class="flex flex-col gap-0 bg-[#68b8dc]">
+                    <div class="slide-item w-[220px] h-[75px] active">
+                        <div class="slide-item-titre">
                             <a href="/"
-                                class="flex flex-col delay-50 transition duration-300 views-slideshow-pager-field-item bg-orange-fleche justify-center px-6 hover:pl-12 group">
-                                <span class="text-[#9e9e9e] group-hover:text-white">Je suis une</span>
+                                class="flex flex-col delay-50 transition duration-300 slide-item-titre-content justify-center px-6">
+                                <span class="haut-titre">Je suis une</span>
                                 <span class="text-[16px] text-[#666666]">clinique</span>
                             </a>
-                        </li>
-                        <li class="w-[220px] h-[75px]">
+                        </div>
+                    </div>
+                    <div class="slide-item w-[220px] h-[75px]">
+                        <div class="slide-item-titre">
                             <a href="/"
-                                class="flex flex-col delay-50 transition views-slideshow-pager-field-item duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12 group">
-                                <span class="text-[#9e9e9e] group-hover:text-white">Je suis une</span>
+                                class="flex flex-col delay-50 transition slide-item-titre-content duration-100 justify-center px-6">
+                                <span class="haut-titre">Je suis une</span>
                                 <span class="text-[16px] text-[#666666]">cabinet médical</span>
                             </a>
-                        </li>
-                        <li class="w-[220px] h-[75px]">
+                        </div>
+                    </div>
+                    <div class="slide-item w-[220px] h-[75px]">
+                        <div class="slide-item-titre">
                             <a href="/"
-                                class="flex flex-col delay-50 transition views-slideshow-pager-field-item duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12 group">
-                                <span class="text-[#9e9e9e] group-hover:text-white">Je suis une</span>
+                                class="flex flex-col delay-50 transition slide-item-titre-content duration-100 justify-center px-6">
+                                <span class="haut-titre">Je suis une</span>
                                 <span class="text-[16px] text-[#666666]">remplaçant</span>
                             </a>
-                        </li>
-                        <li class="w-[220px] h-[75px]">
+                        </div>
+                    </div>
+                    <div class="slide-item w-[220px] h-[75px]">
+                        <div class="slide-item-titre">
                             <a href="/"
-                                class="flex flex-col delay-50 transition views-slideshow-pager-field-item duration-100 bg-orange-fleche justify-center hover:items-start px-6 hover:pl-12 group">
-                                <span class="text-[#9e9e9e] group-hover:text-white">Je recherche une</span>
+                                class="flex flex-col delay-50 transition slide-item-titre-content duration-100 justify-center px-6">
+                                <span class="haut-titre">Je recherche une</span>
                                 <span class="text-[16px] text-[#666666]">installation</span>
                             </a>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="relative">
+                <div class="relative slide-container-item active">
+                    <img src="{{ asset('images/sliders/clinique_0.png') }}" width="560"
+                        alt="Image d'un cabinet médical" class="w-[560px] h-[300px]" />
+                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal text-black pl-[30px] py-14 slide-container-item-body">
+                        <h2 class="text-[22px] ">
+                            <span class="text-[#68b8dc]">Besoin d'un médecin remplaçant dans un service ?</span>
+                        </h2>
+                        <p class="mt-2 text-[14px]">Sélectionnez les meilleurs profils et contactez-les d'un simple clic.</p>
+                    </div>
+                    <div class="absolute top-[260px] left-[420px]">
+                        <a href="{{ path('app_replacement_search') }}" class="en-savoir-plus">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative slide-container-item">
                     <img src="{{ asset('images/sliders/cabinet_0_0.png') }}" width="560"
                         alt="Image d'un cabinet médical" class="w-[560px] h-[300px]" />
-                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal text-black px-10 py-14">
+                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal text-black pl-[30px] py-14 slide-container-item-body">
                         <h2 class="text-[22px] ">
                             <span class="text-[#68b8dc]">Un congé, une absence ?</span>
                         </h2>
@@ -57,37 +79,41 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
                         </a>
                     </div>
                 </div>
+
+                <div class="relative slide-container-item">
+                    <img src="{{ asset('images/sliders/slide_2_0.png') }}" width="560"
+                        alt="Image d'un cabinet médical" class="w-[560px] h-[300px]" />
+                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal text-black pl-[30px] py-14 slide-container-item-body">
+                        <h2 class="text-[22px] ">
+                            <span class="text-[#68b8dc]">Vous recherchez un médecin correspondant à votre spécialité ?</span>
+                        </h2>
+                        <p class="mt-2 text-[14px]">Recevez en temps réel les demandes de remplacement de la part de cliniques ou de cabinets...</p>
+                    </div>
+                    <div class="absolute top-[260px] left-[420px]">
+                        <a href="{{ path('app_replacement_search') }}" class="en-savoir-plus">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative slide-container-item">
+                    <img src="{{ asset('images/sliders/instal_0.png') }}" width="560"
+                        alt="Image d'un cabinet médical" class="w-[560px] h-[300px]" />
+                    <div class="absolute inset-0 flex flex-col gap-4 leading-normal text-black pl-[30px] py-14 slide-container-item-body">
+                        <h2 class="text-[22px] ">
+                            <span class="text-[#68b8dc]">Vous recherchez de nouveaux collaborateurs ?</span>
+                        </h2>
+                        <p class="mt-2 text-[14px]">Sélectionnez les bons profils et contactez-les d'un simple clic.</p>
+                    </div>
+                    <div class="absolute top-[260px] left-[420px]">
+                        <a href="{{ path('app_replacement_search') }}" class="en-savoir-plus">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="customer-bg-fleches float-left">
-                <div class="text-center mb-5">
-                    <span class="text-[28px] font-bold text-white">7872</span>
-                    <span class="text-[20px] text-white">remplaçants</span>
-                    <p class="text-[18px] text-white font-bold mb-[19px]">disponibles immédiatement</p>
-                </div>
-                <div>
-                    <form class="space-y-4 mt-5">
-                        <div class="flex items-center justify-center">
-                            <label class="w-full">
-                                <twig:SelectRegion class="w-full p-2 border border-gray-300 rounded-md bg-white text-base outline-none">
-                                    <option value="All" selected="selected">Région</option>
-                                </twig:SelectRegion>
-                            </label>
-                        </div>
-    
-                        <div class="flex items-center justify-center">
-                            <label class="w-full">
-                                <twig:SelectSpeciality class="w-full p-2 border border-gray-300 rounded-md bg-white text-base outline-none">
-                                    <option value="All" selected="selected">Spécialité</option>
-                                </twig:SelectSpeciality>
-                            </label>
-                        </div>
-    
-                        <div class="flex items-center justify-center">
-                            <input type="submit" value="Rechercher"
-                                class="btn-form-submit cursor-pointer" />
-                        </div>
-                    </form>
-                </div>
+                <twig:FormRechercheRemplacant></twig:FormRechercheRemplacant>
             </div>
         </div>
     </section>
