@@ -1,0 +1,43 @@
+<form class="flex flex-col gap-5">
+    <div class="w-96 flex flex-row justify-between">
+        <label for="edit-submitted-nom">
+            Nom
+            <span class="form-required" title="This field is required">*</span>
+        </label>
+        <input type="text" class="form-text p-1 w-72 outline-none" id="edit-submitted-nom" />
+    </div>
+    <div class="w-96 flex flex-row justify-between" id="webform-component-prenom">
+        <label for="lastname">Prénom
+        </label>
+        <input id="lastname" name="lastname" type="text" class="form-text p-1 w-72 outline-none" />
+    </div>
+    <div class="w-96 flex flex-row justify-between">
+        <label for="edit-submitted-email">
+            Email
+            <span class="form-required" title="This field is required">*</span>
+        </label>
+        <input id="edit-submitted-email" name="email" type="text" class="form-text p-1 w-72 outline-none" />
+    </div>
+    <div class="w-96 flex flex-row justify-between">
+        <label for="edit-submitted-telephone">Téléphone
+        </label>
+        <input id="edit-submitted-telephone" name="phoneNumber" type="text" class="form-text p-1 w-72 outline-none" />
+    </div>
+    <div class="w-96 flex flex-row justify-between">
+        <label for="edit-submitted-message" class="flex flex-row gap-2">
+            Message
+            <span class="form-required">*</span>
+        </label>
+        <div>
+            <textarea id="edit-submitted-message" name="message"
+                class="form-text w-72 h-20 outline-none p-2"></textarea>
+            <div class="grippie"></div>
+        </div>
+    </div>
+    <div class="w-96 flex flex-row justify-between">
+        <div>&nbsp;</div>
+        <div class="w-72 p-1">
+            <input type="submit" value="Envoyer" class="form-submit pl-3 pr-3 p-1 text-xl text-white" />
+        </div>
+    </div>
+</form>

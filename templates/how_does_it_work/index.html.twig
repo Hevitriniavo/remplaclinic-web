@@ -1,141 +1,136 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-page-node.html.twig' %}
 
 {% block title %}
-    Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
+    Comment ça marche ? | Remplaclinic
 {% endblock %}
 
-{% block body %}
-    <main class="flex flex-col justify-between items-start p-12 gap-4">
-        <h1 class="blue-span text-3xl">Comment ça marche ?</h1>
-        <section class="flex flex-row gap-6">
-            <article
-                    class="flex flex-col items-start gap-6"
-            >
-                <div class="flex flex-col items-start p-2 pb-6 bg gap-3">
-                    <h3 class="blue-span">Vos futures demandes de remplacant</h3>
-                    <div class="flex flex-col items-start text gap-4">
-                        <ul>
-                            <li>
-                                Vous représentez un établissement de santé ou un cabinet
-                                médical et vous recherchez un
-                                <strong>médecin remplaçant</strong> occasionnellement, de
-                                façon régulière ou un futur clilaborateur ?
-                            </li>
-                            <li>
-                                Vous souhaitez confier à RemplaClinic une ou plusieurs
-                                missions de recherche de
-                                <strong>médecins remplaçants</strong> au sein de votre
-                                établissement ou de votre cabinet ?
-                            </li>
-                        </ul>
-                        <ul>
-                            <li> RemplaClinic vous propose </li>
-                            <li>
-                                L’accès à une importante base de données d’internes et de
-                                <strong>médecins remplaçants</strong> à partir de vos critères
-                                de choix, spécialité et sous-spécialité(s)
-                            </li>
-                            <li>
-                                Un service de messagerie électronique avec l'envoi automatique
-                                de vos demandes aux potentiels
-                                <strong>médecins remplaçants</strong>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <strong
-                                >Pour avoir accès aux offres de médecins remplaçants
-                                    correspondant à vos critères :</strong
-                                >
-                            </li>
-                            <li>
-                                Vous vous inscrivez en ligne (une inscription par spécialité)
-                            </li>
-                            <li>
-                                Vous serez recontacté sous 24 heures par l’équipe de
-                                RemplaClinic afin d’établir le type d’abonnement qu’il vous
-                                faut
-                            </li>
-                        </ul>
-                        <p>
-                            Dès votre inscription validée, vous pourrez rechercher le
-                            meilleur profil correspondant à votre spécialité, émettre vos
-                            demandes, et suivre l’évolution de vos annonces par le biais
-                            d’un tableau de bord personnalisé. <br />
-                            RemplaClinic se charge d’envoyer vos demandes aux potentiels
-                            <strong>médecins remplaçants</strong> dont les critères
-                            correspondent.
-                            <br />
-                            Ils vous contacteront directement. <br />
-                        </p>
-                        <span class="blue-span mt-5">En cas d'urgence …</span>
-                       <ul>
-                           <li>
-                               Vous souhaitez qu'un de nos collaborateurs gère vos demandes de
-                               <strong>médecins remplaçants</strong> à votre place :
-                           </li>
-                       </ul>
-                        <strong>
-                            Il suffit d'appeler notre équipe au : <br /> <br />
+{% block page_nav %}
+    <h1 class="blue-span text-3xl py-[10px]">Comment ça marche ?</h1>
+{% endblock %}
 
-                            <img src="{{ asset('images/telephone.png') }}" alt="telephone">
-                            <span class="mt-6">
-                                ou de remplir le
-                                <span class="blue-span"
-                                ><a href="/">formulaire de contact</a></span
-                                >
-                                . <br />
-                                et remplaclinic vous recontactera
-                            </span>
-
-                        </strong>
-                    </div>
-                </div>
-                <div class="flex flex-col items-start p-2 pb-6 bg-with gap-3 relative">
-                    <h3 class="blue-span">Je souhaite remplacer</h3>
-                    <div class="text">
-                        <p>Pour les remplaçants, c'est GRATUIT !</p>
-                        <ul>
-                            <li>
-                                Vous remplissez le formulaire d’inscription via un
-                                <strong>module rapide et complet</strong>
-                            </li>
-                            <li>
-                                Dès votre inscription prise en compte, vous recevrez
-                                <strong>en temps réel</strong> dans votre boite mail les
-                                demandes de <strong>remplacement médical</strong>
-                                correspondant à vos critères
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="text">
-                        <p>Les garanties de RemplaClinic</p>
-                        <ul>
-                            <li>
-                                os informations personnelles resteront
-                                <strong> strictement confidentielles</strong>
-                            </li>
-                            <li>
-                                RemplaClinic vérifiera votre statut d’interne ou de médecin
-                                avant la parution de votre profil sur le site
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="angle_100gratuit_left top-0">
-                        <img src="{{ asset('images/angle_100gratuit.gif') }}" alt="angle_100gratuit" class="w-36 h-36">
-                    </div>
-                </div>
-                <p>
-                    <strong class="text"
-                    >Être présent sur RemplaClinic, c’est assurer l'efficacité
-                        optimale de vos recherches de remplaçants.</strong
+{% block article_content %}
+<div class="flex flex-col items-start gap-6">
+    <div class="flex flex-col items-start p-2 pb-6 bg gap-3">
+        <h3 class="blue-span">Vos futures demandes de remplacant</h3>
+        <div class="flex flex-col items-start text gap-4">
+            <ul>
+                <li>
+                    Vous représentez un établissement de santé ou un cabinet
+                    médical et vous recherchez un
+                    <strong>médecin remplaçant</strong> occasionnellement, de
+                    façon régulière ou un futur clilaborateur ?
+                </li>
+                <li>
+                    Vous souhaitez confier à RemplaClinic une ou plusieurs
+                    missions de recherche de
+                    <strong>médecins remplaçants</strong> au sein de votre
+                    établissement ou de votre cabinet ?
+                </li>
+            </ul>
+            <ul>
+                <li> RemplaClinic vous propose </li>
+                <li>
+                    L'accès à une importante base de données d'internes et de
+                    <strong>médecins remplaçants</strong> à partir de vos critères
+                    de choix, spécialité et sous-spécialité(s)
+                </li>
+                <li>
+                    Un service de messagerie électronique avec l'envoi automatique
+                    de vos demandes aux potentiels
+                    <strong>médecins remplaçants</strong>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <strong
+                    >Pour avoir accès aux offres de médecins remplaçants
+                        correspondant à vos critères :</strong
                     >
-                </p>
-            </article>
-            {{ render(controller('App\\Controller\\PartialController::index')) }}
-        </section>
-    </main>
+                </li>
+                <li>
+                    Vous vous inscrivez en ligne (une inscription par spécialité)
+                </li>
+                <li>
+                    Vous serez recontacté sous 24 heures par l'équipe de
+                    RemplaClinic afin d'établir le type d'abonnement qu'il vous
+                    faut
+                </li>
+            </ul>
+            <p>
+                Dès votre inscription validée, vous pourrez rechercher le
+                meilleur profil correspondant à votre spécialité, émettre vos
+                demandes, et suivre l'évolution de vos annonces par le biais
+                d'un tableau de bord personnalisé. <br />
+                RemplaClinic se charge d'envoyer vos demandes aux potentiels
+                <strong>médecins remplaçants</strong> dont les critères
+                correspondent.
+                <br />
+                Ils vous contacteront directement. <br />
+            </p>
+            <span class="blue-span mt-5">En cas d'urgence …</span>
+            <ul>
+                <li>
+                    Vous souhaitez qu'un de nos collaborateurs gère vos demandes de
+                    <strong>médecins remplaçants</strong> à votre place :
+                </li>
+            </ul>
+            <strong>
+                Il suffit d'appeler notre équipe au : <br /> <br />
 
+                <img src="{{ asset('images/telephone.png') }}" alt="telephone">
+                <span class="mt-6">
+                    ou de remplir le
+                    <span class="blue-span"
+                    ><a href="/">formulaire de contact</a></span
+                    >
+                    . <br />
+                    et remplaclinic vous recontactera
+                </span>
+
+            </strong>
+        </div>
+    </div>
+    <div class="flex flex-col items-start p-2 pb-6 bg-with gap-3 relative">
+        <h3 class="blue-span">Je souhaite remplacer</h3>
+        <div class="text">
+            <p>Pour les remplaçants, c'est GRATUIT !</p>
+            <ul>
+                <li>
+                    Vous remplissez le formulaire d'inscription via un
+                    <strong>module rapide et complet</strong>
+                </li>
+                <li>
+                    Dès votre inscription prise en compte, vous recevrez
+                    <strong>en temps réel</strong> dans votre boite mail les
+                    demandes de <strong>remplacement médical</strong>
+                    correspondant à vos critères
+                </li>
+            </ul>
+        </div>
+        <div class="text">
+            <p>Les garanties de RemplaClinic</p>
+            <ul>
+                <li>
+                    os informations personnelles resteront
+                    <strong> strictement confidentielles</strong>
+                </li>
+                <li>
+                    RemplaClinic vérifiera votre statut d'interne ou de médecin
+                    avant la parution de votre profil sur le site
+                </li>
+            </ul>
+        </div>
+        <div class="angle_100gratuit_left top-0">
+            <img src="{{ asset('images/angle_100gratuit.gif') }}" alt="angle_100gratuit" class="w-36 h-36">
+        </div>
+    </div>
+    <p>
+        <strong class="text"
+        >Être présent sur RemplaClinic, c'est assurer l'efficacité
+            optimale de vos recherches de remplaçants.</strong
+        >
+    </p>
+</div>
 {% endblock %}
 
 

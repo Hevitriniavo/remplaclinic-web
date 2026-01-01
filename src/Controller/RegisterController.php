@@ -21,8 +21,6 @@ class RegisterController extends AbstractController
         return $this->render('register/new_clinic.html.twig');
     }
 
-
-
     #[Route('/doctor', name: 'app_register_doctor')]
     public function createDoctor(): Response
     {

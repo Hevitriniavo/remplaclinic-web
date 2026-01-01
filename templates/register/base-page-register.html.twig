@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="w-[1170px] mx-auto flex flex-col">
+        <div class="page-nav clearfix pt-7">
+            {% block page_nav %}{% endblock %}
+        </div>
+        <div class="flex flex-row gap-6">
+            <article class="pb-12 mb-12">
+                {% block article_content %}{% endblock %}
+            </article>
+            <div class="pt-7">
+                {% include 'partials/register_aside.html.twig' %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

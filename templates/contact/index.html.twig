@@ -1,102 +1,40 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-page-node.html.twig' %}
 
 {% block title %}
-    Nous contacter | Remplaclinic
+Nous contacter | Remplaclinic
 {% endblock %}
 
-{% block body %}
-    <div class="flex flex-col justify-between items-start p-12 gap-4">
-        <h1 class="blue-span text-3xl">Nous contacter</h1>
-        <div class="flex flex-row justify-between text-color gap-96">
-            <div class="flex flex-col gap-7">
-                <div class="flex flex-col gap-3">
-                    <div class="flex flex-col gap-5">
-                        <h2 class="text-xl">
-                            <strong>Une question, besoin d'aide ?</strong>
-                        </h2>
-                        <div class="w-24 h-1 bg-blue"></div>
-                    </div>
-                    <p>
-                        Notre équipe est à votre disposition pour vous aider et répondre à vos attentes.
-                    </p>
-                    <p>
-                        Vous pouvez nous contacter :<br />
-                        - par courrier : 14, avenue de l'Opéra 75001 Paris<br />
-                        - par téléphone : 06 69 05 33 00<br />
-                        - par email, en remplissant le formulaire ci-dessous
-                    </p>
-                </div>
-                <div class="flex flex-col gap-5">
-                    <div class="flex flex-col gap-5">
-                        <h2 class="text-xl"><strong>Contact</strong></h2>
-                        <div class="w-24 h-1 bg-blue"></div>
-                    </div>
-                    <form class="flex flex-col items-center gap-5">
-                        <div class="w-96 flex flex-row justify-between">
-                            <label for="edit-submitted-nom">
-                                Nom
-                                <span class="form-required" title="This field is required">*</span>
-                            </label>
-                            <input
-                                    type="text"
-                                    class="form-text p-1 w-72 outline-none"
-                                    id="edit-submitted-nom"
-                            />
-                        </div>
-                        <div class="w-96 flex flex-row justify-between" id="webform-component-prenom">
-                            <label for="lastname">Prénom </label>
-                            <input
-                                    id="lastname"
-                                    name="lastname"
-                                    type="text"
-                                    class="form-text p-1 w-72 outline-none"
-                            />
-                        </div>
-                        <div class="w-96 flex flex-row justify-between">
-                            <label for="edit-submitted-email">
-                                Email
-                                <span class="form-required" title="This field is required">*</span>
-                            </label>
-                            <input
-                                    id="edit-submitted-email"
-                                    name="email"
-                                    type="text"
-                                    class="form-text p-1 w-72 outline-none"
-                            />
-                        </div>
-                        <div class="w-96 flex flex-row justify-between">
-                            <label for="edit-submitted-telephone">Téléphone </label>
-                            <input
-                                    id="edit-submitted-telephone"
-                                    name="phoneNumber"
-                                    type="text"
-                                    class="form-text p-1 w-72 outline-none"
-                            />
-                        </div>
-                        <div class="w-96 flex flex-row justify-between">
-                            <label for="edit-submitted-message" class="flex flex-row gap-2">
-                                Message <span class="form-required">*</span>
-                            </label>
-                            <div>
-                                <textarea
-                                        id="edit-submitted-message"
-                                        name="message"
-                                        class="form-text w-72 h-20 outline-none p-2"
-                                ></textarea>
-                                <div class="grippie"></div>
-                            </div>
-                        </div>
-                        <div class="w-full flex justify-end pt-7">
-                            <input
-                                    type="submit"
-                                    value="Envoyer"
-                                    class="form-submit pl-3 pr-3 p-1 text-xl text-white"
-                            />
-                        </div>
-                    </form>
-                </div>
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Nous contacter</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-7 w-[830px] mr-14">
+        <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-5">
+                <h2 class="text-xl uppercase">
+                    <strong>Une question, besoin d'aide ?</strong>
+                </h2>
+                <div class="w-24 h-1 bg-line-blue"></div>
             </div>
-            {{ render(controller('App\\Controller\\PartialController::index')) }}
+            <p>
+                Notre équipe est à votre disposition pour vous aider et répondre à vos attentes.
+            </p>
+            <p>
+                Vous pouvez nous contacter :<br />
+                - par courrier : 14, avenue de l'Opéra 75001 Paris<br />
+                - par téléphone : 06 69 05 33 00<br />
+                - par email, en remplissant le formulaire ci-dessous
+            </p>
+        </div>
+        <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-5">
+                <h2 class="text-xl"><strong>Contact</strong></h2>
+                <div class="h-1 bg-line-blue"></div>
+            </div>
+            {% include 'contact/_form.html.twig' %}
         </div>
     </div>
+</div>
 {% endblock %}

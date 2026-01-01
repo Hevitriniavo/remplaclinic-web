@@ -174,6 +174,14 @@
   background-color: #297fcb;
 }
 
+.bg-blue-ciel {
+  background-color: #E4F5FB;
+}
+
+.bg-line-blue {
+  background: url("../images/bg-line.png") no-repeat 0 bottom;
+}
+
 .reflection {
   position: relative;
 }
@@ -192,30 +200,6 @@
 .text-color {
   font-size: 15px;
   color: #4E4E4E;
-}
-
-.blue-span {
-  color: #5BB7DF;
-}
-
-.bg {
-  background-color: #EBEBEB;
-}
-
-.bg-blue {
-  background-color: #5BB7DF;
-}
-
-.bg-blue-ciel {
-  background-color: #E4F5FB;
-}
-
-.bg-with {
-  background-color: #E4F5FB;
-}
-
-.blue-bg {
-  background-color: #297FCB;
 }
 
 .box-infos-utils-title {
@@ -264,7 +248,7 @@
   display: block;
   height: 160px;
   background-position: 20px -5px;
-  line-height: 25;
+  line-height: 350px;
   width: 212px;
 }
 
@@ -290,12 +274,6 @@
   width: 160px;
   height: 160px;
   background-position: -5px -175px;
-}
-
-.picto-service-clinique a {
-  color: #2d8eb8;
-  outline: none;
-  text-decoration: none;
 }
 
 .picto-clinique {
@@ -399,26 +377,15 @@
 .picto-group {
   background-image: url('../images/picto-directeur-cliniques.png');
   background-repeat: no-repeat;
+  display: block;
   width: 160px;
   height: 160px;
   background-position: -5px -5px;
-  justify-content: center;
-  align-items: flex-end;
-  display: flex;
-}
-.picto-group  span {
-  margin-top: 350px !important;
-  background-color: rebeccapurple;
+  line-height: 350px;
 }
 
 .picto-group:hover {
   width: 160px;
   height: 160px;
   background-position: -5px -175px;
-}
-
-.picto-group a {
-  color: #2d8eb8;
-  outline: none;
-  text-decoration: none;
 }

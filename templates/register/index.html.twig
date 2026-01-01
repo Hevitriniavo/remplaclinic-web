@@ -1,81 +1,51 @@
-{% extends 'base.html.twig' %}
+{% extends 'register/base-page-register.html.twig' %}
 
 {% block title %}
-    Inscription | Remplaclinic
+Inscription | Remplaclinic
 {% endblock %}
 
-{% block body %}
-    <div class="flex flex-col justify-between items-start p-12 gap-4">
-        <h1 class="blue-span text-3xl pb-10">Inscription</h1>
-        <div class="flex flex-row gap-16">
-            <div class="flex flex-col gap-10">
-                <div class="flex flex-col ">
-                    <h2 class="blue-span p-2 text-xl">Vous représentez :</h2>
-                    <div class="flex flex-row gap-16">
-                        <div class="text-center blue-span">
-                            <a href="{{ path('app_register_service_clinic') }}"
-                               class="picto-service-clinique text-[#7c3aed]">
-                                Un service d'une clinique</a
-                            >
-                        </div>
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Inscription</h1>
+{% endblock %}
 
-                        <div class="text-center blue-span">
-                            <a
-                                    href="{{ path('app_register_clinic') }}"
-                                    class="picto-clinique text-[#7c3aed]">
-                                Une clinique</a
-                            >
-                        </div>
-
-                        <div class="text-center blue-span">
-                            <a href="{{ path('app_contact') }}"
-                                class="picto-group text-[#7c3aed]"
-                            >
-
-                            </a>
-
-                            <a href="{{ path('app_contact') }}"
-                               class=" text-[#7c3aed]"
-                            >
-                                <span>
-                                    Un groupement de<br />
-                                   cliniques
-                                </span>
-                            </a>
-
-                        </div>
-
-                        <div class="text-center blue-span">
-                            <a href="{{ path('app_contact') }}"
-                            class="picto-cabinet-medical text-[#7c3aed]"
-                            >
-
-                                Un cabinet médical</a
-                            >
-                        </div>
-                    </div>
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-10 w-[830px] mr-14">
+        <div class="flex flex-col">
+            <h2 class="py-2 text-xl">Vous représentez :</h2>
+            <div class="flex flex-row gap-16 pl-5">
+                <div class="text-center blue-span">
+                    <a href="{{ path('app_register_service_clinic') }}" class="picto-service-clinique">
+                        Un service d'une clinique</a>
                 </div>
-                <div>
-                    <h2 class="blue-span text-xl">Vous êtes :</h2>
-                    <div>
-                        <a href="{{ path('app_register') }}"
-                           class="picto-remplacant text-[#7c3aed]"
-                        >
-                            <span class="pl-7 blue-span">Un remplaçant</span></a>
-                    </div>
+
+                <div class="text-center blue-span">
+                    <a href="{{ path('app_register_clinic') }}" class="picto-clinique">
+                        Une clinique</a>
+                </div>
+
+                <div class="text-center blue-span">
+                    <a href="{{ path('app_contact') }}" class="picto-group"></a>
+                    <a href="{{ path('app_contact') }}">
+                        Un groupement de cliniques
+                    </a>
+                </div>
+
+                <div class="text-center blue-span">
+                    <a href="{{ path('app_register_doctor') }}" class="picto-cabinet-medical">
+                        Un cabinet médical
+                    </a>
                 </div>
             </div>
-            <article class="flex flex-col gap-10 w-[270px]">
-                <aside class="bg-blue p-3 flex flex-col gap-4 items-center">
-                    <twig:FormRechercheRemplacant></twig:FormRechercheRemplacant>
-                </aside>
-                <div>
-                    <twig:PartenaireLogoSlide></twig:PartenaireLogoSlide>
-                </div>
-                <div class="flex flex-col text-white">
-                    {% include 'partials/box-infos-utiles.html.twig' %}
-                </div>
-            </article>
+        </div>
+        <div>
+            <h2 class="py-2 text-xl">Vous êtes :</h2>
+            <div class="text-center blue-span">
+                <a href="{{ path('app_register') }}" class="picto-remplacant">
+                    <span class="pl-7 blue-span">Un remplaçant</span>
+                </a>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
