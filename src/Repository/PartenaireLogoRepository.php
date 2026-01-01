@@ -71,4 +71,15 @@ class PartenaireLogoRepository extends ServiceEntityRepository
 
         return null;
     }
+
+    /**
+     * @return PartenaireLogo[]
+     */
+    public function findAllOrderByIdDesc(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -109,17 +109,20 @@
   background-image: linear-gradient(to bottom, #e59230, #f9a645);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+/* end slider home */
+
+/* slide partenaire logo */
+.slide-partenaire-logo-item {
+  display: none;
+}
+
+.slide-partenaire-logo-item.active {
+  display: block;
+}
+/* end slide partenaire logo */
 
 .pane-block-22 {
   background: url("../images/sliders/fleche-rempla-desc.png") no-repeat;
-}
-
-.pane-block-24 {
-  background: url("../images/sliders/info.png") no-repeat;
-}
-
-.pane-block-25 {
-  background: url("../images/sliders/parapluie.png") no-repeat;
 }
 
 .text {
@@ -191,8 +194,15 @@
   background-color: #297FCB;
 }
 
-.bg-img {
+.box-infos-utils-title {
   background-image: url("../images/sidebar_infos.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50px;
+}
+
+.box-infos-protegez-vous-title {
+  background: url("../images/sliders/parapluie.png") no-repeat;
   background-repeat: no-repeat;
   background-size: cover;
   height: 50px;

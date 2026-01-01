@@ -1,0 +1,14 @@
+<div class="text-center text-color">
+    <p>Quelques références</p>
+</div>
+
+<div class="slide-partenaire-logo w-[270px] h-[130px]">
+    <div class="w-[270px] h-[130px]">
+        <div class="flex items-center justify-center">
+            {% for partenaireLogo in this.partenairesLogo %}
+                <img class="slide-partenaire-logo-item object-cover {{ loop.first ? 'active' : '' }}" src="{{ asset('uploads/' ~ partenaireLogo.logo) }}"
+        alt="{{ partenaireLogo.name }}" />
+            {% endfor %}
+        </div>
+    </div>
+</div>

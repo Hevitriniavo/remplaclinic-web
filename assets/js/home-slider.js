@@ -10,6 +10,10 @@ class HomeSlide {
     }
 
     initSlideTimer(startIndex) {
+        if (startIndex >= this.slideItems.length) {
+            return
+        }
+
         this.slideItemActiveIndex = startIndex
         this.setSlideItemActive(startIndex)
         this.slideTimer = setInterval(() => {
@@ -31,6 +35,10 @@ class HomeSlide {
     }
 
     setSlideItemActive(index) {
+        if (index >= this.slideItems.length) {
+            return
+        }
+
         this.slideItems.forEach((item, itemIndex) => {
             item.classList.remove('active')
 
@@ -58,9 +66,9 @@ class HomeSlide {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+export default function createHomeSlider() {
     const slideContainers = document.querySelectorAll('.slide-container')
     slideContainers.forEach(slideContainer => {
         new HomeSlide(slideContainer)
     })
-})
+}

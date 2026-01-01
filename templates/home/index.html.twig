@@ -142,11 +142,7 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
                 </div>
         
                 <div class="float-left mb-[15px]">
-                    <p class="text-center pl-[70px] mb-[19px]">Quelques références</p>
-                    <div>
-                        <img class="w-[300px] h-[170px] " src="{{ asset('images/sliders/clinea_new-bleu-rvb_002.jpg') }}"
-                            alt="Clinéa" />
-                    </div>
+                    <twig:PartenaireLogoSlide></twig:PartenaireLogoSlide>
                 </div>
             </div>
         </div>
@@ -173,28 +169,12 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
                 </div>
         
         
-                <div class="w-[220px] float-left ml-[40px]">
-                    <h2 class="pane-block-24 p-[20px_0_10px_65px] text-white text-[18px]">Infos utiles </h2>
-                    <div class="bg-[#5bb7df] text-white p-[25px_10px_29px_15px]">
-                        <p>
-                            Que vous soyez remplacé ou remplaçant, pour un remplacement saisonnier ou régulier, retrouvez toutes
-                            les informations utiles selon votre situation…<br>
-                            <a href="{{ path('app_information_utile') }}" class="text-[#333333] underline">En savoir plus…</a>
-                        </p>
-                    </div>
+                <div class="w-[220px] float-left ml-[40px] text-white">
+                    {% include 'partials/box-infos-utiles.html.twig' %}
                 </div>
         
-                <div class="w-[220px] float-left ml-[40px]">
-                    <h2 class="pane-block-25 p-[20px_0_10px_65px] text-white text-[18px]">Protégez-vous !</h2>
-                    <div class="bg-[#5bb7df] text-white p-[25px_10px_29px_15px]">
-                        <p>
-                            Quelles sont les assurances indispensables ? Sur quoi pouvez vous faire l’impasse.
-                            <br> Tout est expliqué ici…<br>
-                            Retrouvez les réponses de notre partenaire MACSF.
-                            <br>
-                            <a href="{{ path('app_protection') }}" class="text-[#333333] underline">En savoir plus…</a>
-                        </p>
-                    </div>
+                <div class="w-[220px] float-left ml-[40px] text-white">
+                    {% include 'partials/box-infos-protegez-vous.html.twig' %}
                 </div>
         
         
@@ -236,8 +216,4 @@ Annonce medicale : Remplaclinic : Remplacement médical, médecin remplaçant
     </section>
 </div>
 
-{% endblock %}
-
-{% block bodyjs %}
-<script src="{{ asset('js/home-slider.js') }}"></script>
 {% endblock %}
