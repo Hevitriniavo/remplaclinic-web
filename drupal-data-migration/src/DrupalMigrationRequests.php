@@ -6,10 +6,24 @@ class DrupalMigrationRequests extends DrupalMigrationBase
 {
     public function migrate()
     {
+        $type = $this->getOption('type');
+
+        if (empty($type)) {
+            $this->importRequestsByType('demande_de_remplacement');
+            $this->importRequestsByType('demande_d_installation');
+        } else {
+            $this->importRequestsByType($type);
+        }
+    }
+
+    private function importRequestsByType(string $type)
+    {
         $payload = [
-            // 'gt_nid' => 1332,
-            // 'nid' => 837,
+            'type' => $type,
         ];
+
+        $this->addExtraCriteria($payload, 'gt_id', 'gt_nid');
+        $this->addExtraCriteria($payload, 'id', 'nid');
 
         $totalCount = $this->getData(array_merge(
             $payload,
@@ -23,9 +37,14 @@ class DrupalMigrationRequests extends DrupalMigrationBase
 
         echo 'Nombre de demande a importer: ' . $total . PHP_EOL;
 
-        $limit = 20;
+        $limit = $this->getOption('limit', 20);
         $page = 1;
-        for($i = 0; $i <= $total; $i += $limit) {
+
+        // limiter le nombre a traiter par command
+        $totalATraiter = $this->getOption('max_count', $total);
+        $total = min($totalATraiter, $total);
+
+        for($i = $this->getOption('offset', 0); $i <= $total; $i += $limit) {
             echo sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i). PHP_EOL;
 
             $this->importRequests($limit, $i, $payload);

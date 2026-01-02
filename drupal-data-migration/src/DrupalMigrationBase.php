@@ -41,7 +41,7 @@ abstract class DrupalMigrationBase implements DrupalMigration
         $statusCode = $response->getStatusCode();
 
         if ($statusCode !== 200) {
-            throw new \RuntimeException('Failed to fetch roles from Drupal migration endpoint.');
+            throw new \RuntimeException('Failed to fetch from Drupal migration endpoint. (error code: ' . $statusCode . ', message: ' . $response->getContent(false) . ')');
         }
 
         return $response->toArray();

@@ -6,9 +6,10 @@ class DrupalMigrationUsers extends DrupalMigrationBase
 {
     public function migrate()
     {
-        $payload = [
-            // 'gt_uid' => 52239,
-        ];
+        $payload = [];
+
+        $this->addExtraCriteria($payload, 'gt_id', 'gt_uid');
+        $this->addExtraCriteria($payload, 'id', 'uid');
 
         $totalCount = $this->getData(array_merge(
             $payload,
@@ -22,9 +23,14 @@ class DrupalMigrationUsers extends DrupalMigrationBase
 
         echo 'Nombre d\'utilisateur a importer: ' . $total . PHP_EOL;
 
-        $limit = 20;
+        $limit = $this->getOption('limit', 20);
         $page = 1;
-        for($i = 0; $i <= $total; $i += $limit) {
+
+        // limiter le nombre a traiter par command
+        $totalATraiter = $this->getOption('max_count', $total);
+        $total = min($totalATraiter, $total);
+
+        for($i = $this->getOption('offset', 0); $i <= $total; $i += $limit) {
             echo sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i). PHP_EOL;
 
             $this->importUsers($limit, $i, $payload);
