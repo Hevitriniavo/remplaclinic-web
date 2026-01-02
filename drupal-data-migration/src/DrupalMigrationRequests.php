@@ -35,7 +35,7 @@ class DrupalMigrationRequests extends DrupalMigrationBase
 
         $total = $this->keyData($totalCount, 'total_count', 0);
 
-        echo 'Nombre de demande a importer: ' . $total . PHP_EOL;
+        $this->log('info', 'Nombre de demande a importer: ' . $total);
 
         $limit = $this->getOption('limit', 20);
         $page = 1;
@@ -45,7 +45,7 @@ class DrupalMigrationRequests extends DrupalMigrationBase
         $total = min($totalATraiter, $total);
 
         for($i = $this->getOption('offset', 0); $i <= $total; $i += $limit) {
-            echo sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i). PHP_EOL;
+            $this->log('info', sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i));
 
             $this->importRequests($limit, $i, $payload);
         }
@@ -125,14 +125,15 @@ class DrupalMigrationRequests extends DrupalMigrationBase
 
             // Logging
 
-            echo sprintf('Demande du %s au %s', $premierRequest, $dernierRequest). PHP_EOL;
-            echo sprintf('Demande valide: %s (%d)', implode(', ', $validRequest), count($validRequest)). PHP_EOL;
-            echo sprintf('Demande invalide: %s (%d)', implode(', ', $invalidRequest), count($invalidRequest)). PHP_EOL;
+            $this->log('info', sprintf('Demande du %s au %s', $premierRequest, $dernierRequest));
+            $this->log('info', sprintf('Demande valide: %s (%d)', implode(', ', $validRequest), count($validRequest)));
+            $this->log('info', sprintf('Demande invalide: %s (%d)', implode(', ', $invalidRequest), count($invalidRequest)));
 
         } catch (\Exception $e) {
             $this->connection->rollBack();
 
-            echo 'Demande qui a echoue: ' . $dernierRequest . PHP_EOL;
+            $this->log('error', 'Demande qui a echoue: ' . $dernierRequest);
+            $this->log('error', $e->getMessage());
 
             throw $e;
         }

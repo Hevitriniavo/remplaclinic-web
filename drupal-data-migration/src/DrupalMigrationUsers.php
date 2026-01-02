@@ -21,7 +21,7 @@ class DrupalMigrationUsers extends DrupalMigrationBase
 
         $total = $this->keyData($totalCount, 'total_count', 0);
 
-        echo 'Nombre d\'utilisateur a importer: ' . $total . PHP_EOL;
+        $this->log('info', 'Nombre d\'utilisateur a importer: ' . $total);
 
         $limit = $this->getOption('limit', 20);
         $page = 1;
@@ -31,7 +31,7 @@ class DrupalMigrationUsers extends DrupalMigrationBase
         $total = min($totalATraiter, $total);
 
         for($i = $this->getOption('offset', 0); $i <= $total; $i += $limit) {
-            echo sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i). PHP_EOL;
+            $this->log('info', sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i));
 
             $this->importUsers($limit, $i, $payload);
         }
@@ -119,14 +119,15 @@ class DrupalMigrationUsers extends DrupalMigrationBase
 
             // Logging
 
-            echo sprintf('Utilisateur du %s au %s', $premierUser, $dernierUser). PHP_EOL;
-            echo sprintf('Utilisateur valide: %s (%d)', implode(', ', $validUser), count($validUser)). PHP_EOL;
-            echo sprintf('Utilisateur invalide: %s (%d)', implode(', ', $invalidUser), count($invalidUser)). PHP_EOL;
+            $this->log('info', sprintf('Utilisateur du %s au %s', $premierUser, $dernierUser));
+            $this->log('info', sprintf('Utilisateur valide: %s (%d)', implode(', ', $validUser), count($validUser)));
+            $this->log('info', sprintf('Utilisateur invalide: %s (%d)', implode(', ', $invalidUser), count($invalidUser)));
 
         } catch (\Exception $e) {
             $this->connection->rollBack();
 
-            echo 'Utilisateur qui a echoue: ' . $dernierUser . PHP_EOL;
+            $this->log('error', 'Utilisateur qui a echoue: ' . $dernierUser);
+            $this->log('error', $e->getMessage());
 
             throw $e;
         }

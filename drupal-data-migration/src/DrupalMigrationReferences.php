@@ -32,8 +32,14 @@ class DrupalMigrationReferences extends DrupalMigrationBase
             }
 
             $this->connection->commit();
+
+            $this->log('info', count($references) . ' references imported.');
+
         } catch (\Exception $e) {
             $this->connection->rollBack();
+
+            $this->log('error', $e->getMessage());
+
             throw $e;
         }
     }

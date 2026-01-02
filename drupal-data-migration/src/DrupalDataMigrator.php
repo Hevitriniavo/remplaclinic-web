@@ -22,7 +22,8 @@ class DrupalDataMigrator
     public function __construct(
         private readonly Connection $connection,
         private readonly HttpClientInterface $httpClient,
-        private readonly ?array $options = []
+        private readonly ?array $options = [],
+        private readonly ?DrupalMigrationEventHandlerInterface $eventHandler = null
     )
     {}
 
@@ -43,6 +44,10 @@ class DrupalDataMigrator
                 'http' => $this->httpClient,
                 'cmd_options' => $this->options,
             ];
+
+            if (!is_null($this->eventHandler)) {
+                $options['event_handler'] = $this->eventHandler;
+            }
 
             return new $migration($options);
         }

@@ -101,4 +101,12 @@ abstract class DrupalMigrationBase implements DrupalMigration
             $this->eventHandler->handleEvent($eventName, $options);
         }
     }
+
+    protected function log(string $logType, string $message, array $additionalOptions = [])
+    {
+        if (!is_null($this->eventHandler)) {
+            $options = array_merge($this->extraOptions, $additionalOptions);
+            $this->eventHandler->handleEvent(sprintf('<%s>%s</%s>', $logType, $message, $logType), $options);
+        }
+    }
 }

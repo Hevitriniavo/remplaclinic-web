@@ -27,8 +27,14 @@ class DrupalMigrationUserClinics extends DrupalMigrationBase
             }
 
             $this->connection->commit();
+
+            $this->log('info', count($userClinics) . ' user clinics imported.');
+
         } catch (\Exception $e) {
             $this->connection->rollBack();
+
+            $this->log('error', $e->getMessage());
+
             throw $e;
         }
     }

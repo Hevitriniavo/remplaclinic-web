@@ -30,7 +30,7 @@ class DrupalMigrationRequestResponses extends DrupalMigrationBase
 
         $total = $this->keyData($totalCount, 'total_count', 0);
 
-        echo 'Nombre de candidature a importer: ' . $total . PHP_EOL;
+        $this->log('info', 'Nombre de candidature a importer: ' . $total);
 
         $limit = $this->getOption('limit', 1000);
         $page = 1;
@@ -40,7 +40,7 @@ class DrupalMigrationRequestResponses extends DrupalMigrationBase
         $total = min($totalATraiter, $total);
 
         for($i = $this->getOption('offset', 0); $i <= $total; $i += $limit) {
-            echo sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i). PHP_EOL;
+            $this->log('info', sprintf('Page [%d] - Limit: %d, Offset: %d', $page++, $limit, $i));
 
             $this->importRequestCandidatures($limit, $i, $payload);
         }
@@ -103,17 +103,17 @@ class DrupalMigrationRequestResponses extends DrupalMigrationBase
 
             } catch (\Exception $e) {
                 $this->connection->rollBack();
-    
-                echo 'Candidature qui a echoue: ' . $dernierCandidature . '('. $payload['type'] .')' . PHP_EOL;
-    
+
+                $this->log('error', 'Candidature qui a echoue: ' . $dernierCandidature . '('. $payload['type'] .')');
+
                 throw $e;
             }
         }
 
         // Logging
-        echo sprintf('Candidature du %s au %s', $premierCandidature, $dernierCandidature). PHP_EOL;
-        echo sprintf('Candidature valide: %d', count($validCandidature)). PHP_EOL;
-        echo sprintf('Candidature invalide: %d', count($invalidCandidature)). PHP_EOL;
+        $this->log('info', sprintf('Candidature du %s au %s', $premierCandidature, $dernierCandidature));
+        $this->log('info', sprintf('Candidature valide: %d', count($validCandidature)));
+        $this->log('info', sprintf('Candidature invalide: %d', count($invalidCandidature)));
     }
 
     private function isResponseValid(array $request): bool

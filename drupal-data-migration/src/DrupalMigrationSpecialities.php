@@ -30,8 +30,14 @@ class DrupalMigrationSpecialities extends DrupalMigrationBase
             }
 
             $this->connection->commit();
+
+            $this->log('info', count($specialities) . ' specialities imported.');
+
         } catch (\Exception $e) {
             $this->connection->rollBack();
+
+            $this->log('error', $e->getMessage());
+
             throw $e;
         }
     }

@@ -70,7 +70,8 @@ class DrupalImportDataCommand extends Command
         $migrator = new \App\DrupalDataMigration\DrupalDataMigrator(
             $this->connection,
             $this->httpClient,
-            $input->getOptions()
+            $input->getOptions(),
+            $this->getMigratorEventHandlers($output)
         );
 
         foreach($entityNames as $ename) {
@@ -80,5 +81,22 @@ class DrupalImportDataCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function getMigratorEventHandlers(OutputInterface $output): ?\App\DrupalDataMigration\DrupalMigrationEventHandlerInterface
+    {
+        return new class($output) implements \App\DrupalDataMigration\DrupalMigrationEventHandlerInterface {
+            private readonly OutputInterface $output;
+
+            public function __construct(OutputInterface $output)
+            {
+                $this->output = $output;
+            }
+
+            public function handleEvent(?string $eventName, array $options = [])
+            {
+                $this->output->writeln($eventName);
+            }
+        };
     }
 }

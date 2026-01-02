@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/admin', name: 'app_admin_home')]
+    #[Route('/admin/', name: 'app_admin_home')]
     public function index(): Response
     {
         $breadcrumbs = [

@@ -19,8 +19,13 @@ class DrupalMigrationRoles extends DrupalMigrationBase
             }
 
             $this->connection->commit();
+
+            $this->log('info', count($roles) . ' roles imported.');
         } catch (\Exception $e) {
             $this->connection->rollBack();
+
+            $this->log('error', $e->getMessage());
+
             throw $e;
         }
     }

@@ -23,8 +23,14 @@ class DrupalMigrationRegions extends DrupalMigrationBase
             }
 
             $this->connection->commit();
+
+            $this->log('info', count($regions) . ' regions imported.');
+
         } catch (\Exception $e) {
             $this->connection->rollBack();
+
+            $this->log('error', $e->getMessage());
+
             throw $e;
         }
     }
