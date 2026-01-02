@@ -389,3 +389,9 @@
   height: 160px;
   background-position: -5px -175px;
 }
+
+/* form validation */
+.invalid {
+  border: 2px solid #ef4444;
+}
+/* end form validation */

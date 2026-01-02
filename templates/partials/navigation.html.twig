@@ -28,35 +28,7 @@
                 <div id="login-root">
                     <div class="min-w-[245px] max-w-[245px]">
                         <h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">Mon compte</h2>
-                        <form class="bg-[#E4E4E6] mb-0" method="post" action="{{ path('app_login') }}">
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                            <div class="flex flex-col px-[12px] pt-[12px] pr-[20px]">
-                                {% if error is defined and error %}
-                                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                                {% endif %}
-                                <label class="mb-[14px]">
-                                    <input
-                                        class="bg-[#eaeaea] border-solid border-[1px] border-[#e5e5e5] border-t-[#c1c1c1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none"
-                                        type="text" placeholder="Identifiant" name="_username" />
-                                </label>
-
-                                <div class="flex flex-row gap-6 mb-[10px]">
-                                    <label class="w-[calc(100%-110px)]">
-                                        <input
-                                            class="bg-[#eaeaea] mr-2 border border-t-[#c1c1c1] p-1 text-[12px] focus:outline-none"
-                                            type="password" placeholder="Mot de passe" name="_password" />
-                                    </label>
-                                    <button
-                                        class="border border-[#fff] font-[13px] bg-[#f9a645] text-white px-1 h-[31px] rounded-[3px]">Valider</button>
-                                </div>
-
-                                <div>
-                                    <span class="flex justify-start text-[11px] text-[#666666]">
-                                        <a href="#" class="underline">Mot de passe oublié </a><span>|</span><a href="{{ path('app_register') }}" class="underline"> Créer un compte</a>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
+                        {% include 'partials/_form-login.html.twig' %}
                     </div>
                 </div>
             </div>

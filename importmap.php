@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'contact' => [
+        'path' => './assets/pages/contact.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,
