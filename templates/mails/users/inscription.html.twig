@@ -1,0 +1,27 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:center;padding:15px;font-size:18px;">Bienvenue !</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+			Bonjour <b>{{ prenom ~ ' ' ~ nom }}</b>,
+			<br><br>
+			Merci de vous être enregistré sur notre site. Vous pouvez désormais vous identifier avec les informations suivantes :
+			<br><br>
+			Identifiant : <b>{{ username }}</b>
+			<br>
+			Mot de passe : <b>{{ password }}</b>
+			<br><br>
+			En étant connecté, vous accédez à votre tableau de bord pour gérer simplement votre compte :
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;">
+			<a href="{{ url('app_user_espace_perso') }}">
+				<img src="{{ asset('imgs/mails/tdb.jpg') }}" alt="tableau de bord" title="Tableau de bord" />
+			</a>		 
+		</td>
+	</tr>
+{% endblock %}

@@ -1,28 +1,47 @@
-<form class="bg-[#E4E4E6] mb-0" method="post" action="{{ path('app_login') }}" id="form-login">
-	<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-	<div class="flex flex-col px-[12px] pt-[12px] pr-[20px]">
-		{% if error is defined and error %}
-			<div class="text-red-500 text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
-		<label class="mb-[14px]">
-			<input class="bg-[#eaeaea] border-solid border-[1px] border-[#e5e5e5] border-t-[#c1c1c1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none form-login-element" type="text" placeholder="Identifiant" name="_username" data-required="true" autocomplete="username" />
-		</label>
+{% if is_granted('ROLE_USER') %}
+	<h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">
+		<a href="{{ url('app_user_espace_perso') }}">Mon compte</a>
+	</h2>
 
-		<div class="flex flex-row gap-6 mb-[10px]">
-			<label class="w-[calc(100%-110px)]">
-				<input class="bg-[#eaeaea] mr-2 border border-t-[#c1c1c1] p-1 text-[12px] focus:outline-none form-login-element" type="password" placeholder="Mot de passe" name="_password" data-required="true" autocomplete="current-password" />
-			</label>
-			<button class="border border-[#fff] font-[13px] bg-[#f9a645] text-white px-1 h-[31px] rounded-[3px] ml-2 form-login-btn-submit">Valider</button>
-		</div>
-
-		<div>
-			<span class="flex justify-start text-[11px] text-[#666666]">
-				<a href="#" class="underline">Mot de passe oublié
-				</a>
-				<span>|</span>
-				<a href="{{ path('app_register') }}" class="underline">
-					Créer un compte</a>
-			</span>
-		</div>
+	<div class="pl-[45px]">
+		<ul>
+			<li class="py-2">Bonjour {{ app.user.user.establishmentName }}</li>
+			<li class="pt-1">
+				<a class="blue-span" href="{{ url('app_user_espace_perso') }}">Mon espace personnel</a>
+			</li>
+			<li class="pt-1">
+				<a class="blue-span" href="{{ url('app_user_logout') }}">Se déconnecter</a>
+			</li>
+		</ul>
 	</div>
-</form>
+{% else %}
+	<h2 class="font-normal text-white uppercase pl-[45px] leading-[35px] text-[18px]">Mon compte</h2>
+	<form class="bg-[#E4E4E6] mb-0" method="post" action="{{ path('app_login') }}" id="form-login">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		<div class="flex flex-col px-[12px] pt-[12px] pr-[20px]">
+			{% if error is defined and error %}
+				<div class="text-red-500 text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
+			<label class="mb-[14px]">
+				<input class="bg-[#eaeaea] border-solid border-[1px] border-[#e5e5e5] border-t-[#c1c1c1] p-1 text-[12px] w-[calc(100%-35px)] focus:outline-none form-login-element" type="text" placeholder="Identifiant" name="_username" data-required="true" autocomplete="username" />
+			</label>
+
+			<div class="flex flex-row gap-6 mb-[10px]">
+				<label class="w-[calc(100%-110px)]">
+					<input class="bg-[#eaeaea] mr-2 border border-t-[#c1c1c1] p-1 text-[12px] focus:outline-none form-login-element" type="password" placeholder="Mot de passe" name="_password" data-required="true" autocomplete="current-password" />
+				</label>
+				<button class="border border-[#fff] font-[13px] bg-[#f9a645] text-white px-1 h-[31px] rounded-[3px] ml-2 form-login-btn-submit">Valider</button>
+			</div>
+
+			<div>
+				<span class="flex justify-start text-[11px] text-[#666666]">
+					<a href="#" class="underline">Mot de passe oublié
+					</a>
+					<span>|</span>
+					<a href="{{ path('app_register') }}" class="underline">
+						Créer un compte</a>
+				</span>
+			</div>
+		</div>
+	</form>
+{% endif %}

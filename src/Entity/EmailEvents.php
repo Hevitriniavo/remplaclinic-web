@@ -5,6 +5,7 @@ class EmailEvents
 {
     // user
     const USER_INSCRIPTION = 'user:inscription';
+    const USER_INSCRIPTION_NOTIFICATION = 'user:inscription:admin';
     const USER_DESINSCRIPTION = 'user:desinscription';
 
     // request
@@ -22,6 +23,7 @@ class EmailEvents
     {
         return [
             self::USER_INSCRIPTION,
+            self::USER_INSCRIPTION_NOTIFICATION,
             self::USER_DESINSCRIPTION,
 
             self::REQUEST_CREATION,

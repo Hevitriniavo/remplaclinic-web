@@ -11,6 +11,7 @@ class AppConfigurationService
         'APP_EMAIL_FROM_NAME',
         'APP_EMAIL_FROM_EMAIL',
         'DRUPAL_SITE_MIGRATION_URL',
+        'USER_INSCRIPTION_TARGET_EMAIL',
     ];
 
     /**

@@ -93,3 +93,21 @@ request_responses
 - request [ManyToOne -> Request]
 - updatedAt [datetime]
 - createdAt [datetime]
+
+
+TODO: (27/12/2025)
+- [DONE] end date for import request
+- [DONE] raison value for import request
+- [API] optimize get all request (caused by get response & get roles)
+- [JS] fix URL redirect for request table
+- [JS] changer title en tooltip
+- [DONE] [Import] separate import requests and candidatures
+- Interface pour l'import des donnees
+- mail system
+    - [Done] retrieve sender email from env
+- authentification
+- fix all select user [make server data load]
+
+- [import] Add support for log and event
+    * auto actualise the table to check the status
+    * Retry system

@@ -20,6 +20,10 @@ return [
         'path' => './assets/pages/contact.js',
         'entrypoint' => true,
     ],
+    'signup' => [
+        'path' => './assets/pages/signup.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,
@@ -32,5 +36,8 @@ return [
     ],
     '@hotwired/turbo' => [
         'version' => '7.3.0',
+    ],
+    'axios' => [
+        'version' => '1.13.2',
     ],
 ];

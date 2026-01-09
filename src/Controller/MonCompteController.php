@@ -3,10 +3,49 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MonCompteController extends AbstractController
 {
+    #[Route(
+        '/mon-compte/espace-perso',
+        name: 'app_user_espace_perso'
+    )]
+    public function monCompte(): Response
+    {
+        $accountLinks = [
+            [
+                'icon' => 'icone-profil.png',
+                'url' => $this->generateUrl('app_register_clinic'),
+                'text' => 'Mes Informations Personnelles',
+            ],
+            [
+                'icon' => 'icone-demandes.png',
+                'url' => $this->generateUrl('app_user_requets_replacement'),
+                'text' => 'Mes demandes de remplacement',
+            ],
+            [
+                'icon' => 'icon_mes_propositions.png',
+                'url' => $this->generateUrl('app_user_requets_installation'),
+                'text' => "Mes propositions d'installation",
+            ],
+            [
+                'icon' => 'nouvelle-demande-remplacement.png',
+                'url' => $this->generateUrl('app_user_requets_replacement'),
+                'text' => 'Effectuer une nouvelle demande de remplacement',
+            ],
+            [
+                'icon' => 'nouvelle-demande-remplacement.png',
+                'url' => $this->generateUrl('app_user_requets_installation'),
+                'text' => "Effectuer une nouvelle proposition d'installation",
+            ],
+        ];
+        return $this->render('espace-perso/index.html.twig', [
+            'accountLinks' => $accountLinks,
+        ]);
+    }
+
     #[Route(
         '/mon-compte/mes-demandes-de-remplacements',
         name: 'app_user_requets_replacement'

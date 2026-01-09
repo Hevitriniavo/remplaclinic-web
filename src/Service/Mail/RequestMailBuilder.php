@@ -12,7 +12,8 @@ use App\Repository\UserRepository;
 use App\Service\Mail\RequestEmail\ValiderRequestEmail;
 use App\Service\Mail\RequestEmail\RenvoyerRequestEmail;
 use App\Service\Mail\RequestEmail\RelancerRequestEmail;
-
+use App\Service\Mail\UserEmail\InscriptionNotificationAdminEmail;
+use App\Service\Mail\UserEmail\InscriptionUserInfosEmail;
 use Exception;
 use Twig\Environment;
 
@@ -35,6 +36,8 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::REQUEST_VALIDATION => ValiderRequestEmail::class,
             EmailEvents::REQUEST_RENVOIE => RenvoyerRequestEmail::class,
             EmailEvents::REQUEST_RELANCE => RelancerRequestEmail::class,
+            EmailEvents::USER_INSCRIPTION => InscriptionUserInfosEmail::class,
+            EmailEvents::USER_INSCRIPTION_NOTIFICATION => InscriptionNotificationAdminEmail::class,
         ];
 
         if (!array_key_exists($eventName, $emailBuilderMap)) {

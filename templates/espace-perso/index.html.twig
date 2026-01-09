@@ -1,0 +1,31 @@
+{% extends 'register/base-page-register.html.twig' %}
+
+{% block title %}
+	Espace personnel | Remplaclinic
+{% endblock %}
+
+{% block page_nav %}
+	<h1 class="blue-span text-3xl py-[10px]">Espace personnel</h1>
+{% endblock %}
+
+{% block article_content %}
+	<div class="pt-7">
+		<div class="flex flex-wrap gap-3 justify-around">
+            {% for accountLink in accountLinks %}
+                <div class="w-[30%] flex flex-col items-center mb-5">
+                    <a href="{{ accountLink.url }}">
+                        <img src="{{ asset('imgs/icons/' ~ accountLink.icon) }}">
+                    </a>
+                    <br>
+                    <a href="{{ accountLink.url }}" class="text-center blue-span">
+                        {{ accountLink.text }}
+                    </a>
+                </div>
+            {% endfor %}
+		</div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url('app_user_espace_perso') }}" class="text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10">Se déconnecter</a>
+        </div>
+	</div>
+{% endblock %}

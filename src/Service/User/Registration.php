@@ -8,30 +8,43 @@ use App\Dto\User\DirectorDto;
 use App\Dto\User\DoctorDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
+use App\Entity\EmailEvents;
 use App\Entity\User;
 use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
-use App\Repository\RegionRepository;
-use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Service\FileUploader;
+use App\Service\Mail\MailService;
+use App\Service\Mail\RequestMailBuilder;
+use App\Service\Taches\AppConfigurationService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
+use Exception;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Registration
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository,
-        private RoleService $roleService,
-        private SpecialityService $specialityService,
-        private RegionRepository $regionRepository,
-        private FileUploader $fileUploader,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly RoleService $roleService,
+        private readonly SpecialityService $specialityService,
+        private readonly RegionService $regionService,
+        private readonly FileUploader $fileUploader,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly AppConfigurationService $appConfiguration,
+        private readonly MailService $mailService,
+        private readonly RequestMailBuilder $mailBuilder,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {}
 
-    public function register(ReplacementDto $replacementDto, UserFilesDto $files)
+    public function register(ReplacementDto $replacementDto, UserFilesDto $files): ?User
     {
+        if (!$this->checkEmail($replacementDto->email)) {
+            return null;
+        }
+
         $user = new User();
         $userAddress = new UserAddress();
         $userAddress
@@ -50,6 +63,7 @@ class Registration
             ->setYearOfBirth($replacementDto->yearOfBirth)
             ->setNationality($replacementDto->nationality)
             ->setEmail($replacementDto->email)
+            ->setPassword($this->hashPassword($replacementDto->password))
             ->setTelephone($replacementDto->telephone)
             ->setTelephone2($replacementDto->telephone2)
             ->setPassword($replacementDto->password)
@@ -79,11 +93,7 @@ class Registration
         }
 
         if (is_array($replacementDto->mobility)) {
-            foreach ($replacementDto->mobility as $mobilityId) {
-                $region = $this->regionRepository->find($mobilityId);
-                if (is_null($region)) {
-                    throw new EntityNotFoundException('No region found for ' . $mobilityId);
-                }
+            foreach ($this->regionService->getRegions($replacementDto->mobility) as $region) {
                 $user->addMobility($region);
             }
         }
@@ -91,11 +101,23 @@ class Registration
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        // @TODO: get all demande for the user
+        // @TODO: store all demande for user
+        // @TODO: send all demande by email
+
+        // send notification
+        $this->sendInfosEmail($user, $replacementDto->password);
+        $this->notifyAdmin($user, $replacementDto->password);
+
         return $user;
     }
 
-    public function registerClinic(ClinicDto $clinicDto)
+    public function registerClinic(ClinicDto $clinicDto): ?User
     {
+        if (!$this->checkEmail($clinicDto->email)) {
+            return null;
+        }
+
         $user = new User();
         $userAddress = new UserAddress();
         $userEstablishment = new UserEstablishment();
@@ -130,6 +152,7 @@ class Registration
             ->setSurname($clinicDto->surname)
             ->setName($clinicDto->name)
             ->setEmail($clinicDto->email)
+            ->setPassword($this->hashPassword($clinicDto->password))
             ->setTelephone($clinicDto->telephone)
             ->setTelephone2($clinicDto->telephone2)
             ->setPassword($clinicDto->password)
@@ -149,11 +172,19 @@ class Registration
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        // send notification
+        $this->sendInfosEmail($user, $clinicDto->password);
+        $this->notifyAdmin($user, $clinicDto->password);
+
         return $user;
     }
 
-    public function registerDoctor(DoctorDto $doctorDto)
+    public function registerDoctor(DoctorDto $doctorDto): ?User
     {
+        if (!$this->checkEmail($doctorDto->email)) {
+            return null;
+        }
+
         $user = new User();
         $userAddress = new UserAddress();
         $userEstablishment = new UserEstablishment();
@@ -186,6 +217,7 @@ class Registration
             ->setSurname($doctorDto->surname)
             ->setName($doctorDto->name)
             ->setEmail($doctorDto->email)
+            ->setPassword($this->hashPassword($doctorDto->password))
             ->setTelephone($doctorDto->telephone)
             ->setTelephone2($doctorDto->telephone2)
             ->setPassword($doctorDto->password)
@@ -210,11 +242,19 @@ class Registration
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        // send notification
+        $this->sendInfosEmail($user, $doctorDto->password);
+        $this->notifyAdmin($user, $doctorDto->password);
+
         return $user;
     }
 
-    public function registerDirector(DirectorDto $directorDto)
+    public function registerDirector(DirectorDto $directorDto): ?User
     {
+        if (!$this->checkEmail($directorDto->email)) {
+            return null;
+        }
+
         $user = new User();
         $userAddress = new UserAddress();
         $userSubscription = new UserSubscription();
@@ -239,6 +279,7 @@ class Registration
             ->setSurname($directorDto->surname)
             ->setName($directorDto->name)
             ->setEmail($directorDto->email)
+            ->setPassword($this->hashPassword($directorDto->password))
             ->setTelephone($directorDto->telephone)
             ->setTelephone2($directorDto->telephone2)
             ->setPassword($directorDto->password)
@@ -258,6 +299,61 @@ class Registration
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        // send notification
+        $this->sendInfosEmail($user, $directorDto->password);
+        $this->notifyAdmin($user, $directorDto->password);
+
         return $user;
+    }
+
+    private function checkEmail(string $email): bool
+    {
+        $existingUser = $this->entityManager->getRepository(User::class)->count([
+            'email' => $email,
+        ]);
+
+        if ($existingUser > 0) {
+            throw new Exception('Your email is already used by anothoer profile !');
+        }
+
+        return true;
+    }
+
+    private function hashPassword(string $rawPassword): string
+    {
+        $securityUser = new SecurityUser(new User());
+        return $this->passwordHasher->hashPassword($securityUser, $rawPassword);
+    }
+
+    private function sendInfosEmail(User $user, string $rawPassword)
+    {
+        $mailLog = $this->mailBuilder
+            ->build(EmailEvents::USER_INSCRIPTION, null, $user, [
+                'raw_password' => $rawPassword,
+            ]);
+        $this->mailService->send($mailLog);
+    }
+
+    private function notifyAdmin(User $user, string $rawPassword)
+    {
+        $details = [
+            User::ROLE_REPLACEMENT_ID => 'app_admin_replacement_show',
+            User::ROLE_CLINIC_ID => 'app_admin_clinic_show',
+            User::ROLE_DOCTOR_ID => 'app_admin_doctor_show',
+            User::ROLE_DIRECTOR_ID => 'app_admin_director_show',
+        ];
+
+        $detailUrl = '#';
+        if (array_key_exists($user->getRole()->getId(), $details)) {
+            $detailUrl = $this->urlGenerator->generate($details[$user->getRole()->getId()], ['id' => $user->getId()]);
+        }
+
+        $mailLog = $this->mailBuilder
+            ->build(EmailEvents::USER_INSCRIPTION_NOTIFICATION, null, $user, [
+                'raw_password' => $rawPassword,
+                'detail_url' => $detailUrl,
+                'target_email' => $this->appConfiguration->getValue('USER_INSCRIPTION_TARGET_EMAIL', false, true)
+            ]);
+        $this->mailService->send($mailLog);
     }
 }

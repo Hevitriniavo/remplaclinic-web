@@ -233,6 +233,10 @@
   background-color: #807f7f;
 }
 
+.form-submit:disabled {
+  cursor: not-allowed;
+}
+
 .inputShadow {
   box-shadow: 0 0 1px 1px #4E4E4E;
 }
@@ -395,3 +399,37 @@
   border: 2px solid #ef4444;
 }
 /* end form validation */
+
+/* toast */
+@keyframes slide-in {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease forwards;
+}
+
+.animate-slide-out {
+  animation: slide-out 0.3s ease forwards;
+}
+/* end toast */
+
+/* inscription */
+.fieldset-legend {
+  background-image: url(/sites/default/files/arrow-fieldset.png);
+  background-repeat: no-repeat;
+  background-position-x: 10px;
+  padding-left: 40px;
+  padding-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  background-position-y: 2px;
+}
+/* end inscription */
