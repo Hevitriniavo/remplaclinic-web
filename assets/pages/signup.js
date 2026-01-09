@@ -6,7 +6,7 @@ import showToast from '../js/rempla-toater.js'
 document.addEventListener('DOMContentLoaded', () => {
     initPageCommon()
 
-    const form = new RemplaFormValidation('form-signup', true)
+    const form = new RemplaFormValidation('form-signup', { debug: true, ajax: true })
     form.addValidator('passwordConfirmation', (data) => data.passwordConfirmation === data.password)
     form.addValidator('cguAccepted', (data) => {
         const isChecked = data.cguAccepted === '1'

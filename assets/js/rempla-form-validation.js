@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 export default class RemplaFormValidation {
-    constructor(formSelector, debug = false) {
+    constructor(formSelector, options = {}) {
         this.formSelector = formSelector
-        this.debug = debug
+        this.debug = options.debug === true
+        this.ajax = options.ajax === true
 
         this.form = document.getElementById(formSelector)
         this.validators = {}
@@ -12,7 +13,7 @@ export default class RemplaFormValidation {
             this.addSubmitEventListener()
             this.buildValidators()
 
-            if (debug) {
+            if (this.debug) {
                 this.setSubmitSuccessHandler((data) => {
                     console.log('FORM SUBMISSION RESULT: ', data)
                 })
@@ -143,7 +144,7 @@ export default class RemplaFormValidation {
 
     addSubmitEventListener() {
         const that = this
-        this.form.addEventListener('submit', (e) => {
+        that.form.addEventListener('submit', (e) => {
             e.preventDefault()
             that.updateBtnSubmitStatus(true)
 
@@ -163,14 +164,22 @@ export default class RemplaFormValidation {
             })
 
             if (isValid) {
-                that.submit()
-                    .then((res) => {
-                        this.submitSuccessHandler(res)
-                    }).catch((err) => {
-                        this.submitErrorHandler(err)
-                    }).finally(() => {
-                        that.updateBtnSubmitStatus(false)
-                    })
+                if (that.ajax) {
+                    that.submitAjax()
+                        .then((res) => {
+                            if (that.submitSuccessHandler) {
+                                that.submitSuccessHandler(res.data, res)
+                            }
+                        }).catch((err) => {
+                            if (that.submitErrorHandler) {
+                                that.submitErrorHandler(err)
+                            }
+                        }).finally(() => {
+                            that.updateBtnSubmitStatus(false)
+                        })
+                } else {
+                    that.submit()
+                }
             } else {
                 that.updateBtnSubmitStatus(false)
             }
@@ -200,7 +209,11 @@ export default class RemplaFormValidation {
         }
     }
 
-    async submit() {
+    submit() {
+        this.form.submit()
+    }
+
+    async submitAjax() {
         const url = this.form.action
         const method = this.form.method
 
@@ -212,6 +225,6 @@ export default class RemplaFormValidation {
             data: data,
         })
 
-        return response.data
+        return response
     }
 }
