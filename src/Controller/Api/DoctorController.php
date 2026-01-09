@@ -6,9 +6,11 @@ use App\Dto\DataTable\DataTableParams;
 use App\Dto\User\DoctorDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Service\User\Registration;
 use App\Service\User\UserUpdate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +19,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 class DoctorController extends AbstractController
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private readonly UserRepository $userRepository,
+        private readonly Security $security,
     ) {}
 
     #[Route('/api/doctors', name: 'api_doctor_get', methods: ['GET'])]
@@ -34,7 +37,17 @@ class DoctorController extends AbstractController
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] DoctorDto $doctorDto
     ): Response {
-        return $this->json($registration->registerDoctor($doctorDto), Response::HTTP_CREATED, [], ['groups' => 'datatable']);
+        $user = $registration->registerDoctor($doctorDto);
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($user, Response::HTTP_CREATED, [], ['groups' => 'datatable']);
+        }
+
+        // logged in the user
+        $this->security->login(new SecurityUser($user));
+
+        // redirect to signup validation
+        return $this->json([ '_redirect' => $this->generateUrl('app_register_success') ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/doctors/{id}', name: 'api_doctor_detail', methods: ['GET'], requirements: ['id' => '\d+'])]

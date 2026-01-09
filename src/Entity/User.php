@@ -639,6 +639,23 @@ class User
         return $this->getName();
     }
 
+    public function getFullName(): string
+    {
+        $role = $this->getRole();
+        
+        if (!is_null($role)) {
+            if ($role->getId() == 5) {
+                return $this->getEstablishment()->getName();
+            }
+
+            if ($role->getId() == 6) {
+                return 'Docteur '. $this->getSurnameAndName();
+            }
+        }
+
+        return $this->getSurnameAndName();
+    }
+
     public function getEstablishmentName(): string
     {
         $role = $this->getRole();
@@ -664,6 +681,21 @@ class User
         }
 
         return '';
+    }
+
+    public function getSurnameAndName(): string
+    {
+        $names = [];
+
+        if (!empty($this->getSurname())) {
+            $names[] = $this->getSurname();
+        }
+
+        if (!empty($this->getName())) {
+            $names[] = $this->getName();
+        }
+
+        return implode(' ', $names);
     }
 
     public function isFemale(): bool
