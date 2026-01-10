@@ -4,6 +4,10 @@
 Contact | Remplaclinic
 {% endblock %}
 
+{% block importmap %}
+    {{ importmap('contact') }}
+{% endblock %}
+
 {% block page_nav %}
 <h1 class="blue-span text-3xl py-[10px]">Contact</h1>
 {% endblock %}
@@ -16,7 +20,7 @@ Contact | Remplaclinic
                 <h2 class="text-xl uppercase"><strong>Ouvrir un compte</strong></h2>
                 <div class="w-24 h-1 bg-blue"></div>
             </div>
-            {% include 'contact/_form.html.twig' %}
+            {% include 'contact/_form.html.twig' with { telephone: true, lastname: true } %}
         </div>
     </div>
 </div>

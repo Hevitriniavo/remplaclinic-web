@@ -37,7 +37,7 @@ Nous contacter | Remplaclinic
                 <h2 class="text-xl"><strong>Contact</strong></h2>
                 <div class="h-1 bg-line-blue"></div>
             </div>
-            {% include 'contact/_form.html.twig' %}
+            {% include 'contact/_form.html.twig' with { telephone: false, lastname: false } %}
         </div>
     </div>
 </div>

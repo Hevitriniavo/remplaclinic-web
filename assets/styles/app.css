@@ -421,8 +421,8 @@
 /* end toast */
 
 /* inscription */
-.fieldset-legend {
-  background-image: url(/sites/default/files/arrow-fieldset.png);
+.inscription-fieldset-legend {
+  background-image: url(../images/arrow-fieldset.png);
   background-repeat: no-repeat;
   background-position-x: 10px;
   padding-left: 40px;

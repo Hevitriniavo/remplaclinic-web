@@ -1,0 +1,31 @@
+{% extends 'register/base-page-register.html.twig' %}
+
+{% block title %}
+Nous contacter | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+    {{ importmap('contact') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Nous contacter</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-7 w-[830px] mr-14">
+        <div class="pb-2">
+            <p>
+                RemplaClinic et InstalClinic ont tissé des liens forts avec des partenaires aux compétences variées (cabinets d'expertises comptables, cabinets d'avocats, conseils financiers, mutuelles, assurances civiles, ...) pour vous permettre de bénéficier de tarifications avantageuses.
+                <br />
+                <br />
+                Faites nous connaitre vos besoins et nous vous mettrons en relation dans les plus brefs délais.
+            </p>
+        </div>
+        <div class="flex flex-col gap-5">
+            {% include 'contact/_form.html.twig' with { subject: true, position: false, lastname: true } %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -13,7 +13,9 @@
 				<img src="{{ asset('images/picto-part-2.png') }}" alt="...."/><img src="{{ asset('images/picto-part-3.png') }}" alt="...."/>
 			</div>
 			<div class="flex flex-col justify-center pl-4 w-48 blue-span">
-				<a href="/nous-contacter">Besoin d'une assistance comptable ?</a><br/><a href="/nous-contacter">Besoin d'une assistance juridique ?</a><br/><a href="/nous-contacter">Besoin d'une assurance professionnelle ?</a>
+				<a href="{{ path('app_contacts_assistance', { s: 'comptable' }) }}">Besoin d'une assistance comptable ?</a><br/>
+				<a href="{{ path('app_contacts_assistance', { s: 'juridique' }) }}">Besoin d'une assistance juridique ?</a><br/>
+				<a href="{{ path('app_contacts_assistance', { s: 'assurance' }) }}">Besoin d'une assurance professionnelle ?</a>
 			</div>
 		</div>
 	</div>
