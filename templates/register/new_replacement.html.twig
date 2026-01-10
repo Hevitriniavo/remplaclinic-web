@@ -1,7 +1,7 @@
 {% extends 'register/base-page-register.html.twig' %}
 
 {% block title %}
-Création de compte | Remplaclinic
+    {% if connected is defined and connected %} Mes infos personnelles {% else %} Création de compte {% endif %}| Remplaclinic
 {% endblock %}
 
 {% block importmap %}
@@ -9,13 +9,23 @@ Création de compte | Remplaclinic
 {% endblock %}
 
 {% block page_nav %}
-<h1 class="blue-span text-3xl py-[10px]">Je crée mon compte remplaçant</h1>
+<h1 class="blue-span text-3xl py-[10px]">Je {% if connected is defined and connected %} modifie {% else %} creé {% endif %} mon compte remplaçant</h1>
 {% endblock %}
 
 {% block article_content %}
 <div class="pt-7">
     <div class="flex flex-col gap-2">
-        <form action="{{ path('api_replacement_new') }}" method="post" enctype="application/json" id="form-signup">
+        <form
+            {% if connected is defined and connected %}
+            action="{{ path('api_replacement_update', { id: connectedUser.id }) }}"
+            data-detail-url="{{ path('api_replacement_detail', { id: connectedUser.id }) }}"
+            {% else %}
+            action="{{ path('api_replacement_new') }}"
+            {% endif %}
+            method="post"
+            enctype="application/json"
+            id="form-signup"
+        >
             <input type="hidden" name="status" class="form-signup-element" value="1">
             <input type="hidden" name="roles[0]" class="form-signup-element" value="4">
             <div class="w-[870px] min-h-[430px] flex flex-col p-3 gap-6 border">
@@ -161,7 +171,7 @@ Création de compte | Remplaclinic
                     <b>Vos commentaires</b>
                 </h2>
                 <div>
-                    <textarea class="w-full form-text outline-none p-2 form-signup-element" name="userComment" cols="60" rows="10" placeholder="Votre commentaire ici..."></textarea>
+                    <textarea class="w-full form-text outline-none p-2 form-signup-element" id="user-comment" name="userComment" cols="60" rows="10" placeholder="Votre commentaire ici..."></textarea>
                 </div>
             </div>
             {% include 'register/_form-btn-validation.html.twig' with { is_replacement: true } %}

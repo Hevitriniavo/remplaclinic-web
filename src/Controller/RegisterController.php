@@ -30,7 +30,9 @@ class RegisterController extends AbstractController
     #[Route('/inscription/service-clinique', name: 'app_register_service_clinic', methods: ['GET'])]
     public function registerServiceClinic(): Response
     {
-        return $this->render('register/new_service_clinic.html.twig');
+        return $this->render('register/new_clinic.html.twig', [
+            'withService' => true
+        ]);
     }
 
     #[Route('/inscription/doctor', name: 'app_register_doctor', methods: ['GET'])]

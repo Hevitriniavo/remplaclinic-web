@@ -1,13 +1,21 @@
 <?php
+
 namespace App\Controller;
 
+use App\Repository\RegionRepository;
+use App\Security\SecurityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MonCompteController extends AbstractController
 {
+    public function __construct(
+        private readonly Security $security,
+    ) {}
+
     #[Route(
         '/mon-compte/espace-perso',
         name: 'app_user_espace_perso'
@@ -17,7 +25,7 @@ class MonCompteController extends AbstractController
         $accountLinks = [
             [
                 'icon' => 'icone-profil.png',
-                'url' => $this->generateUrl('app_register_clinic'),
+                'url' => $this->generateUrl('app_user_infos'),
                 'text' => 'Mes Informations Personnelles',
             ],
             [
@@ -47,25 +55,54 @@ class MonCompteController extends AbstractController
     }
 
     #[Route(
+        '/mon-compte/mes-infos-personnelles',
+        name: 'app_user_infos'
+    )]
+    public function mesInfosPersonnelles(RegionRepository $regionRepository): Response
+    {
+        /**
+         * @var SecurityUser
+         */
+        $connectedUser = $this->security->getUser();
+
+        $viewName = 'new_replacement';
+        $viewData = [
+            'regions' => [],
+            'connected' => true,
+            'connectedUser' => $connectedUser->getUser()
+        ];
+
+        if ($this->security->isGranted('ROLE_REPLACEMENT')) {
+            $viewData['regions'] =  $regionRepository->findAll();
+        } else if ($this->security->isGranted('ROLE_CLINIC')) {
+            $viewName = 'new_clinic';
+        } else if ($this->security->isGranted('ROLE_DOCTOR')) {
+            $viewName = 'new_doctor';
+        }
+
+        return $this->render('register/' . $viewName . '.html.twig', $viewData);
+    }
+
+    #[Route(
         '/mon-compte/mes-demandes-de-remplacements',
         name: 'app_user_requets_replacement'
     )]
     public function mesDemandesRemplacements(): RedirectResponse
     {
         // switch($roles){
-		// 	case 4:
-		// 		echo $url.'/user/remplacants/mes-demandes-de-remplacements';
-		// 		break;
-		// 	case 5:
-		// 		echo $url.'/user/cliniques/mes-demandes-de-remplacements';
-		// 		break;
-		// 	case 6:
-		// 		echo $url.'/user/cliniques/mes-demandes-de-remplacements';
-		// 		break;
-		// 	case 7:
-		// 		echo $url.'/user/directeur/mes-demandes-de-remplacements';
-		// 		break;
-		// }
+        // 	case 4:
+        // 		echo $url.'/user/remplacants/mes-demandes-de-remplacements';
+        // 		break;
+        // 	case 5:
+        // 		echo $url.'/user/cliniques/mes-demandes-de-remplacements';
+        // 		break;
+        // 	case 6:
+        // 		echo $url.'/user/cliniques/mes-demandes-de-remplacements';
+        // 		break;
+        // 	case 7:
+        // 		echo $url.'/user/directeur/mes-demandes-de-remplacements';
+        // 		break;
+        // }
         // @TODO: handle mes requests replacements here and fix redirect
         return $this->redirectToRoute('app_home');
     }

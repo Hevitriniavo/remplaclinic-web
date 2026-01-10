@@ -1,5 +1,5 @@
 import axios from 'axios'
-import initSignupCommon from './signup-common.js'
+import { default as initSignupCommon, loadUserInfos } from './signup-common.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     initSignupCommon()
@@ -15,13 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         specialiteSelect.addEventListener('change', () => {
             let spUrl = url.replace('0000000000', specialiteSelect.value)
+
+            const sousSpecialitesListe = sousSpecialiteOptionsListe.getAttribute('data-sous-specialites')
+            const sousSpecialites = sousSpecialitesListe ? sousSpecialitesListe.split(',') : []
+
             axios.get(spUrl)
                 .then((res) => {
                     if (res.data && res.data.length > 0) {
                         const spsOptions = res.data.map(sp => {
+                            const isChecked = sousSpecialites.find(id => id == sp.id)
+
                             return `
                                 <div class="w-[49%]">
-                                    <input type="checkbox" id="user-sous-specialite-${ sp.id }" name="subSpecialities[]" value="${ sp.id }" class="form-signup-element">
+                                    <input type="checkbox" id="user-sous-specialite-${ sp.id }" name="subSpecialities[]" value="${ sp.id }" class="form-signup-element" ${isChecked ? 'checked' : ''}>
                                     <label for="user-sous-specialite-${ sp.id }">${ sp.name }</label>
                                 </div>
                             `
@@ -67,4 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             oppositeLink.classList.toggle('hidden')
         })
     })
+
+    // load user detail if needed
+    loadUserInfos()
 })

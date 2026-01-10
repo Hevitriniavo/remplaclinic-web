@@ -13,18 +13,21 @@ use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
 use App\Repository\RegionRepository;
+use App\Security\SecurityUser;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserUpdate
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private RoleService $roleService,
-        private SpecialityService $specialityService,
-        private RegionRepository $regionRepository,
-        private FileUploader $fileUploader,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly RoleService $roleService,
+        private readonly SpecialityService $specialityService,
+        private readonly RegionRepository $regionRepository,
+        private readonly FileUploader $fileUploader,
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {}
 
     public function update(User $user, ReplacementDto $replacementDto, UserFilesDto $files)
@@ -92,6 +95,8 @@ class UserUpdate
                 $user->addMobility($region);
             }
         }
+
+        $this->updatePassword($user, $replacementDto->password);
 
         $this->entityManager->flush();
 
@@ -165,6 +170,8 @@ class UserUpdate
                 $user->addRole($role);
             }
         }
+
+        $this->updatePassword($user, $clinicDto->password);
 
         $this->entityManager->flush();
 
@@ -242,6 +249,8 @@ class UserUpdate
             $user->setSpeciality($specialities[0]);
         }
 
+        $this->updatePassword($user, $doctorDto->password);
+
         $this->entityManager->flush();
 
         return $user;
@@ -300,6 +309,8 @@ class UserUpdate
             }
         }
 
+        $this->updatePassword($user, $directorDto->password);
+
         $this->entityManager->flush();
 
         return $user;
@@ -314,5 +325,17 @@ class UserUpdate
         }
 
         return false;
+    }
+
+    private function updatePassword(User $user, ?string $rawPassword)
+    {
+        if (empty($rawPassword)) {
+            // no password update
+            return;
+        }
+
+        $securityUser = new SecurityUser($user);
+
+        $user->setPassword($this->passwordHasher->hashPassword($securityUser, $rawPassword));
     }
 }

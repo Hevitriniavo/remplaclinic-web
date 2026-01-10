@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\Trait\UpdateCheckAccessTrait;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\User\DoctorDto;
 use App\Entity\User;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 class DoctorController extends AbstractController
 {
+    use UpdateCheckAccessTrait;
+
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly Security $security,
@@ -77,13 +80,17 @@ class DoctorController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canUpdateUser($this->security, $user->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $userUpdate->updateDoctor($user, $doctorDto);
 
-        return $this->json(
-            $user,
-            Response::HTTP_OK,
-            [],
-            ['groups' => 'datatable']
-        );
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($user, Response::HTTP_OK, [], ['groups' => 'datatable']);
+        }
+
+        // redirect to espace peprso
+        return $this->json([ '_redirect' => $this->generateUrl('app_user_espace_perso') ], Response::HTTP_OK);
     }
 }

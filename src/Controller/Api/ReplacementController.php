@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\Trait\UpdateCheckAccessTrait;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 
 class ReplacementController extends AbstractController
 {
+    use UpdateCheckAccessTrait;
+
     public function __construct(
         private UserRepository $userRepository,
         private readonly Security $security,
@@ -97,14 +100,18 @@ class ReplacementController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canUpdateUser($this->security, $user->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $userUpdate->update($user, $replacementDto, $this->toUserFilesDto($cv, $diplom, $licence));
 
-        return $this->json(
-            $user,
-            Response::HTTP_OK,
-            [],
-            ['groups' => 'datatable']
-        );
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($user, Response::HTTP_OK, [], ['groups' => 'datatable']);
+        }
+
+        // redirect to espace-perso
+        return $this->json([ '_redirect' => $this->generateUrl('app_user_espace_perso') ], Response::HTTP_OK);
     }
 
     private function toUserFilesDto($cv, $diplom, $licence): UserFilesDto

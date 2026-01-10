@@ -36,6 +36,7 @@ security:
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/mon-compte, roles: ROLE_USER }
         # - { path: ^/api, roles: ROLE_ADMIN }
         # - { path: ^/, roles: ROLE_NOT_KNOWN }
         # - { path: ^/profile, roles: ROLE_USER }
