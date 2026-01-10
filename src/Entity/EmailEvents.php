@@ -16,6 +16,10 @@ class EmailEvents
     const REQUEST_ARCHIVAGE = 'demande:archivage';
     const REQUEST_RELANCE = 'demande:relance';
 
+    // user <-> request
+    const USER_CREATION_REQUEST_REPLACEMENT = 'user:creation:remplacement';
+    const USER_CREATION_REQUEST_INSTALLATION = 'user:creation:installation';
+
     // response
     const REQUEST_REPONSE = 'demande:renponse';
 
@@ -32,6 +36,9 @@ class EmailEvents
             self::REQUEST_RENVOIE,
             self::REQUEST_ARCHIVAGE,
             self::REQUEST_RELANCE,
+
+            self::USER_CREATION_REQUEST_REPLACEMENT,
+            self::USER_CREATION_REQUEST_INSTALLATION,
 
             self::REQUEST_REPONSE,
         ];

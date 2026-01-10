@@ -163,6 +163,7 @@ class UserRepository extends ServiceEntityRepository
     }
 
     private function addQueryParameters(QueryBuilder $qb, array $params) {
+        // @TODO: by postal_code?
         $speciality = empty($params['speciality']) ? '' : $params['speciality'];
         $mobility = empty($params['mobility']) ? '' : $params['mobility'];
         $subSpeciality = empty($params['sousSpeciality']) ? '' : $params['sousSpeciality'];
@@ -171,17 +172,30 @@ class UserRepository extends ServiceEntityRepository
         $expr = $conditionTpe === 'or' ? $qb->expr()->orX() : $qb->expr()->andX();
 
         if (!empty($speciality)) {
-            $expr->add('s.id = :speciality_id');
 
-            $qb
-                ->setParameter('speciality_id', $speciality);
+            $speciality = (int) $speciality;
+
+            // ssr speciality: '285', '293', '289' => '301'
+            $specialities = [];
+            if ($speciality === 301) {
+                $specialities = [285, 293, 289, 301];
+            } else {
+                $specialities = [$speciality];
+            }
+
+            $expr->add('s.id IN (' . implode(',', $specialities) . ')');
         }
 
         if (!empty($mobility)) {
-            $expr->add('m.id = :mobility_id');
+            $mobility = (int) $mobility;
 
-            $qb
-                ->setParameter('mobility_id', $mobility);
+            // region europe: '504' => all => no criteria
+            if ($mobility !== 504) {
+                $expr->add('m.id = :mobility_id');
+    
+                $qb
+                    ->setParameter('mobility_id', $mobility);
+            }
         }
 
         $subSpeciality = empty($params['sousSpeciality']) ? '' : $params['sousSpeciality'];

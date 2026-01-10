@@ -639,6 +639,15 @@ class User
         return $this->getName();
     }
 
+    public function getApplicantLocality(): string
+    {
+        if (is_null($this->getAddress())) {
+            return '';
+        }
+
+        return $this->getAddress()->getLocality();
+    }
+
     public function getFullName(): string
     {
         $role = $this->getRole();

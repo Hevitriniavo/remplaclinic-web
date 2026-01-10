@@ -78,6 +78,6 @@ class RenvoyerRequestEmail
 
     private function getApplicantLocality(): string
     {
-        return $this->request->getApplicant()->getAddress()?->getLocality();
+        return $this->request->getApplicant()->getApplicantLocality();
     }
 }

@@ -98,4 +98,105 @@ class RequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find all request by the given params
+     * 
+     * @param array<string,string>
+     * 
+     * @return Request[]|int[]
+     */
+    public function findAllBy(array $params = [], bool $onlyId = false): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.speciality', 's')
+            ->leftJoin('r.applicant', 'a')
+            ->leftJoin('r.region', 'rg')
+        ;
+
+        // speciality
+        $speciality = null;
+        if (array_key_exists('speciality', $params)) {
+            $speciality = (int) $params['speciality'];
+        }
+
+        // ssr speciality management
+        // '285', '293', '289' => '301'
+        $specialities = [];
+        if (in_array($speciality, [285, 293, 289])) {
+            $specialities = [$speciality, 301];
+        // NB: The inverse does not correct => an user with 301 is not able to 285, 293, 289
+        // } else if ($speciality === 301) {
+        //     $specialities = [$speciality, 285, 293, 289];
+        } else if (!is_null($speciality)) {
+            $specialities = [$speciality];
+        }
+
+        if (array_key_exists('specialities', $params)) {
+            $criteriaSpecialities = array_map(fn($id) => (int) $id, $params['specialities']);
+            $specialities = array_unique(array_merge($specialities, $criteriaSpecialities));
+        }
+
+        if (!empty($specialities)) {
+            $qb->andWhere('s.id IN (' . implode(',', $specialities) . ')');
+        }
+
+        // region
+        $region = null;
+        if (array_key_exists('region', $params)) {
+            $region = (int) $params['region'];
+        }
+
+        // region europe management
+        // '504' => all
+        $regions = [];
+        if ($region === 504) {
+            // europe => all => no region criteria
+            $regions = [];
+        } else {
+
+            // if given then add europe
+            if (!is_null($region)) {
+                $regions = [$region];
+            }
+
+            if (array_key_exists('regions', $params)) {
+                $criteriaRegions = array_map(fn($id) => (int) $id, $params['regions']);
+                $regions = array_merge($regions, $criteriaRegions);
+            }
+
+            array_push($regions, 504);
+
+            $regions = array_unique($regions);
+        }
+
+
+        if (!empty($regions)) {
+            $qb->andWhere('rg.id IN (' . implode(',', $regions) . ')');
+        }
+
+        // statut
+        $status = null;
+        if (array_key_exists('status', $params)) {
+            $status = (int) $params['status'];
+        }
+
+        // archived statut management
+        if (is_null($status)) {
+            $qb->andWhere('r.status <> :status')
+                ->setParameter('status', Request::ARCHIVED);
+        } else {
+            $qb->andWhere('r.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($onlyId) {
+            return $qb->select('r.id')
+                ->getQuery()
+                ->getSingleColumnResult()
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

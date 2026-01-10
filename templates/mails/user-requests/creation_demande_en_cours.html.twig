@@ -1,0 +1,60 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Nous avons
+					déjà des demandes pour vous !</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+			Bonjour
+			{{ prenom }}
+			{{ nom }},
+			<br>
+			<br>
+			<span style="text-decoration:underline;">Voici la liste des demandes de remplacements en cours correspondant à
+							votre profil :
+			</span>
+			<br>
+			{% for request in requests %}
+				-
+				<b>Demande de remplacement</b>
+				de
+				<b>{{ request.applicant.applicantName }}</b>
+				situé à
+				<b>{{ request.applicant.applicantLocality }}</b>
+				du
+				<b>{{ request.getStartedAtFr(false) }}</b>
+				au
+				<b>{{ request.getEndAtFr(false) }}</b>
+				inclus
+				<br>
+			{% endfor %}
+			<br>
+			<br>
+			Vous retrouverez l'ensemble des demandes sur votre tableau de bord :
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;" colspan="2">
+			<a href="{{ url('app_user_requets_replacement') }}" style="background-color:#5d5d5d;
+																					border:2px solid #6b6b6b;
+																					border-radius: 3px;
+																					font-family: 'ubuntu', sans-serif;
+																					line-height: normal;
+																					margin-right:5px;
+																					padding:5px 10px 7px;
+																					vertical-align: middle;
+																					text-align:center;
+																					color: #FFF;
+																					width:300px;
+																					height:45px;
+																					font-size:18px;
+																					font-weight:normal;
+																					text-decoration:none;
+																					cursor:pointer;">
+				Accéder à mon tableau de bord
+			</a>
+		</td>
+	</tr>
+{% endblock %}

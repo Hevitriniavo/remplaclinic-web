@@ -9,10 +9,14 @@ use App\Dto\User\DoctorDto;
 use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
 use App\Entity\EmailEvents;
+use App\Entity\Request;
+use App\Entity\RequestResponse;
+use App\Entity\RequestType;
 use App\Entity\User;
 use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
+use App\Repository\RequestRepository;
 use App\Security\SecurityUser;
 use App\Service\FileUploader;
 use App\Service\Mail\MailService;
@@ -100,9 +104,8 @@ class Registration
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        // @TODO: get all demande for the user
-        // @TODO: store all demande for user
-        // @TODO: send all demande by email
+        // send request notification
+        $this->sendRequestInProgress($user, $replacementDto->speciality, $replacementDto->mobility);
 
         // send notification
         $this->sendInfosEmail($user, $replacementDto->password);
@@ -351,5 +354,78 @@ class Registration
                 'target_email' => $this->appConfiguration->getValue('USER_INSCRIPTION_TARGET_EMAIL', false, true)
             ]);
         $this->mailService->send($mailLog);
+    }
+
+    /**
+     * @return Request[]
+     */
+    private function getRequestForUser(?int $speciality, ?array $regions): array
+    {
+        $params = [];
+        if (!empty($speciality)) {
+            $params['speciality'] = $speciality;
+        }
+
+        if (!empty($regions)) {
+            $params['regions'] = $regions;
+        }
+
+        /**
+         * @var RequestRepository
+         */
+        $repository = $this->entityManager->getRepository(Request::class);
+
+        return $repository->findAllBy($params);
+    }
+
+    /**
+     * @param User $user
+     * @param int|null $speciality
+     * @param int[]|null $mobility
+     */
+    private function sendRequestInProgress(User $user, ?int $speciality, ?array $mobility)
+    {
+        $requests = $this->getRequestForUser($speciality, $mobility);
+
+        if (empty($requests)) {
+            return;
+        }
+
+        $replacements = [];
+        $installations = [];
+
+        foreach($requests as $request) {
+            $requestResponse = new RequestResponse();
+            $requestResponse
+                ->setRequest($request)
+                ->setUser($user)
+                ->setStatus(RequestResponse::EN_COURS)
+            ;
+            $this->entityManager->persist($requestResponse);
+
+            if ($request->getStatus() == Request::IN_PROGRESS) {
+                if ($request->getRequestType() === RequestType::REPLACEMENT) {
+                    $replacements[] = $request;
+                } else {
+                    $installations[] = $request;
+                }
+            }
+        }
+
+        if (!empty($replacements)) {
+            $mailLog = $this->mailBuilder
+                ->build(EmailEvents::USER_CREATION_REQUEST_REPLACEMENT, null, $user, [
+                    'requests' => $replacements,
+                ]);
+            $this->mailService->send($mailLog);
+        }
+
+        if (!empty($installations)) {
+            $mailLog = $this->mailBuilder
+                ->build(EmailEvents::USER_CREATION_REQUEST_INSTALLATION, null, $user, [
+                    'requests' => $installations,
+                ]);
+            $this->mailService->send($mailLog);
+        }
     }
 }

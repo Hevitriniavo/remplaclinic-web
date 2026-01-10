@@ -13,6 +13,8 @@ use App\Service\Mail\RequestEmail\ValiderRequestEmail;
 use App\Service\Mail\RequestEmail\RenvoyerRequestEmail;
 use App\Service\Mail\RequestEmail\RelancerRequestEmail;
 use App\Service\Mail\UserEmail\InscriptionNotificationAdminEmail;
+use App\Service\Mail\UserRequestEmail\InscriptionRequestInstallationEmail;
+use App\Service\Mail\UserRequestEmail\InscriptionRequestReplacementEmail;
 use App\Service\Mail\UserEmail\InscriptionUserInfosEmail;
 use Exception;
 use Twig\Environment;
@@ -38,6 +40,8 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::REQUEST_RELANCE => RelancerRequestEmail::class,
             EmailEvents::USER_INSCRIPTION => InscriptionUserInfosEmail::class,
             EmailEvents::USER_INSCRIPTION_NOTIFICATION => InscriptionNotificationAdminEmail::class,
+            EmailEvents::USER_CREATION_REQUEST_REPLACEMENT => InscriptionRequestReplacementEmail::class,
+            EmailEvents::USER_CREATION_REQUEST_INSTALLATION => InscriptionRequestInstallationEmail::class,
         ];
 
         if (!array_key_exists($eventName, $emailBuilderMap)) {
