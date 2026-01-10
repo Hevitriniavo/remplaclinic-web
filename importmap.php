@@ -24,6 +24,10 @@ return [
         'path' => './assets/pages/signup.js',
         'entrypoint' => true,
     ],
+    'signup-replacement' => [
+        'path' => './assets/pages/signup-replacement.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,

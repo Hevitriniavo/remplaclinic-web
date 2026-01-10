@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\RegionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,15 @@ class RegisterController extends AbstractController
     public function registerDoctor(): Response
     {
         return $this->render('register/new_doctor.html.twig');
+    }
+
+    #[Route('/inscription/remplacant', name: 'app_register_replacement', methods: ['GET'])]
+    public function registerReplacement(RegionRepository $regionRepository): Response
+    {
+        $regions = $regionRepository->findAll();
+        return $this->render('register/new_replacement.html.twig', [
+            'regions' => $regions,
+        ]);
     }
 
     #[Route('/inscription/validation', name: 'app_register_success', methods: ['GET'])]

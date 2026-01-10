@@ -90,4 +90,17 @@ class SpecialityRepository extends ServiceEntityRepository
 
         return false;
     }
+
+    /**
+     * @return Speciality[]
+     */
+    public function findAllSousSpecialite(int $id): array
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.specialityParent', 'p')
+            ->where('p.id = :speciality_id')
+            ->setParameter('speciality_id', $id)
+            ->getQuery()
+            ->getResult();
+    }
 }

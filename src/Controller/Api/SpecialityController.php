@@ -44,6 +44,19 @@ class SpecialityController extends AbstractController
         );
     }
 
+    #[Route('/api/specialities/{id}/sub-specialites', name: 'api_speciality_sub_specialites', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function getSousSpecialites(int $id): Response
+    {
+        $specialityListe = $this->specialityRepository->findAllSousSpecialite($id);
+
+        return $this->json(
+            $specialityListe,
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'datatable']
+        );
+    }
+
     #[Route('/api/specialities/{id}', name: 'api_speciality_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function update(
         int $id,

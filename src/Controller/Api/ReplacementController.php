@@ -7,9 +7,11 @@ use App\Dto\User\ReplacementDto;
 use App\Dto\User\UserFilesDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Service\User\Registration;
 use App\Service\User\UserUpdate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,6 +22,7 @@ class ReplacementController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
+        private readonly Security $security,
     ) {}
 
     #[Route('/api/replacements', name: 'api_replacement_get', methods: ['GET'])]
@@ -45,7 +48,17 @@ class ReplacementController extends AbstractController
         #[MapUploadedFile]
         mixed $licence,
     ): Response {
-        return $this->json($registration->register($replacementDto, $this->toUserFilesDto($cv, $diplom, $licence)), Response::HTTP_CREATED, [], ['groups' => 'datatable']);
+        $user = $registration->register($replacementDto, $this->toUserFilesDto($cv, $diplom, $licence));
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($user, Response::HTTP_CREATED, [], ['groups' => 'datatable']);
+        }
+
+        // logged in the user
+        $this->security->login(new SecurityUser($user));
+
+        // redirect to signup validation
+        return $this->json([ '_redirect' => $this->generateUrl('app_register_success') ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/replacements/{id}', name: 'api_replacement_detail', methods: ['GET'], requirements: ['id' => '\d+'])]

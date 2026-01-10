@@ -1,0 +1,171 @@
+{% extends 'register/base-page-register.html.twig' %}
+
+{% block title %}
+Création de compte | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+{{ importmap('signup-replacement') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Je crée mon compte remplaçant</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-2">
+        <form action="{{ path('api_replacement_new') }}" method="post" enctype="application/json" id="form-signup">
+            <input type="hidden" name="status" class="form-signup-element" value="1">
+            <input type="hidden" name="roles[0]" class="form-signup-element" value="4">
+            <div class="w-[870px] min-h-[430px] flex flex-col p-3 gap-6 border">
+                <h2 class="text-2xl inscription-fieldset-legend">
+                    <b>Informations générales</b>
+                </h2>
+                <div class="flex flex-row justify-between">
+                    <div class="w-[430px] flex flex-col gap-4 justify-start items-end">
+                        <div class="w-96 flex flex-row justify-end gap-2">
+                            <label for="user-civilite" class="form-label">
+                                Civilité <span class="required">*</span>
+                            </label>
+                            <select id="user-civilite" name="civility"
+                                class="form-text p-1 w-64 outline-none form-signup-element" data-required="true">
+                                <option value="">- Choisir une valeur -</option>
+                                <option value="M">Monsieur</option>
+                                <option value="Mme">Madame</option>
+                                <option value="Mlle">Mademoiselle</option>
+                            </select>
+                        </div>
+                        <div class="w-96 flex flex-row justify-end gap-2">
+                            <label for="user-prenom">Prénom <span class="required">*</span></label>
+                            <input type="text" class="form-text p-1 w-64 outline-none form-signup-element"
+                                id="user-prenom" data-required="true" name="surname" />
+                        </div>
+                        <div class="w-96 flex flex-row justify-end gap-2">
+                            <label for="user-nom">Nom <span class="required">*</span></label>
+                            <input type="text" class="form-text p-1 w-64 outline-none form-signup-element" id="user-nom"
+                                data-required="true" name="name" />
+                        </div>
+                        <div class="flex flex-row gap-2">
+                            <label for="user-numero-inscription" class="text-right">Numéro d'inscription au conseil de l'Ordre</label>
+                            <div>
+                                <input type="text" class="form-text p-1 w-64 outline-none form-signup-element" id="user-numero-inscription" name="ordinaryNumber" />
+                            </div>
+                        </div>
+                        <div class="w-96 flex flex-row justify-end gap-2">
+                            <label for="user-telephone">
+                                Téléphone
+                                <span class="required">*</span>
+                            </label>
+                            <input type="tel" class="form-text p-1 w-64 outline-none form-signup-element" data-required="true" id="user-telephone" placeholder="Ex : 0142260032" name="telephone"/>
+                        </div>
+                    </div>
+                    <div>
+                        {% include 'register/_form-address.html.twig' %}
+                        <div class="flex flex-col gap-4 mt-4 justify-start items-start">
+                            <div class="w-[26rem] flex flex-row justify-end gap-2">
+                                <label for="user-annee-naissance">Année de naissance <span class="required">*</span></label>
+                                <div>
+                                    <input type="text" class="form-text p-1 w-64 outline-none form-signup-element"
+                                    id="user-annee-naissance" data-required="true" name="yearOfBirth" />
+                                </div>
+                            </div>
+                            <div class="w-[26rem] flex flex-row justify-end gap-2">
+                                <label for="user-nationalite">Nationalité <span class="required">*</span></label>
+                                <input type="text" class="form-text p-1 w-64 outline-none form-signup-element"
+                                    id="user-nationalite" data-required="true" name="nationality" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'register/_form-password.html.twig' %}
+            </div>
+            <div class="w-[870px] pb-7 flex flex-col p-3 gap-5 border">
+                <h2 class="text-2xl inscription-fieldset-legend">
+                    <b>Informations de votre profil</b>
+                </h2>
+                <div class="flex flex-row flex-wrap">
+                    <div class="w-[50%] flex flex-row gap-2">
+                        <label for="user-numero-internat" class="text-right">Année d'obtention de l'internat</label>
+                        <div>
+                            <input type="text" class="form-text p-1 w-64 outline-none form-signup-element" id="user-numero-internat" name="yearOfResidency" placeholder="Ex: 1977" />
+                        </div>
+                    </div>
+                    <div class="w-[50%] flex flex-row justify-end gap-2 pl-4">
+                        <label for="user-statut-actuel" class="form-label">
+                            Statut actuel
+                            <span class="required">*</span>
+                        </label>
+                        <div>
+                            <twig:SelectCurrentSpeciality id="user-statut-actuel" name="currentSpeciality" data-required="true"
+                            class="form-text p-1 w-64 outline-none form-signup-element">
+                                <option value="">- Choisir un valeur -</option>
+                            </twig:SelectCurrentSpeciality>
+                        </div>
+                    </div>
+                    <div class="w-[50%] flex flex-row justify-end gap-2 mt-4 pl-4">
+                        <label for="user-specialite" class="form-label">
+                            Spécialité
+                            <span class="required">*</span>
+                        </label>
+                        <div>
+                            <twig:SelectSpeciality id="user-specialite" name="speciality" data-required="true"
+                            class="form-text p-1 w-64 outline-none form-signup-element" data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}">
+                                <option value="">- Choisir un valeur -</option>
+                            </twig:SelectSpeciality>
+                        </div>
+                    </div>
+
+                    <div class="w-full flex-row justify-end gap-2 mt-4 hidden" id="user-sous-specialite-wrapper">
+                        <label class="form-label w-40 text-right">
+                            Sous spécialité
+                        </label>
+                        <div class="flex-1 flex flex-row flex-wrap gap-2" id="user-sous-specialite-options-liste">
+                            {% if sousSpecialites is defined %}
+                                {% for sp in sousSpecialites %}
+                                    <div class="w-[49%]">
+                                        <input type="checkbox" id="user-sous-specialite-{{ sp.id }}" name="subSpecialities[]" value="{{ sp.id }}" class="form-signup-element">
+                                        <label for="user-sous-specialite-{{ sp.id }}">{{ sp.name }}</label>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="w-full flex flex-row justify-end gap-2 mt-4">
+                        <label class="form-label w-40 text-right">
+                            Mobilité
+                            <span class="required">*</span>
+                        </label>
+                        <div class="flex-1 flex flex-row flex-wrap gap-2">
+                            {% for region in regions %}
+                                <div class="w-[49%]">
+                                    <input type="checkbox" id="user-mobilite-{{ region.id }}" name="mobility[]" value="{{ region.id }}" class="user-mobilite-options form-signup-element">
+                                    <label for="user-mobilite-{{ region.id }}">{{ region.name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="w-full pt-2" id="user-mobilite-selection-wrapper">
+                        <div class="text-center cursor-pointer text-[18px] font-semibold">
+                            <a class="blue-span check_all">Sélectionner toutes les régions</a>
+                            <a class="blue-span uncheck_all hidden">Désélectionner toutes les régions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-[870px] pb-7 flex flex-col p-3 gap-5 border">
+                <h2 class="text-2xl inscription-fieldset-legend">
+                    <b>Vos commentaires</b>
+                </h2>
+                <div>
+                    <textarea class="w-full form-text outline-none p-2 form-signup-element" name="userComment" cols="60" rows="10" placeholder="Votre commentaire ici..."></textarea>
+                </div>
+            </div>
+            {% include 'register/_form-btn-validation.html.twig' with { is_replacement: true } %}
+        </form>
+    </div>
+</div>
+{% endblock %}

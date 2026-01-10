@@ -15,7 +15,6 @@ class ReplacementController extends AbstractController
         return $this->render('replacement/index.html.twig');
     }
 
-
     #[Route('/je-cherche-un-remplacant', name: 'app_replacement_search')]
     public function searchReplacement(): Response
     {
