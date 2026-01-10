@@ -38,17 +38,24 @@ class MonCompteController extends AbstractController
                 'url' => $this->generateUrl('app_user_requets_installation'),
                 'text' => "Mes propositions d'installation",
             ],
-            [
-                'icon' => 'nouvelle-demande-remplacement.png',
-                'url' => $this->generateUrl('app_user_requets_replacement'),
-                'text' => 'Effectuer une nouvelle demande de remplacement',
-            ],
-            [
-                'icon' => 'nouvelle-demande-remplacement.png',
-                'url' => $this->generateUrl('app_user_requets_installation'),
-                'text' => "Effectuer une nouvelle proposition d'installation",
-            ],
         ];
+
+        if ($this->isGranted('ROLE_DOCTOR') || $this->isGranted('ROLE_CLINIC')) {
+            array_push(
+                $accountLinks,
+                [
+                    'icon' => 'nouvelle-demande-remplacement.png',
+                    'url' => $this->generateUrl('app_user_requets_replacement'),
+                    'text' => 'Effectuer une nouvelle demande de remplacement',
+                ],
+                [
+                    'icon' => 'nouvelle-demande-remplacement.png',
+                    'url' => $this->generateUrl('app_user_requets_installation'),
+                    'text' => "Effectuer une nouvelle proposition d'installation",
+                ]
+            );
+        }
+
         return $this->render('espace-perso/index.html.twig', [
             'accountLinks' => $accountLinks,
         ]);
