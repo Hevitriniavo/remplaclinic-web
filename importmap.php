@@ -28,6 +28,14 @@ return [
         'path' => './assets/pages/signup-replacement.js',
         'entrypoint' => true,
     ],
+    'request-new' => [
+        'path' => './assets/pages/request-new.js',
+        'entrypoint' => true,
+    ],
+    'search-replacement' => [
+        'path' => './assets/pages/search-replacement.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,
@@ -43,5 +51,25 @@ return [
     ],
     'axios' => [
         'version' => '1.13.2',
+    ],
+    'vanillajs-datepicker' => [
+        'version' => '1.3.4',
+    ],
+    'vanillajs-datepicker/dist/css/datepicker-bulma.min.css' => [
+        'version' => '1.3.4',
+        'type' => 'css',
+    ],
+    'datatables.net-dt' => [
+        'version' => '2.3.6',
+    ],
+    'jquery' => [
+        'version' => '3.7.1',
+    ],
+    'datatables.net' => [
+        'version' => '2.3.6',
+    ],
+    'datatables.net-dt/css/dataTables.dataTables.min.css' => [
+        'version' => '2.3.6',
+        'type' => 'css',
     ],
 ];

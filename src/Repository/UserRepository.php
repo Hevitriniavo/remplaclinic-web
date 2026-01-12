@@ -26,7 +26,7 @@ class UserRepository extends ServiceEntityRepository
     public function findAllDataTables(?int $roleId, DataTableParams $params): DataTableResponse
     {
         $sortBy = $params->getOrderColumn(['u.id', 'u.id', 'u.status', 'u.name', 'u.email', 'u.createAt', 's.name'], 'u.id');
-        
+
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
             ->orderBy($sortBy, $params->getOrderDir())
@@ -37,7 +37,7 @@ class UserRepository extends ServiceEntityRepository
             $qb->join('u.roles', 'r', Expr\Join::WITH, 'r.id = :roleId')
                 ->setParameter('roleId', $roleId);
         }
-        
+
         if (!empty($params->value)) {
             $qb
                 ->andWhere(
@@ -50,7 +50,7 @@ class UserRepository extends ServiceEntityRepository
                 )
                 ->setParameter('value', '%' . $params->value . '%');
         }
-        
+
         $paginator = new Paginator($qb->getQuery());
 
         return DataTableResponse::fromPaginator($paginator, $params->draw + 1);
@@ -64,7 +64,7 @@ class UserRepository extends ServiceEntityRepository
             ->leftJoin('u.speciality', 's')
             ->leftJoin('u.mobilities', 'm')
             ->andWhere('u.status = 1');
-        
+
         if (!is_null($params)) {
             $sortBy = $params->getOrderColumn(['u.id', 'u.name', 'u.surname', 's.name', 'm.name'], 'u.id');
             $searchParam = $params->value;
@@ -79,7 +79,7 @@ class UserRepository extends ServiceEntityRepository
                 ->andWhere('r.id = :roleId')
                 ->setParameter('roleId', $roleId);
         }
-        
+
         if (!empty($searchParam)) {
             $qb
                 ->andWhere(
@@ -95,11 +95,11 @@ class UserRepository extends ServiceEntityRepository
         }
 
         $this->addQueryParameters($qb, $queryParams);
-        
+
         $paginator = new Paginator($qb->getQuery());
 
         $result = [];
-        foreach($paginator as $row) {
+        foreach ($paginator as $row) {
             $resultRow = [
                 'id' => $row->getId(),
                 'name' => $row->getName(),
@@ -112,7 +112,7 @@ class UserRepository extends ServiceEntityRepository
             ];
 
             if ($row->getMobilities()) {
-                foreach($row->getMobilities() as $region) {
+                foreach ($row->getMobilities() as $region) {
                     $resultRow['mobilities'][] = [
                         'id' => $region->getId(),
                         'name' => $region->getName(),
@@ -141,7 +141,7 @@ class UserRepository extends ServiceEntityRepository
                 ->andWhere('r.id = :roleId')
                 ->setParameter('roleId', $roleId);
         }
-        
+
         $searchValue = empty($params['search']) ? '' : $params['search'];
         if (!empty($searchValue)) {
             $qb
@@ -158,11 +158,12 @@ class UserRepository extends ServiceEntityRepository
         }
 
         $this->addQueryParameters($qb, $params);
-        
+
         return $qb->getQuery()->getSingleColumnResult();
     }
 
-    private function addQueryParameters(QueryBuilder $qb, array $params) {
+    private function addQueryParameters(QueryBuilder $qb, array $params)
+    {
         // @TODO: by postal_code?
         $speciality = empty($params['speciality']) ? '' : $params['speciality'];
         $mobility = empty($params['mobility']) ? '' : $params['mobility'];
@@ -192,7 +193,7 @@ class UserRepository extends ServiceEntityRepository
             // region europe: '504' => all => no criteria
             if ($mobility !== 504) {
                 $expr->add('m.id = :mobility_id');
-    
+
                 $qb
                     ->setParameter('mobility_id', $mobility);
             }
@@ -205,7 +206,7 @@ class UserRepository extends ServiceEntityRepository
                 ->leftJoin('subU.subSpecialities', 'sub')
                 ->andWhere('sub.id = :sub_speciality_id')
                 ->getDQL();
-            
+
             $expr->add('u.id IN (' . $sousSpecialityQb . ')');
 
             $qb
@@ -220,7 +221,7 @@ class UserRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('a')
             ->join('a.roles', 'r', Join::ON, 'r.id = :role_id')
             ->setParameter('role_id', $roleId);
-        
+
         return $qb->select('a')
             ->getQuery()
             ->getResult();
@@ -228,15 +229,65 @@ class UserRepository extends ServiceEntityRepository
 
     public function countAllByRole(?int $roleId): int
     {
-        $qb = $this->_createNativeQuerySearch($roleId);
+        $qb = $this->_createNativeQuerySearch([
+            'role_id' => $roleId,
+        ]);
 
         $result = $qb
-            ->select('COUNT(u.id) AS total')
+            ->select('COUNT(DISTINCT u.id) AS total')
             ->executeQuery()
-            ->fetchNumeric()
-        ;
+            ->fetchOne();
 
-        return  $result[0];
+        return  $result;
+    }
+
+    public function findAllByParams(array $params = []): array
+    {
+        $offset = empty($params['offset']) ? 0 : (int) $params['offset'];
+        $limit = empty($params['limit']) ? 20 : (int) $params['limit'];
+
+        $result = [
+            'data' => [],
+            'totalRecords' => 0
+        ];
+
+        $countQueryBuilder = $this->_createNativeQuerySearch($params);
+        $listQueryBuilder = $this->_createNativeQuerySearch($params);
+
+
+        $result['totalRecords'] = $countQueryBuilder
+            ->select('COUNT(DISTINCT u.id) AS total')
+            ->executeQuery()
+            ->fetchOne();
+
+        $queryResult = $listQueryBuilder
+            ->leftJoin('u', 'user_speciality', 'us', 'us.user_id = u.id')
+            ->leftJoin('us', 'speciality', 'sp', 'us.speciality_id = sp.id')
+            ->select("CONCAT(u.surname, ' ', u.name) as prenom, u.current_speciality as statut, GROUP_CONCAT(DISTINCT sp.name) as sous_specialite")
+            ->groupBy('u.id', 'u.name', 'u.surname')
+            ->orderBy('u.id', 'desc')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->executeQuery();
+
+        $allCurrentSpeciality = User::allCurrentSpecialities();
+
+        while (($row = $queryResult->fetchAssociative()) !== false) {
+
+            if (array_key_exists($row['statut'], $allCurrentSpeciality)) {
+                $row['statut_name'] = $allCurrentSpeciality[$row['statut']];
+            } else {
+                $row['statut_name'] = '';
+            }
+
+            if (empty($row['sous_specialite'])) {
+                $row['sous_specialite'] = '-';
+            }
+
+            $result['data'][] = $row;
+        }
+
+        return  $result;
     }
 
     /**
@@ -256,26 +307,44 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    private function _createNativeQuerySearch(?int $role = User::ROLE_REPLACEMENT_ID, ?int $regionId = null, ?int $specialityId = null): NativeQueryBuilder
+    private function _createNativeQuerySearch(array $params = [], bool $joinSpeciality = false, bool $joinRegion = false): NativeQueryBuilder
     {
         $qb = $this->getEntityManager()->getConnection()
             ->createQueryBuilder()
             ->from('user', 'u')
-            ->join('u', 'user_user_role', 'r', 'u.id = r.user_id AND r.user_role_id = :role_id')
-            ->where('u.status = 1')
-            ->setParameter('role_id', $role);
-        
-        if (!is_null($specialityId)) {
+            ->where('u.status = 1');
+
+        if (array_key_exists('role_id', $params)) {
+            $qb->join('u', 'user_user_role', 'r', 'u.id = r.user_id AND r.user_role_id = :role_id')
+                ->setParameter('role_id', $params['role_id']);
+        }
+
+        if (!empty($params['speciality_id'])) {
             $qb
-                ->where('u.speciality_id = :speciality_id')
-                ->setParameter('speciality_id', $specialityId)
+                ->andWhere('u.speciality_id = :speciality_id')
+                ->setParameter('speciality_id', $params['speciality_id']);;
+        }
+
+        if (!empty($params['region_id'])) {
+            $qb
+                ->join('u', 'user_region', 'ur', 'ur.user_id = u.id AND ur.region_id = :region_id')
+                ->setParameter('region_id', $params['region_id'])
+            ;
+        } else if (!empty($params['search'])) {
+            $qb
+                ->join('u', 'user_region', 'ur', 'ur.user_id = u.id')
+                ->join('ur', 'region', 'r', 'ur.region_id = r.id')
             ;
         }
 
-        if (!is_null($regionId)) {
+        if (!empty($params['search'])) {
             $qb
-                ->join('u', 'user_region', 'ur', 'ur.user_id = u.id AND u.region_id = :region_id')
-                ->setParameter('region_id', $regionId)
+                ->join('u', 'speciality', 's', 's.id = u.speciality_id')
+                ->andWhere($qb->expr()->or(
+                    's.name LIKE :search',
+                    'r.name LIKE :search'
+                ))
+                ->setParameter('search', '%' . $params['search'] . '%')
             ;
         }
 

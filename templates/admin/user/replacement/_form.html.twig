@@ -283,12 +283,11 @@
                                                                 <label for="replacement-current-speciality">Statut
                                                                     actuel *
                                                                 </label>
-                                                                <twig:SelectSpeciality id="replacement-current-speciality"
+                                                                <twig:SelectCurrentSpeciality id="replacement-current-speciality"
                                                                     class="form-control"
-                                                                    v-model="userData.currentSpeciality"
-                                                                    :class="getErrorClass('currentSpeciality')">
-                                                                    <option>- Choisir un valeur -</option>
-                                                                </twig:SelectSpeciality>
+                                                                    v-model="userData.currentSpeciality">
+                                                                    <option :value="null">- Choisir un valeur -</option>
+                                                                </twig:SelectCurrentSpeciality>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="replacement-speciality">Spécialité

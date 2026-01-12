@@ -19,6 +19,13 @@ class User
     const ROLE_DIRECTOR_ID = 7;
     const ROLE_ADMIN_ID = 3;
 
+    const CURRENT_SPECIALITY_ASSISTANT = 33;
+    const CURRENT_SPECIALITY_CHIEF_CLINIC = 31;
+    const CURRENT_SPECIALITY_INETRNSHIP = 34;
+    const CURRENT_SPECIALITY_REPLACEMENT = 494;
+    const CURRENT_SPECIALITY_PRACTITIONNER = 32;
+    const CURRENT_SPECIALITY_OTHER = 35;
+
     #[Groups(['datatable', 'user:simple'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -719,5 +726,17 @@ class User
             'Mademoiselle',
             'Madame',
         ]);
+    }
+
+    public static function allCurrentSpecialities(): array
+    {
+        return [
+            self::CURRENT_SPECIALITY_ASSISTANT => 'Assistant',
+            self::CURRENT_SPECIALITY_CHIEF_CLINIC => 'Chef de clinique',
+            self::CURRENT_SPECIALITY_INETRNSHIP => 'Interne',
+            self::CURRENT_SPECIALITY_REPLACEMENT => 'Médecin remplaçant',
+            self::CURRENT_SPECIALITY_PRACTITIONNER => 'Praticien hospitalier',
+            self::CURRENT_SPECIALITY_OTHER => 'Autre',
+        ];
     }
 }

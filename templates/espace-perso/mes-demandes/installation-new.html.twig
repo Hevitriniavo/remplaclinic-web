@@ -1,0 +1,123 @@
+{% extends 'base-page-register.html.twig' %}
+
+{% block title %}
+	Nouvelle proposition d'installation | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+	{{ importmap('request-new') }}
+{% endblock %}
+
+{% block page_nav %}
+	<h1 class="blue-span text-3xl py-[10px]">Nouvelle proposition d'installation</h1>
+{% endblock %}
+
+{% block article_content %}
+	<div class="pt-7">
+		<div class="flex flex-col gap-2">
+			<form action="" method="post" id="form-request" enctype="application/json">
+				<div class="w-[870px] flex flex-col p-3 gap-4 border">
+					<h2 class="text-2xl inscription-fieldset-legend">
+						<b>Informations sur la proposition d'installation</b>
+					</h2>
+					<div class="flex flex-col gap-4 justify-start items-start">
+						<div class="flex flex-row gap-2">
+							<label for="request-specialite" class="w-[220px] text-right">
+								Spécialité
+								<span class="required">*</span>
+							</label>
+							<twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true" class="w-[240px] p-1 outline-none form-text form-request-element" data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}">
+								<option value="">- Choisir un valeur -</option>
+							</twig:SelectSpeciality>
+						</div>
+
+						<div class="flex flex-row gap-2">
+							<label for="request-region" class="w-[220px] text-right">
+								Région
+								<span class="required">*</span>
+							</label>
+							<twig:SelectRegion id="request-region" name="region" data-required="true" class="w-[240px] p-1 outline-none form-text form-request-element">
+								<option value="">- Choisir un valeur -</option>
+							</twig:SelectRegion>
+						</div>
+
+						<div class="flex flex-row gap-2">
+							<label for="request-raison-0" class="w-[220px] text-right">
+								Raison
+                                <span class="required">*</span>
+							</label>
+							<div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-0" name="raison[]" value="0">
+                                    <label class="option" for="request-raison-0">Recrutement afin de compléter l'équipe actuelle</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-1" name="raison[]" value="1">
+                                    <label class="option" for="request-raison-1">Création de poste</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-2" name="raison[]" value="2">
+                                    <label class="option" for="request-raison-2">Création de cabinet ou proposition d'association</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-3" name="raison[]" value="3">
+                                    <label class="option" for="request-raison-3">Cession de patientèle ou de fonds de commerce</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-4" name="raison[]" value="4">
+                                    <label class="option" for="request-raison-4">Cession de parts d'une société (SCM, SELARL, etc)</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-5" name="raison[]" value="5">
+                                    <label class="option" for="request-raison-5">Départ en retraite</label>
+                                </div>
+                                <div class="my-2">
+                                    <input type="checkbox" id="request-raison-6" name="raison[]" value="6">
+                                    <label class="option" for="request-raison-6">Autre</label>
+                                </div>
+                                <div class="my-2 hidden" id="request-raison-value-wrapper">
+                                    <input type="text" id="request-raison-value" name="raisonValue" value="" class="form-text p-1 outline-none w-[240px]" placeholder="Veuillez renseigner une raison">
+                                </div>
+							</div>
+						</div>
+
+                        <div class="flex flex-row gap-2">
+							<label for="request-remuneration" class="w-[220px] text-right">
+								Salaire (en &euro;) ou Chiffre d'affaires potentiel
+							</label>
+                            <div>
+                                <input type="text" id="request-remuneration" name="remuneration" class="w-[240px] form-text p-1 outline-none form-request-element" data-required="true">
+                            </div>
+						</div>
+
+						<div class="flex flex-row gap-2">
+							<label for="request-commentaire" class="w-[220px] text-right">
+								Commentaire
+							</label>
+							<textarea id="request-commentaire" name="commentaire" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
+						</div>
+
+						<div class="flex flex-row gap-2">
+							<label for="request-date-debut" class="w-[220px] text-right">
+								Date de début inclus
+								<span class="required">*</span>
+							</label>
+							<div>
+								<input type="text" id="request-date-debut" name="startedAt" class="w-[240px] form-text p-1 outline-none form-request-element rempla-datepicker" data-required="true">
+								<div>Ex:
+									{{ date()|date('d/m/Y') }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="w-[870px] flex items-center justify-center p-4 bg-blue border mt-2">
+					<button type="submit" class="relative text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10 form-signup-btn-submit">
+						<span class="btn-spinner hidden absolute top-3 left-3 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+						<span>Valider</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

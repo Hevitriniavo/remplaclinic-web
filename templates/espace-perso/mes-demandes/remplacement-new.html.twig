@@ -1,0 +1,192 @@
+{% extends 'base-page-register.html.twig' %}
+
+{% block title %}
+Nouvelle demande de remplacement | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+{{ importmap('request-new') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Nouvelle demande de remplacement</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-2">
+        <form action="" method="post" id="form-request" enctype="application/json">
+            <div class="w-[870px] flex flex-col p-3 gap-4 border">
+                <h2 class="text-2xl inscription-fieldset-legend">
+                    <b>Informations sur la demande</b>
+                </h2>
+                <div class="flex flex-col gap-4 justify-start items-start">
+                    <div class="flex flex-row gap-2">
+                        <label for="request-specialite" class="w-[220px] text-right">
+                            Spécialité
+                            <span class="required">*</span>
+                        </label>
+                        <twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true"
+                            class="w-[240px] p-1 outline-none form-text form-request-element"
+                            data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}">
+                            <option value="">- Choisir un valeur -</option>
+                        </twig:SelectSpeciality>
+                    </div>
+
+                    <div class="flex-row gap-2 hidden" id="request-sous-specialite-wrapper">
+                        <label class="w-[220px] text-right">
+                            Sous spécialité
+                        </label>
+                        <div class="flex-1 flex flex-row flex-wrap gap-2" id="request-sous-specialite-options-liste">
+                            {% if sousSpecialites is defined %}
+                            {% for sp in sousSpecialites %}
+                            <div class="w-[49%]">
+                                <input type="checkbox" id="request-sous-specialite-{{ sp.id }}" name="subSpecialities[]"
+                                    value="{{ sp.id }}" class="form-request-element">
+                                <label for="request-sous-specialite-{{ sp.id }}">{{ sp.name }}</label>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-region" class="w-[220px] text-right">
+                            Région
+                            <span class="required">*</span>
+                        </label>
+                        <twig:SelectRegion id="request-region" name="region" data-required="true"
+                            class="w-[240px] p-1 outline-none form-text form-request-element">
+                            <option value="">- Choisir un valeur -</option>
+                        </twig:SelectRegion>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-nb-poste" class="w-[220px] text-right">
+                            Nombre de postes
+                            <span class="required">*</span>
+                        </label>
+                        <select id="request-nb-poste" name="positionCount" data-required="true"
+                            class="w-[240px] p-1 outline-none form-text form-request-element">
+                            <option value="">- Choisir un valeur -</option>
+                            {% for n in range(1, 10) %}
+                            <option value="{{ n }}">{{ n }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-logement-1" class="w-[220px] text-right">
+                            Logement inclus possible
+                        </label>
+                        <div class="w-[240px]">
+                            <div class="my-1">
+                                <input type="radio" id="request-logement-1" name="logement" value="1">
+                                <label class="outline-none" for="request-logement-1">Oui</label>
+                            </div>
+                            <div class="my-1">
+                                <input type="radio" id="request-logement-0" name="logement" value="0">
+                                <label class="outline-none" for="request-logement-0">Non</label>
+                            </div>
+                            <div class="my-1">
+                                <input type="radio" id="request-logement-2" name="logement" value="2">
+                                <label class="outline-none" for="request-logement-2">À débattre</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-row gap-2">
+                        <label for="request-remboursement-1" class="w-[220px] text-right">
+                            Remboursement frais de transport
+                        </label>
+                        <div class="w-[240px]">
+                            <div class="my-1">
+                                <input type="radio" id="request-remboursement-1" name="remboursement" value="1">
+                                <label class="outline-none" for="request-remboursement-1">Oui</label>
+                            </div>
+                            <div class="my-1">
+                                <input type="radio" id="request-remboursement-0" name="remboursement" value="0">
+                                <label class="outline-none" for="request-remboursement-0">Non</label>
+                            </div>
+                            <div class="my-1">
+                                <input type="radio" id="request-remboursement-2" name="remboursement" value="2">
+                                <label class="outline-none" for="request-remboursement-2">À débattre</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-remuneration" class="w-[220px] text-right">
+                            Rémunération indicative
+                        </label>
+                        <div>
+                            <input type="text" id="request-remuneration" name="remuneration" value="" size="60" maxlength="128" class="w-[240px] form-text p-1 outline-none form-request-element">
+                            <span class="input-suffix">&euro; par jour</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-retrocession" class="w-[220px] text-right">
+                            Ou Rétrocession indicative
+                        </label>
+                        <div>
+                            <input type="text" id="request-retrocession" name="retrocession" value="" size="60" maxlength="128" class="w-[240px] form-text p-1 outline-none form-request-element">
+                            <span class="input-suffix">%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-type-remplacement-1" class="w-[220px] text-right">
+                            Type de remplacement
+                        </label>
+                        <div class="w-[240px]">
+                            <div class="my-1">
+                                <input type="radio" id="request-type-remplacement-0" name="replacementType" value="0">
+                                <label class="outline-none" for="request-type-remplacement-0">Ponctuel</label>
+                            </div>
+                            <div class="my-1">
+                                <input type="radio" id="request-type-remplacement-1" name="replacementType" value="1">
+                                <label class="outline-none" for="request-type-remplacement-1">Régulier</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-commentaire" class="w-[220px] text-right">
+                            Commentaire
+                        </label>
+                        <textarea id="request-commentaire" name="commentaire" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-date-debut" class="w-[220px] text-right">
+                            Date de début inclus
+                            <span class="required">*</span>
+                        </label>
+                        <div>
+                            <input type="text" id="request-date-debut" name="startedAt" class="w-[240px] form-text p-1 outline-none form-request-element rempla-datepicker" data-required="true" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-2">
+                        <label for="request-date-fin" class="w-[220px] text-right">
+                            Date de fin inclus
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" id="request-date-fin" name="endAt" class="w-[240px] form-text p-1 outline-none form-request-element rempla-datepicker" data-required="true" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-[870px] flex items-center justify-center p-4 bg-blue border mt-2">
+                <button type="submit"
+                    class="relative text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10 form-signup-btn-submit">
+                    <span
+                        class="btn-spinner hidden absolute top-3 left-3 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span>Valider</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

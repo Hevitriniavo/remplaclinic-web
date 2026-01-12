@@ -45,12 +45,12 @@ class MonCompteController extends AbstractController
                 $accountLinks,
                 [
                     'icon' => 'nouvelle-demande-remplacement.png',
-                    'url' => $this->generateUrl('app_user_requets_replacement'),
+                    'url' => $this->generateUrl('app_user_requets_replacement_new'),
                     'text' => 'Effectuer une nouvelle demande de remplacement',
                 ],
                 [
                     'icon' => 'nouvelle-demande-remplacement.png',
-                    'url' => $this->generateUrl('app_user_requets_installation'),
+                    'url' => $this->generateUrl('app_user_requets_installation_new'),
                     'text' => "Effectuer une nouvelle proposition d'installation",
                 ]
             );
@@ -88,6 +88,24 @@ class MonCompteController extends AbstractController
         }
 
         return $this->render('register/' . $viewName . '.html.twig', $viewData);
+    }
+
+    #[Route(
+        '/mon-compte/mes-demandes-de-remplacements/new',
+        name: 'app_user_requets_replacement_new'
+    )]
+    public function newMesDemandesRemplacements(): Response
+    {
+        return $this->render('espace-perso/mes-demandes/remplacement-new.html.twig');
+    }
+
+    #[Route(
+        '/mon-compte/mes-propositions-d-installation/new',
+        name: 'app_user_requets_installation_new'
+    )]
+    public function newMesPropositionsInstallations(): Response
+    {
+        return $this->render('espace-perso/mes-demandes/installation-new.html.twig');
     }
 
     #[Route(

@@ -1,77 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-page-node.html.twig' %}
 
-{% block title %}Rechercher des remplacants | Remplaclinic{% endblock %}
+{% block title %}
+Rechercher des remplacants | Remplaclinic
+{% endblock %}
 
-{% block body %}
-    <div class="flex flex-col justify-between items-start p-12 gap-4">
+{% block importmap %}
+{{ importmap('search-replacement') }}
+{% endblock %}
 
-        <h1 class="p-[10px] font-normal text-[#5bb7df] text-[30px] mb-4">
-            Rechercher des remplaçants
-        </h1>
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Rechercher des remplacants</h1>
+{% endblock %}
 
-        <div class="flex flex-row gap-6">
-            <article class="flex flex-col items-start p-4 pb-6 gap-4">
-                <div>
-                    <p class="text-[22px] text-[#2d8eb8] font-normal">
-                        {{ 1026 }} remplaçant(s) correspondent à vos critères de recherche
-                    </p>
-                    <p class="text-sm text-gray-600">
-                        Une fois votre inscription complétée, vous aurez la possibilité de contacter ces remplaçants et d'envoyer automatiquement des demandes de remplacements et/ou d'installation.
-                    </p>
-                   <p class=" text-[24px] p-[30px] mx-auto text-center">
-                        <a href="#" class="blue-span font-medium">
-                            Inscrivez-vous pour contacter des remplaçants
-                        </a>
-                   </p>
-                </div>
+{% block article_content %}
+<div class="mt-10">
+	<p class="text-[22px] text-[#2d8eb8] font-normal">
+		{{ result.totalRecords }}
+		remplaçant(s) correspondent à vos critères de recherche
+	</p>
+	<p class="text-sm text-gray-600">
+		Une fois votre inscription complétée, vous aurez la possibilité de contacter ces remplaçants et d'envoyer
+		automatiquement des demandes de remplacements et/ou d'installation.
+	</p>
+	<p class=" text-[24px] p-[30px] mx-auto text-center">
+		<a href="{{ path('app_register') }}" class="blue-span font-medium">
+			Inscrivez-vous pour contacter des remplaçants
+		</a>
+	</p>
+</div>
 
-                <div class="overflow-x-auto w-full">
-                    <table class="min-w-full border border-gray-200 text-sm">
-                        <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
-                            <tr>
-                                <th scope="col" class="px-4 py-2 text-left font-semibold">
-                                    Prénom
-                                </th>
-                                <th scope="col" class="px-4 py-2 text-left font-semibold">
-                                    Statut
-                                </th>
-                                <th scope="col" class="px-4 py-2 text-left font-semibold">
-                                    Sous-spécialités
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="border-b">
-                            <td class="px-4 py-2">Melania Ionela</td>
-                            <td class="px-4 py-2">Autre</td>
-                            <td class="px-4 py-2">-</td>
-                        </tr>
-                        <tr class="bg-gray-50 border-b">
-                            <td class="px-4 py-2">HAFIZA</td>
-                            <td class="px-4 py-2">Autre</td>
-                            <td class="px-4 py-2">-</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="px-4 py-2">Isabelle</td>
-                            <td class="px-4 py-2">Médecin remplaçant</td>
-                            <td class="px-4 py-2">-</td>
-                        </tr>
-                        <tr class="bg-gray-50 border-b">
-                            <td class="px-4 py-2">Laurine</td>
-                            <td class="px-4 py-2">Médecin remplaçant</td>
-                            <td class="px-4 py-2">-</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-2">Aurélie</td>
-                            <td class="px-4 py-2">Médecin remplaçant</td>
-                            <td class="px-4 py-2">-</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </article>
-
-            {{ render(controller('App\\Controller\\PartialController::index')) }}
-        </div>
-    </div>
+<div class="overflow-x-auto w-full flex flex-col gap-4">
+	<div class="flex flex-row justify-start">
+		<div>
+			<input type="search" name="search" placeholder="Region ou spécialité..."
+				class="outline-none border-solid border-[1px] border-[#eaeaea] p-2">
+		</div>
+	</div>
+	<table id="tbl-search-replacements" class="w-full border border-gray-200 text-sm display">
+		<thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+			<tr>
+				<th scope="col" class="px-4 py-2 text-left font-semibold">
+					Prénom
+				</th>
+				<th scope="col" class="px-4 py-2 text-left font-semibold">
+					Statut
+				</th>
+				<th scope="col" class="px-4 py-2 text-left font-semibold">
+					Sous-spécialités
+				</th>
+			</tr>
+		</thead>
+		<tbody class="min-w-full">
+			{% for row in result.data %}
+			<tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+				<td class="px-4 py-2">{{ row.prenom }}</td>
+				<td class="px-4 py-2">{{ row.statut_name }}</td>
+				<td class="px-4 py-2 max-w-[60%]">{{ row.sous_specialite }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{{ pagination_view(result.totalRecords, params) }}
+</div>
 {% endblock %}
