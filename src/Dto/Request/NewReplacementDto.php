@@ -24,13 +24,13 @@ class NewReplacementDto
         public ?int $positionCount,
 
         #[Assert\NotNull(groups: ['create'])]
-        #[Assert\GreaterThanOrEqual(value: 1, groups: ['create'])]
-        #[Assert\LessThanOrEqual(value: 3, groups: ['create'])]
+        #[Assert\GreaterThanOrEqual(value: 0, groups: ['create'])]
+        #[Assert\LessThanOrEqual(value: 2, groups: ['create'])]
         public ?int $accomodationIncluded,
 
         #[Assert\NotNull(groups: ['create'])]
-        #[Assert\GreaterThanOrEqual(value: 1, groups: ['create'])]
-        #[Assert\LessThanOrEqual(value: 3, groups: ['create'])]
+        #[Assert\GreaterThanOrEqual(value: 0, groups: ['create'])]
+        #[Assert\LessThanOrEqual(value: 2, groups: ['create'])]
         public ?int $transportCostRefunded,
 
         public ?string $remuneration,
@@ -44,6 +44,8 @@ class NewReplacementDto
         public ?string $startedAt,
 
         public ?string $endAt,
+
+        public ?array $subSpecialities,
     ) {
     }
 }

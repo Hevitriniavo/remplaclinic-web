@@ -10,15 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPageCommon()
 
     const form = new RemplaFormValidation('form-request', { debug: true, ajax: true })
-    // form.addValidator('passwordConfirmation', (data) => data.passwordConfirmation === data.password)
-    // form.addValidator('cguAccepted', (data) => {
-    //     const isChecked = data.cguAccepted === '1'
-    //     if (!isChecked) {
-    //         showToast("Vous devriez accepter les conditions générales d'utilisation et s'engager à les respecter.", 'warning')
-    //     }
-
-    //     return isChecked
-    // })
 
     form.setSubmitSuccessHandler(({ _redirect }) => {
         window.location.href = _redirect
@@ -87,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     datepickerElems.forEach((elem) => {
         new Datepicker(elem, {
             format: 'dd/mm/yyyy',
+            minDate: new Date().getTime(),
             autohide: true,
             todayHighlight: true,
         })

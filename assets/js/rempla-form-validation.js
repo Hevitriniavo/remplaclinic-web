@@ -32,6 +32,10 @@ export default class RemplaFormValidation {
         this.submitErrorHandler = cb
     }
 
+    setAjaxHandler(cb) {
+        this.ajaxHandler = cb
+    }
+
     getFormElements() {
         const elements = this.form.querySelectorAll('.' + this.formSelector + '-element')
         return elements.length > 0 ? elements : []
@@ -83,34 +87,56 @@ export default class RemplaFormValidation {
         let data = {}
 
         elements.forEach(inputEl => {
+            let inputData = null
+            let ignore = false
             // checkbox
             if (inputEl.type === 'checkbox') {
                 const checked = inputEl.checked
                 const checkedValue = inputEl.dataset.checkedValue
                 const uncheckedValue = inputEl.dataset.uncheckedValue
 
-                let value = checked
+                let value = false
 
-                if (checked && checkedValue) {
-                    value = checkedValue
-                }
-                if (!checked && uncheckedValue) {
-                    value = uncheckedValue
+                if (checked) {
+                    value = checkedValue ? checkedValue : inputEl.value
+                } else {
+                    value = uncheckedValue ? uncheckedValue : false
+
+                    // pour un checkbox multiple or choices, on ignore
+                    ignore = inputEl.name.indexOf('[]') > 0
                 }
 
-                data[inputEl.name] = value
+                inputData = value
             } else if (inputEl.type === 'number') {
                 let val = inputEl.value
                 if (typeof val === 'string') {
                     val = val.trim()
                 }
-                data[inputEl.name] = Number(val)
+                inputData = Number(val)
             } else {
                 let val = inputEl.value
                 if (typeof val === 'string') {
                     val = val.trim()
                 }
-                data[inputEl.name] = val
+                inputData = val
+            }
+
+            if (!ignore) {
+                let inputKey = inputEl.name
+                const indexKeyArray = inputKey.indexOf('[]')
+                if (indexKeyArray > 0) {
+                    inputKey = inputKey.substring(0, indexKeyArray)
+                }
+
+                if (Object.hasOwn(data, inputKey)) {
+                    if (Array.isArray(data[inputKey])) {
+                        data[inputKey].push(inputData)
+                    } else {
+                        data[inputKey] = [data[inputKey], inputData]
+                    }
+                } else {
+                    data[inputKey] = inputData
+                }
             }
         })
 
@@ -165,19 +191,25 @@ export default class RemplaFormValidation {
 
             if (isValid) {
                 if (that.ajax) {
-                    that.submitAjax()
-                        .then((res) => {
-                            if (that.submitSuccessHandler) {
-                                that.submitSuccessHandler(res.data, res)
-                            }
-                        }).catch((err) => {
-                            if (that.submitErrorHandler) {
-                                that.submitErrorHandler(err)
-                            }
-                        }).finally(() => {
-                            that.updateBtnSubmitStatus(false)
-                        })
+                    if (that.ajaxHandler) {
+                        that.updateBtnSubmitStatus(false)
+                        that.ajaxHandler(that.form, data)
+                    } else {
+                        that.submitAjax()
+                            .then((res) => {
+                                if (that.submitSuccessHandler) {
+                                    that.submitSuccessHandler(res.data, res)
+                                }
+                            }).catch((err) => {
+                                if (that.submitErrorHandler) {
+                                    that.submitErrorHandler(err)
+                                }
+                            }).finally(() => {
+                                that.updateBtnSubmitStatus(false)
+                            })
+                    }
                 } else {
+                    that.updateBtnSubmitStatus(false)
                     that.submit()
                 }
             } else {

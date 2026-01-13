@@ -15,7 +15,8 @@
 {% block article_content %}
 	<div class="pt-7">
 		<div class="flex flex-col gap-2">
-			<form action="" method="post" id="form-request" enctype="application/json">
+			<form action="{{ path('api_request_installation_new') }}" method="post" id="form-request" enctype="application/json">
+				<input type="hidden" name="applicant" value="{{ app.user.user.id }}">
 				<div class="w-[870px] flex flex-col p-3 gap-4 border">
 					<h2 class="text-2xl inscription-fieldset-legend">
 						<b>Informations sur la proposition d'installation</b>
@@ -26,7 +27,7 @@
 								Spécialité
 								<span class="required">*</span>
 							</label>
-							<twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true" class="w-[240px] p-1 outline-none form-text form-request-element" data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}">
+							<twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true" class="w-[240px] p-1 outline-none form-text form-request-element">
 								<option value="">- Choisir un valeur -</option>
 							</twig:SelectSpeciality>
 						</div>
@@ -48,31 +49,31 @@
 							</label>
 							<div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-0" name="raison[]" value="0">
+                                    <input type="checkbox" id="request-raison-0" name="raison[]" value="Recrutement afin de compléter l'équipe actuelle">
                                     <label class="option" for="request-raison-0">Recrutement afin de compléter l'équipe actuelle</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-1" name="raison[]" value="1">
+                                    <input type="checkbox" id="request-raison-1" name="raison[]" value="Création de poste">
                                     <label class="option" for="request-raison-1">Création de poste</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-2" name="raison[]" value="2">
+                                    <input type="checkbox" id="request-raison-2" name="raison[]" value="Création de cabinet ou proposition d'association">
                                     <label class="option" for="request-raison-2">Création de cabinet ou proposition d'association</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-3" name="raison[]" value="3">
+                                    <input type="checkbox" id="request-raison-3" name="raison[]" value="Cession de patientèle ou de fonds de commerce">
                                     <label class="option" for="request-raison-3">Cession de patientèle ou de fonds de commerce</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-4" name="raison[]" value="4">
+                                    <input type="checkbox" id="request-raison-4" name="raison[]" value="Cession de parts d'une société (SCM, SELARL, etc)">
                                     <label class="option" for="request-raison-4">Cession de parts d'une société (SCM, SELARL, etc)</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-5" name="raison[]" value="5">
+                                    <input type="checkbox" id="request-raison-5" name="raison[]" value="Départ en retraite">
                                     <label class="option" for="request-raison-5">Départ en retraite</label>
                                 </div>
                                 <div class="my-2">
-                                    <input type="checkbox" id="request-raison-6" name="raison[]" value="6">
+                                    <input type="checkbox" id="request-raison-6" name="raison[]" value="Autre">
                                     <label class="option" for="request-raison-6">Autre</label>
                                 </div>
                                 <div class="my-2 hidden" id="request-raison-value-wrapper">
@@ -94,7 +95,7 @@
 							<label for="request-commentaire" class="w-[220px] text-right">
 								Commentaire
 							</label>
-							<textarea id="request-commentaire" name="commentaire" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
+							<textarea id="request-commentaire" name="comment" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
 						</div>
 
 						<div class="flex flex-row gap-2">
@@ -103,7 +104,7 @@
 								<span class="required">*</span>
 							</label>
 							<div>
-								<input type="text" id="request-date-debut" name="startedAt" class="w-[240px] form-text p-1 outline-none form-request-element rempla-datepicker" data-required="true">
+								<input type="text" id="request-date-debut" name="startedAt" class="w-[240px] form-text p-1 outline-none form-request-element rempla-datepicker" data-required="true" autocomplete="off">
 								<div>Ex:
 									{{ date()|date('d/m/Y') }}</div>
 							</div>

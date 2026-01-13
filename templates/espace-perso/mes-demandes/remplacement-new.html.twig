@@ -15,7 +15,8 @@ Nouvelle demande de remplacement | Remplaclinic
 {% block article_content %}
 <div class="pt-7">
     <div class="flex flex-col gap-2">
-        <form action="" method="post" id="form-request" enctype="application/json">
+        <form action="{{ path('api_request_replacement_new') }}" method="post" id="form-request" enctype="application/json">
+            <input type="hidden" name="applicant" value="{{ app.user.user.id }}">
             <div class="w-[870px] flex flex-col p-3 gap-4 border">
                 <h2 class="text-2xl inscription-fieldset-legend">
                     <b>Informations sur la demande</b>
@@ -81,15 +82,15 @@ Nouvelle demande de remplacement | Remplaclinic
                         </label>
                         <div class="w-[240px]">
                             <div class="my-1">
-                                <input type="radio" id="request-logement-1" name="logement" value="1">
+                                <input type="radio" id="request-logement-1" name="accomodationIncluded" value="1">
                                 <label class="outline-none" for="request-logement-1">Oui</label>
                             </div>
                             <div class="my-1">
-                                <input type="radio" id="request-logement-0" name="logement" value="0">
+                                <input type="radio" id="request-logement-0" name="accomodationIncluded" value="0">
                                 <label class="outline-none" for="request-logement-0">Non</label>
                             </div>
                             <div class="my-1">
-                                <input type="radio" id="request-logement-2" name="logement" value="2">
+                                <input type="radio" id="request-logement-2" name="accomodationIncluded" value="2">
                                 <label class="outline-none" for="request-logement-2">À débattre</label>
                             </div>
                         </div>
@@ -101,15 +102,15 @@ Nouvelle demande de remplacement | Remplaclinic
                         </label>
                         <div class="w-[240px]">
                             <div class="my-1">
-                                <input type="radio" id="request-remboursement-1" name="remboursement" value="1">
+                                <input type="radio" id="request-remboursement-1" name="transportCostRefunded" value="1">
                                 <label class="outline-none" for="request-remboursement-1">Oui</label>
                             </div>
                             <div class="my-1">
-                                <input type="radio" id="request-remboursement-0" name="remboursement" value="0">
+                                <input type="radio" id="request-remboursement-0" name="transportCostRefunded" value="0">
                                 <label class="outline-none" for="request-remboursement-0">Non</label>
                             </div>
                             <div class="my-1">
-                                <input type="radio" id="request-remboursement-2" name="remboursement" value="2">
+                                <input type="radio" id="request-remboursement-2" name="transportCostRefunded" value="2">
                                 <label class="outline-none" for="request-remboursement-2">À débattre</label>
                             </div>
                         </div>
@@ -141,11 +142,11 @@ Nouvelle demande de remplacement | Remplaclinic
                         </label>
                         <div class="w-[240px]">
                             <div class="my-1">
-                                <input type="radio" id="request-type-remplacement-0" name="replacementType" value="0">
+                                <input type="radio" id="request-type-remplacement-0" name="replacementType" value="ponctual">
                                 <label class="outline-none" for="request-type-remplacement-0">Ponctuel</label>
                             </div>
                             <div class="my-1">
-                                <input type="radio" id="request-type-remplacement-1" name="replacementType" value="1">
+                                <input type="radio" id="request-type-remplacement-1" name="replacementType" value="regular">
                                 <label class="outline-none" for="request-type-remplacement-1">Régulier</label>
                             </div>
                         </div>
@@ -155,7 +156,7 @@ Nouvelle demande de remplacement | Remplaclinic
                         <label for="request-commentaire" class="w-[220px] text-right">
                             Commentaire
                         </label>
-                        <textarea id="request-commentaire" name="commentaire" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
+                        <textarea id="request-commentaire" name="comment" cols="60" rows="6" class="w-[400px] form-text p-1 outline-none form-request-element"></textarea>
                     </div>
 
                     <div class="flex flex-row gap-2">

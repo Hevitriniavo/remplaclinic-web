@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\Trait\RequestCheckAccessTrait;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\Request\EditRequestDto;
 use App\Dto\Request\NewInstallationDto;
@@ -11,6 +12,7 @@ use App\Entity\RequestType;
 use App\Repository\RequestRepository;
 use App\Service\Request\RequestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -20,8 +22,11 @@ class RequestController extends AbstractController
 {
     const JSON_LIST_GROUPS = ['request:datatable', 'user:simple', 'speciality:simple'];
 
+    use RequestCheckAccessTrait;
+
     public function __construct(
-        private RequestRepository $requestRepository,
+        private readonly RequestRepository $requestRepository,
+        private readonly Security $security,
     ) {}
 
     #[Route('/api/request-replacements', name: 'api_request_replacement_get', methods: ['GET'])]
@@ -45,7 +50,18 @@ class RequestController extends AbstractController
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] NewReplacementDto $replacementDto
     ): Response {
-        return $this->json($requestService->createReplacement($replacementDto), Response::HTTP_CREATED, [], ['groups' =>  self::JSON_LIST_GROUPS]);
+        if (!$this->canCreateOrUpdateUser($this->security, $replacementDto->applicant)) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
+        $request = $requestService->createReplacement($replacementDto);
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($request, Response::HTTP_CREATED, [], ['groups' =>  self::JSON_LIST_GROUPS]);
+        }
+
+        // redirect to my request
+        return $this->json([ '_redirect' => $this->generateUrl('app_user_requets_replacement') ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/request-installations', name: 'api_request_installation_new', methods: ['POST'])]
@@ -55,7 +71,21 @@ class RequestController extends AbstractController
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] NewInstallationDto $installationDto
     ): Response {
-        return $this->json($requestService->createInstallation($installationDto), Response::HTTP_CREATED, [], ['groups' =>  self::JSON_LIST_GROUPS]);
+        if (!$this->canCreateOrUpdateUser($this->security, $installationDto->applicant)) {
+            
+            // @TODO: check user abonnement here
+
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
+        $request = $requestService->createInstallation($installationDto);
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($request, Response::HTTP_CREATED, [], ['groups' =>  self::JSON_LIST_GROUPS]);
+        }
+
+        // redirect to my request
+        return $this->json([ '_redirect' => $this->generateUrl('app_user_requets_installation') ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/requests/{id}', name: 'api_request_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
