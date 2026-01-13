@@ -33,7 +33,7 @@ Rechercher des remplacants | Remplaclinic
 	<div class="flex flex-row justify-start">
 		<div>
 			<input type="search" name="search" placeholder="Region ou spécialité..."
-				class="outline-none border-solid border-[1px] border-[#eaeaea] p-2">
+				class="outline-none border-solid border-[1px] border-[#eaeaea] p-2" id="tbl-search-replacements-search"  value="{{ params.search is defined ? params.search : '' }}">
 		</div>
 	</div>
 	<table id="tbl-search-replacements" class="w-full border border-gray-200 text-sm display">
@@ -60,6 +60,8 @@ Rechercher des remplacants | Remplaclinic
 			{% endfor %}
 		</tbody>
 	</table>
-	{{ pagination_view(result.totalRecords, params) }}
+	<div id="tbl-search-replacements-pager">
+		{{ pagination_view(result.totalRecords, params) }}
+	</div>
 </div>
 {% endblock %}

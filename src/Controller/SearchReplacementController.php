@@ -20,11 +20,13 @@ class SearchReplacementController extends AbstractController
     public function index (Request $request): Response
     {
         $params = $request->query->all();
+        $routeParams = [];
 
         // region
         if (!empty($params['region'])) {
             if (strtolower($params['region']) !== 'all') {
                 $params['region_id'] = (int) $params['region'];
+                $routeParams['region'] = $params['region'];
             }
             unset($params['region']);
         }
@@ -33,6 +35,7 @@ class SearchReplacementController extends AbstractController
         if (!empty($params['specialite'])) {
             if (strtolower($params['specialite']) !== 'all') {
                 $params['speciality_id'] = (int) $params['specialite'];
+                $routeParams['specialite'] = $params['specialite'];
             }
             unset($params['specialite']);
         }
@@ -43,6 +46,7 @@ class SearchReplacementController extends AbstractController
         } else {
             $params['limit'] = (int) $params['limit'];
         }
+        $routeParams['limit'] = $params['limit'];
 
         // page
         if (array_key_exists('page', $params)) {
@@ -65,7 +69,9 @@ class SearchReplacementController extends AbstractController
 
         return $this->render('search_replacement/index.html.twig', [
             'result' => $this->userRepository->findAllByParams($params),
-            'params' => $params,
+            'params' => array_merge($params, [
+                '_url' => $this->generateUrl('app_search_replacement', $routeParams)
+            ]),
         ]);
     }
 }

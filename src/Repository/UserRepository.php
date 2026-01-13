@@ -333,7 +333,7 @@ class UserRepository extends ServiceEntityRepository
         } else if (!empty($params['search'])) {
             $qb
                 ->join('u', 'user_region', 'ur', 'ur.user_id = u.id')
-                ->join('ur', 'region', 'r', 'ur.region_id = r.id')
+                ->join('ur', 'region', 'rg', 'ur.region_id = rg.id')
             ;
         }
 
@@ -342,7 +342,7 @@ class UserRepository extends ServiceEntityRepository
                 ->join('u', 'speciality', 's', 's.id = u.speciality_id')
                 ->andWhere($qb->expr()->or(
                     's.name LIKE :search',
-                    'r.name LIKE :search'
+                    'rg.name LIKE :search'
                 ))
                 ->setParameter('search', '%' . $params['search'] . '%')
             ;

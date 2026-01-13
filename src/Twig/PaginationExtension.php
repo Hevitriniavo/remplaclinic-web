@@ -30,7 +30,7 @@ class PaginationExtension extends AbstractExtension
         }
 
         $pageSelectionView = sprintf(
-            'Afficher <select class="outline-none border-[1px] border-solid border-[#eaeaea] h-50 w-100 p-2 rounded-md bg-transparent">%s</select> sur <span>%d</span> lignes (de <span>%d</span> à <span>%d</span> lignes)',
+            'Afficher <select name="limit" class="outline-none border-[1px] border-solid border-[#eaeaea] h-50 w-100 p-2 rounded-md bg-transparent">%s</select> sur <span>%d</span> lignes (de <span>%d</span> à <span>%d</span> lignes)',
             implode('', $optionHtml),
             $totalRecords,
             $offset + 1,
@@ -45,25 +45,26 @@ class PaginationExtension extends AbstractExtension
         $limit = $this->getLimit($options);
         $page = $this->getPage($options);
         $maxPage = $this->getMaxPage($totalRecords, $limit);
+        $url = $this->getUrl($options);
         
         $pages = $this->paginate($page, $totalRecords, $limit, 5);
 
         $pageLinksHtml = [];
 
         // previous page link
-        $pageLinksHtml[] = $this->getPageLink('&lt;', false, $page <= 1);
+        $pageLinksHtml[] = $this->getPageLink($page - 1, $url, false, $page <= 1, '&lt;');
         
         // first page
         foreach ($pages as $p) {
             if ($p === '...') {
-                $pageLinksHtml[] = $this->getPageLink('...', false, false);
+                $pageLinksHtml[] = $this->getPageLink(0, $url, false, false, '...');
             } else {
-                $pageLinksHtml[] = $this->getPageLink($p, $p === $page, false);
+                $pageLinksHtml[] = $this->getPageLink($p, $url, $p === $page, false);
             }
         }
 
         // next page
-        $pageLinksHtml[] = $this->getPageLink('&gt;', false, $page >= $maxPage);
+        $pageLinksHtml[] = $this->getPageLink($page + 1, $url, false, $page >= $maxPage, '&gt;');
 
         return implode('', $pageLinksHtml);
     }
@@ -111,6 +112,11 @@ class PaginationExtension extends AbstractExtension
         return (int) ceil($totalRecords / $limit);
     }
 
+    private function getUrl(array $options): string
+    {
+        return array_key_exists('_url', $options) ? $options['_url'] : '';
+    }
+
     private function getPageAndOffset(array $options): array
     {
         $offset = isset($options['offset']) ? (int) $options['offset'] : null;
@@ -145,17 +151,28 @@ class PaginationExtension extends AbstractExtension
         ];
     }
 
-    private function getPageLink(int|string $page, bool $active = false, bool $disabled = false): string
+    private function getPageLink(int $page, string $url, bool $active = false, bool $disabled = false, string $pageText = ''): string
     {
+        $baseUrl = '';
+        if (stripos('?', $url) !== false) {
+            $baseUrl = $url . '?';
+        } else {
+            $baseUrl = $url . '&';
+        }
+
+        if (empty($pageText)) {
+            $pageText = $page;
+        }
+
         $activeClass = $active ? 'border-[#86d0f0] bg-[#ebf6fc] text-[#2d8eb8]' : 'border-[#eaeaea]';
-        $startTag = $disabled ? 'span' : 'a href="#"';
+        $startTag = $disabled ? 'span' : sprintf('a href="%spage=%s"', $baseUrl, $page);
         $endTag = $disabled ? 'span' : 'a';
 
         return sprintf(
             '<%s class="p-2 border-[1px] border-solid %s">%s</%s>',
             $startTag,
             $activeClass,
-            $page,
+            $pageText,
             $endTag
         );
     }
