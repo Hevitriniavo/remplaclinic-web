@@ -1,7 +1,16 @@
 export default class {
-    constructor(selector) {
+    /**
+     * @param {String} selector 
+     * @param {{
+     *  beforeOpen: Function,
+     *  beforeOpenAsync: Function
+     * }} modalOptions 
+     */
+    constructor(selector, modalOptions = {}) {
         this.selector = selector
         this.modal = document.querySelector('#' + selector)
+
+        this.options = modalOptions
 
         if (this.modal) {
             this.addEventListener()
@@ -17,8 +26,22 @@ export default class {
         const that = this
         const activators = document.querySelectorAll('.' + this.selector + '-activator')
         activators.forEach(activator => {
-            activator.addEventListener('click', () => {
-                that.open()
+            activator.addEventListener('click', (e) => {
+                if (that.options.beforeOpen) {
+                    if (that.options.beforeOpen(e, activator)) {
+                        that.open()
+                    }
+                } else if (that.options.beforeOpenAsync) {
+                    that.options.beforeOpenAsync(e, activator)
+                        .then((opened) => {
+                            if (opened) {
+                                that.open()
+                            }
+                        })
+                        .catch(() => {})
+                } else {
+                    that.open()
+                }
             })
         })
     }
