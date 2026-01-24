@@ -8,6 +8,7 @@ use App\Entity\Request;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -198,5 +199,38 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findAllByUserId(int $userId, RequestType $requestType, int $limit = 10, int $offset = 0, ?int $status = null): DataTableResponse
+    {
+        $countResponseQuery = $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(o.id)')
+            ->from(RequestResponse::class, 'o')
+            ->where('o.request = r.id')
+            ->andWhere('o.status IN (' . implode(',', [RequestResponse::ACCEPTE, RequestResponse::PLUS_D_INFOS]) . ')')
+            ->getDQL()
+        ;
+    
+        $qb = $this->createQueryBuilder('r')
+            ->select('r AS request', '(' . $countResponseQuery . ') AS responseCount')
+            ->join('r.applicant', 'a')
+        ;
+            
+        $qb->where('a.id = :applicant_id')
+            ->setParameter('applicant_id', $userId)
+            ->andWhere('r.requestType = :request_type')
+            ->setParameter('request_type', $requestType)
+            ->orderBy('r.createdAt', 'desc')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+        
+        if (!is_null($status)) {
+            $qb->andWhere('r.status = :r_status')
+                ->setParameter('r_status', $status);
+        }
+
+        $paginator = new Paginator($qb->getQuery());
+
+        return DataTableResponse::fromPaginator($paginator, 0);
     }
 }

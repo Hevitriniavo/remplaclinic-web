@@ -5,7 +5,7 @@ Mes demandes de remplacement | Remplaclinic
 {% endblock %}
 
 {% block importmap %}
-{{ importmap('request-new') }}
+{{ importmap('mes-demandes') }}
 {% endblock %}
 
 {% block page_nav %}
@@ -19,10 +19,10 @@ Mes demandes de remplacement | Remplaclinic
             <div class="flex flex-col justify-end">
                 <label for="mes-demandes-filtre-statut">Filtrer par statut</label>
                 <select id="mes-demandes-filtre-statut" name="statut" class="form-text px-1 py-2 w-64 outline-none form-signup-element">
-                    <option value="All" selected="selected">- Aucun -</option>
-                    <option value="0">A valider</option>
-                    <option value="2">Archivé</option>
-                    <option value="1">En cours</option>
+                    <option value="all" {% if params.status is not defined %} selected="selected" {% endif %}>- Aucun -</option>
+                    <option value="0" {% if params.status is defined and params.status is same as (0) %} selected="selected" {% endif %}>A valider</option>
+                    <option value="2" {% if params.status is defined and params.status is same as (2) %} selected="selected" {% endif %}>Archivé</option>
+                    <option value="1" {% if params.status is defined and params.status is same as (1) %} selected="selected" {% endif %}>En cours</option>
                 </select>
             </div>
             <div class="flex items-center pl-2">
@@ -31,59 +31,78 @@ Mes demandes de remplacement | Remplaclinic
                 </a>
             </div>
         </div>
-        <div class="mes-demandes-container mt-5">
-            <table class="w-full border border-gray-200 text-sm">
-                <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
-                    <tr>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Détail
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Demande
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Date de la demande
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Spécialité
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Période
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Nombre de postes
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Etat
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="min-w-full">
-                    {% if requests|length > 0 %}
-                        {% for row in requests %}
-                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
-                            <td class="px-4 py-2">{{ row.detail }}</td>
-                            <td class="px-4 py-2">{{ row.demande }}</td>
-                            <td class="px-4 py-2">{{ row.date }}</td>
-                            <td class="px-4 py-2">{{ row.specialite }}</td>
-                            <td class="px-4 py-2">{{ row.periode }}</td>
-                            <td class="px-4 py-2">{{ row.positionCount }}</td>
-                            <td class="px-4 py-2">{{ row.statut }}</td>
-                            <td class="px-4 py-2">
-                                <div>Actions</div>
-                            </td>
+        <div class="mes-demandes-container mt-5 flex flex-col gap=5">
+            <div>
+                <table class="w-full border border-gray-200 text-sm">
+                    <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+                        <tr>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Détail
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Demande
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Date de la demande
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Spécialité
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Période
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Nombre de postes
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Etat
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Actions
+                            </th>
                         </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
-                            <td class="px-4 py-2" colspan="8">Pas de proposition en cours</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="min-w-full">
+                        {% if requests.recordsTotal > 0 %}
+                            {% for row in requests.data %}
+                            <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                                <td class="px-4 py-2">
+                                    <div class="flex justify-center items-center">
+                                        <a href="#" class="block h-10 w-10 loupe-detail-demande modal-detail-demande-activator"></a>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <span class="blue-span cursor-pointer modal-detail-demande-activator">{{ row.request.title }}</span>
+                                </td>
+                                <td class="px-4 py-2">{{ row.request.createdAt|date('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ row.request.speciality.name }}</td>
+                                <td class="px-4 py-2">{{ row.request.startedAt|date('d/m/Y') }} - {{ row.request.endAt|date('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ row.request.positionCount }}</td>
+                                <td class="px-4 py-2">{{ row.request.statusAsText }}</td>
+                                <td class="px-4 py-2">
+                                    {% if row.request.status is not same as(2) %}
+                                        <a class="form-submit text-white py-1 px-4">
+                                            Clôturer
+                                        </a>
+                                    {% else %}
+                                        <span>Clôturée</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
+                                <td class="px-4 py-2" colspan="8">Pas de demande en cours</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% if requests.recordsTotal > params.limit %}
+                <div id="tbl-mes-demandes-pager">
+                    {{ pagination_view(requests.recordsTotal, params) }}
+                </div>
+            {% endif %}
         </div>
         <div class="mes-demandes-footer mt-5">
             <div class="footer-message bg-[#68b8dc] border-solid border border-[#d2d2d2] p-4">

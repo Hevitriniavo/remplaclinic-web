@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Request;
 use App\Entity\RequestType;
+use App\Pagination\Pagination;
 use App\Repository\RegionRepository;
+use App\Repository\RequestRepository;
 use App\Security\SecurityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -15,6 +19,7 @@ class MonCompteController extends AbstractController
 {
     public function __construct(
         private readonly Security $security,
+        private readonly RequestRepository $requestRepository,
     ) {}
 
     #[Route(
@@ -113,30 +118,57 @@ class MonCompteController extends AbstractController
         '/mon-compte/mes-demandes-de-remplacements',
         name: 'app_user_requets_replacement'
     )]
-    public function mesDemandesRemplacements(): Response
+    public function mesDemandesRemplacements(HttpFoundationRequest $request): Response
     {
-        return $this->renderViewForUser(RequestType::REPLACEMENT);
+        return $this->renderViewForUser($request, RequestType::REPLACEMENT);
     }
 
     #[Route(
         '/mon-compte/mes-propositions-d-installation',
         name: 'app_user_requets_installation'
     )]
-    public function mesPropositionsInstallations(): Response
+    public function mesPropositionsInstallations(HttpFoundationRequest $request): Response
     {
-        return $this->renderViewForUser(RequestType::INSTALLATION);
+        return $this->renderViewForUser($request, RequestType::INSTALLATION);
     }
 
-    private function renderViewForUser(RequestType $requestType): Response
+    private function renderViewForUser(HttpFoundationRequest $request, RequestType $requestType): Response
     {
+        /**
+         * @var SecurityUser
+         */
+        $user = $this->security->getUser();
+
         $viewPath = '';
         $templateName = $requestType === RequestType::INSTALLATION ? 'mes-propositions' : 'mes-demandes';
+        $routeName = $requestType === RequestType::INSTALLATION ? 'app_user_requets_installation' : 'app_user_requets_replacement';
         $viewData = [
-            'requests' => []
+            'requests' => [],
+            'params' => [],
         ];
+
+        $pagination = new Pagination($request->query->all());
+        $status = $request->query->get('status');
+        $status = in_array($status, [Request::CREATED, Request::ARCHIVED, Request::IN_PROGRESS]) ? $status : null;
 
         if ($this->security->isGranted('ROLE_CLINIC') || $this->security->isGranted('ROLE_DOCTOR')) {
             $viewPath = 'clinique-cabinet';
+
+            $viewData['requests'] = $this->requestRepository->findAllByUserId(
+                $user->getUser()->getId(),
+                $requestType,
+                $pagination->limit,
+                $pagination->offset,
+                $status
+            );
+
+            $routeParams = is_null($status) ? [] : ['status' => (int) $status];
+            $routeParams['limit'] = $pagination->limit;
+
+            $viewData['params'] = array_merge($routeParams, $pagination->toArray(), [
+                '_url' => $this->generateUrl($routeName, $routeParams)
+            ]);
+
         } else if ($this->security->isGranted('ROLE_REPLACEMENT')) {
             $viewPath = 'remplacant';
         } else {

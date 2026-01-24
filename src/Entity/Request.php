@@ -153,6 +153,17 @@ class Request
         return $this->status;
     }
 
+    public function getStatusAsText(): string
+    {
+        $statuses = ["A valider", "En cours", "Archivé"];
+        
+        if (array_key_exists($this->getStatus(), $statuses)) {
+            return $statuses[$this->getStatus()];
+        }
+
+        return '';
+    }
+
     public function setStatus(int $status): static
     {
         $this->status = $status;

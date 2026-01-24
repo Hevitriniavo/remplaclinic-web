@@ -19,3 +19,18 @@ export const getCleanUrl = (url, id) => {
     }
     return result
 }
+
+export const addDataTableLimitOptionsEvent = (tableSelector) => {
+    const limitOptions = document.querySelectorAll(tableSelector + ' select[name="limit"]')
+    limitOptions.forEach(limitOption => {
+        limitOption.addEventListener('change', (e) => {
+            const href = window.location.href.split('?')
+            const url = new URLSearchParams(href.length > 1 ? href[1] : '')
+    
+            url.set('limit', e.target.value)
+            url.set('page', 1)
+    
+            window.location.href = href[0] + '?' + url.toString()
+        })
+    })
+}

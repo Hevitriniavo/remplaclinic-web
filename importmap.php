@@ -36,6 +36,10 @@ return [
         'path' => './assets/pages/search-replacement.js',
         'entrypoint' => true,
     ],
+    'mes-demandes' => [
+        'path' => './assets/pages/mes-demandes.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,
