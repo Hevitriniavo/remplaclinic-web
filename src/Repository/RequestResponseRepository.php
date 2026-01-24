@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
+use App\Entity\Request;
 use App\Entity\RequestResponse;
+use App\Entity\RequestType;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -145,5 +147,36 @@ class RequestResponseRepository extends ServiceEntityRepository
             ->getResult();
 
         return array_map(fn(RequestResponse $item) => $item->getUser(), $responses);
+    }
+
+    public function findAllByUserId(int $userId, RequestType $requestType, int $limit = 10, int $offset = 0, ?int $status = null): DataTableResponse
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->join('p.user', 'u')
+            ->join('p.request', 'r')
+            ->join('r.applicant', 'a')
+        ;
+            
+        $qb->where('u.id = :user_id')
+            ->setParameter('user_id', $userId)
+            ->andWhere('r.requestType = :request_type')
+            ->setParameter('request_type', $requestType)
+            ->andWhere('r.status <> :r_status')
+            ->setParameter('r_status', Request::ARCHIVED)
+            ->orderBy('r.createdAt', 'desc')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+        
+        if (!is_null($status)) {
+            $qb->andWhere('p.status = :p_status')
+                ->setParameter('p_status', $status);
+        } else {
+            $qb->andWhere('p.status <> :p_status')
+                ->setParameter('p_status', RequestResponse::EXCLU);
+        }
+
+        $paginator = new Paginator($qb->getQuery());
+
+        return DataTableResponse::fromPaginator($paginator, 0);
     }
 }

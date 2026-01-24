@@ -65,7 +65,7 @@ Mes propositions d'installation | Remplaclinic
                     <tbody class="min-w-full">
                         {% if requests.recordsTotal > 0 %}
                                 {% for row in requests.data %}
-                                <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                                <tr class="hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
                                     <td class="px-4 py-2">
                                         <div class="flex justify-center items-center">
                                             <a href="#" class="block h-10 w-10 loupe-detail-demande modal-detail-demande-activator"></a>
@@ -91,7 +91,7 @@ Mes propositions d'installation | Remplaclinic
                                 </tr>
                                 {% endfor %}
                             {% else %}
-                            <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
+                            <tr class="hover:bg-[#fff5e9] border-b">
                                 <td class="px-4 py-2" colspan="8">Pas de proposition en cours</td>
                             </tr>
                         {% endif %}

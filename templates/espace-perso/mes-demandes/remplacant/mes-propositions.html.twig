@@ -18,55 +18,85 @@ Mes propositions d'installation | Remplaclinic
         <div class="text-center font-bold">
             Pour accéder au détail de la proposition, vous pouvez cliquer sur celle-ci.
         </div>
-        <div class="mes-demandes-container mt-5">
-            <table class="w-full border border-gray-200 text-sm">
-                <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
-                    <tr>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Détail
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Demandeur
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Ville
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Proposition
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Date
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Statut
-                        </th>
-                        <th scope="col" class="px-4 py-2 text-left font-semibold">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="min-w-full">
-                    {% if requests|length > 0 %}
-                        {% for row in requests %}
-                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
-                            <td class="px-4 py-2">{{ row.detail }}</td>
-                            <td class="px-4 py-2">{{ row.demandeur }}</td>
-                            <td class="px-4 py-2">{{ row.ville }}</td>
-                            <td class="px-4 py-2">{{ row.demande }}</td>
-                            <td class="px-4 py-2">{{ row.periode }}</td>
-                            <td class="px-4 py-2">{{ row.statut }}</td>
-                            <td class="px-4 py-2">
-                                <div>Actions</div>
-                            </td>
+        <div class="mes-demandes-container mt-5 flex flex-col gap-5">
+            <div>
+                <table class="w-full border border-gray-200 text-sm">
+                    <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+                        <tr>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Détail
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Demandeur
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Ville
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Proposition
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Date
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Statut
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Actions
+                            </th>
                         </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
-                            <td class="px-4 py-2" colspan="7">Pas de proposition en cours</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="min-w-full">
+                        {% if requests.recordsTotal > 0 %}
+                            {% for row in requests.data %}
+                            <tr class="hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                                <td class="px-4 py-2">
+                                    <div class="flex justify-center items-center">
+                                        <a href="#" class="block h-10 w-10 loupe-detail-demande modal-detail-demande-activator"></a>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">{{ row.applicantName }}</td>
+                                <td class="px-4 py-2">{{ row.request.applicant.applicantLocality }}</td>
+                                <td class="px-4 py-2">
+                                    <span class="blue-span cursor-pointer modal-detail-demande-activator">{{ row.request.title }}</span>
+                                </td>
+                                <td class="px-4 py-2">{{ row.request.startedAt|date('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ row.statusAsText }}</td>
+                                <td class="px-4 py-2">
+                                    {% if row.status is same as(0) %}
+                                        <div class="flex flex-col gap-2 w-[150px] items-start justify-center">
+                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur.">
+                                                Je postule
+                                            </a>
+                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous allez recevoir un email avec les informations du demandeur.">
+                                                Plus d'informations
+                                            </a>
+                                        </div>
+                                    {% elseif row.status is same as(1) %}
+                                        <span>Votre Candidature est en cours</span>
+                                    {% elseif row.status is same as(2) %}
+                                        <div class="flex flex-col gap-2 w-[150px] items-start justify-center">
+                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur.">
+                                                Je postule
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="hover:bg-[#fff5e9] border-b">
+                                <td class="px-4 py-2" colspan="7">Pas de proposition en cours</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% if requests.recordsTotal > params.limit %}
+                <div id="tbl-mes-demandes-pager">
+                    {{ pagination_view(requests.recordsTotal, params) }}
+                </div>
+            {% endif %}
         </div>
         <div class="mes-demandes-footer mt-5">
             <a class="relative text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10" href="{{ path('app_user_espace_perso') }}">

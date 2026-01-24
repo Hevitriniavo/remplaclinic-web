@@ -105,4 +105,32 @@ class RequestResponse
 
         return $this;
     }
+
+    public function getApplicantName(): string
+    {
+        $role = $this->request->getApplicant()->getRole();
+        
+        if (!is_null($role)) {
+            if ($role->getId() == 5) {
+                return $this->request->getApplicant()->getEstablishment()->getName();
+            }
+
+            if ($role->getId() == 6) {
+                return 'Cabinet Médical';
+            }
+        }
+
+        return '';
+    }
+
+    public function getStatusAsText(): string
+    {
+        $statuses = ["En cours", "Candidature en cours", "Demande d'informations"];
+        
+        if (array_key_exists($this->getStatus(), $statuses)) {
+            return $statuses[$this->getStatus()];
+        }
+
+        return '';
+    }
 }

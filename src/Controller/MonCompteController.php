@@ -7,6 +7,7 @@ use App\Entity\RequestType;
 use App\Pagination\Pagination;
 use App\Repository\RegionRepository;
 use App\Repository\RequestRepository;
+use App\Repository\RequestResponseRepository;
 use App\Security\SecurityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,6 +21,7 @@ class MonCompteController extends AbstractController
     public function __construct(
         private readonly Security $security,
         private readonly RequestRepository $requestRepository,
+        private readonly RequestResponseRepository $requestResponseRepository,
     ) {}
 
     #[Route(
@@ -171,6 +173,19 @@ class MonCompteController extends AbstractController
 
         } else if ($this->security->isGranted('ROLE_REPLACEMENT')) {
             $viewPath = 'remplacant';
+
+            $viewData['requests'] = $this->requestResponseRepository->findAllByUserId(
+                $user->getUser()->getId(),
+                $requestType,
+                $pagination->limit,
+                $pagination->offset
+            );
+
+            $routeParams = ['limit' => $pagination->limit];
+
+            $viewData['params'] = array_merge($routeParams, $pagination->toArray(), [
+                '_url' => $this->generateUrl($routeName, $routeParams)
+            ]);
         } else {
             throw new AccessDeniedException('Access denied.');
         }
