@@ -1,0 +1,79 @@
+{% extends 'base-page-espace-perso.html.twig' %}
+
+{% block title %}
+Mes propositions d'installation | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+{{ importmap('request-new') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Mes propositions d'installation</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-2">
+        <div class="text-center font-bold">
+            Pour accéder au détail de la proposition, vous pouvez cliquer sur celle-ci.
+        </div>
+        <div class="mes-demandes-container mt-5">
+            <table class="w-full border border-gray-200 text-sm">
+                <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+                    <tr>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Détail
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Demandeur
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Ville
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Proposition
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Date
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Statut
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="min-w-full">
+                    {% if requests|length > 0 %}
+                        {% for row in requests %}
+                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                            <td class="px-4 py-2">{{ row.detail }}</td>
+                            <td class="px-4 py-2">{{ row.demandeur }}</td>
+                            <td class="px-4 py-2">{{ row.ville }}</td>
+                            <td class="px-4 py-2">{{ row.demande }}</td>
+                            <td class="px-4 py-2">{{ row.periode }}</td>
+                            <td class="px-4 py-2">{{ row.statut }}</td>
+                            <td class="px-4 py-2">
+                                <div>Actions</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
+                            <td class="px-4 py-2" colspan="7">Pas de proposition en cours</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mes-demandes-footer mt-5">
+            <a class="relative text-xl form-submit text-white pt-2 pb-2 pr-10 pl-10" href="{{ path('app_user_espace_perso') }}">
+                <span class="arrow-back"></span>
+                Mon Compte
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="w-[1170px] mx-auto flex flex-col">
+        <div class="pt-7">
+            <h1 class="blue-span text-4xl py-[10px]">
+                <a href="{{ path('app_user_espace_perso') }}">Espace personnel</a>
+            </h1>
+        </div>
+        <div class="page-nav pt-7 clearfix">
+            {% block page_nav %}{% endblock %}
+        </div>
+        <div class="flex flex-row gap-6">
+            <article class="pb-12 mb-12 w-[870px]">
+                {% block article_content %}{% endblock %}
+            </article>
+            {% include 'partials/search_by_country.html.twig' %}
+        </div>
+    </main>
+{% endblock %}

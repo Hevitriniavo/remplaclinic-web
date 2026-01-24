@@ -405,6 +405,17 @@ class User
         return $this->currentSpeciality;
     }
 
+    public function getCurrentSpecialityAsText(): string
+    {
+        $allCurrentSpeciality = User::allCurrentSpecialities();
+
+        if (array_key_exists($this->getCurrentSpeciality(), $allCurrentSpeciality)) {
+            return $allCurrentSpeciality[$this->getCurrentSpeciality()];
+        }
+        
+        return '';
+    }
+
     public function setCurrentSpeciality(?int $currentSpeciality): static
     {
         $this->currentSpeciality = $currentSpeciality;
@@ -585,6 +596,14 @@ class User
     public function getMobilities(): Collection
     {
         return $this->mobilities;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobilitiesAsText(): string
+    {
+        return implode(' - ', $this->mobilities->map(fn(Region $m) => $m->getName())->toArray());
     }
 
     public function addMobility(Region $mobility): static

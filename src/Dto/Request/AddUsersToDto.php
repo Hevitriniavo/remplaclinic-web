@@ -8,6 +8,8 @@ class AddUsersToDto
     public function __construct(
         #[Assert\NotNull()]
         public array $users,
+
+        public ?bool $all,
     ) {
     }
 }

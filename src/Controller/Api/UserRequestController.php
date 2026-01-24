@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\IdListDto;
 use App\Dto\Request\AddUsersToDto;
+use App\Entity\Request as EntityRequest;
 use App\Entity\User;
 use App\Repository\RequestRepository;
 use App\Repository\RequestResponseRepository;
@@ -21,9 +22,9 @@ class UserRequestController extends AbstractController
     const JSON_LIST_GROUPS = ['request:datatable'];
 
     public function __construct(
-        private RequestRepository $requestRepository,
-        private RequestResponseRepository $requestResponseRepository,
-        private UserRepository $userRepository,
+        private readonly RequestRepository $requestRepository,
+        private readonly RequestResponseRepository $requestResponseRepository,
+        private readonly UserRepository $userRepository,
     ) {}
 
     #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
@@ -59,13 +60,30 @@ class UserRequestController extends AbstractController
         )] AddUsersToDto $addUsersDto
     ): Response
     {
+        /**
+         * @var EntityRequest
+         */
         $request = $this->requestRepository->find($requestId);
 
         if (is_null($request)) {
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
-        $requestService->initRequestResponse($request, $addUsersDto->users);
+        $users = $addUsersDto->users;
+
+        if ($addUsersDto->all) {
+            $users = $this->userRepository->findAllIdsForRequest(
+                User::ROLE_REPLACEMENT_ID,
+                [
+                    'speciality' => $request->getSpeciality()->getId(),
+                    'mobility' => $request->getRegion()->getId(),
+                    'condition_type' => 'and'
+                ],
+                $addUsersDto->users
+            );
+        }
+
+        $requestService->initRequestResponse($request, $users);
 
         return $this->json('ok');
     }

@@ -128,7 +128,7 @@ class UserRepository extends ServiceEntityRepository
         return $response;
     }
 
-    public function findAllIdsForRequest(?int $roleId, array $params = []): array
+    public function findAllIdsForRequest(?int $roleId, array $params = [], array $exclus = []): array
     {
         $qb = $this->createQueryBuilder('u')
             ->select('DISTINCT(u.id)')
@@ -140,6 +140,11 @@ class UserRepository extends ServiceEntityRepository
             $qb->join('u.roles', 'r')
                 ->andWhere('r.id = :roleId')
                 ->setParameter('roleId', $roleId);
+        }
+
+        if (!empty($exclus)) {
+            $exclus = array_map(fn($item) => (int) $item, $exclus);
+            $qb->andWhere('u.id NOT IN (' . implode(',', $exclus) . ')');
         }
 
         $searchValue = empty($params['search']) ? '' : $params['search'];
@@ -230,7 +235,7 @@ class UserRepository extends ServiceEntityRepository
     public function countAllByRole(?int $roleId): int
     {
         $qb = $this->_createNativeQuerySearch([
-            'role_id' => $roleId,
+            'role' => $roleId,
         ]);
 
         $result = $qb
@@ -263,7 +268,7 @@ class UserRepository extends ServiceEntityRepository
         $queryResult = $listQueryBuilder
             ->leftJoin('u', 'user_speciality', 'us', 'us.user_id = u.id')
             ->leftJoin('us', 'speciality', 'sp', 'us.speciality_id = sp.id')
-            ->select("CONCAT(u.surname, ' ', u.name) as prenom, u.current_speciality as statut, GROUP_CONCAT(DISTINCT sp.name) as sous_specialite")
+            ->select("u.id as id, CONCAT(u.surname, ' ', u.name) as prenom, u.current_speciality as statut, GROUP_CONCAT(DISTINCT sp.name) as sous_specialite")
             ->groupBy('u.id', 'u.name', 'u.surname')
             ->orderBy('u.id', 'desc')
             ->setFirstResult($offset)
@@ -314,32 +319,40 @@ class UserRepository extends ServiceEntityRepository
             ->from('user', 'u')
             ->where('u.status = 1');
 
-        if (array_key_exists('role_id', $params)) {
+        if (array_key_exists('role', $params)) {
             $qb->join('u', 'user_user_role', 'r', 'u.id = r.user_id AND r.user_role_id = :role_id')
-                ->setParameter('role_id', $params['role_id']);
+                ->setParameter('role_id', $params['role']);
         }
 
-        if (!empty($params['speciality_id'])) {
+        if (!empty($params['specialite'])) {
+            // ssr speciality: '285', '293', '289' => '301'
+            $specialities = [];
+            if ($params['specialite'] === 301) {
+                $specialities = [285, 293, 289, 301];
+            } else {
+                $specialities = [$params['specialite']];
+            }
+
             $qb
-                ->andWhere('u.speciality_id = :speciality_id')
-                ->setParameter('speciality_id', $params['speciality_id']);;
+                ->andWhere('u.speciality_id IN (' . implode(',', $specialities) .')');
         }
 
-        if (!empty($params['region_id'])) {
+        // region europe: '504' => all => no criteria
+        if (!empty($params['region']) && $params['region'] !== 504) {
             $qb
                 ->join('u', 'user_region', 'ur', 'ur.user_id = u.id AND ur.region_id = :region_id')
-                ->setParameter('region_id', $params['region_id'])
+                ->setParameter('region_id', $params['region'])
             ;
         } else if (!empty($params['search'])) {
             $qb
                 ->join('u', 'user_region', 'ur', 'ur.user_id = u.id')
-                ->join('ur', 'region', 'rg', 'ur.region_id = rg.id')
             ;
         }
 
         if (!empty($params['search'])) {
             $qb
                 ->join('u', 'speciality', 's', 's.id = u.speciality_id')
+                ->join('ur', 'region', 'rg', 'ur.region_id = rg.id')
                 ->andWhere($qb->expr()->or(
                     's.name LIKE :search',
                     'rg.name LIKE :search'

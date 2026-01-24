@@ -1,0 +1,97 @@
+{% extends 'base-page-espace-perso.html.twig' %}
+
+{% block title %}
+Mes propositions d'installation | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+{{ importmap('request-new') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Mes propositions d'installation</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-2">
+        <div class="flex items-end">
+            <div class="flex flex-col justify-end">
+                <label for="mes-demandes-filtre-statut">Filtrer par statut</label>
+                <select id="mes-demandes-filtre-statut" name="statut" class="form-text px-1 py-2 w-64 outline-none form-signup-element">
+                    <option value="All" selected="selected">- Aucun -</option>
+                    <option value="0">A valider</option>
+                    <option value="2">Archivé</option>
+                    <option value="1">En cours</option>
+                </select>
+            </div>
+            <div class="flex items-center pl-2">
+                <a class="text-xl form-submit text-white pt-1 pb-1 pr-10 pl-10" href="{{ path('app_user_espace_perso') }}">
+                    Appliquer
+                </a>
+            </div>
+        </div>
+        <div class="mes-demandes-container mt-5">
+            <table class="w-full border border-gray-200 text-sm">
+                <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+                    <tr>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Détail
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Demande
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Date de la demande
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Spécialité
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Période
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Nombre de postes
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Etat
+                        </th>
+                        <th scope="col" class="px-4 py-2 text-left font-semibold">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="min-w-full">
+                    {% if requests|length > 0 %}
+                        {% for row in requests %}
+                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                            <td class="px-4 py-2">{{ row.detail }}</td>
+                            <td class="px-4 py-2">{{ row.demande }}</td>
+                            <td class="px-4 py-2">{{ row.date }}</td>
+                            <td class="px-4 py-2">{{ row.specialite }}</td>
+                            <td class="px-4 py-2">{{ row.periode }}</td>
+                            <td class="px-4 py-2">{{ row.positionCount }}</td>
+                            <td class="px-4 py-2">{{ row.statut }}</td>
+                            <td class="px-4 py-2">
+                                <div>Actions</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="w-[400px] hover:bg-[#fff5e9] border-b">
+                            <td class="px-4 py-2" colspan="8">Pas de proposition en cours</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mes-demandes-footer mt-5">
+            <div class="footer-message bg-[#68b8dc] border-solid border border-[#d2d2d2] p-4">
+                <p class="my-2">Pour effectuer une nouvelle demande de remplacement, contactez-nous par téléphone au <span class="text-red-500 text-xl">04 72 14 07 40</span> ou par mail à <span class="text-red-500 text-xl">contact@remplaclinic.com</span>.</p>
+                <p class="my-4">Un tarif personnalisé adapté à la taille de votre cabinet médical ou de votre établissement de santé vous sera proposé.</p>
+                <p class="my-4">Si vous avez un abonnement Remplaclinic en cours, contactez directement votre interlocuteur privilégié.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

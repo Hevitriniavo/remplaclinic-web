@@ -1,0 +1,103 @@
+<!-- Modal Overlay & Content Container (Hidden by default) -->
+<div id="selection-remplacant-modal" class="fixed inset-0 bg-black bg-opacity-50 flex hidden items-start justify-center z-40">
+    <!-- Modal Content Box -->
+    <div class="bg-white p-6 mt-10 rounded-lg shadow-lg w-1/2">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Sélection des remplaçants</h2>
+            <!--button class="text-gray-500 hover:text-gray-700 close">&times;</button-->
+        </div>
+
+        <!-- Modal Body -->
+        <div class="flex flex-col gap-5">
+            <div>Vous pouvez sélectionner l'ensemble des remplaçants en cliquant dans la case de la 1ère ligne du tableau. <b>Afin de valider votre choix, veuillez vous rendre en bas de page.</b></div>
+            <div>
+                <span class="font-bold text-lg" id="tbl-search-replacements-selection-count">0</span> remplaçant(s) sélectionné(s) sur <span class="font-bold text-lg" id="tbl-search-replacements-total-records">{{ 10 }}</span>. 
+            </div>
+            <div class="max-h-[500px] overflow-y-auto">
+                <table
+                    id="tbl-search-replacements"
+                    class="w-full border border-gray-200 text-sm"
+                    data-list-url="{{ path('api_replacement_search') }}"
+                >
+                    <thead class="bg-[#ebf6fc] border-[1px] border-solid border-[#86d0f0] text-[#2d8eb8]">
+                        <tr class="w-full">
+                            <th>
+                                <input type="checkbox" id="user-replacement-all" name="remplacants_all" value="all">
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Prénom
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Statut
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-left font-semibold">
+                                Sous-spécialité(s)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="min-w-full">
+                        {% if remplacants is defined %}
+                            {% for row in remplacants %}
+                            <tr class="hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
+                                <td class="px-4 py-2">
+                                    <input type="checkbox" id="user-replacement-{{ row.id }}" name="remplacants[]" value="{{ row.id }}">
+                                </td>
+                                <td class="px-4 py-2">
+                                    <span data-id="{{ row.id }}" class="blue-span cursor-pointer">{{ row.prenom }}</span>
+                                </td>
+                                <td class="px-4 py-2">{{ row.statut_name }}</td>
+                                <td class="px-4 py-2 max-w-[60%]">{{ row.sous_specialite }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tbl-search-replacements-pagination-container"></div>
+        </div>
+
+        <!-- Modal Footer (Optional) -->
+        <div class="mt-4 flex">
+            <button
+                class="relative form-submit text-xl text-white pt-2 pb-2 pr-10 pl-10 btn-validate-selection"
+                data-init-response-url="{{ path('api_request_personne_contacte_add', { requestId: '0000000000' }) }}"
+            >
+                <span
+                    class="btn-spinner hidden absolute top-3 left-3 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span>Valider</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="remplacant-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex hidden items-center justify-center z-50">
+    <!-- Modal Content Box -->
+    <div class="bg-white p-10 rounded-lg shadow-lg w-1/4">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold user-detail-title">Mr Bernard Cazeneuve - 1970</h2>
+            <button class="text-gray-500 hover:text-gray-700 close">&times;</button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="flex flex-col gap-5">
+            <div><b>Localité</b> : <span class="user-detail-locality">Paris - 75000</span></div>
+            <div><b>Nationalité</b> : <span class="user-detail-nationality">MG</span></div>
+            <div><b>Année internat</b> : <span class="user-detail-year_alternance">2010</span></div>
+            <div><b>Spécialité de la demande</b> : <span class="user-detail-request_speciality">Cardiologie</span></div>
+            <div><b>Région de la demande</b> : <span class="user-detail-request_region">Alsace</span></div>
+            <div><b>Statut actuel</b> : <span class="user-detail-current_status">Interne</span></div>
+            <div><b>Mobilité</b> : <span class="user-detail-mobility">Toutes les regions</span></div>
+            <div><b>Spécialité</b> : <span class="user-detail-speciality">Cardiologie</span></div>
+        </div>
+
+        <div class="mt-4 flex">
+            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded close">
+               Fermer
+            </button>
+        </div>
+    </div>
+</div>

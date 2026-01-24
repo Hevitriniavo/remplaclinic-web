@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\Trait\SearchReplacementTrait;
 use App\Controller\Trait\UpdateCheckAccessTrait;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\User\ReplacementDto;
@@ -22,9 +23,10 @@ use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 class ReplacementController extends AbstractController
 {
     use UpdateCheckAccessTrait;
+    use SearchReplacementTrait;
 
     public function __construct(
-        private UserRepository $userRepository,
+        private readonly UserRepository $userRepository,
         private readonly Security $security,
     ) {}
 
@@ -112,6 +114,46 @@ class ReplacementController extends AbstractController
 
         // redirect to espace-perso
         return $this->json([ '_redirect' => $this->generateUrl('app_user_espace_perso') ], Response::HTTP_OK);
+    }
+
+    #[Route('/api/search-remplacants', name: 'api_replacement_search')]
+    public function search (Request $request): Response
+    {
+        $params = $this->getSearchParams($request);
+        $pagination = $params['pagination'];
+
+        $routeParams = $params['extra_options'];
+        $routeParams['limit'] = $params['limit'];
+
+        $resultData = $this->userRepository->findAllByParams($params);
+
+        return $this->json([
+            'result' => $resultData,
+            'params' => array_merge($pagination->withMaxPageArray($resultData['totalRecords']), [
+                '_url' => $this->generateUrl('api_replacement_search', $routeParams),
+                '_detail_url' => $this->generateUrl('api_replacement_search_detail', ['id' => '0000000000'])
+            ]),
+        ]);
+    }
+
+    #[Route('/api/search-remplacants/{id}', name: 'api_replacement_search_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function getSearchDetail(int $id): Response
+    {
+        /**
+         * @var User
+         */
+        $user = $this->userRepository->find($id);
+
+        return $this->json([
+            'id' => $user->getId(),
+            'title' => sprintf('%s %s %s - %s', $user->getCivility(), $user->getName(), $user->getSurname(), $user->getYearOfBirth()),
+            'locality' => sprintf('%s - %s', $user->getAddress()->getLocality(), $user->getAddress()->getPostalCode()),
+            'nationality' => $user->getNationality(),
+            'year_alternance' => $user->getYearOfAlternance(),
+            'current_status' => $user->getCurrentSpecialityAsText(),
+            'speciality' => $user->getSpeciality()->getName(),
+            'mobility' => $user->getMobilitiesAsText()
+        ]);
     }
 
     private function toUserFilesDto($cv, $diplom, $licence): UserFilesDto

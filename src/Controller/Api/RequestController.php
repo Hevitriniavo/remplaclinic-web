@@ -61,7 +61,10 @@ class RequestController extends AbstractController
         }
 
         // redirect to my request
-        return $this->json([ '_redirect' => $this->generateUrl('app_user_requets_replacement') ], Response::HTTP_CREATED);
+        return $this->json([
+            'id' => $request->getId(),
+            '_redirect' => $this->generateUrl('app_user_requets_replacement'),
+        ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/request-installations', name: 'api_request_installation_new', methods: ['POST'])]
@@ -85,7 +88,10 @@ class RequestController extends AbstractController
         }
 
         // redirect to my request
-        return $this->json([ '_redirect' => $this->generateUrl('app_user_requets_installation') ], Response::HTTP_CREATED);
+        return $this->json([
+            'id' => $request->getId(),
+            '_redirect' => $this->generateUrl('app_user_requets_installation')
+        ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/requests/{id}', name: 'api_request_detail', methods: ['GET'], requirements: ['id' => '\d+'])]

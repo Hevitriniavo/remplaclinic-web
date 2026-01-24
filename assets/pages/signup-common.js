@@ -2,7 +2,7 @@ import axios from 'axios'
 import initPageCommon from './page-common.js'
 import RemplaFormValidation from '../js/rempla-form-validation.js'
 
-import showToast from '../js/rempla-toater.js'
+import showToast from '../js/rempla-toaster.js'
 
 export default function initSignupCommon() {
     initPageCommon()

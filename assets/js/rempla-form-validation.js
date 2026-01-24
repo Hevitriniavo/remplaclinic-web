@@ -1,5 +1,26 @@
 import axios from 'axios'
 
+export const updateBtnSubmitStatus = (button, isLoader = true) => {
+    if (button) {
+        // const text = button.querySelector('.btn-text')
+        const spinner = button.querySelector('.btn-spinner')
+
+        if (!spinner) {
+            return
+        }
+
+        if (isLoader) {
+            button.disabled = true
+            // text.classList.add('invisible')
+            spinner.classList.remove('hidden')
+        } else {
+            button.disabled = false
+            // text.classList.remove('invisible')
+            spinner.classList.add('hidden')
+        }
+    }
+}
+
 export default class RemplaFormValidation {
     constructor(formSelector, options = {}) {
         this.formSelector = formSelector
@@ -219,26 +240,7 @@ export default class RemplaFormValidation {
     }
 
     updateBtnSubmitStatus(isLoader = true) {
-        const button = this.form.querySelector('.' + this.formSelector + '-btn-submit')
-
-        if (button) {
-            // const text = button.querySelector('.btn-text')
-            const spinner = button.querySelector('.btn-spinner')
-
-            if (!spinner) {
-                return
-            }
-
-            if (isLoader) {
-                button.disabled = true
-                // text.classList.add('invisible')
-                spinner.classList.remove('hidden')
-            } else {
-                button.disabled = false
-                // text.classList.remove('invisible')
-                spinner.classList.add('hidden')
-            }
-        }
+        updateBtnSubmitStatus(this.form.querySelector('.' + this.formSelector + '-btn-submit'), isLoader)
     }
 
     submit() {

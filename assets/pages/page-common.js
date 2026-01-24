@@ -11,3 +11,11 @@ export default function initPageCommon() {
 
     initFormLoginValidation()
 }
+
+export const getCleanUrl = (url, id) => {
+    let result = url
+    if (result) {
+        result = result.replace('0000000000', id)
+    }
+    return result
+}

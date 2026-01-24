@@ -34,4 +34,16 @@ class DataTableParams
     {
         return array_key_exists($this->order_column, $cols) ? $cols[$this->order_column] : $defaultValue;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'value' => $this->value,
+            'draw' => $this->draw,
+            'order_column' => $this->order_column,
+            'order_dir' => $this->order_dir,
+            'offset' => $this->offset,
+            'limit' => $this->limit,
+        ];
+    }
 }
