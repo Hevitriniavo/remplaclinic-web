@@ -372,6 +372,14 @@ class User
         return $this->subSpecialities;
     }
 
+    /**
+     * @return string
+     */
+    public function getSubSpecialitiesAsText(): string
+    {
+        return implode(' - ', $this->subSpecialities->map(fn(Speciality $s) => $s->getName())->toArray());
+    }
+
     public function addSubSpeciality(Speciality $subSpeciality): static
     {
         if (!$this->subSpecialities->contains($subSpeciality)) {

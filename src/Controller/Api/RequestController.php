@@ -8,6 +8,7 @@ use App\Dto\Request\EditRequestDto;
 use App\Dto\Request\NewInstallationDto;
 use App\Dto\Request\NewReplacementDto;
 use App\Dto\IdListDto;
+use App\Entity\Request as EntityRequest;
 use App\Entity\RequestType;
 use App\Repository\RequestRepository;
 use App\Service\Request\RequestService;
@@ -108,6 +109,28 @@ class RequestController extends AbstractController
             [],
             ['groups' => $groups]
         );
+    }
+
+    #[Route('/api/requests/{id}/more-detail', name: 'api_request_detail_more', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function getMoreDetail(int $id): Response
+    {
+        /**
+         * @var EntityRequest
+         */
+        $request = $this->requestRepository->find($id);
+
+        return $this->json([
+            'id' => $request->getId(),
+            'title' => $request->getTitle(),
+            'specialite' => $request->getSpeciality()->getName(),
+            'sous_specialite' => $request->getSubSpecialitiesAsText(),
+            'region' => $request->getRegion()->getName(),
+            'ville' => $request->getApplicant()->getApplicantLocality(),
+            'remuneration' => $request->getRemuneration(),
+            'logement' => $request->getAccomodationIncludedAsText(),
+            'transport' => $request->getTransportCostRefundedAsText(),
+            'commentaire' => $request->getComment()
+        ]);
     }
 
     #[Route('/api/request-replacements/{id}', name: 'api_request_replacement_update', methods: ['POST'], requirements: ['id' => '\d+'])]

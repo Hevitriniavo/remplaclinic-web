@@ -315,6 +315,14 @@ class Request
         return $this->subSpecialities;
     }
 
+    /**
+     * @return string
+     */
+    public function getSubSpecialitiesAsText(): string
+    {
+        return implode(' - ', $this->subSpecialities->map(fn(Speciality $s) => $s->getName())->toArray());
+    }
+
     public function addSubSpeciality(Speciality $subSpeciality): static
     {
         if (!$this->subSpecialities->contains($subSpeciality)) {
@@ -355,6 +363,21 @@ class Request
         return $this->accomodationIncluded;
     }
 
+    public function getAccomodationIncludedAsText(): string
+    {
+        $values = [
+            'Non',
+            'Oui',
+            'À débattre'
+        ];
+
+        if (array_key_exists($this->getAccomodationIncluded(), $values)) {
+            return $values[$this->getAccomodationIncluded()];
+        }
+
+        return '';
+    }
+
     public function setAccomodationIncluded(?int $accomodationIncluded): static
     {
         $this->accomodationIncluded = $accomodationIncluded;
@@ -365,6 +388,21 @@ class Request
     public function getTransportCostRefunded(): ?int
     {
         return $this->transportCostRefunded;
+    }
+
+    public function getTransportCostRefundedAsText(): string
+    {
+        $values = [
+            'Non',
+            'Oui',
+            'À débattre'
+        ];
+        
+        if (array_key_exists($this->getTransportCostRefunded(), $values)) {
+            return $values[$this->getTransportCostRefunded()];
+        }
+
+        return '';
     }
 
     public function setTransportCostRefunded(?int $transportCostRefunded): static

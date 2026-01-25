@@ -68,11 +68,11 @@ Mes demandes de remplacement | Remplaclinic
                             <tr class="hover:bg-[#fff5e9] border-b {{ loop.index % 2 ? '' : 'bg-gray-50' }}">
                                 <td class="px-4 py-2">
                                     <div class="flex justify-center items-center">
-                                        <a href="#" class="block h-10 w-10 loupe-detail-demande modal-detail-demande-activator"></a>
+                                        <a href="#" class="block h-10 w-10 loupe-detail-demande modal-detail-demande-activator" data-id="{{ row.request.id }}"></a>
                                     </div>
                                 </td>
                                 <td class="px-4 py-2">
-                                    <span class="blue-span cursor-pointer modal-detail-demande-activator">{{ row.request.title }}</span>
+                                    <span class="blue-span cursor-pointer modal-detail-demande-activator" data-id="{{ row.request.id }}">{{ row.request.title }}</span>
                                 </td>
                                 <td class="px-4 py-2">{{ row.request.createdAt|date('d/m/Y') }}</td>
                                 <td class="px-4 py-2">{{ row.request.speciality.name }}</td>
@@ -112,5 +112,7 @@ Mes demandes de remplacement | Remplaclinic
             </div>
         </div>
     </div>
+
+    {% include 'espace-perso/mes-demandes/_detail-demande.html.twig' with { requestType: 'replacement' } %}
 </div>
 {% endblock %}

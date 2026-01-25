@@ -6,6 +6,7 @@ use App\Dto\IdListDto;
 use App\Dto\Request\AddUsersToDto;
 use App\Entity\Request as EntityRequest;
 use App\Entity\User;
+use App\Pagination\Pagination;
 use App\Repository\RequestRepository;
 use App\Repository\RequestResponseRepository;
 use App\Repository\UserRepository;
@@ -28,10 +29,33 @@ class UserRequestController extends AbstractController
     ) {}
 
     #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
-    public function getPersonneContacteForRequest(Request $request, int $requestId): Response
+    public function getRequestPersonneContactesAdmin(Request $request, int $requestId): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
         return $this->json($this->requestResponseRepository->findAllDataTables($requestId, $params), 200, [], ['groups' => self::JSON_LIST_GROUPS]);
+    }
+
+    /**
+     * List des utilisateurs pour une demande.
+     */
+    #[Route('/api/requests/{requestId}/personne-contacte/more', name: 'api_request_personne_contacte_list_more', methods: ['GET'], requirements: ['requestId' => '\d+'])]
+    public function getRequestPersonneContactes(Request $request, int $requestId): Response
+    {
+        $pagination = new Pagination($request->query->all());
+
+        $routeParams = [
+            'limit' => $pagination->limit,
+            'requestId' => $requestId,
+        ];
+
+        $resultData = $this->requestResponseRepository->findAllByRequestId($requestId, $pagination->limit, $pagination->offset);
+
+        return $this->json([
+            'result' => $resultData,
+            'params' => array_merge($pagination->withMaxPageArray($resultData['totalRecords']), [
+                '_url' => $this->generateUrl('api_request_personne_contacte_list_more', $routeParams),
+            ]),
+        ]);
     }
 
     #[Route('/api/requests/personne-contacte', name: 'api_request_personne_contacte_all', methods: ['GET'])]

@@ -9,6 +9,7 @@ use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -151,32 +152,95 @@ class RequestResponseRepository extends ServiceEntityRepository
 
     public function findAllByUserId(int $userId, RequestType $requestType, int $limit = 10, int $offset = 0, ?int $status = null): DataTableResponse
     {
+        $params = [
+            'user' => $userId,
+            'request_type' => $requestType,
+            'exclu_request_status' => Request::ARCHIVED,
+            'status' => $status,
+        ];
+
+        $paginator = new Paginator($this->createFindAllQueryBuilder($params, $limit, $offset)->getQuery());
+
+        return DataTableResponse::fromPaginator($paginator, 0);
+    }
+
+    public function findAllByRequestId(int $requestId, int $limit = 10, int $offset = 0, ?int $status = null): array
+    {
+        $params = [
+            'request' => $requestId,
+            'status' => $status,
+        ];
+
+        $qb = $this->createFindAllQueryBuilder($params, $limit, $offset);
+
+        $paginator = new Paginator($qb->getQuery());
+
+        $result = [
+            'totalRecords' => count($paginator),
+            'data' => [],
+        ];
+
+        foreach($paginator as $row) {
+            $result['data'][] = [
+                'id' => $row->getId(),
+                'statut' => $row->getStatusAsText(),
+                'user' => [
+                    'id' => $row->getUser()->getId(),
+                    'name' => $row->getUser()->getSurnameAndName(),
+                    'current_speciality' => $row->getUser()->getCurrentSpecialityAsText(),
+                    'sous_specialite' => $row->getUser()->getSubSpecialitiesAsText(),
+                ],
+            ];
+        }
+
+        return $result;
+    }
+
+    private function createFindAllQueryBuilder(array $params = [], int $limit = 10, int $offset = 0): QueryBuilder
+    {
         $qb = $this->createQueryBuilder('p')
             ->join('p.user', 'u')
             ->join('p.request', 'r')
             ->join('r.applicant', 'a')
         ;
-            
-        $qb->where('u.id = :user_id')
-            ->setParameter('user_id', $userId)
-            ->andWhere('r.requestType = :request_type')
-            ->setParameter('request_type', $requestType)
-            ->andWhere('r.status <> :r_status')
-            ->setParameter('r_status', Request::ARCHIVED)
-            ->orderBy('r.createdAt', 'desc')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset);
         
-        if (!is_null($status)) {
+        // user
+        if (!empty($params['user'])) {
+            $qb->andWhere('u.id = :user_id')
+                ->setParameter('user_id', $params['user']);
+        }
+
+        // request
+        if (!empty($params['request'])) {
+            $qb->andWhere('r.id = :request_id')
+                ->setParameter('request_id', $params['request']);
+        }
+
+        // request_type
+        if (!empty($params['request_type'])) {
+            $qb->andWhere('r.requestType = :request_type')
+                ->setParameter('request_type', $params['request_type']);
+        }
+
+        // exclu request statut
+        if (!empty($params['exclu_request_status'])) {
+            $qb->andWhere('r.status <> :exclu_request_status')
+                ->setParameter('exclu_request_status', $params['exclu_request_status']);
+        }
+        
+        if (!empty($params['status'])) {
             $qb->andWhere('p.status = :p_status')
-                ->setParameter('p_status', $status);
+                ->setParameter('p_status', $params['status']);
         } else {
             $qb->andWhere('p.status <> :p_status')
                 ->setParameter('p_status', RequestResponse::EXCLU);
         }
 
-        $paginator = new Paginator($qb->getQuery());
+        $qb
+            ->orderBy('r.createdAt', 'desc')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
 
-        return DataTableResponse::fromPaginator($paginator, 0);
+        return $qb;
     }
 }
