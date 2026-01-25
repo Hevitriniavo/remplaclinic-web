@@ -111,5 +111,9 @@
             {% include 'register/_form-btn-validation.html.twig' %}
         </form>
     </div>
+
+    {% if is_granted('ROLE_USER') %}
+        {% include 'register/_confirmation-desinscription.html.twig' %}
+    {% endif %}
 </div>
 {% endblock %}

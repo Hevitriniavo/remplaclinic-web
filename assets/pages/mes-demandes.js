@@ -106,4 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return true
         }
     })
+
+    // candidature
+    new RemplaModal('modal-confirmation-candidature', {
+        beforeOpenAsync: async (e, activator) => {
+            e.preventDefault()
+            console.log('OPEN CONFIRMATION', {e, activator})
+            // update modal data here
+            return true
+        }
+    })
 })

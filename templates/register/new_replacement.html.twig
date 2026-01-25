@@ -177,5 +177,9 @@
             {% include 'register/_form-btn-validation.html.twig' with { is_replacement: true } %}
         </form>
     </div>
+
+    {% if is_granted('ROLE_USER') %}
+        {% include 'register/_confirmation-desinscription.html.twig' %}
+    {% endif %}
 </div>
 {% endblock %}

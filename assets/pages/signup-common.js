@@ -1,7 +1,7 @@
 import axios from 'axios'
 import initPageCommon from './page-common.js'
 import RemplaFormValidation from '../js/rempla-form-validation.js'
-
+import RemplaModal from '../js/rempla-modal.js'
 import showToast from '../js/rempla-toaster.js'
 
 export default function initSignupCommon() {
@@ -111,4 +111,15 @@ export const loadUserInfos = function () {
                 showToast("Erreur: Impossible d'afficher vos informations personnelles. Veuillez contacter l'administrateur.", 'error', 5000)
             })
     }
+}
+
+export const initDesinscriptionModal = function (selector = 'modal-confirmation-desinscription') {
+    return new RemplaModal(selector, {
+        beforeOpenAsync: async (e, activator) => {
+            e.preventDefault()
+            console.log('OPEN CONFIRMATION DESINSCRIPTION', {e, activator})
+            // update modal data here
+            return true
+        }
+    })
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { default as initSignupCommon, loadUserInfos } from './signup-common.js'
+import { default as initSignupCommon, loadUserInfos, initDesinscriptionModal } from './signup-common.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     initSignupCommon()
@@ -76,4 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // load user detail if needed
     loadUserInfos()
+
+    // description
+    initDesinscriptionModal('modal-confirmation-desinscription')
 })
