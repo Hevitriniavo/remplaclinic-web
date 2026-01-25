@@ -133,4 +133,15 @@ class RequestResponse
 
         return '';
     }
+
+    public function getApplicantStatusAsText(): string
+    {
+        $statuses = ["En cours", "Accepté", "Demande d'informations complémentaires"];
+        
+        if (array_key_exists($this->getStatus(), $statuses)) {
+            return $statuses[$this->getStatus()];
+        }
+
+        return '';
+    }
 }

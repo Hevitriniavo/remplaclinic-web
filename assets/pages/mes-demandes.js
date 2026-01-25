@@ -77,8 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
             tabNavigation.setActiveIndex(0)
 
             // clear liste remplacants table
-            document.querySelector('#tbl-request-replacements tbody').innerHTML = ''
-            document.querySelector('.tbl-request-replacements-pagination-container').innerHTML = ''
+            const tableListeRemplacants = document.querySelector('#tbl-request-replacements tbody')
+            if (tableListeRemplacants) {
+                tableListeRemplacants.innerHTML = ''
+
+                const paginationContainer = document.querySelector('.tbl-request-replacements-pagination-container')
+                if (paginationContainer) {
+                    paginationContainer.innerHTML = ''
+                }
+            }
 
             // get request detail
             const url = getCleanUrl(document.getElementById('modal-detail-demande').dataset.detailUrl, requestId)

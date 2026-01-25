@@ -8,7 +8,7 @@
 
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl blue-span font-semibold demande-detail-title">Demande de remplacement du 26/01/2026 au 30/01/2026</h2>
+            <h2 class="text-xl blue-span font-semibold demande-detail-title"></h2>
             <button class="text-gray-500 hover:text-gray-700 close">&times;</button>
         </div>
 
@@ -35,9 +35,9 @@
                 <div id="tab-infos-detail-demande" class="tab-content">
                     <div class="flex gap-5">
                         <div class="flex flex-col gap-2">
-                            <div><b>Spécialité</b>: <span class="demande-detail-specialite">Soins</span></div>
+                            <div><b>Spécialité</b>: <span class="demande-detail-specialite"></span></div>
                             {% if requestType is defined and requestType is not same as('installation') %}
-                            <div><b>Sous spécialité</b>: <span class="demande-detail-sous_specialite">Soins de suite et réadaptation</span></div>
+                            <div><b>Sous spécialité</b>: <span class="demande-detail-sous_specialite"></span></div>
                             {% elseif requestType is defined and requestType is same as('installation') %}
                                 <div class="flex gap-2">
                                     <div class="font-bold">Raison(s): </div>
@@ -46,14 +46,14 @@
                             {% endif %}
                         </div>
                         <div class="flex flex-col gap-2">
-                            <div><b>Région</b>: <span class="demande-detail-region">Languedoc-Roussillon</span></div>
-                            <div><b>Ville</b>: <span class="demande-detail-ville">Saint Clément de Rivière (MONTPELLIER)</span></div>
+                            <div><b>Région</b>: <span class="demande-detail-region"></span></div>
+                            <div><b>Ville</b>: <span class="demande-detail-ville"></span></div>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <div><b>Rémunération</b>: <span class="demande-detail-remuneration">de 70 000 à 75 000 euros brut / an</span> &euro;</div>
+                            <div><b>Rémunération</b>: <span class="demande-detail-remuneration"></span></div>
                             {% if requestType is defined and requestType is not same as('installation') %}
-                            <div><b>Logement proposé</b>: <span class="demande-detail-logement">Non</span></div>
-                            <div><b>Transport pris en charge</b>: <span class="demande-detail-transport">Non</span></div>
+                            <div><b>Logement proposé</b>: <span class="demande-detail-logement"></span></div>
+                            <div><b>Transport pris en charge</b>: <span class="demande-detail-transport"></span></div>
                             {% endif %}
                         </div>
                     </div>

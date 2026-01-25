@@ -368,7 +368,7 @@ class Request
         $values = [
             'Non',
             'Oui',
-            'À débattre'
+            'Non renseigné'
         ];
 
         if (array_key_exists($this->getAccomodationIncluded(), $values)) {
@@ -395,7 +395,7 @@ class Request
         $values = [
             'Non',
             'Oui',
-            'À débattre'
+            'Non renseigné'
         ];
         
         if (array_key_exists($this->getTransportCostRefunded(), $values)) {

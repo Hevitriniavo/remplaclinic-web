@@ -183,7 +183,7 @@ class RequestResponseRepository extends ServiceEntityRepository
         foreach($paginator as $row) {
             $result['data'][] = [
                 'id' => $row->getId(),
-                'statut' => $row->getStatusAsText(),
+                'statut' => $row->getApplicantStatusAsText(),
                 'user' => [
                     'id' => $row->getUser()->getId(),
                     'name' => $row->getUser()->getSurnameAndName(),
