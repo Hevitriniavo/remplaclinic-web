@@ -9,6 +9,7 @@ use App\Dto\Request\NewInstallationDto;
 use App\Dto\Request\NewReplacementDto;
 use App\Dto\IdListDto;
 use App\Entity\Request as EntityRequest;
+use App\Entity\RequestReason;
 use App\Entity\RequestType;
 use App\Repository\RequestRepository;
 use App\Service\Request\RequestService;
@@ -129,7 +130,8 @@ class RequestController extends AbstractController
             'remuneration' => $request->getRemuneration(),
             'logement' => $request->getAccomodationIncludedAsText(),
             'transport' => $request->getTransportCostRefundedAsText(),
-            'commentaire' => $request->getComment()
+            'commentaire' => $request->getComment(),
+            'raison' => implode('<br>', $request->getReasons()->map(fn(RequestReason $r) => $r->getReason() === 'Autre' ? $r->getReasonValue() : $r->getReason())->toArray())
         ]);
     }
 

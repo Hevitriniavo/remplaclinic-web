@@ -38,6 +38,11 @@
                             <div><b>Spécialité</b>: <span class="demande-detail-specialite">Soins</span></div>
                             {% if requestType is defined and requestType is not same as('installation') %}
                             <div><b>Sous spécialité</b>: <span class="demande-detail-sous_specialite">Soins de suite et réadaptation</span></div>
+                            {% elseif requestType is defined and requestType is same as('installation') %}
+                                <div class="flex gap-2">
+                                    <div class="font-bold">Raison(s): </div>
+                                    <div class="demande-detail-raison"></div>
+                                </div>
                             {% endif %}
                         </div>
                         <div class="flex flex-col gap-2">
@@ -45,7 +50,7 @@
                             <div><b>Ville</b>: <span class="demande-detail-ville">Saint Clément de Rivière (MONTPELLIER)</span></div>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <div><b>Rémunération</b>: <span class="demande-detail-remuneration">de 70 000 à 75 000 euros brut / an &euro;</span></div>
+                            <div><b>Rémunération</b>: <span class="demande-detail-remuneration">de 70 000 à 75 000 euros brut / an</span> &euro;</div>
                             {% if requestType is defined and requestType is not same as('installation') %}
                             <div><b>Logement proposé</b>: <span class="demande-detail-logement">Non</span></div>
                             <div><b>Transport pris en charge</b>: <span class="demande-detail-transport">Non</span></div>

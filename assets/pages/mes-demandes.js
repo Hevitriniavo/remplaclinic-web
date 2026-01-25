@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const el = document.querySelector(`.demande-detail-${key}`)
                     if (el) {
-                        const contentProp = key === 'commentaire' ? 'innerHTML' : 'innerText'
+                        const contentProp = ['commentaire', 'raison'].includes(key) ? 'innerHTML' : 'innerText'
                         el[contentProp] = response.data[key]
                     }
                 }
