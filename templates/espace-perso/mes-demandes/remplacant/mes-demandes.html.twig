@@ -65,10 +65,10 @@ Mes demandes de remplacement | Remplaclinic
                                 <td class="px-4 py-2">
                                     {% if row.status is same as(0) %}
                                         <div class="flex flex-col gap-2 w-[150px] items-start justify-center">
-                                            <a class="form-submit text-white py-1 px-4 modal-confirmation-candidature-activator" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur." href="{{ row.id }}">
+                                            <a class="form-submit text-white py-1 px-4 modal-confirmation-candidature-activator" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur." href="{{ path('app_user_request_response_answer', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 1 }) }}">
                                                 Je postule
                                             </a>
-                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous allez recevoir un email avec les informations du demandeur.">
+                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous allez recevoir un email avec les informations du demandeur." href="{{ path('app_user_request_response_from_mail', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 2 }) }}">
                                                 Plus d'informations
                                             </a>
                                         </div>
@@ -76,7 +76,7 @@ Mes demandes de remplacement | Remplaclinic
                                         <span>Votre Candidature est en cours</span>
                                     {% elseif row.status is same as(2) %}
                                         <div class="flex flex-col gap-2 w-[150px] items-start justify-center">
-                                            <a class="form-submit text-white py-1 px-4 modal-confirmation-candidature-activator" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur." href="{{ row.id }}">
+                                            <a class="form-submit text-white py-1 px-4 modal-confirmation-candidature-activator" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur." href="{{ path('app_user_request_response_answer', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 1 }) }}">
                                                 Je postule
                                             </a>
                                         </div>

@@ -12,10 +12,14 @@ use App\Repository\UserRepository;
 use App\Service\Mail\RequestEmail\ValiderRequestEmail;
 use App\Service\Mail\RequestEmail\RenvoyerRequestEmail;
 use App\Service\Mail\RequestEmail\RelancerRequestEmail;
+use App\Service\Mail\RequestEmail\RequestNotificationAdminEmail;
 use App\Service\Mail\UserEmail\InscriptionNotificationAdminEmail;
 use App\Service\Mail\UserRequestEmail\InscriptionRequestInstallationEmail;
 use App\Service\Mail\UserRequestEmail\InscriptionRequestReplacementEmail;
 use App\Service\Mail\UserEmail\InscriptionUserInfosEmail;
+use App\Service\Mail\UserRequestEmail\RequestResponseCoordonneeEmail;
+use App\Service\Mail\UserRequestEmail\RequestResponseNotificationAdminEmail;
+use App\Service\Mail\UserRequestEmail\RequestResponseOwnerNotificationEmail;
 use Exception;
 use Twig\Environment;
 
@@ -42,6 +46,10 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::USER_INSCRIPTION_NOTIFICATION => InscriptionNotificationAdminEmail::class,
             EmailEvents::USER_CREATION_REQUEST_REPLACEMENT => InscriptionRequestReplacementEmail::class,
             EmailEvents::USER_CREATION_REQUEST_INSTALLATION => InscriptionRequestInstallationEmail::class,
+            EmailEvents::REQUEST_CREATION => RequestNotificationAdminEmail::class,
+            EmailEvents::REQUEST_REPONSE_DEMANDEUR => RequestResponseOwnerNotificationEmail::class,
+            EmailEvents::REQUEST_REPONSE_COORDONNEE => RequestResponseCoordonneeEmail::class,
+            EmailEvents::REQUEST_REPONSE_ADMIN => RequestResponseNotificationAdminEmail::class,
         ];
 
         if (!array_key_exists($eventName, $emailBuilderMap)) {

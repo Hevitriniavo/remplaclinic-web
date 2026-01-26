@@ -1,0 +1,16 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:center;padding:15px;font-size:18px;">Un remplaçant a postulé à votre demande !</td>
+</tr>
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+		Bonjour <b>{{ prenom ~ ' ' ~ nom }}</b>,
+		<br><br>
+		Un remplaçant a répondu favorablement à votre demande. L'équipe de Remplaclinic est en train de prendre contact avec lui afin de vous mettre en relation.
+		<br><br>
+		En outre, nous vous rappelons que notre service est un service de mise en relation de médecins, il vous appartient de contrôler la validité de la licence  de remplacement ou de l'inscription à l'ordre des médecins du remplaçant qui a postulé.
+	</td>
+</tr>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:center;padding:15px;font-size:18px;">Accédez aux coordonnées et prenez contact</td>
+</tr>
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+		Bonjour <b>{{ prenom ~ ' ' ~ nom }}</b>,
+		<br><br>
+		{% if croise %}
+			Suite à votre réponse positive à la demande, nous vous invitons à prendre contact directement avec le demandeur.
+		{% else %}
+			Suite à votre réponse de demande d'informations, nous vous invitons à prendre contact directement avec le demandeur.
+		{% endif %}
+		<br><br>
+		Voici ses coordonnées :
+		<br>
+		<b>{{ nom_etablissement }}</b>
+		<br>
+		<b>{{ cp }}</b>
+		<br>
+		<b>{{ owner_prenom ~ ' ' ~ owner_nom }}</b>
+		<br>
+		<b>{{ mail }}</b>
+		<br>
+		<b>{{ tel_fixe }}</b>
+		<br>
+		<b>{{ tel_port }}</b>
+		<br><br>
+		{% if croise %}
+			Si vous n'effectuez pas cette démarche, Remplaclinic se réserve alors le droit de prendre contact avec le demandeur afin de fixer directement les conditions du remplacement.
+		{% endif %}
+	</td>
+</tr>
+{% endblock %}

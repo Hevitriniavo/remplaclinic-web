@@ -1,0 +1,51 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Notification nouvelle proposition d'installation</td>
+</tr>
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+		Bonjour,
+		<br><br>
+		Une <b>proposition d'installation</b> en <b>{{ specialite_demande }}</b> de <b>{{ nom_demandeur }}</b> située à <b>{{ ville_demandeur }}</b> vient d'arriver sur le site remplaclinic.
+		<br><br>
+		<span style="text-decoration:underline;">Raison(s) :</span>
+		<br>
+		{% for raison in raisons %}
+			{% if raison.reason == 'Autre' %}
+				<br/>
+				-
+				{{ raison.raisonValue }}
+			{% else %}
+				<br/>
+				-
+				{{ raison.reason }}
+			{% endif %}
+		{% endfor %}
+		<br><br>
+		Salaire : {{ remuneration }} &euro;
+		<br><br>
+		<span style="text-decoration:underline;">Date de la proposition :</span>
+		<br>
+		- à partir du <b>{{ date_debut_demande }}</b>
+		<br><br>
+		<span style="text-decoration:underline;">Précisions sur la proposition : </span>
+		<br>
+		{{ commentaires_demande|raw }}
+		<br><br>
+		<span style="text-decoration:underline;">Sous-spécialités : </span>
+		<br>
+		{% for sp in specialites %}
+			- <b>{{ sp.name }}</b><br>
+		{% endfor %}
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;" colspan="2">
+		<a href="{{ url('app_admin_request_installation_show', { id: request_id }) }}">
+			<img src="{{ asset('imgs/mails/demande.jpg') }}" alt="proposition d'installation" title="Proposition d'installation" />
+		</a>
+	</td>
+</tr>
+{% endblock %}

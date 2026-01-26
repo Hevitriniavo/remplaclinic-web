@@ -243,4 +243,19 @@ class RequestResponseRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findOneByUserIdAndRequestId(int $userId, int $requestId): ?RequestResponse
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.user', 'u')
+            ->join('p.request', 'r')
+            ->join('r.applicant', 'a')
+            ->andWhere('u.id = :user_id AND r.id = :request_id')
+            ->setParameter('user_id', $userId)
+            ->setParameter('request_id', $requestId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

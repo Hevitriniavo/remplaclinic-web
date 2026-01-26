@@ -56,7 +56,7 @@ class RenvoyerRequestEmail
             'ville_demandeur' => $this->getApplicantLocality(),
             'date_debut_demande' => $this->request->getStartedAtFr(false),
             'date_fin_demande' => $this->request->getEndAtFr(false),
-            'remuneration' => $this->request->getRemuneration(),
+            'remuneration' => $this->request->getRemunerationOrRetrocession(),
             'commentaires_demande' => $this->request->getComment(),
             'specialites' => $this->request->getSubSpecialities(),
             'user_id' => $this->user->getId(),

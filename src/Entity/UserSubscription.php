@@ -89,6 +89,15 @@ class UserSubscription
         return $this;
     }
 
+    public function decrementInstallationCount(): static
+    {
+        if (!is_null($this->installationCount)) {
+            $this->installationCount--;
+        }
+        
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;

@@ -316,6 +316,14 @@ class Request
     }
 
     /**
+     * @return bool
+     */
+    public function hasSubSpecialities(): bool
+    {
+        return $this->subSpecialities !== null && $this->subSpecialities->count() >= 0;
+    }
+
+    /**
      * @return string
      */
     public function getSubSpecialitiesAsText(): string
@@ -541,5 +549,18 @@ class Request
         }
 
         return $this;
+    }
+
+    public function getRemunerationOrRetrocession(string $defaultValue = 'Non renseigné'): string
+    {
+        $remuneration = $defaultValue;
+
+        if (!empty($this->getRemuneration())) {
+            $remuneration = $this->getRemuneration() . ' €';
+        } else if (!empty($this->getRetrocession())) {
+            $remuneration = $this->getRetrocession() . ' %';
+        }
+
+        return $remuneration;
     }
 }

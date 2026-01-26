@@ -111,8 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
     new RemplaModal('modal-confirmation-candidature', {
         beforeOpenAsync: async (e, activator) => {
             e.preventDefault()
-            console.log('OPEN CONFIRMATION', {e, activator})
-            // update modal data here
+            
+            const btnConfirm = document.querySelector('.js-btn-confirm-candidature')
+            btnConfirm.href = activator.href
+
             return true
         }
     })

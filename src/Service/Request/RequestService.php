@@ -6,12 +6,17 @@ use App\Common\DateUtil;
 use App\Dto\Request\EditRequestDto;
 use App\Dto\Request\NewInstallationDto;
 use App\Dto\Request\NewReplacementDto;
+use App\Entity\EmailEvents;
 use App\Entity\Request;
 use App\Entity\RequestReason;
 use App\Entity\RequestReplacementType;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
+use App\Entity\UserSubscription;
 use App\Repository\RequestRepository;
+use App\Service\Mail\MailService;
+use App\Service\Mail\RequestMailBuilder;
+use App\Service\Taches\AppConfigurationService;
 use App\Service\User\RegionService;
 use App\Service\User\SpecialityService;
 use App\Service\User\UserService;
@@ -26,10 +31,14 @@ class RequestService
         private SpecialityService $specialityService,
         private RegionService $regionService,
         private UserService $userService,
+        private MailService $mailService,
+        private RequestMailBuilder $mailBuilder,
+        private AppConfigurationService $config,
     ) {}
 
     public function createReplacement(NewReplacementDto $replacementDto): ?Request
     {
+        // step 1: store request
         $request = new Request();
         $request->setApplicant($this->userService->getUser($replacementDto->applicant))
             ->setSpeciality($this->specialityService->getSpeciality($replacementDto->speciality))
@@ -50,14 +59,22 @@ class RequestService
             ->setStatus(Request::CREATED)
         ;
 
+        foreach ($this->specialityService->getSpecialities($replacementDto->subSpecialities) as $speciality) {
+            $request->addSubSpeciality($speciality);
+        }
+
         $this->entityManager->persist($request);
         $this->entityManager->flush();
+
+        // step 2: notify admin
+        $this->notifyAdminNewRequest($request);
 
         return $request;
     }
 
     public function createInstallation(NewInstallationDto $installationDto): ?Request
     {
+        // step 1: store request
         $request = new Request();
         $request->setApplicant($this->userService->getUser($installationDto->applicant))
             ->setSpeciality($this->specialityService->getSpeciality($installationDto->speciality))
@@ -80,6 +97,12 @@ class RequestService
 
         $this->entityManager->persist($request);
         $this->entityManager->flush();
+
+        // step 2: update abonnement
+        $this->updateUserSubscription($request->getApplicant()->getSubscription());
+        
+        // step 3: notify admin
+        $this->notifyAdminNewRequest($request);
 
         return $request;
     }
@@ -223,5 +246,22 @@ class RequestService
                 $request->addReason($r);
             }
         }
+    }
+
+    private function updateUserSubscription(?UserSubscription $subscription)
+    {
+        if (!empty($subscription)) {
+            $subscription->decrementInstallationCount();
+            $this->entityManager->flush();
+        }
+    }
+
+    private function notifyAdminNewRequest(Request $request)
+    {
+        $mailLog = $this->mailBuilder
+            ->build(EmailEvents::REQUEST_CREATION, $request, null, [
+                'target_email' => $this->config->getValue('REQUEST_NOTIFICATION_TARGET_EMAIL'),
+            ]);
+        $this->mailService->send($mailLog);
     }
 }

@@ -21,7 +21,9 @@ class EmailEvents
     const USER_CREATION_REQUEST_INSTALLATION = 'user:creation:installation';
 
     // response
-    const REQUEST_REPONSE = 'demande:renponse';
+    const REQUEST_REPONSE_DEMANDEUR = 'demande:renponse:demandeur';
+    const REQUEST_REPONSE_COORDONNEE = 'demande:renponse:coordonnee';
+    const REQUEST_REPONSE_ADMIN = 'demande:renponse:admin';
 
     public static function all(): array
     {
@@ -40,7 +42,9 @@ class EmailEvents
             self::USER_CREATION_REQUEST_REPLACEMENT,
             self::USER_CREATION_REQUEST_INSTALLATION,
 
-            self::REQUEST_REPONSE,
+            self::REQUEST_REPONSE_DEMANDEUR,
+            self::REQUEST_REPONSE_COORDONNEE,
+            self::REQUEST_REPONSE_ADMIN,
         ];
     }
 }

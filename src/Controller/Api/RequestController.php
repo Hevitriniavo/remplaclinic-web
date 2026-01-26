@@ -127,7 +127,7 @@ class RequestController extends AbstractController
             'sous_specialite' => $request->getSubSpecialitiesAsText(),
             'region' => $request->getRegion()->getName(),
             'ville' => $request->getApplicant()->getApplicantLocality(),
-            'remuneration' => !empty($request->getRemuneration()) ? $request->getRemuneration() . ' €' : (!empty($request->getRetrocession()) ? $request->getRetrocession() . ' %' : 'Non renseigné'),
+            'remuneration' => $request->getRemunerationOrRetrocession(),
             'logement' => $request->getAccomodationIncludedAsText(),
             'transport' => $request->getTransportCostRefundedAsText(),
             'commentaire' => $request->getComment(),
