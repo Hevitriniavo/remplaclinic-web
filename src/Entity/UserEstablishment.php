@@ -17,7 +17,7 @@ class UserEstablishment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'user:establishment'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 

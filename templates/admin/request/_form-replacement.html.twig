@@ -4,17 +4,25 @@
             <div class="card-header">
                 <h1 class="text-center">Informations sur la demande</h1>
             </div>
-            <div class="card-body" ref="formEl" data-url="{{ path('api_request_replacement_new') }}">
+            <div
+                class="card-body"
+                ref="formEl"
+                data-url="{{ path('api_request_replacement_new') }}"
+                data-applicant-url="{{ path('api_user_liste_select') }}"
+            >
                 <div class="row justify-content-center">
                     <div class="col-10">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="request-applicant">Demandeur *</label>
-                                    <twig:SelectClinic class="form-control select2-input" id="request-applicant"
-                                        v-model="requestData.applicant">
+                                    <select
+                                        class="form-control"
+                                        id="request-applicant"
+                                        v-model="requestData.applicant"
+                                    >
                                         <option></option>
-                                    </twig:SelectClinic>
+                                    </select>
                                     <div class="text-danger" v-if="getErrorClass('applicant') === 'is-invalid'">Choisir
                                         un demandeur</div>
                                 </div>

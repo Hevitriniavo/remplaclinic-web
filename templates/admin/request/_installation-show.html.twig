@@ -4,7 +4,7 @@
 >
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" ref="formEl" data-applicant-url="{{ path('api_user_liste_select') }}">
                 <div class="row">
                     <div class="col-12">
                         <div class="text-right">
@@ -66,10 +66,13 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="request-applicant">Demandeur *</label>
-                                    <twig:SelectClinic class="form-control select2-input" id="request-applicant"
-                                        v-model="requestData.applicant">
+                                    <select
+                                        class="form-control"
+                                        id="request-applicant"
+                                        v-model="requestData.applicant"
+                                    >
                                         <option></option>
-                                    </twig:SelectClinic>
+                                    </select>
                                     <div class="text-danger" v-if="getErrorClass('applicant') === 'is-invalid'">Choisir
                                         un demandeur</div>
                                 </div>

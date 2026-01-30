@@ -28,12 +28,12 @@ class EditRequestDto
 
         public ?int $positionCount,
 
-        #[Assert\GreaterThanOrEqual(value: 1)]
-        #[Assert\LessThanOrEqual(value: 3)]
+        #[Assert\GreaterThanOrEqual(value: 0)]
+        #[Assert\LessThanOrEqual(value: 2)]
         public ?int $accomodationIncluded,
 
-        #[Assert\GreaterThanOrEqual(value: 1)]
-        #[Assert\LessThanOrEqual(value: 3)]
+        #[Assert\GreaterThanOrEqual(value: 0)]
+        #[Assert\LessThanOrEqual(value: 2)]
         public ?int $transportCostRefunded,
         
         public ?string $remuneration,

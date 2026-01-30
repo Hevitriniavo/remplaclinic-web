@@ -379,6 +379,12 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('role', $params['role']);
         }
 
+        // roles
+        if (!empty($params['roles'])) {
+            $in = array_map(fn($id) => (int) $id, $params['roles']);
+            $qb->andWhere('uur.user_role_id IN ('. implode(',', $in) .')');
+        }
+
         // exclusion
         if (!empty($params['exclus'])) {
             $in = array_map(fn($id) => (int) $id, $params['exclus']);

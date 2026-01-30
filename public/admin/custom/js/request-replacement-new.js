@@ -85,23 +85,7 @@ const app = createApp({
     }
 
     function toFormData() {
-      const formData = requestData.value
-      const result = new FormData()
-      for (const key in formData) {
-        if (Object.prototype.hasOwnProperty.call(formData, key)) {
-          const value = formData[key]
-          if (Array.isArray(value)) {
-            let index = 0
-            for (const aValue of value) {
-              result.append(`${key}[${index}]`, aValue)
-              index++
-            }
-          } else if (value !== null && value !== undefined) {
-            result.append(key, value)
-          }
-        }
-      }
-      return result
+      return window.toFormData(requestData.value)
     }
 
     async function getRequestDetail() {
@@ -125,8 +109,8 @@ const app = createApp({
           positionCount: response.data.positionCount,
           remuneration: response.data.remuneration,
           retrocession: response.data.retrocession,
-          startedAt: formatDate(response.data.startedAt, false),
-          endAt: response.data.endAt ? formatDate(response.data.endAt, false) : null,
+          startedAt: window.formatDate(response.data.startedAt, false),
+          endAt: response.data.endAt ? window.formatDate(response.data.endAt, false) : null,
           replacementType: response.data.replacementType,
           accomodationIncluded: response.data.accomodationIncluded,
           transportCostRefunded: response.data.transportCostRefunded,
@@ -142,8 +126,12 @@ const app = createApp({
 
         // update date envoi
         const requestDateEnvoisList = response.data.sentDates || []
-        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => formatDate(dateEnvoi.sentAt))
+        requestDateEnvois.value = requestDateEnvoisList.map(dateEnvoi => window.formatDate(dateEnvoi.sentAt))
+
+        return response.data
       }
+
+      return null
     }
 
     function onSaveRequest() {
@@ -351,7 +339,11 @@ const app = createApp({
           'personne-contacte': getPersonneContactes,
         }
 
-        await actions[navigationTab]()
+        const response = await actions[navigationTab]()
+
+        if (navigationTab === 'modifier') {
+          initFormView(response)
+        }
       }
     }
 
@@ -369,6 +361,76 @@ const app = createApp({
         .catch(() => {})
     }
 
+    function createUserApplicantSelect2(selector) {
+      jQuery(selector).select2({
+        theme: "bootstrap4",
+        allowClear: true,
+        placeholder: "- Choisir une option -",
+        ajax: {
+          beforeSend: null,
+          url: formEl.value.dataset.applicantUrl,
+          type: "get",
+          dataType: "json",
+          delay: 200,
+          data: (params) => {
+            return {
+              search: params.term,
+              roles: [5, 6]
+            }
+          },
+          processResults: function(data) {
+            return {
+              results: data.map(user => ({ id: user.id, text: user.establishmentName ? user.establishmentName : `${user.name} ${user.surname}` }))
+            }
+          }
+        },
+      })
+    }
+
+    function initFormView(data) {
+      jQuery(".select2-input").select2({
+        theme: "bootstrap4",
+        allowClear: true,
+        placeholder: "- Choisir une option -",
+      })
+
+      initAndSetApplicant(data?.applicant)
+
+      jQuery("#request-speciality").on('change', function() {
+        requestData.value.speciality = jQuery(this).val()
+      })
+      jQuery("#request-applicant").on('change', function() {
+        requestData.value.applicant = jQuery(this).val()
+      })
+      jQuery("#request-region").on('change', function() {
+        requestData.value.region = jQuery(this).val()
+      })
+      
+      jQuery("#request-sub-specialities").on('change', function() {
+        requestData.value.subSpecialities = jQuery(this).val().filter(val => !!val)
+      })
+
+      jQuery("#request-started-at, #request-end-at").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+      })
+      jQuery("#request-started-at-input").on("change", function () {
+        requestData.value.startedAt = jQuery(this).val()
+      })
+      jQuery("#request-end-at-input").on("change", function () {
+        requestData.value.endAt = jQuery(this).val()
+      })
+    }
+
+    function initAndSetApplicant(applicant) {
+      createUserApplicantSelect2('#request-applicant')
+
+      if (applicant) {
+        const nomLibelle = applicant.establishment?.name ? applicant.establishment.name : `${applicant.name} ${applicant.surname}`
+        jQuery('#request-applicant').html(`<option value="${applicant.id}" selected="selected">${nomLibelle}</option>`)
+      }
+    }
+
     onMounted(() => {
       jQuery(".editor").summernote({
         height: 200,
@@ -384,36 +446,8 @@ const app = createApp({
         ],
       })
 
-      getRequestDetail().then(() => {
-        jQuery(".select2-input").select2({
-          theme: "bootstrap4",
-          allowClear: true,
-          placeholder: "- Choisir une option -",
-        })
-        jQuery("#request-speciality").on('change', function() {
-          requestData.value.speciality = jQuery(this).val()
-        })
-        jQuery("#request-applicant").on('change', function() {
-          requestData.value.applicant = jQuery(this).val()
-        })
-        jQuery("#request-region").on('change', function() {
-          requestData.value.region = jQuery(this).val()
-        })
-        
-        jQuery("#request-sub-specialities").on('change', function() {
-          requestData.value.subSpecialities = jQuery(this).val().filter(val => !!val)
-        })
-
-        jQuery("#request-started-at, #request-end-at").datepicker({
-          format: "dd/mm/yyyy",
-          autoclose: true,
-        })
-        jQuery("#request-started-at-input").on("change", function () {
-          requestData.value.startedAt = jQuery(this).val()
-        })
-        jQuery("#request-end-at-input").on("change", function () {
-          requestData.value.endAt = jQuery(this).val()
-        })
+      getRequestDetail().then((data) => {
+        initFormView(data)
       })
     })
 

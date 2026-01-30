@@ -103,6 +103,7 @@ class RequestController extends AbstractController
 
         $groups = self::JSON_LIST_GROUPS;
         $groups[] = 'full';
+        $groups[] = 'user:establishment';
 
         return $this->json(
             $request,

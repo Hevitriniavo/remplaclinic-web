@@ -114,7 +114,7 @@ class User
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
-    #[Groups(['datatable'])]
+    #[Groups(['datatable', 'user:establishment'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?UserEstablishment $establishment = null;
 
