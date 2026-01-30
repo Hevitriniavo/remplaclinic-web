@@ -114,7 +114,7 @@ $(function () {
             return "";
           }
 
-          return formatDate(data, false);
+          return window.formatDate(data, false);
         },
       },
       {
@@ -124,10 +124,10 @@ $(function () {
         render: function (data, type, row, meta) {
           const dates = [];
           if (data) {
-            dates.push(formatDate(data, false));
+            dates.push(window.formatDate(data, false));
           }
-          if (row["request"]["endAt"]) {
-            dates.push(formatDate(row["request"]["endAt"], false));
+          if (row['request']['requestType'] !== 'installation' && row["request"]["endAt"]) {
+            dates.push(window.formatDate(row["request"]["endAt"], false));
           }
 
           return dates.join(' - ');
@@ -142,7 +142,7 @@ $(function () {
             return "";
           }
 
-          return formatDate(data, false);
+          return window.formatDate(data, false);
         },
       },
       {
