@@ -363,4 +363,43 @@ class UserRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findAllForSelect(array $params = [])
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $qb->from('user', 'u')
+            ->select('DISTINCT u.id, u.surname, u.name, ue.name AS establishmentName')
+            ->join('u', 'user_user_role', 'uur', 'u.id = uur.user_id')
+            ->leftJoin('u', 'user_establishment', 'ue', 'u.establishment_id = ue.id')
+        ;
+
+        // role
+        if (!empty($params['role'])) {
+            $qb->andWhere('uur.user_role_id = :role')
+                ->setParameter('role', $params['role']);
+        }
+
+        // exclusion
+        if (!empty($params['exclus'])) {
+            $in = array_map(fn($id) => (int) $id, $params['exclus']);
+            $qb->andWhere('u.id NOT IN ('. implode(',', $in) .')');
+        }
+
+        // search
+        $searchValue = empty($params['search']) ? '' : $params['search'];
+        if (!empty($searchValue)) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->or(
+                        'u.name LIKE :value',
+                        'u.surname LIKE :value',
+                        'u.email LIKE :value',
+                        'ue.name LIKE :value'
+                    )
+                )
+                ->setParameter('value', '%' . $searchValue . '%');
+        }
+
+        return $qb->executeQuery()->fetchAllAssociative();
+    }
 }

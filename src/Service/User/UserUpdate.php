@@ -23,6 +23,7 @@ class UserUpdate
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly UserService $userService,
         private readonly RoleService $roleService,
         private readonly SpecialityService $specialityService,
         private readonly RegionRepository $regionRepository,
@@ -306,6 +307,13 @@ class UserUpdate
             $user->clearRole();
             foreach ($this->roleService->getRoles($directorDto->roles) as $role) {
                 $user->addRole($role);
+            }
+        }
+
+        if (is_array($directorDto->cliniques)) {
+            $user->clearClinics();
+            foreach ($this->userService->getUsers($directorDto->cliniques) as $clinic) {
+                $user->addClinic($clinic);
             }
         }
 

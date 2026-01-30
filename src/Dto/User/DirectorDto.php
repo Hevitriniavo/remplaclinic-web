@@ -62,6 +62,8 @@ class DirectorDto
         #[Assert\GreaterThanOrEqual(value: 0, groups: ['create'])]
         #[Assert\LessThanOrEqual(value: 1, groups: ['create'])]
         public ?int $subscriptionEndNotification,
+
+        public ?array $cliniques,
     ) {
     }
 }

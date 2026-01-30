@@ -14,14 +14,11 @@ class DrupalMigrationUserClinics extends DrupalMigrationBase
         $this->connection->beginTransaction();
         try {
             foreach ($userClinics as $userClinic) {
-
-                $this->connection->update(
-                    'user',
+                $this->connection->insert(
+                    'user_user',
                     [
-                        'clinic_id' => $userClinic['entity_id'],
-                    ],
-                    [
-                        'id' => $userClinic['field_clinique_uid']
+                        'user_source' => $userClinic['entity_id'],
+                        'user_target' => $userClinic['field_clinique_uid'],
                     ]
                 );
             }

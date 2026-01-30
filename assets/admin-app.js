@@ -165,6 +165,62 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 /**************************/
+/**** FORM DATA HELPER ****/
+/**************************/
+window.toQueryParams = (data, baseUrl = '') => {
+  const builder = new URLSearchParams()
+  const dataArrayLike = window.toArrayDataLike(data)
+  for (const line of dataArrayLike) {
+    builder.append(line.name, line.value)
+  }
+  const params = builder.toString()
+  if (!baseUrl || !typeof baseUrl === 'string') {
+    return params
+  }
+  if (baseUrl.indexOf('?') > 0) {
+    return `${baseUrl}&${params}`
+  }
+
+  return `${baseUrl}?${params}`
+}
+
+window.toFormData = (data, parsed = false) => {
+  const builder = new FormData()
+  const dataArrayLike = parsed ? data : window.toArrayDataLike(data)
+  for (const line of dataArrayLike) {
+    builder.append(line.name, line.value)
+  }
+  return builder
+}
+
+window.toArrayDataLike = (data, rootName = '') => {
+  let results = []
+  for (const key in data) {
+    if (Object.hasOwnProperty.call(data, key)) {
+      const element = data[key]
+      if (element === null || element === undefined) {
+        continue
+      }
+      const path = rootName ? `${rootName}[${key}]` : `${key}`
+      // if (Array.isArray(data)) {
+      //   path = `${path}[${key}]`
+      // } else {
+      //   path = `${path}${path ? '.' : ''}${key}`
+      // }
+      if (Array.isArray(element) || typeof element === 'object') {
+        results = results.concat(window.toArrayDataLike(element, path))
+      } else {
+        results.push({
+          name: path,
+          value: element
+        })
+      }
+    }
+  }
+  return results
+}
+
+/**************************/
 /**** Add axios loader ****/
 /**************************/
 axios.interceptors.request.use(

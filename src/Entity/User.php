@@ -26,7 +26,7 @@ class User
     const CURRENT_SPECIALITY_PRACTITIONNER = 32;
     const CURRENT_SPECIALITY_OTHER = 35;
 
-    #[Groups(['datatable', 'user:simple'])]
+    #[Groups(['datatable', 'user:simple', 'user:with-clinics'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -118,10 +118,6 @@ class User
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?UserEstablishment $establishment = null;
 
-    #[Groups(['datatable'])]
-    #[ORM\ManyToOne(targetEntity: self::class)]
-    private ?self $clinic = null;
-
     #[Groups(['full', 'user:simple'])]
     /**
      * @var Collection<int, UserRole>
@@ -160,11 +156,19 @@ class User
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserSubscription $subscription = null;
 
+    #[Groups(['user:with-clinics'])]
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class)]
+    private Collection $clinics;
+
     public function __construct()
     {
         $this->subSpecialities = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->mobilities = new ArrayCollection();
+        $this->clinics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -451,18 +455,6 @@ class User
     public function setEstablishment(?UserEstablishment $establishment): static
     {
         $this->establishment = $establishment;
-
-        return $this;
-    }
-
-    public function getClinic(): ?self
-    {
-        return $this->clinic;
-    }
-
-    public function setClinic(?self $clinic): static
-    {
-        $this->clinic = $clinic;
 
         return $this;
     }
@@ -765,5 +757,36 @@ class User
             self::CURRENT_SPECIALITY_PRACTITIONNER => 'Praticien hospitalier',
             self::CURRENT_SPECIALITY_OTHER => 'Autre',
         ];
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getClinics(): Collection
+    {
+        return $this->clinics;
+    }
+
+    public function addClinic(self $clinic): static
+    {
+        if (!$this->clinics->contains($clinic)) {
+            $this->clinics->add($clinic);
+        }
+
+        return $this;
+    }
+
+    public function removeClinic(self $clinic): static
+    {
+        $this->clinics->removeElement($clinic);
+
+        return $this;
+    }
+
+    public function clearClinics(): static
+    {
+        $this->clinics = new ArrayCollection();
+
+        return $this;
     }
 }

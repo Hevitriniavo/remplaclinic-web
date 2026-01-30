@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\Registration;
 use App\Service\User\UserUpdate;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +47,7 @@ class DirectorController extends AbstractController
             $evidence,
             is_null($evidence) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
             [],
-            ['groups' => ['datatable', 'full']]
+            ['groups' => ['datatable', 'full', 'user:with-clinics']]
         );
     }
 

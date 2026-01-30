@@ -32,6 +32,7 @@ class Registration
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly UserService $userService,
         private readonly RoleService $roleService,
         private readonly SpecialityService $specialityService,
         private readonly RegionService $regionService,
@@ -293,6 +294,10 @@ class Registration
 
         foreach ($this->roleService->getRoles($directorDto->roles) as $role) {
             $user->addRole($role);
+        }
+
+        foreach ($this->userService->getUsers($directorDto->cliniques) as $clinic) {
+            $user->addClinic($clinic);
         }
 
         $this->entityManager->persist($user);
