@@ -77,19 +77,15 @@ $(function () {
 
           const role = row["request"]["applicant"]["roles"];
 
+          const applicantName = data.establishment?.name ? data.establishment.name : `${data.name} ${data.surname}`
+
           let href = "#";
           if (role && role.length) {
             href = role[0].id == 6 ? doctorUrl : clinicUrl;
           }
 
           return (
-            '<div><a href="' +
-            href +
-            '">' +
-            data.name +
-            " " +
-            data.surname +
-            "</a></div>"
+            `<div><a href="${href}">${applicantName}</a></div>`
           );
         },
       },

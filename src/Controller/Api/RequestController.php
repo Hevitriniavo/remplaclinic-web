@@ -35,14 +35,22 @@ class RequestController extends AbstractController
     public function replacement(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
-        return $this->json($this->requestRepository->findAllDataTables(RequestType::REPLACEMENT, $params), 200, [], ['groups' => self::JSON_LIST_GROUPS]);
+
+        $groups = self::JSON_LIST_GROUPS;
+        array_push($groups, 'user:establishment');
+
+        return $this->json($this->requestRepository->findAllDataTables(RequestType::REPLACEMENT, $params), 200, [], ['groups' => $groups]);
     }
 
     #[Route('/api/request-installations', name: 'api_request_installation_get', methods: ['GET'])]
     public function installation(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
-        return $this->json($this->requestRepository->findAllDataTables(RequestType::INSTALLATION, $params), 200, [], ['groups' =>  self::JSON_LIST_GROUPS]);
+
+        $groups = self::JSON_LIST_GROUPS;
+        array_push($groups, 'user:establishment');
+        
+        return $this->json($this->requestRepository->findAllDataTables(RequestType::INSTALLATION, $params), 200, [], ['groups' =>  $groups]);
     }
 
     #[Route('/api/request-replacements', name: 'api_request_replacement_new', methods: ['POST'])]

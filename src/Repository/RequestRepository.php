@@ -37,6 +37,7 @@ class RequestRepository extends ServiceEntityRepository
             ->leftJoin('u.speciality', 's')
             ->leftJoin('u.region', 'r')
             ->leftJoin('u.applicant', 'a')
+            ->leftJoin('a.establishment', 'es')
             // ->leftJoin('u.responses', 'resp', 'resp.request = u.id AND res.status = ' . RequestResponse::ACCEPTE)
             ->addSelect('(' . $countResponseQuery . ') AS responseCount')
             // ->addSelect('0 AS responseCount')
