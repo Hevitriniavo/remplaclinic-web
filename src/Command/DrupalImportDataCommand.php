@@ -26,7 +26,8 @@ class DrupalImportDataCommand extends Command
         'users',
         'user_clinics', // copy user cv after this
         'requests',
-        'request_responses'
+        'request_responses',
+        'contacts'
     ];
 
     public function __construct(

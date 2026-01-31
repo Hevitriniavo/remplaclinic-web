@@ -17,6 +17,7 @@ class DrupalDataMigrator
         'user_clinics' => DrupalMigrationUserClinics::class,
         'requests' => DrupalMigrationRequests::class,
         'request_responses' => DrupalMigrationRequestResponses::class,
+        'contacts' => DrupalMigrationContacts::class,
     ];
 
     public function __construct(

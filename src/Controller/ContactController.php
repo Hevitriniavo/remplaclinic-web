@@ -28,4 +28,11 @@ class ContactController extends AbstractController
             's' => $request->query->get('s'),
         ]);
     }
+
+    #[Route('/contacts/confirmation', name: 'app_contacts_confirmation')]
+    public function contactConfirmation(): Response
+    {
+        // @TODO: change confirmation text depends on contact subject
+        return $this->render('contact/contact-confirmation.html.twig');
+    }
 }

@@ -1,0 +1,165 @@
+{% extends 'admin-datatable.html.twig' %}
+
+{% block title %}
+Remplaclinic :: Admin :: Contacts
+{% endblock %}
+
+{% block page_title %}
+Contacts
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="btn-group mr-3">
+                            <button type="button" class="btn btn-default btn-flat">Action multiple</button>
+                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon"
+                                data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item btn-delete" href="#"
+                                    data-url="{{ path('api_contacts_delete_multiple') }}" data-multiple="true"
+                                    data-selector=".contact-selection">Supprimer</a>
+                            </div>
+                        </div>
+
+                        {# <a class="btn btn-secondary btn-flat" id="btn-contact-new"
+                            href="{{ path('app_admin_contact_new') }}">
+                            <i class="fas fa-plus"></i> Ajouter un remplaçant
+                        </a> #}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table id="tbl-contacts" class="table table-hover"
+                                data-url="{{ path('api_contacts_get') }}"
+                                data-delete-url="{{ path('api_contacts_delete', {id: '0000000000'}) }}"
+                                data-detail-url="{{ path('api_contacts_detail', {id: '0000000000'}) }}"
+                                style="width: 100%;"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input
+                                                    class="custom-control-input custom-control-input-secondary checkbox-selection-tout"
+                                                    type="checkbox" id="contact-selection-tout"
+                                                    data-selector=".contact-selection">
+                                                <label for="contact-selection-tout"
+                                                    class="custom-control-label"></label>
+                                            </div>
+                                        </th>
+                                        <th>#ID</th>
+                                        <th>#SUJET</th>
+                                        <th>#DATE</th>
+                                        <th>#ADRESSE IP</th>
+                                        <th>#NOM</th>
+                                        <th class="text-uppercase">#Prénom</th>
+                                        <th>#EMAIL</th>
+                                        <th class="text-uppercase">#Téléphone</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal detail -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="modal fade" id="conatct-detail-modal">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-secondary">
+                                        <h4 class="modal-title">Contact</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                            <span aria-hidden="true" class="text-white">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Nom</strong></p>
+                                                            <p class="contact-detail-name">N/R</p>
+                                                        </div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Prénom</strong></p>
+                                                            <p class="contact-detail-surname">N/R</p>
+                                                        </div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Email</strong></p>
+                                                            <p class="contact-detail-email">N/R</p>
+                                                        </div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Téléphone</strong></p>
+                                                            <p class="contact-detail-telephone">N/R</p>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Raison</strong></p>
+                                                            <p class="contact-detail-contact_type">N/R</p>
+                                                        </div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Date</strong></p>
+                                                            <p class="contact-detail-submitted_at">N/R</p>
+                                                        </div>
+                                                        <div class="pr-5">
+                                                            <p class="mb-0"><strong>Adresse IP</strong></p>
+                                                            <p class="contact-detail-remote_addr">N/R</p>
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-0"><strong>Objet</strong></p>
+                                                            <p class="contact-detail-object">N/R</p>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <p class="mb-0"><strong>Fonction</strong></p>
+                                                            <p class="contact-detail-fonction">N/R</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div>
+                                                    <p class="mb-0"><strong>Message</strong></p>
+                                                    <p class="contact-detail-message">N/R</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">
+                                            <i class="fas fa-times"></i> Fermer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End modal detail -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodyjs %}
+{{ parent() }}
+<script src="{{ versioned_asset('admin/custom/js/contact.js') }}"></script>
+{% endblock %}

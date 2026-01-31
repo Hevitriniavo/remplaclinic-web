@@ -92,6 +92,14 @@
                 </li>
                 <li class="nav-header">MAILBOX</li>
                 <li class="nav-item">
+                    <a href="{{ path('app_admin_contacts') }}" class="nav-link {{ currentRoute == 'app_admin_contacts' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-question-circle"></i>
+                        <p class="text-uppercase">
+                            Contacts
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('app_admin_emails_admin_list') }}" class="nav-link {{ currentRoute == 'app_admin_emails_admin_list' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-mail-bulk"></i>
                         <p class="text-uppercase">
@@ -101,7 +109,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_admin_emails_inbox') }}" class="nav-link {{ currentRoute == 'app_admin_emails_inbox' or currentRoute == 'app_admin_emails_compose' ? 'active' : '' }}">
-                        <i class="nav-icon far fa-envelope"></i>
+                        <i class="nav-icon fas fa-envelope"></i>
                         <p class="text-uppercase">
                             Envoyes
                         </p>
