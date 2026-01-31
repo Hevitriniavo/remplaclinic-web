@@ -131,9 +131,10 @@ $(function () {
       },
     ],
     serverSide: true,
-    ajax: {
-      url: tblDom.data("url"),
-      type: "GET",
+    ajax: function (data, callback) {
+      axios.get(tblDom.data("url"), { params: data })
+        .then(response => callback(response.data))
+        .catch(() => callback({ data: [] }))
     },
   });
 

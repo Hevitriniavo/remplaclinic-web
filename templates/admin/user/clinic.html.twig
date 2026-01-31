@@ -1,5 +1,12 @@
 {% extends 'admin-datatable.html.twig' %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('admin/plugins/datepicker/css/bootstrap-datepicker3.min.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+{% endblock %}
+
 {% block title %}
 Remplaclinic :: Admin :: Clinique
 {% endblock %}
@@ -31,6 +38,12 @@ Clinique
 
                         <a class="btn btn-secondary btn-flat" id="btn-clinic-new" href="{{ path('app_admin_clinic_new') }}">
                             <i class="fas fa-plus"></i> Ajouter un clinique
+                        </a>
+
+                        <a class="btn btn-default btn-flat ml-3" id="btn-clinic-search">
+                            <i class="fas fa-search"></i>
+                            <span class="mx-1">Filtrer la liste</span>
+                            <span class="badge badge-secondary" id="filtre-user-counter">0</span>
                         </a>
                     </div>
                 </div>
@@ -64,6 +77,11 @@ Clinique
                         </table>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        {% include 'admin/user/clinic/_search-modal.html.twig' %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -72,5 +90,7 @@ Clinique
 
 {% block bodyjs %}
 {{ parent() }}
+<script src="{{ asset('admin/plugins/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ versioned_asset('admin/custom/js/clinic.js') }}"></script>
 {% endblock %}

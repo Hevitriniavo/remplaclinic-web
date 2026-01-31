@@ -288,9 +288,10 @@ const app = createApp({
             },
           ],
           serverSide: true,
-          ajax: {
-            url: url,
-            type: "GET",
+          ajax: function (data, callback) {
+            axios.get(url, { params: data })
+              .then(response => callback(response.data))
+              .catch(() => callback({ data: [] }))
           },
         })
 
@@ -573,15 +574,10 @@ function openSelectUserModal(requestId, speciality, mobility) {
       },
     ],
     serverSide: true,
-    ajax: {
-      url: listPersonneUrl,
-      type: "GET",
-      data: (params) => {
-        return {
-          ...params,
-          ...getFiltreParametres(),
-        }
-      },
+    ajax: function (data, callback) {
+      axios.get(listPersonneUrl, { params: { ...data, ...getFiltreParametres() }})
+        .then(response => callback(response.data))
+        .catch(() => callback({ data: [] }))
     },
   })
 }
