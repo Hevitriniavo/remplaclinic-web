@@ -5,7 +5,11 @@ namespace App\Service\Contact;
 use App\Dto\ContactDto;
 use App\Entity\Contact;
 use App\Entity\ContactObject;
+use App\Entity\EmailEvents;
 use App\Entity\User;
+use App\Service\Mail\MailService;
+use App\Service\Mail\RequestMailBuilder;
+use App\Service\Taches\AppConfigurationService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,6 +17,9 @@ class ContactService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly MailService $mailLog,
+        private readonly RequestMailBuilder $mailBuilder,
+        private readonly AppConfigurationService $config,
     ) {}
 
     public function submitContact(ContactDto $contactDto, ?User $user): ?Contact
@@ -37,7 +44,7 @@ class ContactService
         $this->entityManager->flush();
 
         // step 2: notify admin
-        // $this->notifyAdminNewRequest($contact);
+        $this->sendAdminNotification($contact);
 
         return $contact;
     }
@@ -67,5 +74,15 @@ class ContactService
             return true;
         }
         return false;
+    }
+
+    private function sendAdminNotification(Contact $contact)
+    {
+        $mailLog = $this->mailBuilder
+            ->build(EmailEvents::CONTACT_CREATION, null, null, [
+                'contact' => $contact,
+                'target_email' => $this->config->getValue('CONTACT_NOTIFICATION_TARGET_EMAIL'),
+            ]);
+        $this->mailLog->send($mailLog);
     }
 }

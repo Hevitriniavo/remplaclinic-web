@@ -25,6 +25,9 @@ class EmailEvents
     const REQUEST_REPONSE_COORDONNEE = 'demande:renponse:coordonnee';
     const REQUEST_REPONSE_ADMIN = 'demande:renponse:admin';
 
+    // contact
+    const CONTACT_CREATION = 'contact:creation';
+
     public static function all(): array
     {
         return [
@@ -45,6 +48,8 @@ class EmailEvents
             self::REQUEST_REPONSE_DEMANDEUR,
             self::REQUEST_REPONSE_COORDONNEE,
             self::REQUEST_REPONSE_ADMIN,
+
+            self::CONTACT_CREATION,
         ];
     }
 }

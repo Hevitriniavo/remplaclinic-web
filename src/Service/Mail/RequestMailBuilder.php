@@ -9,6 +9,7 @@ use App\Message\Request\RequestMessageMailBuilderInterface;
 use App\Repository\AdminEmailRepository;
 use App\Repository\RequestRepository;
 use App\Repository\UserRepository;
+use App\Service\Mail\Contact\ContactNotificationAdminEmail;
 use App\Service\Mail\RequestEmail\ValiderRequestEmail;
 use App\Service\Mail\RequestEmail\RenvoyerRequestEmail;
 use App\Service\Mail\RequestEmail\RelancerRequestEmail;
@@ -50,6 +51,7 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::REQUEST_REPONSE_DEMANDEUR => RequestResponseOwnerNotificationEmail::class,
             EmailEvents::REQUEST_REPONSE_COORDONNEE => RequestResponseCoordonneeEmail::class,
             EmailEvents::REQUEST_REPONSE_ADMIN => RequestResponseNotificationAdminEmail::class,
+            EmailEvents::CONTACT_CREATION => ContactNotificationAdminEmail::class,
         ];
 
         if (!array_key_exists($eventName, $emailBuilderMap)) {

@@ -1,0 +1,34 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Notification nouveau contact</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+			Bonjour,
+			<br><br>
+			Un nouveau message pour {{ type_message }} a été recu :
+			<br><br>
+			Prénom, Nom : <b>{{ contact.surname ~ ' ' ~ contact.name }} </b>
+			<br>
+			E-mail : <b>{{ contact.email }}</b>
+			<br>
+			Téléphone : <b>{{ contact.telephone }}</b>
+			<br>
+			{% if contact.object|length > 0 %}
+				<br>
+				<b>Objet :</b>
+				{% for object in contact.object %}
+					<br>- {{ object.value }}
+				{% endfor %}
+				<br>
+			{% endif %}
+			<br>
+			<b>Message :</b>
+			<br>
+			<!-- Not safe HTML -->
+			{{ contact.message }}
+		</td>
+	</tr>
+{% endblock %}

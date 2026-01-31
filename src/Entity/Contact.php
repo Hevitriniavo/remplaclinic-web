@@ -78,6 +78,22 @@ class Contact
         return $this->contact_type;
     }
 
+    public function getContactTypeAsText(): string
+    {
+        $types = [
+            self::CONTACT_ASSISTANCE => 'Assistance',
+            self::CONTACT_OUVERTURE_COMPTE => 'Ouverture de compte',
+            self::CONTACT_INSTAL_CLINIC => 'Installation',
+            self::CONTACT_DEFAULT => 'Contact',
+        ];
+        
+        if (array_key_exists($this->getContactType(), $types)) {
+            return $types[$this->getContactType()];
+        }
+
+        return '';
+    }
+
     public function setContactType(int $contact_type): static
     {
         $this->contact_type = $contact_type;

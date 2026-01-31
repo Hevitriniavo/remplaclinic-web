@@ -13,6 +13,7 @@ class AppConfigurationService
         'DRUPAL_SITE_MIGRATION_URL',
         'USER_INSCRIPTION_TARGET_EMAIL',
         'REQUEST_NOTIFICATION_TARGET_EMAIL',
+        'CONTACT_NOTIFICATION_TARGET_EMAIL',
     ];
 
     /**
