@@ -101,7 +101,7 @@ const VueDashboardChart = {
                     </p>
                     <p class="ml-auto d-flex flex-column text-right">
                         <span :class="[chartData.up ? 'text-success' : 'text-danger']">
-                            <i class="fas" :class="[chartData.up ? 'fa-arrow-up' : 'fa-arrow-down']"></i> 12.5%
+                            <i class="fas" :class="[chartData.up ? 'fa-arrow-up' : 'fa-arrow-down']"></i> $% chartData.percentage %$%
                         </span>
                         <span class="text-muted">Cette semaine</span>
                     </p>
@@ -187,7 +187,7 @@ const VueDashboardChartInscription = {
                             },
                             ticks: {
                                 beginAtZero: true,
-                                suggestedMax: 200,
+                                suggestedMax: 20,
                                 fontColor: '#495057',
                                 fontStyle: 'bold'
                             }
@@ -276,6 +276,7 @@ const VueDashboardChartReponse = {
                             },
                             ticks: {
                                 beginAtZero: true,
+                                suggestedMax: 20,
                                 fontColor: '#495057',
                                 fontStyle: 'bold',
                             }
@@ -481,8 +482,9 @@ const VueDashboardApp = {
                         itle: 'Inscriptions',
                         title2: 'Nouveaux inscrits',
                         viewHref: '#',
-                        total: '82',
-                        up: true,
+                        total: responseData.value.inscription.chartData.total,
+                        up: responseData.value.inscription.chartData.up,
+                        percentage: responseData.value.inscription.chartData.percentage,
                     }
                 },
                 response: {
@@ -492,8 +494,9 @@ const VueDashboardApp = {
                         itle: 'Candidatures',
                         title2: 'Nouvelles candidatures',
                         viewHref: '#',
-                        total: '145',
-                        up: true,
+                        total: responseData.value.reponse.chartData.total,
+                        up: responseData.value.reponse.chartData.up,
+                        percentage: responseData.value.reponse.chartData.percentage,
                     }
                 },
             }

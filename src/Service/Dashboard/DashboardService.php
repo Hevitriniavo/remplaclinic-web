@@ -5,6 +5,7 @@ use App\Entity\Request;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 
 class DashboardService
@@ -224,9 +225,46 @@ class DashboardService
 
     private function getInscriptionWeekStats(): array
     {
+        // step 1: generate date
+        $thisWeeks = $this->weekDates('monday this week');
+        $lastWeeks = $this->weekDates('monday last week');
+
+        // step 2: get inscription counts
+        $inscriptionThisWeeks = $this->getInscriptionCounts($thisWeeks);
+        $inscriptionLastWeeks = $this->getInscriptionCounts($lastWeeks);
+
+        // step 4: compare and format result
         $result = [
-            'currentWeek' => [100, 120, 170, 167, 180, 177, 160],
-            'lastWeek' => [60, 80, 70, 67, 80, 77, 100],
+            'currentWeek'  => [],
+            'lastWeek'  => [],
+        ];
+        $totalThisWeek = 0;
+        $totalLastWeek = 0;
+        for($i = 0; $i < 7; $i++) {
+            $dayThisWeek = $thisWeeks[$i];
+            $dayLastWeek = $lastWeeks[$i];
+
+            if (array_key_exists($dayThisWeek, $inscriptionThisWeeks)) {
+                $result['currentWeek'][$i] = $inscriptionThisWeeks[$dayThisWeek];
+                $totalThisWeek += $inscriptionThisWeeks[$dayThisWeek];
+            } else {
+                $result['currentWeek'][$i] = 0;
+            }
+
+            if (array_key_exists($dayLastWeek, $inscriptionLastWeeks)) {
+                $result['lastWeek'][$i] = $inscriptionLastWeeks[$dayLastWeek];
+                $totalLastWeek += $inscriptionLastWeeks[$dayLastWeek];
+            } else {
+                $result['lastWeek'][$i] = 0;
+            }
+        }
+
+        $percentage = $this->percentChange($totalLastWeek, $totalThisWeek);
+
+        $result['chartData'] = [
+            'total' => $totalLastWeek + $totalThisWeek,
+            'percentage' => $percentage,
+            'up' => $percentage > 0,
         ];
 
         return $result;
@@ -234,10 +272,105 @@ class DashboardService
 
     private function getResponseWeekStats(): array
     {
+        // step 1: generate date
+        $thisWeeks = $this->weekDates('monday this week');
+        $lastWeeks = $this->weekDates('monday last week');
+
+        // step 2: get response counts
+        $responseThisWeeks = $this->getResponseCounts($thisWeeks);
+        $responseLastWeeks = $this->getResponseCounts($lastWeeks);
+
+        // step 4: compare and format result
         $result = [
-            'currentWeek' => [1000, 2000, 3000, 2500, 2700, 2500, 3000],
-            'lastWeek' => [700, 1700, 2700, 2000, 1800, 1500, 2000],
+            'currentWeek'  => [],
+            'lastWeek'  => [],
         ];
+        $totalThisWeek = 0;
+        $totalLastWeek = 0;
+        for($i = 0; $i < 7; $i++) {
+            $dayThisWeek = $thisWeeks[$i];
+            $dayLastWeek = $lastWeeks[$i];
+
+            if (array_key_exists($dayThisWeek, $responseThisWeeks)) {
+                $result['currentWeek'][$i] = $responseThisWeeks[$dayThisWeek];
+                $totalThisWeek += $responseThisWeeks[$dayThisWeek];
+            } else {
+                $result['currentWeek'][$i] = 0;
+            }
+
+            if (array_key_exists($dayLastWeek, $responseLastWeeks)) {
+                $result['lastWeek'][$i] = $responseLastWeeks[$dayLastWeek];
+                $totalLastWeek += $responseLastWeeks[$dayLastWeek];
+            } else {
+                $result['lastWeek'][$i] = 0;
+            }
+        }
+
+        $percentage = $this->percentChange($totalLastWeek, $totalThisWeek);
+
+        $result['chartData'] = [
+            'total' => $totalLastWeek + $totalThisWeek,
+            'percentage' => $percentage,
+            'up' => $percentage > 0,
+        ];
+
+        return $result;
+    }
+
+    private function weekDates(string $weekStartDay): array
+    {
+        $startOfWeek = new DateTimeImmutable($weekStartDay);
+
+        $week = [];
+        for ($i = 0; $i < 7; $i++) {
+            $week[] = $startOfWeek->modify("+{$i} days")->format('Y-m-d');
+        }
+
+        return $week;
+    }
+
+    private function getInscriptionCounts(array $days): array
+    {
+        $placeholders = implode(',', array_fill(0, count($days), '?'));
+
+        $sql = "SELECT DATE(create_at) AS day, COUNT(*) AS total FROM user WHERE DATE(create_at) IN ($placeholders) GROUP BY DATE(create_at)";
+
+        $stmt = $this->connection->prepare($sql);
+        
+        $rs = $stmt->executeQuery($days);
+        $result = [];
+
+        while(($row = $rs->fetchAssociative()) !== false) {
+            $result[$row['day']] = $row['total'];
+        }
+
+        return $result;
+    }
+
+    private function percentChange(int|float $previous, int|float $current): ?float
+    {
+        if ($previous == 0) {
+            return null; // or 0, or 100 — depends on your business rule
+        }
+
+        return round((($current - $previous) / $previous) * 100, 2);
+    }
+
+    private function getResponseCounts(array $days): array
+    {
+        $status = [ RequestResponse::ACCEPTE, RequestResponse::PLUS_D_INFOS ];
+        $placeholders = implode(',', array_fill(0, count($days), '?'));
+
+        $sql = "SELECT DATE(r.updated_at) AS day, COUNT(r.id) AS total FROM request_response r WHERE DATE(r.updated_at) IN ($placeholders) AND r.status IN (". implode(',', $status) .") GROUP BY DATE(r.updated_at)";
+
+        $stmt = $this->connection->prepare($sql);
+        
+        $rs = $stmt->executeQuery($days);
+        $result = [];
+
+        while(($row = $rs->fetchAssociative()) !== false) {
+            $result[$row['day']] = $row['total'];
+        }
 
         return $result;
     }
