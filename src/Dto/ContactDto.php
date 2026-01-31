@@ -17,7 +17,7 @@ class ContactDto
         public string $name,
 
         #[Assert\Length(max: 255)]
-        public string $surname,
+        public ?string $surname,
 
         #[Assert\NotBlank]
         #[Assert\NotNull]
@@ -29,12 +29,12 @@ class ContactDto
         public string $message,
 
         #[Assert\Length(max: 255)]
-        public string $telephone,
+        public ?string $telephone,
 
         #[Assert\Length(max: 255)]
-        public string $fonction,
+        public ?string $fonction,
 
-        public array $object,
+        public ?array $object,
         
         #[Assert\Length(max: 255)]
         public ?string $remote_addr,

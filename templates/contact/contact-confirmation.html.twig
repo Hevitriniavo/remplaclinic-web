@@ -14,14 +14,12 @@ Contact | Remplaclinic
 
 {% block article_content %}
 <div class="pt-7">
-    <div class="flex flex-col gap-7 w-[830px] mr-14">
-        <div class="flex flex-col gap-5">
-            <div class="flex flex-col gap-5">
-                <h2 class="text-xl uppercase"><strong>Ouvrir un compte</strong></h2>
-                <div class="w-24 h-1 bg-blue"></div>
-            </div>
-            {% include 'contact/_form.html.twig' with { telephone: true, lastname: true } %}
-        </div>
+    <div class="content">
+        <h2 class="uppercase text-[#191919] mb-[19px] text-lg font-bold">{{ message1 }}</h2>
+
+        <p class="mb-[19px]">{{ message2|raw }}</p>
+
+        <a href="{{ url('app_home') }}" class="text-xl form-submit text-white py-2 px-10">Revenir à l'accueil</a>
     </div>
 </div>
 {% endblock %}

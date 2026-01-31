@@ -3,5 +3,9 @@ import RemplaFormValidation from '../js/rempla-form-validation.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     initPageCommon()
-    new RemplaFormValidation('form-contact')
+
+    const form = new RemplaFormValidation('form-contact', { debug: true, ajax: true })
+    form.setSubmitSuccessHandler(({ _redirect }) => {
+        window.location.href = _redirect
+    })
 })

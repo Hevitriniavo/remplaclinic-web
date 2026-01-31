@@ -8,9 +8,11 @@ use App\Dto\IdListDto;
 use App\Repository\ContactRepository;
 use App\Security\SecurityUser;
 use App\Service\Contact\ContactService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
@@ -30,6 +32,8 @@ class ContactController extends AbstractController
 
     #[Route('/api/contacts', name: 'api_contacts_new', methods: ['POST'])]
     public function create(
+        Request $request,
+        FlashBagAwareSessionInterface $flashBag,
         #[MapRequestPayload(
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] ContactDto $contactDto,
@@ -49,7 +53,19 @@ class ContactController extends AbstractController
             // @TODO: get remote addr from request
         }
 
-        return $this->json($this->contactService->submitContact($contactDto, $user), Response::HTTP_CREATED, [], ['groups' => 'datatable']);
+        // step 4: create and send email
+        $created = $this->contactService->submitContact($contactDto, $user);
+        if (is_null($created)) {
+            throw new Exception('Contact failed.');
+        }
+
+        // step 5: confirm
+        $flashBag->getFlashBag()->set('contact_id', $created->getId());
+        $flashBag->getFlashBag()->set('contact_type', $created->getContactType());
+
+        return $this->json([
+            '_redirect' => $this->generateUrl('app_contacts_confirmation')
+        ], Response::HTTP_CREATED);
     }
 
     #[Route('/api/contacts/{id}', name: 'api_contacts_detail', methods: ['GET'], requirements: ['id' => '\d+'])]

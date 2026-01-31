@@ -68,7 +68,7 @@ Mes propositions d'installation | Remplaclinic
                                             <a class="form-submit text-white py-1 px-4 modal-confirmation-candidature-activator" title="En cliquant sur ce bouton, vous vous engagez à contacter le demandeur." href="{{ path('app_user_request_response_answer', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 1 }) }}">
                                                 Je postule
                                             </a>
-                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous allez recevoir un email avec les informations du demandeur." href="{{ path('app_user_request_response_from_mail', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 2 }) }}">
+                                            <a class="form-submit text-white py-1 px-4" title="En cliquant sur ce bouton, vous allez recevoir un email avec les informations du demandeur." href="{{ path('app_user_request_response_answer', { userId: app.user.user.id, requestId: row.request.id, responseStatus: 2 }) }}">
                                                 Plus d'informations
                                             </a>
                                         </div>

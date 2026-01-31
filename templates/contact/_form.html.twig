@@ -1,18 +1,19 @@
-<form class="flex flex-col gap-5" id="form-contact">
+<form class="flex flex-col gap-5" id="form-contact" method="post" action="{{ path('api_contacts_new') }}">
+    <input type="hidden" name="contact_type" value="{{ contact_type is defined ? contact_type : 98 }}">
     {% if subject is defined and subject %}
     <div class="w-full flex flex-row justify-between gap-5">
         <label>Ma demande concerne <span class="form-required" title="This field is required">*</span></label>
         <div class="flex-1 flex gap-5">
             <div>
-                <input type="checkbox" id="form-contact-subject-1" name="assistance_comptable" value="assistance_comptable" class="form-contact-element" {% if s is defined and s is same as('comptable') %} checked {% endif %}>
+                <input type="checkbox" id="form-contact-subject-1" name="object[]" value="assistance_comptable" class="form-contact-element" {% if s is defined and s is same as('comptable') %} checked {% endif %}>
                 <label class="option" for="form-contact-subject-1">Une assistance comptable </label>
             </div>
             <div>
-                <input type="checkbox" id="form-contact-subject-2" name="assistance_juridique" value="assistance_juridique" class="form-contact-element" {% if s is defined and s is same as('juridique') %} checked {% endif %}>
+                <input type="checkbox" id="form-contact-subject-2" name="object[]" value="assistance_juridique" class="form-contact-element" {% if s is defined and s is same as('juridique') %} checked {% endif %}>
                 <label class="option" for="form-contact-subject-2">Une assistance juridique </label>
             </div>
             <div>
-                <input type="checkbox" id="form-contact-subject-3" name="assurance_professionnelle" value="assurance_professionnelle" class="form-contact-element" {% if s is defined and s is same as('assurance') %} checked {% endif %}>
+                <input type="checkbox" id="form-contact-subject-3" name="object[]" value="assurance_professionnelle" class="form-contact-element" {% if s is defined and s is same as('assurance') %} checked {% endif %}>
                 <label class="option" for="form-contact-subject-3">Une assurance professionnelle </label>
             </div>
         </div>
@@ -23,7 +24,7 @@
             Nom
             <span class="form-required" title="This field is required">*</span>
         </label>
-        <input type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" id="form-contact-nom" data-required="true" />
+        <input type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" id="form-contact-nom" data-required="true" name="name" />
     </div>
     {% set lastname = lastname is defined ? lastname : false %}
     <div class="w-[700px] flex flex-row justify-between">
@@ -33,12 +34,12 @@
                 <span class="form-required">*</span>
             {% endif %}
         </label>
-        <input id="form-contact-lastname" name="lastname" type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" {% if lastname %} data-required="true" {% endif %} />
+        <input id="form-contact-lastname" name="surname" type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" {% if lastname %} data-required="true" {% endif %} />
     </div>
     {% if position is defined %}
     <div class="w-[700px] flex flex-row justify-between">
         <label for="form-contact-position">Fonction</label>
-        <input id="form-contact-position" name="position" type="text" class="form-text p-1 w-[600px] outline-none" />
+        <input id="form-contact-position" name="fonction" type="text" class="form-text p-1 w-[600px] outline-none" />
     </div>
     {% endif %}
     <div class="w-[700px] flex flex-row justify-between">
@@ -56,7 +57,7 @@
                 <span class="form-required">*</span>
             {% endif %}
         </label>
-        <input id="form-contact-phone" name="phoneNumber" type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" {% if telephone %} data-required="true" {% endif %} />
+        <input id="form-contact-phone" name="telephone" type="text" class="form-text p-1 w-[600px] outline-none form-contact-element" {% if telephone %} data-required="true" {% endif %} />
     </div>
     {% endif %}
     <div class="w-[700px] flex flex-row justify-between">
@@ -69,7 +70,12 @@
     <div class="w-[700px] flex flex-row justify-between">
         <div>&nbsp;</div>
         <div class="w-[600px] p-1">
-            <input type="submit" value="Envoyer" class="form-submit pl-3 pr-3 p-1 text-xl text-white form-contact-btn-submit" />
+            <button type="submit"
+                class="relative text-xl form-submit text-white py-1 px-10 form-contact-btn-submit">
+                <span
+                    class="btn-spinner hidden absolute top-2 left-3 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span>Envoyer</span>
+            </button>
         </div>
     </div>
 </form>
