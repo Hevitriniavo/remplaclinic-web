@@ -160,8 +160,14 @@ class User
     /**
      * @var Collection<int, self>
      */
-    #[ORM\ManyToMany(targetEntity: self::class)]
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'directors')]
     private Collection $clinics;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'clinics')]
+    private Collection $directors;
 
     public function __construct()
     {
@@ -169,6 +175,7 @@ class User
         $this->roles = new ArrayCollection();
         $this->mobilities = new ArrayCollection();
         $this->clinics = new ArrayCollection();
+        $this->directors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -786,6 +793,33 @@ class User
     public function clearClinics(): static
     {
         $this->clinics = new ArrayCollection();
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getDirectors(): Collection
+    {
+        return $this->directors;
+    }
+
+    public function addDirector(self $director): static
+    {
+        if (!$this->directors->contains($director)) {
+            $this->directors->add($director);
+            $director->addClinic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDirector(self $director): static
+    {
+        if ($this->directors->removeElement($director)) {
+            $director->removeClinic($this);
+        }
 
         return $this;
     }

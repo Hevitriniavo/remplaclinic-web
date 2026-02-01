@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Common\DateUtil;
+use App\Common\IdUtil;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\User;
@@ -29,6 +31,9 @@ class UserRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
+            ->leftJoin('u.address', 'a')
+            ->leftJoin('u.establishment', 'e')
+            ->leftJoin('u.subscription', 'sub')
             ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset);
@@ -49,6 +54,90 @@ class UserRepository extends ServiceEntityRepository
                     )
                 )
                 ->setParameter('value', '%' . $params->value . '%');
+        }
+
+        // filters
+        $filters = $params->filters;
+        if (!empty($filters)) {
+            // civility
+            if (!empty($filters['civility'])) {
+                $qb->andWhere('u.civility = :filter_civility')
+                    ->setParameter('filter_civility', $filters['civility']);
+            }
+
+            // status
+            if (isset($filters['status'])) {
+                $qb->andWhere('u.status = :filter_status')
+                    ->setParameter('filter_status', $filters['status']);
+            }
+
+            // current_speciality
+            if (!empty($filters['current_speciality'])) {
+                $qb->andWhere('u.currentSpeciality = :filter_current_speciality')
+                    ->setParameter('filter_current_speciality', $filters['current_speciality']);
+            }
+
+            // mobilities
+            if (!empty($filters['mobilities'])) {
+                $qb
+                    ->join('u.mobilities', 'm')
+                    ->andWhere('m.id IN ('. IdUtil::implode($filters['mobilities']) . ')');
+            }
+
+            // specialities
+            if (!empty($filters['specialities'])) {
+                $qb->andWhere('s.id IN ('. IdUtil::implode($filters['specialities']) . ')');
+            }
+
+            // created_from
+            if (!empty($filters['created_from'])) {
+                $qb->andWhere('u.createAt >= :filter_created_from')
+                    ->setParameter('filter_created_from', DateUtil::parseDate('d/m/Y', $filters['created_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // created_to
+            if (!empty($filters['created_to'])) {
+                $qb->andWhere('u.createAt <= :filter_created_to')
+                    ->setParameter('filter_created_to', DateUtil::parseDate('d/m/Y', $filters['created_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // director
+            if (!empty($filters['director'])) {
+                $qb
+                    ->join('u.directors', 'd')
+                    ->andWhere('d.id IN ('. IdUtil::implode($filters['director']) . ')');
+            }
+
+            // clinic
+            if (!empty($filters['clinic'])) {
+                $qb
+                    ->join('u.clinics', 'cl')
+                    ->andWhere('cl.id IN ('. IdUtil::implode($filters['clinic']) . ')');
+            }
+
+            // installation_count_min
+            if (!empty($filters['installation_count_min'])) {
+                $qb->andWhere('sub.installationCount >= :filter_installation_count_min')
+                    ->setParameter('filter_installation_count_min', $filters['installation_count_min']);
+            }
+
+            // installation_count_max
+            if (!empty($filters['installation_count_max'])) {
+                $qb->andWhere('sub.installationCount <= :filter_installation_count_max')
+                    ->setParameter('filter_installation_count_max', $filters['installation_count_max']);
+            }
+
+            // abonnement_from
+            if (!empty($filters['abonnement_from'])) {
+                $qb->andWhere('sub.endAt >= :filter_abonnement_from')
+                    ->setParameter('filter_abonnement_from', DateUtil::parseDate('d/m/Y', $filters['abonnement_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // abonnement_to
+            if (!empty($filters['abonnement_to'])) {
+                $qb->andWhere('sub.endAt <= :filter_abonnement_to')
+                    ->setParameter('filter_abonnement_to', DateUtil::parseDate('d/m/Y', $filters['abonnement_to'])->format('Y-m-d') . ' 23:59');
+            }
         }
 
         $paginator = new Paginator($qb->getQuery());

@@ -68,7 +68,7 @@ class RequestRepository extends ServiceEntityRepository
             }
 
             // status
-            if (!empty($filters['status'])) {
+            if (isset($filters['status'])) {
                 $qb->andWhere('u.status = :filter_status')
                     ->setParameter('filter_status', $filters['status']);
             }
