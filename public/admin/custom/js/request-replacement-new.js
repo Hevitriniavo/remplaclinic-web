@@ -310,7 +310,8 @@ const app = createApp({
             delay: 200,
             data: (params) => {
               return {
-                search: params.term
+                search: params.term,
+                role: 4
               }
             },
             processResults: function(data) {

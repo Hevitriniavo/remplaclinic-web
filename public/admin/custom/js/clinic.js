@@ -196,6 +196,8 @@ function initSearchFilters() {
         userFiltres[key] = value;
       } else if (key.startsWith('specialities')) {
         userFiltres.specialities.push(parseInt(value));
+      } else if (key.startsWith('director')) {
+        userFiltres.director.push(parseInt(value));
       }
     })
 

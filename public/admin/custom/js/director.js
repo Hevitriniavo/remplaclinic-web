@@ -139,6 +139,8 @@ function initSearchFilters() {
     urlQueryParams.forEach((value, key) => {
       if (Object.hasOwn(userFiltres, key)) {
         userFiltres[key] = value;
+      } else if (key.startsWith('clinic')) {
+        userFiltres.clinic.push(parseInt(value))
       }
     })
 
