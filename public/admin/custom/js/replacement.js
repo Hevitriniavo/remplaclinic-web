@@ -77,15 +77,7 @@ $(function () {
             return '';
           }
 
-          const date = new Date(data);
-          const formatter = new Intl.DateTimeFormat("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: '2-digit',
-              minute: '2-digit'
-          });
-          return formatter.format(date);
+          return window.formatDate(data);
         }
       },
       {
@@ -154,6 +146,10 @@ function initSearchFilters() {
     count: 0,
   };
 
+  function isEmptyValue(filterValue) {
+    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0);
+  }
+
   function loadFromUrl() {
     const urlQueryParams = new URLSearchParams(window.location.href.indexOf('?') >= 0 ? window.location.href.substring(window.location.href.indexOf('?')) : '');
     urlQueryParams.forEach((value, key) => {
@@ -171,7 +167,7 @@ function initSearchFilters() {
       
       const filterValue = userFiltres[name];
       
-      if ((filterValue !== '' && !Array.isArray(filterValue)) || filterValue.length > 0) {
+      if (!isEmptyValue(filterValue)) {
         userFiltres.count++
       }
     }
@@ -230,11 +226,15 @@ function initSearchFilters() {
       let filtreCount = 0;
 
       filtreElement.forEach((el) => {
-        const value = $(el).val();
+        let value = $(el).val();
+
+        if (Array.isArray(value)) {
+          value = value.filter(v => !isEmptyValue(v))
+        }
 
         filtreData[el.name] = value;
 
-        if (value) {
+        if (!isEmptyValue(value)) {
           filtreCount++;
         }
       });
@@ -254,7 +254,21 @@ function initSearchFilters() {
   loadFromUrl()
   
   return {
-    getFilters: () => userFiltres,
+    getFilters: () => {
+      const result = {};
+
+      for (const filterName in userFiltres) {
+        if (filterName === 'count' || !Object.hasOwn(userFiltres, filterName)) continue;
+        
+        const filterValue = userFiltres[filterName];
+        
+        if (!isEmptyValue(filterValue)) {
+          result[filterName] = filterValue;
+        }
+      }
+
+      return result;
+    },
     addSearchElementEventListener: addSearchElementEventListener
   }
 }

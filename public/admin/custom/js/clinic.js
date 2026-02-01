@@ -91,7 +91,7 @@ $(function () {
             return '';
           }
 
-          return formatDate(data);
+          return window.formatDate(data);
         }
       },
       {
@@ -175,7 +175,7 @@ function initSearchFilters() {
     civility: '',
     status: '',
     specialities: [],
-    director: '',
+    director: [],
     installation_count_min: '',
     installation_count_max: '',
     created_from: '',
@@ -185,13 +185,15 @@ function initSearchFilters() {
     count: 0,
   };
 
+  function isEmptyValue(filterValue) {
+    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0);
+  }
+
   function loadFromUrl() {
     const urlQueryParams = new URLSearchParams(window.location.href.indexOf('?') >= 0 ? window.location.href.substring(window.location.href.indexOf('?')) : '');
     urlQueryParams.forEach((value, key) => {
       if (Object.hasOwn(userFiltres, key)) {
         userFiltres[key] = value;
-      } else if (key.startsWith('mobilities')) {
-        userFiltres.mobilities.push(parseInt(value));
       } else if (key.startsWith('specialities')) {
         userFiltres.specialities.push(parseInt(value));
       }
@@ -202,7 +204,7 @@ function initSearchFilters() {
       
       const filterValue = userFiltres[name];
       
-      if ((filterValue !== '' && !Array.isArray(filterValue)) || filterValue.length > 0) {
+      if (!isEmptyValue(filterValue)) {
         userFiltres.count++
       }
     }
@@ -219,7 +221,7 @@ function initSearchFilters() {
     $('#filtre-user-directeur').select2({
       theme: "bootstrap4",
       allowClear: true,
-      placeholder: "- Choisir une option -",
+      placeholder: "- Tous -",
       ajax: {
         beforeSend: null,
         url: $('#filtre-user-directeur').data('directorUrl'),
@@ -265,7 +267,7 @@ function initSearchFilters() {
         civility: '',
         status: '',
         specialities: [],
-        director: '',
+        director: [],
         installation_count_min: '',
         installation_count_max: '',
         created_from: '',
@@ -288,11 +290,15 @@ function initSearchFilters() {
       let filtreCount = 0;
 
       filtreElement.forEach((el) => {
-        const value = $(el).val();
+        let value = $(el).val();
+
+        if (Array.isArray(value)) {
+          value = value.filter(v => !isEmptyValue(v))
+        }
 
         filtreData[el.name] = value;
 
-        if (value) {
+        if (!isEmptyValue(value)) {
           filtreCount++;
         }
       });
@@ -312,7 +318,21 @@ function initSearchFilters() {
   loadFromUrl()
   
   return {
-    getFilters: () => userFiltres,
+    getFilters: () => {
+      const result = {};
+
+      for (const filterName in userFiltres) {
+        if (filterName === 'count' || !Object.hasOwn(userFiltres, filterName)) continue;
+        
+        const filterValue = userFiltres[filterName];
+        
+        if (!isEmptyValue(filterValue)) {
+          result[filterName] = filterValue;
+        }
+      }
+
+      return result;
+    },
     addSearchElementEventListener: addSearchElementEventListener
   }
 }

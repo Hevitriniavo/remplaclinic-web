@@ -1,7 +1,10 @@
 $(function () {
   const tblDom = $("#tbl-doctors");
 
-  const specialityDatatable = tblDom.DataTable({
+  // search params
+  const userFiltres = initSearchFilters();
+
+  const doctorDatatable = tblDom.DataTable({
     paging: true,
     searching: true,
     ordering: true,
@@ -73,16 +76,7 @@ $(function () {
           if (!data) {
             return '';
           }
-
-          const date = new Date(data);
-          const formatter = new Intl.DateTimeFormat("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: '2-digit',
-              minute: '2-digit'
-          });
-          return formatter.format(date);
+          return window.formatDate(data);
         }
       },
       {
@@ -130,7 +124,7 @@ $(function () {
     ],
     serverSide: true,
     ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
+      axios.get(tblDom.data("url"), { params: { filters: userFiltres.getFilters(), ...data }})
         .then(response => callback(response.data))
         .catch(() => callback({ data: [] }))
     },
@@ -138,6 +132,156 @@ $(function () {
 
   // delete
   $(document).on('deletedEvent', function() {
-    specialityDatatable.draw();
+    doctorDatatable.draw();
+  });
+
+  // filtres
+  userFiltres.addSearchElementEventListener(() => {
+    doctorDatatable.draw();
   });
 });
+
+
+/****************************/
+/**** FILTRE MANAGEMENT *****/
+/****************************/
+function initSearchFilters() {
+  const userFiltres = {
+    civility: '',
+    status: '',
+    specialities: [],
+    installation_count_min: '',
+    installation_count_max: '',
+    created_from: '',
+    created_to: '',
+    abonnement_from: '',
+    abonnement_to: '',
+    count: 0,
+  };
+
+  function isEmptyValue(filterValue) {
+    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0);
+  }
+
+  function loadFromUrl() {
+    const urlQueryParams = new URLSearchParams(window.location.href.indexOf('?') >= 0 ? window.location.href.substring(window.location.href.indexOf('?')) : '');
+    urlQueryParams.forEach((value, key) => {
+      if (Object.hasOwn(userFiltres, key)) {
+        userFiltres[key] = value;
+      } else if (key.startsWith('specialities')) {
+        userFiltres.specialities.push(parseInt(value));
+      }
+    })
+
+    for (const name in userFiltres) {
+      if (name === 'count' || !Object.hasOwn(userFiltres, name)) continue;
+      
+      const filterValue = userFiltres[name];
+      
+      if (!isEmptyValue(filterValue)) {
+        userFiltres.count++
+      }
+    }
+    $('#filtre-user-counter').text(userFiltres.count)
+  }
+
+  function addSearchElementEventListener (searchFn) {
+    $('.select2-input').select2({
+      theme: "bootstrap4",
+      allowClear: true,
+      placeholder: "- Tous -",
+    });
+
+    $(".datepicker-wrapper").datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true,
+    });
+
+    $('#btn-doctor-search').on('click', function (e) {
+      e.preventDefault();
+
+      const filtreElement = document.querySelectorAll('.filtre-user-element')
+
+      filtreElement.forEach((el) => {
+        const value = Object.hasOwn(userFiltres, el.name) ? userFiltres[el.name] : '';
+        $(el).val(value).trigger('change')
+      });
+
+      $('#filtre-user-modal').modal('show');
+    });
+
+    $('#filtre-user-reset').on('click', function (e) {
+      e.preventDefault();
+
+      Object.assign(userFiltres, {
+        civility: '',
+        status: '',
+        specialities: [],
+        installation_count_min: '',
+        installation_count_max: '',
+        created_from: '',
+        created_to: '',
+        abonnement_from: '',
+        abonnement_to: '',
+        count: 0,  
+      });
+
+      $('#filtre-user-modal').modal('hide');
+      $('#filtre-user-counter').text(userFiltres.count)
+      searchFn()
+    });
+
+    $('#filtre-user-validate').on('click', function (e) {
+      e.preventDefault();
+
+      const filtreElement = document.querySelectorAll('.filtre-user-element');
+      const filtreData = {};
+      let filtreCount = 0;
+
+      filtreElement.forEach((el) => {
+        let value = $(el).val();
+
+        if (Array.isArray(value)) {
+          value = value.filter(v => !isEmptyValue(v))
+        }
+
+        filtreData[el.name] = value;
+
+        if (!isEmptyValue(value)) {
+          filtreCount++;
+        }
+      });
+
+      filtreData.count = filtreCount;
+
+      Object.assign(userFiltres, filtreData);
+
+      $('#filtre-user-modal').modal('hide');
+      $('#filtre-user-counter').text(filtreCount)
+
+      searchFn()
+    });
+  }
+
+  // initialize filters
+  loadFromUrl()
+  
+  return {
+    getFilters: () => {
+      const result = {};
+
+      for (const filterName in userFiltres) {
+        if (filterName === 'count' || !Object.hasOwn(userFiltres, filterName)) continue;
+        
+        const filterValue = userFiltres[filterName];
+        
+        if (!isEmptyValue(filterValue)) {
+          result[filterName] = filterValue;
+        }
+      }
+
+      return result;
+    },
+    addSearchElementEventListener: addSearchElementEventListener
+  }
+}
