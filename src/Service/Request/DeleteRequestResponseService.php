@@ -14,10 +14,13 @@ class DeleteRequestResponseService
 
     public function delete(int $id): ?RequestResponse
     {   
-        $requestResponses = $this->getMailLogs([$id]);
+        $requestResponses = $this->getRequestResponses([$id]);
 
         if (count($requestResponses) > 0) {
             $this->em->remove($requestResponses[0]);
+            
+            $this->updateRequestResponseCount($requestResponses[0]);
+            
             $this->em->flush();
 
             return $requestResponses[0];
@@ -28,10 +31,11 @@ class DeleteRequestResponseService
 
     public function deleteMultiple(array $ids): array
     {
-        $result = $this->getMailLogs($ids);
+        $result = $this->getRequestResponses($ids);
 
         foreach($result as $requestResponse) {
             $this->em->remove($requestResponse);
+            $this->updateRequestResponseCount($requestResponse);
         }
 
         $this->em->flush();
@@ -39,7 +43,7 @@ class DeleteRequestResponseService
         return $result;
     }
 
-    private function getMailLogs(array $ids): array
+    private function getRequestResponses(array $ids): array
     {
         $res = [];
 
@@ -54,5 +58,14 @@ class DeleteRequestResponseService
         }
 
         return $res;
+    }
+
+    private function updateRequestResponseCount(RequestResponse $requestResponse)
+    {
+        $request = $requestResponse->getRequest();
+
+        if ($requestResponse->getStatus() === RequestResponse::ACCEPTE || $requestResponse->getStatus() === RequestResponse::PLUS_D_INFOS) {
+            $request->decrementResponseCount();
+        }
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Repository;
 
+use App\Common\DateUtil;
+use App\Common\IdUtil;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\Request;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,23 +25,13 @@ class RequestRepository extends ServiceEntityRepository
 
     public function findAllDataTables(?RequestType $requestType, DataTableParams $params): DataTableResponse
     {
-        $sortBy = $params->getOrderColumn(['u.id', 'u.id', 'u.status', 'u.requestType', 'a.name', 's.name', 'u.createdAt', 'u.startedAt', 'u.lastSentAt', 'responseCount'], 'u.id');
-        
-        $countResponseQuery = $this->getEntityManager()->createQueryBuilder()
-            ->select('COUNT(o.id)')
-            ->from(RequestResponse::class, 'o')
-            ->where('o.request = u.id')
-            ->andWhere('o.status = ' . RequestResponse::ACCEPTE)
-            ->getDQL();
+        $sortBy = $params->getOrderColumn(['u.id', 'u.id', 'u.status', 'u.requestType', 'a.name', 's.name', 'u.createdAt', 'u.startedAt', 'u.lastSentAt', 'u.responseCount'], 'u.id');
 
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.speciality', 's')
             ->leftJoin('u.region', 'r')
             ->leftJoin('u.applicant', 'a')
             ->leftJoin('a.establishment', 'es')
-            // ->leftJoin('u.responses', 'resp', 'resp.request = u.id AND res.status = ' . RequestResponse::ACCEPTE)
-            ->addSelect('(' . $countResponseQuery . ') AS responseCount')
-            // ->addSelect('0 AS responseCount')
             ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset);
@@ -67,20 +58,95 @@ class RequestRepository extends ServiceEntityRepository
                 )
                 ->setParameter('value', '%' . $params->value . '%');
         }
+
+        // filters
+        $filters = $params->filters;
+        if (!empty($filters)) {
+            // applicant
+            if (!empty($filters['applicant'])) {
+                $qb->andWhere('a.id IN ('. IdUtil::implode($filters['applicant']) . ')');
+            }
+
+            // status
+            if (!empty($filters['status'])) {
+                $qb->andWhere('u.status = :filter_status')
+                    ->setParameter('filter_status', $filters['status']);
+            }
+
+            // regions
+            if (!empty($filters['regions'])) {
+                $qb->andWhere('r.id IN ('. IdUtil::implode($filters['regions']) . ')');
+            }
+
+            // specialities
+            if (!empty($filters['specialities'])) {
+                $qb->andWhere('s.id IN ('. IdUtil::implode($filters['specialities']) . ')');
+            }
+
+            // response_count_min
+            if (!empty($filters['response_count_min'])) {
+                $qb->andWhere('u.responseCount >= :filter_response_count_min')
+                    ->setParameter('filter_response_count_min', $filters['response_count_min']);
+            }
+
+            // response_count_max
+            if (!empty($filters['response_count_max'])) {
+                $qb->andWhere('u.responseCount <= :filter_response_count_max')
+                    ->setParameter('filter_response_count_max', $filters['response_count_max']);
+            }
+
+            // created_from
+            if (!empty($filters['created_from'])) {
+                $qb->andWhere('u.createdAt >= :filter_created_from')
+                    ->setParameter('filter_created_from', DateUtil::parseDate('d/m/Y', $filters['created_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // created_to
+            if (!empty($filters['created_to'])) {
+                $qb->andWhere('u.createdAt <= :filter_created_to')
+                    ->setParameter('filter_created_to', DateUtil::parseDate('d/m/Y', $filters['created_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // started_from
+            if (!empty($filters['started_from'])) {
+                $qb->andWhere('u.startedAt >= :filter_started_from')
+                    ->setParameter('filter_started_from', DateUtil::parseDate('d/m/Y', $filters['started_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // started_to
+            if (!empty($filters['started_to'])) {
+                $qb->andWhere('u.startedAt <= :filter_started_to')
+                    ->setParameter('filter_started_to', DateUtil::parseDate('d/m/Y', $filters['started_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // end_from
+            if (!empty($filters['end_from'])) {
+                $qb->andWhere('u.endAt >= :filter_end_from')
+                    ->setParameter('filter_end_from', DateUtil::parseDate('d/m/Y', $filters['end_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // end_to
+            if (!empty($filters['end_to'])) {
+                $qb->andWhere('u.endAt <= :filter_end_to')
+                    ->setParameter('filter_end_to', DateUtil::parseDate('d/m/Y', $filters['end_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // sent_from
+            if (!empty($filters['sent_from'])) {
+                $qb->andWhere('u.lastSentAt >= :filter_sent_from')
+                    ->setParameter('filter_sent_from', DateUtil::parseDate('d/m/Y', $filters['sent_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // sent_to
+            if (!empty($filters['sent_to'])) {
+                $qb->andWhere('u.lastSentAt <= :filter_sent_to')
+                    ->setParameter('filter_sent_to', DateUtil::parseDate('d/m/Y', $filters['sent_to'])->format('Y-m-d') . ' 23:59');
+            }
+        }
         
         $paginator = new Paginator($qb->getQuery());
-        
-        $result = [];
-        foreach($paginator as $request) {
-            $result[] = [
-                'request' => $request[0],
-                'responseCount' => $request['responseCount'],
-            ];
-        }
 
-        $response = DataTableResponse::fromPaginator($paginator, $params->draw + 1, true);
-        $response->data = $result;
-        return $response;
+        return DataTableResponse::fromPaginator($paginator, $params->draw + 1);
     }
 
     /**

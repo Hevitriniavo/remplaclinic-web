@@ -123,6 +123,10 @@ class Request
     #[ORM\OneToMany(targetEntity: RequestReason::class, mappedBy: 'request', orphanRemoval: true)]
     private Collection $reasons;
 
+    #[Groups(['request:datatable'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $responseCount = null;
+
     public function __construct()
     {
         $this->subSpecialities = new ArrayCollection();
@@ -562,5 +566,39 @@ class Request
         }
 
         return $remuneration;
+    }
+
+    public function getResponseCount(): ?int
+    {
+        return $this->responseCount;
+    }
+
+    public function setResponseCount(?int $responseCount): static
+    {
+        $this->responseCount = $responseCount;
+
+        return $this;
+    }
+
+    public function incrementResponseCount(): static
+    {
+        if (is_null($this->getResponseCount())) {
+            $this->responseCount = 0;
+        }
+
+        $this->responseCount++;
+
+        return $this;
+    }
+
+    public function decrementResponseCount(): static
+    {
+        if (is_null($this->getResponseCount())) {
+            $this->responseCount = 0;
+        } else {
+            $this->responseCount++;
+        }
+
+        return $this;
     }
 }

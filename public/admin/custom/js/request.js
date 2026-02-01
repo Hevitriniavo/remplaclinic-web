@@ -24,7 +24,7 @@ $(function () {
     columnDefs: [
       {
         targets: 0,
-        data: "request.id",
+        data: "id",
         width: '3%',
         orderable: false,
         render: function (data, type, row, meta) {
@@ -38,12 +38,12 @@ $(function () {
       },
       {
         targets: 1,
-        data: "request.id",
+        data: "id",
         width: "5%",
       },
       {
         targets: 2,
-        data: "request.status",
+        data: "status",
         width: "5%",
         render: function (data, type, row, meta) {
           const statuses = ["A valider", "En cours", "Archivé"];
@@ -52,7 +52,7 @@ $(function () {
       },
       {
         targets: 3,
-        data: "request.requestType",
+        data: "requestType",
         width: "10%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -69,7 +69,7 @@ $(function () {
       },
       {
         targets: 4,
-        data: "request.applicant",
+        data: "applicant",
         width: "12%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -78,7 +78,7 @@ $(function () {
           const clinicUrl = getCleanUrl(tblDom.data("clinic-url"), data["id"]);
           const doctorUrl = getCleanUrl(tblDom.data("doctor-url"), data["id"]);
 
-          const role = row["request"]["applicant"]["roles"];
+          const role = data.roles;
 
           const applicantName = data.establishment?.name ? data.establishment.name : `${data.name} ${data.surname}`
 
@@ -94,7 +94,7 @@ $(function () {
       },
       {
         targets: 5,
-        data: "request.speciality",
+        data: "speciality",
         width: "15%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -106,7 +106,7 @@ $(function () {
       },
       {
         targets: 6,
-        data: "request.createdAt",
+        data: "createdAt",
         width: "10%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -118,15 +118,15 @@ $(function () {
       },
       {
         targets: 7,
-        data: "request.startedAt",
+        data: "startedAt",
         width: "8%",
         render: function (data, type, row, meta) {
           const dates = [];
           if (data) {
             dates.push(window.formatDate(data, false));
           }
-          if (row['request']['requestType'] !== 'installation' && row["request"]["endAt"]) {
-            dates.push(window.formatDate(row["request"]["endAt"], false));
+          if (row.requestType !== 'installation' && row.endAt) {
+            dates.push(window.formatDate(row.endAt, false));
           }
 
           return dates.join(' - ');
@@ -134,7 +134,7 @@ $(function () {
       },
       {
         targets: 8,
-        data: "request.lastSentAt",
+        data: "lastSentAt",
         width: "8%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -151,34 +151,34 @@ $(function () {
       },
       {
         targets: 10,
-        data: "request.id",
+        data: "id",
         orderable: false,
         className: "text-right",
         width: "19%",
         render: function (data, type, row, meta) {
           const deleteUrl = getCleanUrl(
             tblDom.data("delete-url"),
-            row["request"]["id"]
+            data
           );
           const detailUrl = getCleanUrl(
             tblDom.data("detail-url"),
-            row["request"]["id"]
+            data
           );
           const resendUrl = getCleanUrl(
             tblDom.data("resend-url"),
-            row["request"]["id"]
+            data
           );
           const resendApplicantUrl = getCleanUrl(
             tblDom.data("resend-applicant-url"),
-            row["request"]["id"]
+            data
           );
           const validateUrl = getCleanUrl(
             tblDom.data("validate-url"),
-            row["request"]["id"]
+            data
           );
           const closeUrl = getCleanUrl(
             tblDom.data("close-url"),
-            row["request"]["id"]
+            data
           );
           const actions = [];
           actions.push(
@@ -187,7 +187,7 @@ $(function () {
               '" title="Editer"><i class="fas fa-edit"></i></a>'
           );
           
-          if (row['request']['status'] === 0) {
+          if (row.status === 0) {
             actions.push(
               '<a class="btn btn-sm btn-outline-secondary ml-2 btn-edit" href="' +
                 validateUrl +
@@ -215,7 +215,7 @@ $(function () {
             '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="' +
               deleteUrl +
               '" data-id="' +
-              row["request"]["id"] +
+              data +
               '"><i class="fas fa-trash"></i></a>'
           );
 
@@ -248,7 +248,6 @@ $(function () {
 function initSearchFilters() {
   const requestFiltres = {
     applicant: [],
-    civility: '',
     created_from: '',
     created_to: '',
     regions: [],
@@ -349,7 +348,6 @@ function initSearchFilters() {
 
       Object.assign(requestFiltres, {
         applicant: [],
-        civility: '',
         created_from: '',
         created_to: '',
         regions: [],

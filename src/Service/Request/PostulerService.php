@@ -63,6 +63,7 @@ class PostulerService
         } else {
             // step 1: update candidature
             $this->updateRequestResponse($requestResponse, $responseStatus);
+            $this->updateRequestResponseCount($requestResponse->getRequest());
             
             // step 2 - 3 - 4: envoi des emails vers demandeur, candidat et admin 
             if ($requestResponse->getRequest()->getRequestType() === RequestType::INSTALLATION) {
@@ -97,6 +98,13 @@ class PostulerService
             ->setStatus($responseStatus)
             ->setUpdatedAt(new DateTimeImmutable())
         ;
+        $this->em->flush();
+    }
+
+    private function updateRequestResponseCount(Request $request)
+    {
+        $request->incrementResponseCount();
+        
         $this->em->flush();
     }
 

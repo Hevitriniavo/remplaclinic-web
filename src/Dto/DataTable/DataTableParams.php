@@ -11,6 +11,7 @@ class DataTableParams
     public $order_dir;
     public $offset;
     public $limit;
+    public $filters = [];
 
     public static function fromRequest($requestParams = []): self
     {
@@ -21,6 +22,7 @@ class DataTableParams
         $params->order_dir = isset($requestParams['order'][0]['dir']) ? $requestParams['order'][0]['dir'] : null;
         $params->offset = isset($requestParams['start']) ? (int) $requestParams['start'] : null;
         $params->limit = isset($requestParams['length']) ? (int) $requestParams['length'] : self::DEFAULT_LIMIT;
+        $params->filters = isset($requestParams['filters']) ? $requestParams['filters'] : [];
 
         return $params;
     }
