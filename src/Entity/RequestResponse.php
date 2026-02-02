@@ -7,6 +7,8 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: RequestResponseRepository::class)]
 class RequestResponse
 {
@@ -15,23 +17,29 @@ class RequestResponse
     const PLUS_D_INFOS = 2;
     const EXCLU = 3;
 
+    #[Groups(['datatable'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['datatable'])]
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $status = null;
 
+    #[Groups(['datatable'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createAt = null;
 
+    #[Groups(['datatable'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[Groups(['datatable'])]
     #[ORM\ManyToOne]
     private ?User $user = null;
 
+    #[Groups(['datatable'])]
     #[ORM\ManyToOne]
     private ?Request $request = null;
 

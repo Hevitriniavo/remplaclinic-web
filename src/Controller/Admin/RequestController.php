@@ -21,6 +21,15 @@ class RequestController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/request-responses', name: 'app_admin_request_response')]
+    public function getRequestResponses(): Response
+    {
+        $breadcrumbs = $this->getBreadcrumbs('Candidature');
+        return $this->render('admin/request/candidature.html.twig', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+    }
+
     #[Route('/admin/request-installations', name: 'app_admin_request_installation')]
     public function installation(): Response
     {

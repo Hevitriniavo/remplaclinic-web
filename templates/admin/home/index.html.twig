@@ -22,6 +22,7 @@ Tableau de bord
         icon-clinic="{{ asset('imgs/icons/picto-clinique-hover.png') }}"
         url-replacement="{{ path('app_admin_request_replacement') }}"
         url-installation="{{ path('app_admin_request_installation') }}"
+        url-candidature="{{ path('app_admin_request_response', { updated_from: debutMois, status: responseStatus })}}"
         url-user="{{ path('app_admin_replacement') }}"
         api-url="{{ path('api_home_dashboard') }}"
         v-slot="dashboard"

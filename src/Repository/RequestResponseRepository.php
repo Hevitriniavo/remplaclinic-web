@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Common\DateUtil;
+use App\Common\IdUtil;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\DataTable\DataTableResponse;
 use App\Entity\Request;
@@ -23,7 +25,108 @@ class RequestResponseRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestResponse::class);
     }
 
-    public function findAllDataTables(int $requestId, DataTableParams $params): DataTableResponse
+    /**
+     * List of request responses
+     */
+    public function findAllDataTables(DataTableParams $params): DataTableResponse
+    {
+        $sortBy = $params->getOrderColumn(['a.id', 'a.id', 'a.status', 'r.requestType', 'c.id', 'r.id', 'r.createdAt', 'u.id', 'a.updatedAt'], 'a.id');
+
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.user', 'u')
+            ->leftJoin('a.request', 'r')
+            ->leftJoin('r.applicant', 'c')
+            ->orderBy($sortBy, $params->getOrderDir())
+            ->setMaxResults($params->limit)
+            ->setFirstResult($params->offset);
+        
+        if (!empty($params->value)) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->orX(
+                        'u.name LIKE :value',
+                        'u.surname LIKE :value',
+                        'u.email LIKE :value',
+                        'c.name LIKE :value',
+                        'c.surname LIKE :value',
+                        'c.email LIKE :value'
+                    )
+                )
+                ->setParameter('value', '%' . $params->value . '%');
+        }
+
+        $filters = $params->filters;
+        if (!empty($filters)) {
+            // user
+            if (!empty($filters['user'])) {
+                $qb->andWhere('u.id IN ('. IdUtil::implode($filters['user']) . ')');
+            }
+
+            // applicant
+            if (!empty($filters['applicant'])) {
+                $qb->andWhere('c.id IN ('. IdUtil::implode($filters['applicant']) . ')');
+            }
+
+            // status
+            if (isset($filters['status'])) {
+                $qb->andWhere('a.status = :filter_status')
+                    ->setParameter('filter_status', $filters['status']);
+            }
+
+            // request_type
+            if (isset($filters['request_type'])) {
+                $qb->andWhere('r.requestType = :filter_request_type')
+                    ->setParameter('filter_request_type', $filters['request_type']);
+            }
+
+            // regions
+            if (!empty($filters['regions'])) {
+                $qb
+                    ->leftJoin('r.region', 'rg')
+                    ->andWhere('rg.id IN ('. IdUtil::implode($filters['regions']) . ')');
+            }
+
+            // specialities
+            if (!empty($filters['specialities'])) {
+                $qb
+                    ->leftJoin('r.speciality', 'sp')
+                    ->andWhere('sp.id IN ('. IdUtil::implode($filters['specialities']) . ')');
+            }
+
+            // created_from
+            if (!empty($filters['created_from'])) {
+                $qb->andWhere('r.createdAt >= :filter_created_from')
+                    ->setParameter('filter_created_from', DateUtil::parseDate('d/m/Y', $filters['created_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // created_to
+            if (!empty($filters['created_to'])) {
+                $qb->andWhere('r.createdAt <= :filter_created_to')
+                    ->setParameter('filter_created_to', DateUtil::parseDate('d/m/Y', $filters['created_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // updated_from
+            if (!empty($filters['updated_from'])) {
+                $qb->andWhere('a.updatedAt >= :filter_updated_from')
+                    ->setParameter('filter_updated_from', DateUtil::parseDate('d/m/Y', $filters['updated_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // updated_to
+            if (!empty($filters['updated_to'])) {
+                $qb->andWhere('a.updatedAt <= :filter_updated_to')
+                    ->setParameter('filter_updated_to', DateUtil::parseDate('d/m/Y', $filters['updated_to'])->format('Y-m-d') . ' 23:59');
+            }
+        }
+        
+        $paginator = new Paginator($qb->getQuery());
+
+        return DataTableResponse::fromPaginator($paginator, $params->draw + 1);
+    }
+
+    /**
+     * List of response for a given request. Shown in request detail tab.
+     */
+    public function findAllDataTablesForRequest(int $requestId, DataTableParams $params): DataTableResponse
     {
         $sortBy = $params->getOrderColumn(['a.id', 'a.id', 'u.name', 'u.surname', 's.name', 'a.status'], 'a.id');
 
@@ -74,6 +177,9 @@ class RequestResponseRepository extends ServiceEntityRepository
         return $response;
     }
 
+    /**
+     * List of user not added to a request.
+     */
     public function findAllUserNotAddedTo(int $requestId, ?string $searchTerm = ''): array
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
@@ -150,6 +256,9 @@ class RequestResponseRepository extends ServiceEntityRepository
         return array_map(fn(RequestResponse $item) => $item->getUser(), $responses);
     }
 
+    /**
+     * List of request response connected to a given user.
+     */
     public function findAllByUserId(int $userId, RequestType $requestType, int $limit = 10, int $offset = 0, ?int $status = null): DataTableResponse
     {
         $params = [
@@ -164,6 +273,9 @@ class RequestResponseRepository extends ServiceEntityRepository
         return DataTableResponse::fromPaginator($paginator, 0);
     }
 
+    /**
+     * List of request response connected to a given request. Shown in request detail for clinic and doctor tab.
+     */
     public function findAllByRequestId(int $requestId, int $limit = 10, int $offset = 0, ?int $status = null): array
     {
         $params = [

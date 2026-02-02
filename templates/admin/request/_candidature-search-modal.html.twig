@@ -1,0 +1,142 @@
+<div class="modal fade" id="filtre-request-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title">Filtre</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="filtre-request-demandeur">Demandeur</label>
+                            <select data-applicant-url="{{ path('api_user_liste_select') }}" class="form-control filtre-request-element" id="filtre-request-demandeur" name="applicant" multiple="true">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="filtre-request-user">Remplaçant</label>
+                            <select data-user-url="{{ path('api_user_liste_select') }}" class="form-control filtre-request-element" id="filtre-request-user" name="user" multiple="true">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="filtre-request-speciality">Spécialité de la demande</label>
+                            <twig:SelectSpeciality class="form-control select2-input filtre-request-element" id="filtre-request-speciality" name="specialities" multiple="true">
+                                <option></option>
+                            </twig:SelectSpeciality>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="filtre-request-regions">Région de la demande</label>
+                                <twig:SelectRegion class="form-control select2-input filtre-request-element" multiple="true" id="filtre-request-regions" name="regions">
+                                    <option></option>
+                                </twig:SelectRegion>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="filtre-request-request-type">Type de la demande</label>
+                            <select id="filtre-request-request-type" class="form-control filtre-request-element" name="request_type">
+                                <option value="" selected>- Tous -</option>
+                                <option value="installation">Proposition d'installation</option>
+                                <option value="replacement">Demande de remplaçement</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="filtre-request-status">Statut</label>
+                            <select id="filtre-request-status" class="form-control filtre-request-element" name="status">
+                                <option value="" selected>- Tous -</option>
+                                <option value="0">En cours</option>
+                                <option value="1">Candidature en cours</option>
+                                <option value="2">Plus d'infos</option>
+                                <option value="3">Exclu</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="filtre-request-created-from-input">Date de publication de la demande</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group date datepicker-wrapper" id="filtre-request-created-from" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input filtre-request-element" data-target="#filtre-request-created-from" id="filtre-request-created-from-input" name="created_from" placeholder="De">
+                                        <div class="input-group-append" data-target="#filtre-request-created-from" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group date datepicker-wrapper" id="filtre-request-created-to" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input filtre-request-element" data-target="#filtre-request-created-to" id="filtre-request-created-to-input" name="created_to" placeholder="A">
+                                        <div class="input-group-append" data-target="#filtre-request-created-to" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="filtre-request-updated-from-input">Date de la reponse</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group date datepicker-wrapper" id="filtre-request-updated-from" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input filtre-request-element" data-target="#filtre-request-updated-from" id="filtre-request-updated-from-input" name="updated_from" placeholder="De">
+                                        <div class="input-group-append" data-target="#filtre-request-updated-from" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group date datepicker-wrapper" id="filtre-request-updated-to" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input filtre-request-element" data-target="#filtre-request-updated-to" id="filtre-request-updated-to-input" name="updated_to" placeholder="A">
+                                        <div class="input-group-append" data-target="#filtre-request-updated-to" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" class="btn btn-default btn-flat" id="filtre-request-reset">
+                    <i class="fas fa-times"></i> Effacer
+                </button>
+                <button type="button" class="btn btn-secondary btn-flat" id="filtre-request-validate">
+                    <i class="fas fa-filter"></i> Valider
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

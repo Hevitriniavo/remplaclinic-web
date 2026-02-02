@@ -28,11 +28,21 @@ class UserRequestController extends AbstractController
         private readonly UserRepository $userRepository,
     ) {}
 
+    #[Route('/api/requests/responses', name: 'api_request_response_list', methods: ['GET'])]
+    public function getRequestResponseListe(Request $request): Response
+    {
+        $params = DataTableParams::fromRequest($request->query->all());
+
+        $response = $this->requestResponseRepository->findAllDataTables($params);
+
+        return $this->json($response, 200, [], ['groups' => ['datatable', 'request:datatable', 'request:with-title', 'user:simple']]);
+    }
+
     #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
     public function getRequestPersonneContactesAdmin(Request $request, int $requestId): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
-        return $this->json($this->requestResponseRepository->findAllDataTables($requestId, $params), 200, [], ['groups' => self::JSON_LIST_GROUPS]);
+        return $this->json($this->requestResponseRepository->findAllDataTablesForRequest($requestId, $params), 200, [], ['groups' => self::JSON_LIST_GROUPS]);
     }
 
     /**

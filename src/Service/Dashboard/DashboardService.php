@@ -7,12 +7,14 @@ use App\Entity\RequestType;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DashboardService
 {
 
     public function __construct(
         private readonly Connection $connection,
+        private readonly UrlGeneratorInterface $urlGenerator,
     )
     {}
 
@@ -265,6 +267,9 @@ class DashboardService
             'total' => $totalLastWeek + $totalThisWeek,
             'percentage' => $percentage,
             'up' => $percentage > 0,
+            'viewHref' => $this->urlGenerator->generate('app_admin_replacement', [
+                'created_from' => (new DateTimeImmutable('monday last week'))->format('d/m/Y')
+            ])
         ];
 
         return $result;
@@ -312,6 +317,10 @@ class DashboardService
             'total' => $totalLastWeek + $totalThisWeek,
             'percentage' => $percentage,
             'up' => $percentage > 0,
+            'viewHref' => $this->urlGenerator->generate('app_admin_request_response', [
+                'updated_from' => (new DateTimeImmutable('monday last week'))->format('d/m/Y'),
+                'status' => RequestResponse::ACCEPTE,
+            ])
         ];
 
         return $result;

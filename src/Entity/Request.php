@@ -23,7 +23,7 @@ class Request
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['full'])]
+    #[Groups(['full', 'request:with-title'])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 

@@ -316,6 +316,7 @@ const VueDashboardApp = {
         'urlReplacement',
         'urlInstallation',
         'urlUser',
+        'urlCandidature',
         'apiUrl',
     ],
     setup(props) {
@@ -455,7 +456,7 @@ const VueDashboardApp = {
                         percentage: true,
                         icon: 'fas fa-quote-right',
                         bg: 'bg-danger',
-                        href: '#',
+                        href: props.urlCandidature,
                         items: [
                             {
                                 label: 'Accepte',
@@ -481,7 +482,7 @@ const VueDashboardApp = {
                     chartData: {
                         itle: 'Inscriptions',
                         title2: 'Nouveaux inscrits',
-                        viewHref: '#',
+                        viewHref: responseData.value.inscription.chartData.viewHref,
                         total: responseData.value.inscription.chartData.total,
                         up: responseData.value.inscription.chartData.up,
                         percentage: responseData.value.inscription.chartData.percentage,
@@ -493,7 +494,7 @@ const VueDashboardApp = {
                     chartData: {
                         itle: 'Candidatures',
                         title2: 'Nouvelles candidatures',
-                        viewHref: '#',
+                        viewHref: responseData.value.reponse.chartData.viewHref,
                         total: responseData.value.reponse.chartData.total,
                         up: responseData.value.reponse.chartData.up,
                         percentage: responseData.value.reponse.chartData.percentage,
