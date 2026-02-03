@@ -32,10 +32,15 @@ class DataTableResponse
 
     public static function fromData(array $data = []): DataTableResponse
     {
+        return self::make($data, count($data), 0);
+    }
+
+    public static function make(array $data = [], int $total, int $draw = 0): DataTableResponse
+    {
         $result = new DataTableResponse();
-        $result->recordsFiltered = count($data);
-        $result->recordsTotal = count($data);
-        $result->draw = 0;
+        $result->recordsFiltered = $total;
+        $result->recordsTotal = $total;
+        $result->draw = $draw;
         $result->data = $data;
 
         return $result;

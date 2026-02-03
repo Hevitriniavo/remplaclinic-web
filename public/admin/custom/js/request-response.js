@@ -52,7 +52,7 @@ $(function () {
       },
       {
         targets: 3,
-        data: "request.requestType",
+        data: "request_type",
         width: "10%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -69,38 +69,38 @@ $(function () {
       },
       {
         targets: 4,
-        data: "request",
+        data: "request_id",
         width: "15%",
         render: function (data, type, row, meta) {
           if (!data) {
             return "";
           }
 
-          const requestUrl = getCleanUrl(tblDom.data(data.requestType.toUpperCase() == 'INSTALLATION' ? 'request-installation-url' : 'request-replacement-url'), data.id);
+          const requestUrl = getCleanUrl(tblDom.data(row.request_type.toUpperCase() == 'INSTALLATION' ? 'request-installation-url' : 'request-replacement-url'), data);
 
           return (
-            `<div><a href="${requestUrl}">${data.title}</a></div>`
+            `<div><a href="${requestUrl}">${row.request_title}</a></div>`
           );
         },
       },
       {
         targets: 5,
-        data: "request.applicant",
+        data: "applicant_id",
         width: "15%",
         render: function (data, type, row, meta) {
           if (!data) {
             return "";
           }
-          const clinicUrl = getCleanUrl(tblDom.data("clinic-url"), data["id"]);
-          const doctorUrl = getCleanUrl(tblDom.data("doctor-url"), data["id"]);
+          const clinicUrl = getCleanUrl(tblDom.data("clinic-url"), data);
+          const doctorUrl = getCleanUrl(tblDom.data("doctor-url"), data);
 
-          const role = data.roles;
+          const role = row.applicant_role_id;
 
-          const applicantName = data.establishment?.name ? data.establishment.name : `${data.name} ${data.surname}`
+          const applicantName = row.applicant_establishment_name ? row.applicant_establishment_name : `${row.applicant_name} ${row.applicant_surname}`
 
           let href = "#";
-          if (role && role.length) {
-            href = role[0].id == 6 ? doctorUrl : clinicUrl;
+          if (role) {
+            href = role == 6 ? doctorUrl : clinicUrl;
           }
 
           return (
@@ -110,7 +110,7 @@ $(function () {
       },
       {
         targets: 6,
-        data: "request.createdAt",
+        data: "request_created_at",
         width: "10%",
         render: function (data, type, row, meta) {
           if (!data) {
@@ -122,15 +122,15 @@ $(function () {
       },
       {
         targets: 7,
-        data: "user",
+        data: "user_id",
         width: "15%",
         render: function (data, type, row, meta) {
           if (!data) {
             return "";
           }
           
-          const replacementUrl = getCleanUrl(tblDom.data("replacement-url"), data["id"]);
-          const userFullName = `${data.name} ${data.surname}`
+          const replacementUrl = getCleanUrl(tblDom.data("replacement-url"), data);
+          const userFullName = `${row.user_name} ${row.user_surname}`
 
           return (
             `<div><a href="${replacementUrl}">${userFullName}</a></div>`
@@ -139,7 +139,7 @@ $(function () {
       },
       {
         targets: 8,
-        data: "updatedAt",
+        data: "updated_at",
         width: "10%",
         render: function (data, type, row, meta) {
           if (!data) {

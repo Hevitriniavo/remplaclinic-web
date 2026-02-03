@@ -75,7 +75,6 @@ class DrupalMigrationUsers extends DrupalMigrationBase
                         'speciality_id' => $specialityId,
                         'subscription_id' => $subscriptionId,
                         'establishment_id' => $establishmentId,
-                        'clinic_id' => null,
                         'ordinary_number' => $this->truncValue($this->keyData($user, 'field_num_ordre.und.0.safe_value')),
                         'civility' => $this->keyData($user, 'field_civilit_.und.0.value'),
                         'surname' => $this->keyData($user, 'field_prenom.und.0.safe_value'),

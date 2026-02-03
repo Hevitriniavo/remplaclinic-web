@@ -10,7 +10,9 @@ use App\Entity\Request;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use App\Entity\User;
+use App\Entity\UserRole;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Query\QueryBuilder as NativeQueryBuilder;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,97 +32,53 @@ class RequestResponseRepository extends ServiceEntityRepository
      */
     public function findAllDataTables(DataTableParams $params): DataTableResponse
     {
-        $sortBy = $params->getOrderColumn(['a.id', 'a.id', 'a.status', 'r.requestType', 'c.id', 'r.id', 'r.createdAt', 'u.id', 'a.updatedAt'], 'a.id');
+        $sortBy = $params->getOrderColumn(['a.id', 'a.id', 'a.status', 'r.request_type', 'c.id', 'r.id', 'r.created_at', 'u.id', 'a.updated_at'], 'a.id');
+        
+        $paramsArr = [
+            'value' => $params->value,
+            'filters' => $params->filters,
+        ];
 
-        $qb = $this->createQueryBuilder('a')
-            ->leftJoin('a.user', 'u')
-            ->leftJoin('a.request', 'r')
-            ->leftJoin('r.applicant', 'c')
+        $queryBuilder = $this->createNativeFindAllQueryBuilder($paramsArr);
+        
+        $countQueryBuilder = clone $queryBuilder;
+        $totalRows = $countQueryBuilder->select('COUNT(DISTINCT a.id) as total')
+            ->executeQuery()
+            ->fetchNumeric();
+        
+        $data = $queryBuilder
+            ->leftJoin('c', 'user_user_role', 'uur', 'c.id = uur.user_id AND uur.user_role_id IN ('. implode(', ', [User::ROLE_CLINIC_ID, User::ROLE_DOCTOR_ID]) . ')')
+            ->leftJoin('c', 'user_establishment', 'ue', 'c.establishment_id = ue.id')
+            ->addSelect(
+                'a.id AS id',
+                'a.status AS status',
+                'a.updated_at AS updated_at'
+            )
+            ->addSelect(
+                'u.id AS user_id',
+                'u.name AS user_name',
+                'u.surname AS user_surname'
+            )
+            ->addSelect(
+                'r.id AS request_id',
+                'r.request_type AS request_type',
+                'r.title AS request_title',
+                'r.created_at AS request_created_at'
+            )
+            ->addSelect(
+                'c.id AS applicant_id',
+                'c.name AS applicant_name',
+                'c.surname AS applicant_surname',
+                'uur.user_role_id AS applicant_role_id',
+                'ue.name AS applicant_establishment_name',
+            )
             ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
-            ->setFirstResult($params->offset);
-        
-        if (!empty($params->value)) {
-            $qb
-                ->andWhere(
-                    $qb->expr()->orX(
-                        'u.name LIKE :value',
-                        'u.surname LIKE :value',
-                        'u.email LIKE :value',
-                        'c.name LIKE :value',
-                        'c.surname LIKE :value',
-                        'c.email LIKE :value'
-                    )
-                )
-                ->setParameter('value', '%' . $params->value . '%');
-        }
+            ->setFirstResult($params->offset ? $params->offset : 0)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        $filters = $params->filters;
-        if (!empty($filters)) {
-            // user
-            if (!empty($filters['user'])) {
-                $qb->andWhere('u.id IN ('. IdUtil::implode($filters['user']) . ')');
-            }
-
-            // applicant
-            if (!empty($filters['applicant'])) {
-                $qb->andWhere('c.id IN ('. IdUtil::implode($filters['applicant']) . ')');
-            }
-
-            // status
-            if (isset($filters['status'])) {
-                $qb->andWhere('a.status = :filter_status')
-                    ->setParameter('filter_status', $filters['status']);
-            }
-
-            // request_type
-            if (isset($filters['request_type'])) {
-                $qb->andWhere('r.requestType = :filter_request_type')
-                    ->setParameter('filter_request_type', $filters['request_type']);
-            }
-
-            // regions
-            if (!empty($filters['regions'])) {
-                $qb
-                    ->leftJoin('r.region', 'rg')
-                    ->andWhere('rg.id IN ('. IdUtil::implode($filters['regions']) . ')');
-            }
-
-            // specialities
-            if (!empty($filters['specialities'])) {
-                $qb
-                    ->leftJoin('r.speciality', 'sp')
-                    ->andWhere('sp.id IN ('. IdUtil::implode($filters['specialities']) . ')');
-            }
-
-            // created_from
-            if (!empty($filters['created_from'])) {
-                $qb->andWhere('r.createdAt >= :filter_created_from')
-                    ->setParameter('filter_created_from', DateUtil::parseDate('d/m/Y', $filters['created_from'])->format('Y-m-d') . ' 00:00');
-            }
-
-            // created_to
-            if (!empty($filters['created_to'])) {
-                $qb->andWhere('r.createdAt <= :filter_created_to')
-                    ->setParameter('filter_created_to', DateUtil::parseDate('d/m/Y', $filters['created_to'])->format('Y-m-d') . ' 23:59');
-            }
-
-            // updated_from
-            if (!empty($filters['updated_from'])) {
-                $qb->andWhere('a.updatedAt >= :filter_updated_from')
-                    ->setParameter('filter_updated_from', DateUtil::parseDate('d/m/Y', $filters['updated_from'])->format('Y-m-d') . ' 00:00');
-            }
-
-            // updated_to
-            if (!empty($filters['updated_to'])) {
-                $qb->andWhere('a.updatedAt <= :filter_updated_to')
-                    ->setParameter('filter_updated_to', DateUtil::parseDate('d/m/Y', $filters['updated_to'])->format('Y-m-d') . ' 23:59');
-            }
-        }
-        
-        $paginator = new Paginator($qb->getQuery());
-
-        return DataTableResponse::fromPaginator($paginator, $params->draw + 1);
+        return DataTableResponse::make($data, $totalRows[0], $params->draw + 1);
     }
 
     /**
@@ -369,5 +327,96 @@ class RequestResponseRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    private function createNativeFindAllQueryBuilder(array $params = []): NativeQueryBuilder
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->from('request_response', 'a')
+            ->leftJoin('a', 'user', 'u', 'a.user_id = u.id')
+            ->leftJoin('a', 'request', 'r', 'a.request_id = r.id')
+            ->leftJoin('r', 'user', 'c', 'r.applicant_id = c.id');
+
+        if (!empty($params['value'])) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->or(
+                        'u.name LIKE :value',
+                        'u.surname LIKE :value',
+                        'u.email LIKE :value',
+                        'c.name LIKE :value',
+                        'c.surname LIKE :value',
+                        'c.email LIKE :value'
+                    )
+                )
+                ->setParameter('value', '%' . $params['value'] . '%');
+        }
+
+        if (!empty($params['filters'])) {
+            $filters = $params['filters'];
+
+            // user
+            if (!empty($filters['user'])) {
+                $qb->andWhere('u.id IN ('. IdUtil::implode($filters['user']) . ')');
+            }
+
+            // applicant
+            if (!empty($filters['applicant'])) {
+                $qb->andWhere('c.id IN ('. IdUtil::implode($filters['applicant']) . ')');
+            }
+
+            // status
+            if (isset($filters['status'])) {
+                $qb->andWhere('a.status = :filter_status')
+                    ->setParameter('filter_status', $filters['status']);
+            }
+
+            // request_type
+            if (isset($filters['request_type'])) {
+                $qb->andWhere('r.request_type = :filter_request_type')
+                    ->setParameter('filter_request_type', $filters['request_type']);
+            }
+
+            // regions
+            if (!empty($filters['regions'])) {
+                $qb
+                    ->leftJoin('r', 'region', 'rg', 'r.region_id = rg.id')
+                    ->andWhere('rg.id IN ('. IdUtil::implode($filters['regions']) . ')');
+            }
+
+            // specialities
+            if (!empty($filters['specialities'])) {
+                $qb
+                    ->leftJoin('r', 'speciality', 'sp', 'r.speciality_id = sp.id')
+                    ->andWhere('sp.id IN ('. IdUtil::implode($filters['specialities']) . ')');
+            }
+
+            // created_from
+            if (!empty($filters['created_from'])) {
+                $qb->andWhere('r.created_at >= :filter_created_from')
+                    ->setParameter('filter_created_from', DateUtil::parseDate('d/m/Y', $filters['created_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // created_to
+            if (!empty($filters['created_to'])) {
+                $qb->andWhere('r.created_at <= :filter_created_to')
+                    ->setParameter('filter_created_to', DateUtil::parseDate('d/m/Y', $filters['created_to'])->format('Y-m-d') . ' 23:59');
+            }
+
+            // updated_from
+            if (!empty($filters['updated_from'])) {
+                $qb->andWhere('a.updated_at >= :filter_updated_from')
+                    ->setParameter('filter_updated_from', DateUtil::parseDate('d/m/Y', $filters['updated_from'])->format('Y-m-d') . ' 00:00');
+            }
+
+            // updated_to
+            if (!empty($filters['updated_to'])) {
+                $qb->andWhere('a.updated_at <= :filter_updated_to')
+                    ->setParameter('filter_updated_to', DateUtil::parseDate('d/m/Y', $filters['updated_to'])->format('Y-m-d') . ' 23:59');
+            }
+        }
+
+        return $qb;
     }
 }
