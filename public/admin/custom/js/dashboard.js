@@ -346,10 +346,22 @@ const VueDashboardApp = {
                 },
             },
             inscription: {
+                chartData: {
+                    percentage: 0,
+                    total: 0,
+                    up: false,
+                    viewHref: "#"
+                },
                 currentWeek: [0, 0, 0, 0, 0, 0, 0],
                 lastWeek: [0, 0, 0, 0, 0, 0, 0],
             },
             reponse: {
+                chartData: {
+                    percentage: 0,
+                    total: 0,
+                    up: false,
+                    viewHref: "#"
+                },
                 currentWeek: [0, 0, 0, 0, 0, 0, 0],
                 lastWeek: [0, 0, 0, 0, 0, 0, 0],
             }
