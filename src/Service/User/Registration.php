@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Entity\UserAddress;
 use App\Entity\UserEstablishment;
 use App\Entity\UserSubscription;
+use App\Exceptions\ApiException;
 use App\Repository\RequestRepository;
 use App\Security\SecurityUser;
 use App\Service\FileUploader;
@@ -317,7 +318,7 @@ class Registration
         ]);
 
         if ($existingUser > 0) {
-            throw new Exception('Your email is already used by anothoer profile !');
+            throw ApiException::make('Votre email est deja utilise dans une autre profile !', 'REGISTRATION_EMAIL_EXIST', 409);
         }
 
         return true;

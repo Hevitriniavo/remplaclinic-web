@@ -31,7 +31,7 @@ class AppSchedulerService
         $appScheduler = $repository->findOneBy(['label' => $scheduler->label]);
 
         if (!is_null($appScheduler)) {
-            throw new Exception('There is already a scheduler with label {' . $appScheduler->getLabel() . '}');
+            throw new Exception('Un scheduler avec le nom {' . $appScheduler->getLabel() . '} existe deja dans la base de donnees.');
         }
 
         $appScheduler = new AppScheduler();

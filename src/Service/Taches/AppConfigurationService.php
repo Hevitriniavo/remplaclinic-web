@@ -80,7 +80,7 @@ class AppConfigurationService
 
         $result = array_key_exists($name, $this->configurations) ? $this->configurations[$name] : null;
         if ($throwExceptionIfNotFound && is_null($result)) {
-            throw new Exception('No app configuration with name {' . $name . '}');
+            throw new Exception("Aucune configuration correspond au nom {" . $name . "}.");
         }
 
         return $result;

@@ -81,7 +81,7 @@ class AppConfigurationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
 
         if (!is_null($exist)) {
-            throw new Exception('App configuration with name {' . $appConfiguration->getName() . '} exist already.');
+            throw new Exception('Il existe une configuration portant le meme nom que {' . $appConfiguration->getName() . '} dans la base de donnees.');
         }
     }
 }

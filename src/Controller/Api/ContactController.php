@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\ContactDto;
 use App\Dto\IdListDto;
+use App\Exceptions\ApiException;
 use App\Repository\ContactRepository;
 use App\Security\SecurityUser;
 use App\Service\Contact\ContactService;
@@ -56,7 +57,7 @@ class ContactController extends AbstractController
         // step 4: create and send email
         $created = $this->contactService->submitContact($contactDto, $user);
         if (is_null($created)) {
-            throw new Exception('Contact failed.');
+            throw ApiException::make("Impossible d'envoyer votre message. Veuillez contacter par telephone l'administateur pour l'assistance.", 'CONTACT_CREATION_FAILED', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // step 5: confirm

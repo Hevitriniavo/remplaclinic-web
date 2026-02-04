@@ -71,7 +71,7 @@ class SpecialityRepository extends ServiceEntityRepository
         if (!empty($specialityDto->specialityParent)) {
             $specialityParent = $this->find($specialityDto->specialityParent);
             if (is_null($specialityParent)) {
-                throw new EntityNotFoundException('There is no speclity with id ' . $specialityDto->specialityParent . '.');
+                throw new EntityNotFoundException("L'ID specialite " . $specialityDto->specialityParent . " n'existe pas dans la base de donnees.");
             }
             $speciality->setSpecialityParent($specialityParent);
         }
