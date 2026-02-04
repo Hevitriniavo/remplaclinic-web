@@ -1,0 +1,22 @@
+{% if not (app.request.pathinfo starts with '/admin') %}
+<div class="fixed top-0 inset-x-0 z-50 bg-[#373737] text-[#cccccc]">
+    <div class="max-w-[1170px] mx-auto py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+            </svg>
+
+            <span class="text-sm">
+                Basculer au backoffice pour povouvoir administrer le site
+            </span>
+        </div>
+
+        <a href="{{ path('app_admin_home') }}"
+            class="bg-[#ff9d32] text-white text-sm font-semibold px-3 py-1.5">
+            Acceder au backoffice
+        </a>
+    </div>
+</div>
+{% endif %}

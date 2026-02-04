@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './axios-instance.js'
 
 export const updateBtnSubmitStatus = (button, isLoader = true) => {
     if (button) {

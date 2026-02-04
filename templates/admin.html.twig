@@ -101,6 +101,25 @@
         </div>
     </div>
 
+    <div>
+        <!-- Start alert -->
+        <div id="alert-container" class="position-fixed" style="top: 1rem; right: 1rem; z-index: 1050; display: none;">
+            <div id="alert-box"
+                class="alert alert-danger alert-dismissible fade show shadow d-flex align-items-center"
+                role="alert">
+                <div class="flex-grow-1">
+                    <i id="alert-icon" class="fas fa-times-circle mr-3"></i>
+                    <strong id="alert-title">Error</strong><br>
+                    <span id="alert-message">Something went wrong.</span>
+                </div>
+
+                <button id="alert-btn-close" type="button" class="close ml-2" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div> <!-- End alert -->
+    </div>
+
     <script src="{{ asset('admin/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {% block bodyjs %}{% endblock %}

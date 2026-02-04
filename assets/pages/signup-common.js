@@ -1,5 +1,5 @@
-import axios from 'axios'
 import initPageCommon from './page-common.js'
+import axios from '../js/axios-instance.js'
 import RemplaFormValidation from '../js/rempla-form-validation.js'
 import RemplaModal from '../js/rempla-modal.js'
 import showToast from '../js/rempla-toaster.js'

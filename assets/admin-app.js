@@ -12,7 +12,7 @@ function initDeleteButtons() {
     const multipleIdsSelector = button.data('selector')
 
     // id
-    let id = null;
+    let id = null
 
     if (estMultiple) {
       // action multiple
@@ -241,6 +241,72 @@ axios.interceptors.response.use(
   },
   function (error) {
     hideLoader()
-    return Promise.reject(error)
+
+    console.error('API_ERROR: ', error.response?.data || error)
+
+    // check if error is an api error
+    const message = error.response?.data?.error
+    if (message) {
+      showAlert(message)
+    }
+
+    return Promise.reject(error.response?.data || error)
   }
 )
+
+/****************************************/
+/**** ALERT MESSAGE (API ERROR, ETC) ****/
+/****************************************/
+const ALERT_TYPES = {
+    error: {
+        class: 'alert-danger',
+        icon: 'fas fa-times-circle',
+        title: 'Error'
+    },
+    warning: {
+        class: 'alert-warning',
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Warning'
+    },
+    success: {
+        class: 'alert-success',
+        icon: 'fas fa-check-circle',
+        title: 'Success'
+    },
+    info: {
+        class: 'alert-info',
+        icon: 'fas fa-info-circle',
+        title: 'Info'
+    }
+}
+
+let alertTimeout = null
+
+function showAlert(message, type = 'error', duration = 5000) {
+    const container = document.getElementById('alert-container')
+    const box = document.getElementById('alert-box')
+    const icon = document.getElementById('alert-icon')
+    const title = document.getElementById('alert-title')
+    const messageEl = document.getElementById('alert-message')
+
+    const config = ALERT_TYPES[type] || ALERT_TYPES.error
+
+    // Reset classes
+    box.className = 'alert alert-dismissible fade show shadow d-flex align-items-start'
+    box.classList.add(config.class)
+
+    icon.className = config.icon + ' mr-2 mt-1'
+    title.textContent = config.title
+    messageEl.textContent = message
+
+    container.style.display = 'block'
+
+    if (alertTimeout) clearTimeout(alertTimeout)
+    alertTimeout = setTimeout(hideAlert, duration)
+}
+window.showAlert = showAlert
+
+function hideAlert() {
+    document.getElementById('alert-container').style.display = 'none'
+}
+window.hideAlert = hideAlert

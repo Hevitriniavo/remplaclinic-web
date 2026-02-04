@@ -11,7 +11,11 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body class="{% if is_granted('ROLE_ADMIN') and not (app.request.pathinfo starts with '/admin') %} pt-14 {% endif %} {% if cookie_consent() is null %} pb-16 {% endif %}">
+        {% if is_granted('ROLE_ADMIN') and not (app.request.pathinfo starts with '/admin') %}
+            {% include 'partials/admin_banner.html.twig' %}
+        {% endif %}
+
         {% include 'partials/navigation.html.twig' %}
         {% block body %}
 
@@ -21,6 +25,9 @@
         <div>
             <div id="rempla-toaster-root" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
         </div>
+        {% if cookie_consent() is null %}
+            {% include 'cookie-consent/_banner.html.twig' %}
+        {% endif %}
         {% block bodyjs %}{% endblock %}
     </body>
 </html>

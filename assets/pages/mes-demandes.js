@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../js/axios-instance.js'
 import initPageCommon, { getCleanUrl, addDataTableLimitOptionsEvent } from './page-common.js'
 import RemplaModal from '../js/rempla-modal.js'
 import RemplaTabNavigation from '../js/rempla-tab-navigation.js'

@@ -35,3 +35,6 @@ services:
     App\Service\FileCleaner:
         arguments:
             $targetDirectory: '%kernel.project_dir%/public/uploads'
+    App\Exceptions\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

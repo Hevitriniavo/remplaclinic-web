@@ -1,0 +1,92 @@
+<div id="cookie-consent">
+    <div class="max-w-[1170px] flex justify-between mx-auto">
+        <p class="cookie-text">
+            Nous utilisons des cookies pour ameliorer votre experience sur le site
+            <a href="/conditions-generales-dutilisation">En savoir plus</a>
+        </p>
+        <div class="cookie-actions">
+            <button class="btn-cookie-consent accept" data-consent="accepted">Accepter</button>
+            <button class="btn-cookie-consent reject" data-consent="rejected">Refuser</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* cookie consent */
+    #cookie-consent {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #373737;
+        color: #cccccc;
+        padding: 15px 20px;
+        z-index: 9999;
+
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+        font-size: 14px;
+    }
+
+    #cookie-consent p {
+        margin: 0;
+        max-width: 70%;
+    }
+
+    #cookie-consent a {
+        color: #5ab0d5;
+        text-decoration: underline;
+    }
+
+    #cookie-consent .cookie-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    #cookie-consent button {
+        padding: 8px 14px;
+        border: 0;
+        cursor: pointer;
+    }
+
+    #cookie-consent button[data-consent="accepted"] {
+        background-color: #ff9d32;
+        color: #fff;
+    }
+
+    #cookie-consent button[data-consent="rejected"] {
+        color: #fff;
+    }
+
+    #cookie-consent button[data-consent="rejected"]:hover {
+        background-color: #cccccc;;
+    }
+
+    /* End cookie consent */
+</style>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnAccept = document.querySelector('.btn-cookie-consent.accept')
+        if (btnAccept) {
+            btnAccept.addEventListener('click', function (e) {
+                if (!e.target.dataset.consent) return;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', "{{ path('app_cookie_consent') }}", true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('consent=' + e.target.dataset.consent);
+
+                xhr.onload = function () {
+                    location.reload();
+                };
+            })
+        }
+
+        const btnReject = document.querySelector('.btn-cookie-consent.reject')
+        if (btnReject) {
+            btnReject.addEventListener('click', function (e) {
+                window.history.back()
+            })
+        }
+    })
+</script>

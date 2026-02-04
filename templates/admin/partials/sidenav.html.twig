@@ -3,8 +3,8 @@
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-bold text-uppercase">&nbsp;</span>
     </a>
-    <div class="sidebar">
-        <nav class="mt-2">
+    <div class="sidebar d-flex flex-column">
+        <nav class="mt-2 flex-grow-1">
             {% set currentRoute = app.request.attributes.get('_route') %}
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-header">ACCUEIL</li>
@@ -166,6 +166,17 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item mt-auto">
+                    <a href="{{ path('app_user_logout') }}" class="nav-link">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p class="text-uppercase">Se déconnecter</p>
+                    </a>
                 </li>
             </ul>
         </nav>

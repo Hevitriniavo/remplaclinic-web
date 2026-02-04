@@ -231,6 +231,8 @@ const app = createApp({
           .catch(() => {
             requesting.value = false;
           });
+      } else {
+        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 

@@ -1,4 +1,4 @@
-export default function showToast(message, type = 'success', duration = 3000, containerId = 'rempla-toaster-root') {
+export default function showToast(message, type = 'success', duration = 5000, containerId = 'rempla-toaster-root') {
     const toastContainer = document.getElementById(containerId)
 
     if (!toastContainer) {

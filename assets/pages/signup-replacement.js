@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../js/axios-instance.js'
 import { default as initSignupCommon, loadUserInfos, initDesinscriptionModal } from './signup-common.js'
 
 document.addEventListener('DOMContentLoaded', () => {

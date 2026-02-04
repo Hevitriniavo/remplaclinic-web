@@ -1,8 +1,7 @@
-import axios from 'axios'
-
 import { Datepicker } from 'vanillajs-datepicker'
 import 'vanillajs-datepicker/dist/css/datepicker-bulma.min.css'
 
+import axios from '../js/axios-instance.js'
 import { default as initPageCommon, getCleanUrl } from './page-common.js'
 import { default as RemplaFormValidation, updateBtnSubmitStatus } from '../js/rempla-form-validation.js'
 import RemplaModal from '../js/rempla-modal.js'
