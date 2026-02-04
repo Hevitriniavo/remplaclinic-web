@@ -2,6 +2,7 @@
 
 namespace App\Service\User;
 
+use App\Common\IdUtil;
 use App\Entity\User;
 use App\Service\FileCleaner;
 use Doctrine\DBAL\Connection;
@@ -49,8 +50,6 @@ class UserDelete
         $users = $this->userService->getUsers($ids);
 
         $this->db->beginTransaction();
-
-        $this->db->beginTransaction();
         try {
 
             foreach($users as $user) {
@@ -94,6 +93,33 @@ class UserDelete
         $this->db->delete('user_user_role', [
             'user_id' => $user->getId(),
         ]);
+
+        // delete request
+        $requestsId = $this->db
+            ->executeQuery('SELECT id FROM request WHERE applicant_id = ?', [$user->getId()])
+            ->fetchFirstColumn();
+        if (!empty($requestsId)) {
+
+            $ids = IdUtil::implode($requestsId, ', ');
+
+            // delete request history
+            $this->db->executeStatement('DELETE FROM request_history WHERE request_id IN ('. $ids . ')');
+
+            // delete request response
+            $this->db->executeStatement('DELETE FROM request_response WHERE request_id IN ('. $ids . ')');
+            
+            // delete request reason
+            $this->db->executeStatement('DELETE FROM request_reason WHERE request_id IN ('. $ids . ')');
+            
+            // delete request speciality
+            $this->db->executeStatement('DELETE FROM request_speciality WHERE request_id IN ('. $ids . ')');
+
+            $this->db->delete('request', [
+                'applicant_id' => $user->getId(),
+            ]);
+        }
+
+
 
         // delete user
         $this->db->delete('user', [

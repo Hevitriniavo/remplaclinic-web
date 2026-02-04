@@ -21,10 +21,4 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_home');
     }
-
-    #[Route('/user/supprimer-compte', name: 'app_user_delete')]
-    public function deleteAccount(): Response
-    {
-        return $this->redirectToRoute('app_home');
-    }
 }
