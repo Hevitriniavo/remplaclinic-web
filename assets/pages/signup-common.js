@@ -114,12 +114,26 @@ export const loadUserInfos = function () {
 }
 
 export const initDesinscriptionModal = function (selector = 'modal-confirmation-desinscription') {
-    return new RemplaModal(selector, {
+    const form = new RemplaModal(selector, {
         beforeOpenAsync: async (e, activator) => {
             e.preventDefault()
-            console.log('OPEN CONFIRMATION DESINSCRIPTION', {e, activator})
             // update modal data here
             return true
         }
     })
+
+    const btnConfirmDesinscription = document.querySelector('.btn-confirm-desinscription')
+    if (btnConfirmDesinscription) {
+        btnConfirmDesinscription.addEventListener('click', e => {
+            e.preventDefault()
+
+            axios.delete(btnConfirmDesinscription.dataset.deleteUrl)
+                .then(() => {
+                    window.location.reload()
+                })
+                .catch(() => {})
+        })
+    }
+
+    return form
 }

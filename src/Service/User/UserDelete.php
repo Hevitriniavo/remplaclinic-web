@@ -4,13 +4,13 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Service\FileCleaner;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\DBAL\Connection;
+use Exception;
 
 class UserDelete
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private Connection $db,
         private UserService $userService,
         private FileCleaner $fileCleaner,
     ) {}
@@ -22,8 +22,17 @@ class UserDelete
          */
         $user = $this->userService->getUser($id);
 
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
+        $this->db->beginTransaction();
+        try {
+
+            $this->deleteUser($user);
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+
+            throw $e;
+        }
 
         $this->fileCleaner->remove($user->getCv());
         $this->fileCleaner->remove($user->getDiplom());
@@ -39,16 +48,77 @@ class UserDelete
          */
         $users = $this->userService->getUsers($ids);
 
+        $this->db->beginTransaction();
+
+        $this->db->beginTransaction();
+        try {
+
+            foreach($users as $user) {
+                $this->deleteUser($user);
+            }
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+
+            throw $e;
+        }
+
         foreach($users as $user) {
-            $this->entityManager->remove($user);
-            
             $this->fileCleaner->remove($user->getCv());
             $this->fileCleaner->remove($user->getDiplom());
             $this->fileCleaner->remove($user->getLicence());
         }
 
-        $this->entityManager->flush();
-
         return true;
+    }
+
+    private function deleteUser(User $user)
+    {
+        // delete request response
+        $this->db->delete('request_response', [
+            'user_id' => $user->getId(),
+        ]);
+
+        // delete user region
+        $this->db->delete('user_region', [
+            'user_id' => $user->getId(),
+        ]);
+
+        // delete user speciality
+        $this->db->delete('user_speciality', [
+            'user_id' => $user->getId(),
+        ]);
+
+        // delete user user_user_role
+        $this->db->delete('user_user_role', [
+            'user_id' => $user->getId(),
+        ]);
+
+        // delete user
+        $this->db->delete('user', [
+            'id' => $user->getId(),
+        ]);
+
+        // delete user address
+        if (!is_null($user->getAddress())) {
+            $this->db->delete('user_address', [
+                'id' => $user->getAddress()->getId(),
+            ]);
+        }
+        
+        // delete user user_establishment
+        if (!is_null($user->getEstablishment())) {
+            $this->db->delete('user_establishment', [
+                'id' => $user->getEstablishment()->getId(),
+            ]);
+        }
+
+        // delete user user_subscription
+        if (!is_null($user->getSubscription())) {
+            $this->db->delete('user_subscription', [
+                'id' => $user->getSubscription()->getId(),
+            ]);
+        }
     }
 }
