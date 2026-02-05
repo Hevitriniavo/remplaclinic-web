@@ -417,6 +417,7 @@ const app = createApp({
 
       jQuery("#request-started-at, #request-end-at").datepicker({
         format: "dd/mm/yyyy",
+        startDate: '0d',
         autoclose: true,
       })
       jQuery("#request-started-at-input").on("change", function () {
