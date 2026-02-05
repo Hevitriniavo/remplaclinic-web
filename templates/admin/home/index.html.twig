@@ -15,50 +15,230 @@ Tableau de bord
 
 {% block body %}
 <div class="row" id="root">
-    <vue-dashboard-app
-        icon-remplacant="{{ asset('imgs/icons/picto-remplacant-hover.png') }}"
-        icon-doctor="{{ asset('imgs/icons/picto-cabinet-medical-hover.png') }}"
-        icon-director="{{ asset('imgs/icons/picto-directeur-cliniques-hover.png') }}"
-        icon-clinic="{{ asset('imgs/icons/picto-clinique-hover.png') }}"
-        url-replacement="{{ path('app_admin_request_replacement') }}"
-        url-installation="{{ path('app_admin_request_installation') }}"
-        url-candidature="{{ path('app_admin_request_response', { updated_from: debutMois, status: responseStatus })}}"
-        url-user="{{ path('app_admin_replacement') }}"
-        api-url="{{ path('api_home_dashboard') }}"
-        v-slot="dashboard"
-    >
-        <div class="col-12" v-if="dashboard.isLoaded">
-            <div class="row">
-                <vue-dashboard-user-count
-                    :box-items="dashboard.data.users"
-                ></vue-dashboard-user-count>
-            </div>
-            
-            <div class="row mt-3 mb-5">
-                <vue-dashboard-request-count
-                    :box-items="dashboard.data.requests"
-                ></vue-dashboard-request-count>
-            </div>
+    <div class="col-12">
+        <!-- users -->
+        <div class="row">
+            <!-- remplacant -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ asset('imgs/icons/picto-remplacant-hover.png') }}" alt="Remplaçant">
 
-            <div class="row">
-                <div class="col-lg-6">
-                    <vue-dashboard-chart-inscription
-                        :data-current-week="dashboard.data.inscription.currentWeek"
-                        :data-last-week="dashboard.data.inscription.lastWeek"
-                        :chart-data="dashboard.data.inscription.chartData"
-                    ></vue-dashboard-chart-inscription>
+                    <div class="info-box-content">
+                        <span class="info-box-text text-uppercase">Remplaçant</span>
+                        <div class="info-box-number">
+                            {{ dashboardData.users.remplacant }}
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="col-lg-6">
-                    <vue-dashboard-chart-reponse
-                        :data-current-week="dashboard.data.response.currentWeek"
-                        :data-last-week="dashboard.data.response.lastWeek"
-                        :chart-data="dashboard.data.response.chartData"
-                    ></vue-dashboard-chart-reponse>
+            <!-- doctor -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ asset('imgs/icons/picto-cabinet-medical-hover.png') }}" alt="Cabinet médicale">
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-uppercase">Cabinet médicale</span>
+                        <div class="info-box-number">
+                            {{ dashboardData.users.doctor }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- clinique -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ asset('imgs/icons/picto-clinique-hover.png') }}" alt="Clinique">
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-uppercase">Clinique</span>
+                        <div class="info-box-number">
+                            {{ dashboardData.users.clinic }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- directeur -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ asset('imgs/icons/picto-directeur-cliniques-hover.png') }}" alt="Directeur de clinique">
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-uppercase">Directeur de clinique</span>
+                        <div class="info-box-number">
+                            {{ dashboardData.users.director }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </vue-dashboard-app>
+        <!-- end users -->
+        
+        <!-- requests -->
+        <div class="row mt-3 mb-5">
+            <!-- Demande de remplacement -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3>{{ dashboardData.requests.remplacement.total }}</h3>
+                        <p>Demande de remplacement</p>
+
+                        <p>
+                            A valider: <span class="badge badge-info mr-2">{{ dashboardData.requests.remplacement.status.0 }}</span>
+                            En cours: <span class="badge badge-success mr-2">{{ dashboardData.requests.remplacement.status.1 }}</span>
+                            Archive: <span class="badge badge-warning mr-2">{{ dashboardData.requests.remplacement.status.2 }}</span>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <a href="{{ path('app_admin_request_replacement') }}" class="small-box-footer">Voir <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Proposition d'installaction -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ dashboardData.requests.installation.total }}</h3>
+                        <p>Proposition d'installaction</p>
+
+                        <p>
+                            A valider: <span class="badge badge-info mr-2">{{ dashboardData.requests.installation.status.0 }}</span>
+                            En cours: <span class="badge badge-success mr-2">{{ dashboardData.requests.installation.status.1 }}</span>
+                            Archive: <span class="badge badge-warning mr-2">{{ dashboardData.requests.installation.status.2 }}</span>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fab fa-instalod"></i>
+                    </div>
+                    <a href="{{ path('app_admin_request_installation') }}" class="small-box-footer">Voir <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Utilisateurs inscrits -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ dashboardData.requests.users.total }}</h3>
+                        <p>Utilisateurs inscrits</p>
+
+                        <p>
+                            Actif: <span class="badge badge-info mr-2">{{ dashboardData.requests.users.status.0 }}</span>
+                            Inactif: <span class="badge badge-warning mr-2">{{ dashboardData.requests.users.status.1 }}</span>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                    <a href="{{ path('app_admin_replacement') }}" class="small-box-footer">Voir <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Candidatures du mois -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{ dashboardData.requests.reponses.percentage }} <sup style="font-size: 20px">%</sup></h3>
+                        <p>Candidatures du mois</p>
+
+                        <p>
+                            Accepte: <span class="badge badge-success mr-2">{{ dashboardData.requests.reponses.status.0 }}</span>
+                            Plus d'info: <span class="badge badge-info mr-2">{{ dashboardData.requests.reponses.status.1 }}</span>
+                            Exclu: <span class="badge badge-warning mr-2">{{ dashboardData.requests.reponses.status.2 }}</span>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <a href="{{ path('app_admin_request_response', { updated_from: debutMois, status: responseStatus })}}" class="small-box-footer">Voir <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end requests -->
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Inscriptions</h3>
+                            <a href="{{ dashboardData.inscription.chartData.viewHref }}">Voir plus</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span class="text-bold text-lg">{{ dashboardData.inscription.chartData.total }}</span>
+                                <span>Nouveaux inscrits</span>
+                            </p>
+                            <p class="ml-auto d-flex flex-column text-right">
+                                <span class="{{ dashboardData.inscription.chartData.up ? 'text-success' : 'text-danger' }}">
+                                    <i class="fas {{ dashboardData.inscription.chartData.up ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ dashboardData.inscription.chartData.percentage }}%
+                                </span>
+                                <span class="text-muted">Cette semaine</span>
+                            </p>
+                        </div>
+
+                        <div class="position-relative mb-4">
+                            <canvas id="inscription-chart-canvas" data-current-week="{{ dashboardData.inscription.currentWeek|json_encode }}" data-last-week="{{ dashboardData.inscription.lastWeek|json_encode }}" height="200"></canvas>
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> Cette semaine
+                            </span>
+
+                            <span>
+                                <i class="fas fa-square text-gray"></i> La semaine derniere
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Candidatures</h3>
+                            <a href="{{ dashboardData.reponse.chartData.viewHref }}">Voir plus</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span class="text-bold text-lg">{{ dashboardData.reponse.chartData.total }}</span>
+                                <span>Nouvelles candidatures</span>
+                            </p>
+                            <p class="ml-auto d-flex flex-column text-right">
+                                <span class="{{ dashboardData.reponse.chartData.up ? 'text-success' : 'text-danger' }}">
+                                    <i class="fas {{ dashboardData.reponse.chartData.up ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ dashboardData.reponse.chartData.percentage }}%
+                                </span>
+                                <span class="text-muted">Cette semaine</span>
+                            </p>
+                        </div>
+
+                        <div class="position-relative mb-4">
+                            <canvas id="reponse-chart-canvas" data-current-week="{{ dashboardData.reponse.currentWeek|json_encode }}" data-last-week="{{ dashboardData.reponse.lastWeek|json_encode }}" height="200"></canvas>
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> Cette semaine
+                            </span>
+
+                            <span>
+                                <i class="fas fa-square text-gray"></i> La semaine derniere
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

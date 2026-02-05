@@ -67,8 +67,8 @@ class DashboardService
         $roles = [
             'remplacant' => User::ROLE_REPLACEMENT_ID,
             'doctor' => User::ROLE_DOCTOR_ID,
-            'director' => User::ROLE_CLINIC_ID,
-            'clinic' => User::ROLE_DIRECTOR_ID,
+            'clinic' => User::ROLE_CLINIC_ID,
+            'director' => User::ROLE_DIRECTOR_ID,
         ];
 
         $sql = 'select r.user_role_id AS role, count(u.id) AS total FROM user_user_role r JOIN user u ON r.user_id = u.id WHERE r.user_role_id IN ('.  implode(',', array_values($roles)) .') GROUP BY r.user_role_id';
@@ -143,10 +143,10 @@ class DashboardService
             'en_cours' => RequestResponse::EN_COURS,
         ];
 
-        $sql = 'select rr.status as status, count(rr.id) as total from request_response rr where rr.updated_at like ? group by rr.status';
+        $sql = 'select rr.status as status, count(rr.id) as total from request_response rr where rr.updated_at > ? group by rr.status';
 
         $query = $this->connection->prepare($sql);
-        $query->bindValue(1, date('Y-m') . '%');
+        $query->bindValue(1, date('Y-m-01 00:00'));
 
         $rs = $query->executeQuery()
             ->fetchAllAssociative();
@@ -340,13 +340,20 @@ class DashboardService
 
     private function getInscriptionCounts(array $days): array
     {
-        $placeholders = implode(',', array_fill(0, count($days), '?'));
+        $placeholders = [];
+        $sqlParams = [];
 
-        $sql = "SELECT DATE(create_at) AS day, COUNT(*) AS total FROM user WHERE DATE(create_at) IN ($placeholders) GROUP BY DATE(create_at)";
+        for($index = 0; $index < count($days); $index++) {
+            $placeholders[] = ":day_$index";
+            $sqlParams["day_$index"] = $days[$index];
+        }
+        $placeholdersStr = implode(', ', $placeholders);
+
+        $sql = "SELECT DATE(create_at) AS day, COUNT(*) AS total FROM user WHERE DATE(create_at) IN ($placeholdersStr) GROUP BY DATE(create_at)";
 
         $stmt = $this->connection->prepare($sql);
         
-        $rs = $stmt->executeQuery($days);
+        $rs = $stmt->executeQuery($sqlParams);
         $result = [];
 
         while(($row = $rs->fetchAssociative()) !== false) {
@@ -359,7 +366,7 @@ class DashboardService
     private function percentChange(int|float $previous, int|float $current): ?float
     {
         if ($previous == 0) {
-            return null; // or 0, or 100 — depends on your business rule
+            return round($current * 100, 2);
         }
 
         return round((($current - $previous) / $previous) * 100, 2);
@@ -368,13 +375,20 @@ class DashboardService
     private function getResponseCounts(array $days): array
     {
         $status = [ RequestResponse::ACCEPTE, RequestResponse::PLUS_D_INFOS ];
-        $placeholders = implode(',', array_fill(0, count($days), '?'));
+        $placeholders = [];
+        $sqlParams = [];
 
-        $sql = "SELECT DATE(r.updated_at) AS day, COUNT(r.id) AS total FROM request_response r WHERE DATE(r.updated_at) IN ($placeholders) AND r.status IN (". implode(',', $status) .") GROUP BY DATE(r.updated_at)";
+        for($index = 0; $index < count($days); $index++) {
+            $placeholders[] = ":day_$index";
+            $sqlParams["day_$index"] = $days[$index];
+        }
+        $placeholdersStr = implode(', ', $placeholders);
+
+        $sql = "SELECT DATE(r.updated_at) AS day, COUNT(r.id) AS total FROM request_response r WHERE DATE(r.updated_at) IN ($placeholdersStr) AND r.status IN (". implode(',', $status) .") GROUP BY DATE(r.updated_at)";
 
         $stmt = $this->connection->prepare($sql);
         
-        $rs = $stmt->executeQuery($days);
+        $rs = $stmt->executeQuery($sqlParams);
         $result = [];
 
         while(($row = $rs->fetchAssociative()) !== false) {
