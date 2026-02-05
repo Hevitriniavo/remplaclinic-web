@@ -6,13 +6,9 @@ use App\Entity\EmailEvents;
 use App\Entity\RequestType;
 use App\Repository\RequestResponseRepository;
 use App\Service\Mail\RequestMailBuilder;
-use App\Service\Request\CloturerService;
-use App\Service\Request\RelancerService;
-use App\Service\Request\RenvoyerService;
-use App\Service\Request\ValiderService;
+use App\Service\Request\OperationExecutor;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,10 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class RequestTafController extends AbstractController
 {
     public function __construct(
-        private readonly ValiderService $validerService,
-        private readonly RenvoyerService $renvoyerService,
-        private readonly RelancerService $relancerService,
-        private readonly CloturerService $cloturerService,
+        private readonly OperationExecutor $operationExecutor
     )
     {}
 
@@ -39,7 +32,12 @@ class RequestTafController extends AbstractController
     public function tafExecution(string $requestType, int $requestId, string $eventName): Response
     {
         $requestType = RequestType::from($requestType);
-        return $this->handleExecuteAction($requestId, $eventName, $requestType === RequestType::REPLACEMENT ? 'app_admin_request_replacement' : 'app_admin_request_installation');
+        
+        $request = $this->operationExecutor->handle($requestId, $eventName);
+    
+        $this->addFlash('request_operation', sprintf("L'operation %s sur la %s est en cours d'execution.", $eventName, $request->getRequestType() === RequestType::REPLACEMENT ? 'demande de remplacement' : "proposition d'installation"));
+
+        return $this->redirectToRoute($requestType === RequestType::REPLACEMENT ? 'app_admin_request_replacement' : 'app_admin_request_installation');
     }
 
     #[Route(
@@ -80,24 +78,5 @@ class RequestTafController extends AbstractController
         }
 
         return new Response($mailLog->getBody());
-    }
-
-
-    private function handleExecuteAction(int $requestId, string $eventName, string $redirectToRoute): RedirectResponse
-    {
-        $services = [
-            EmailEvents::REQUEST_VALIDATION => $this->validerService,
-            EmailEvents::REQUEST_RENVOIE => $this->renvoyerService,
-            EmailEvents::REQUEST_RELANCE => $this->relancerService,
-            // EmailEvents::REQUEST_ARCHIVAGE => $this->validerService,
-            EmailEvents::REQUEST_CLOTURATION => $this->cloturerService,
-        ];
-        $serviceVisitor = $services[$eventName];
-
-        $request = $serviceVisitor->execute($requestId);
-
-        $this->addFlash('request_operation', sprintf("L'operation %s sur la %s est en cours d'execution.", $eventName, $request->getRequestType() === RequestType::REPLACEMENT ? 'demande de remplacement' : "proposition d'installation"));
-
-        return $this->redirectToRoute($redirectToRoute);
     }
 }

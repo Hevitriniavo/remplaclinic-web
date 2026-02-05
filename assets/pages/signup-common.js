@@ -7,7 +7,7 @@ import showToast from '../js/rempla-toaster.js'
 export default function initSignupCommon() {
     initPageCommon()
 
-    const form = new RemplaFormValidation('form-signup', { debug: true, ajax: true })
+    const form = new RemplaFormValidation('form-signup', { debug: false, ajax: true })
     form.addValidator('passwordConfirmation', (data) => data.passwordConfirmation === data.password)
     form.addValidator('cguAccepted', (data) => {
         const isChecked = data.cguAccepted === '1'

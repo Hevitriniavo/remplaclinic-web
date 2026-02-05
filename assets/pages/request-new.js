@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPageCommon()
 
     // form
-    const form = new RemplaFormValidation('form-request', { debug: true, ajax: true })
+    const form = new RemplaFormValidation('form-request', { debug: false, ajax: true })
 
     // selection des remplacants
     const modal = new RemplaModal('selection-remplacant-modal')

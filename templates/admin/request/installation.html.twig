@@ -30,11 +30,10 @@ Proposition d'installation
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item" href="#">Valider</a>
-                                <a class="dropdown-item" href="#">Renvoyer</a>
-                                <a class="dropdown-item" href="#">Relancer le demandeur</a>
-                                <a class="dropdown-item" href="#">Cloturer</a>
-                                <a class="dropdown-item" href="#">Archiver</a>
+                                <a class="dropdown-item btn-request-operation" href="{{ path('api_request_taf_execute', { requestType: 'installation', eventName: 'demande:validation'}) }}">Valider</a>
+                                <a class="dropdown-item btn-request-operation" href="{{ path('api_request_taf_execute', { requestType: 'installation', eventName: 'demande:renvoie'}) }}">Renvoyer</a>
+                                <a class="dropdown-item btn-request-operation" href="{{ path('api_request_taf_execute', { requestType: 'installation', eventName: 'demande:relance'}) }}">Relancer le demandeur</a>
+                                <a class="dropdown-item btn-request-operation" href="{{ path('api_request_taf_execute', { requestType: 'installation', eventName: 'demande:cloturation'}) }}">Cloturer</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item btn-delete" href="#"
                                     data-url="{{ path('api_request_delete_multiple') }}" data-multiple="true"

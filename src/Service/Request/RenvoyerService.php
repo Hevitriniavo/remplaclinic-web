@@ -4,6 +4,7 @@ namespace App\Service\Request;
 use App\Entity\EmailEvents;
 use App\Entity\Request;
 use App\Entity\RequestHistory;
+use App\Exceptions\ApiException;
 use App\Message\Request\RequestMessageDispatcher;
 use App\Repository\RequestResponseRepository;
 use DateTimeImmutable;
@@ -43,7 +44,7 @@ class RenvoyerService
 
         // si statut n'est pas 'A valider'
         if ($request->getStatus() !== Request::IN_PROGRESS) {
-            throw new Exception('Request found with a status not to be remember because it is not in progress.');
+            throw ApiException::make("Renvoi impossible: la demande n'est pas en cours.", 'REQUEST_RENVOIE_STATUS');
         }
 
         $requestHistory = (new RequestHistory())->setSentAt(new DateTimeImmutable());

@@ -8,10 +8,12 @@ use App\Dto\Request\EditRequestDto;
 use App\Dto\Request\NewInstallationDto;
 use App\Dto\Request\NewReplacementDto;
 use App\Dto\IdListDto;
+use App\Entity\EmailEvents;
 use App\Entity\Request as EntityRequest;
 use App\Entity\RequestReason;
 use App\Entity\RequestType;
 use App\Repository\RequestRepository;
+use App\Service\Request\OperationExecutor;
 use App\Service\Request\RequestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,6 +31,7 @@ class RequestController extends AbstractController
     public function __construct(
         private readonly RequestRepository $requestRepository,
         private readonly Security $security,
+        private readonly OperationExecutor $operationExecutor,
     ) {}
 
     #[Route('/api/request-replacements', name: 'api_request_replacement_get', methods: ['GET'])]
@@ -217,5 +220,34 @@ class RequestController extends AbstractController
             '',
             $deleted ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
         );
+    }
+
+    #[Route(
+        '/admin/requests-{requestType}/{eventName}/multiple',
+        name: 'api_request_taf_execute',
+        requirements: [
+            'requestType' => 'replacement|installation',
+            'eventName' => EmailEvents::REQUEST_VALIDATION . '|' . EmailEvents::REQUEST_RENVOIE . '|' . EmailEvents::REQUEST_RELANCE . '|' . EmailEvents::REQUEST_CLOTURATION
+        ],
+        methods: ['PUT']
+    )]
+    public function tafExecutionMultiple(
+        #[MapRequestPayload(
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )] IdListDto $requests,
+        string $requestType,
+        string $eventName
+    ): Response
+    {
+        $requestType = RequestType::from($requestType);
+
+        foreach($requests->ids as $requestId) {
+            $this->operationExecutor->handle($requestId, $eventName);
+        }
+
+        return $this->json([
+            'ok' => true,
+            'message' => sprintf("L'operation %s sur les %s est en cours d'execution.", $eventName, $requestType === RequestType::REPLACEMENT ? 'demandes de remplacement' : "propositions d'installation")
+        ]);
     }
 }
