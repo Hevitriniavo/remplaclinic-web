@@ -452,3 +452,15 @@ a.loupe-detail-demande {
   text-decoration: none;
 }
 /* end mes demandes */
+
+/* Qui sommes  nous link */
+.qsm-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px 10px 15px;
+  background-color: #56b1da;
+  background-image: -webkit-linear-gradient(top, #56b1da, #3488b9);
+  border-radius: 4px;
+  border: 1px solid #55a8d1;
+}
+/* end qui sommes  nous link */

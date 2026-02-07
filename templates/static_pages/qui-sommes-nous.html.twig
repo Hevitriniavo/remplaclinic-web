@@ -1,0 +1,46 @@
+{% extends 'base-page-node.html.twig' %}
+
+{% block title %}
+Qui sommes-nous | Remplaclinic
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Qui sommes-nous</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-3">
+    <div class="flex flex-col gap-10 w-[830px] mr-14">
+        <div>
+            <p class="mb-3">
+                <span class="blue-span text-base font-bold">RemplaClinic, c'est l'association de deux médecins et de trois entrepreneurs.</span>
+                <br>La mise en place du numerus clausus a réduit de façon drastique le nombre de médecins. Parallèlement, il existe une demande croissante de médecins qualifiés. Le médecin remplaçant a pris donc une place de plus en plus importante pour assurer la continuité des soins dans les établissements de santé.
+                <br>Les demandes de remplacement sont de plus en plus importantes +400% en 2008 (source : conseil national de l'ordre des médecins).
+                <br>Et pourtant… Les professionnels de santé, les établissements de soins ont du mal à trouver les «bons» remplaçants, c'est un fait !
+                <br>Jusqu'à présent, les contacts entre médecins remplaçants et établissement de santé ne se faisaient que par « bouche à oreille » et, de ce fait, de nombreuses offres restaient sans réponse.
+                <br>En effet, chaque fois que des absences sont prévues, sans même parler des difficultés imprévues, les difficultés commencent :
+                <br>qui contacter ? combien de personnes différentes via des moyens différents (mail pour les uns, téléphone pour les autres …) va t-il falloir contacter pour espérer pouvoir trouver LE ou LA remplaçant(e) qui réponde aux besoins… et ce dans le délai imparti.
+            </p>
+            <p class="mb-3">
+                <span class="blue-span text-base font-bold">RemplaClinic s'est donné pour mission de faciliter la mise en relation de médecins remplaçants et d'établissements de santé.</span>
+                <br>Les établissements de santé ont aujourd'hui accès à un panel de médecins remplaçants sélectionnés selon leurs expertises dans leurs spécialités.
+                <br>Les médecins remplaçants sont informés en temps réel de toutes les offres en rapport avec leur domaine de compétence.
+                <br>Remplaclinic c'est l'assurance de trouver le médecin remplaçant adapté dans les meilleurs délais !
+            </p>
+			<p class="mb-3">
+                <span class="blue-span text-base font-bold">RemplaClinic, c'est la première plateforme dédiée au remplacement médical.</span>
+                <br><span class="font-bold">Qui est concerné par l'offre de RemplaClinic ?</span>
+                <br><span class="blue-span">•</span> les médecins remplaçants
+                <br><span class="blue-span">•</span> les établissements de soins et de santé ou les médecins en libéral.
+			</p>
+            <p class="mb-3">
+                <span class="blue-span text-base font-bold">Grâce à RemplaClinic, les offres et des demandes des deux populations pourront se rencontrer.</span>
+            </p>
+            <p>
+                <a class="qsm-link" href="{{ path('app_how_does_it_work') }}" title="Remplaclinic, comment ça marche ?">RemplaClinic, comment ça marche ?</a>
+            </p>
+	    </div>
+    </div>
+</div>
+
+{% endblock %}
