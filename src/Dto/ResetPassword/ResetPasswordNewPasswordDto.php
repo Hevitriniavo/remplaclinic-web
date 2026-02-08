@@ -1,0 +1,19 @@
+<?php
+namespace App\Dto\ResetPassword;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+class ResetPasswordNewPasswordDto
+{
+    public function __construct(
+        #[Assert\NotBlank]
+        #[Assert\NotNull]
+        #[Assert\Length(max: 255)]
+        public string $code,
+
+        #[Assert\NotBlank]
+        #[Assert\NotNull]
+        #[Assert\Length(max: 20)]
+        public string $password,
+    ) {}
+}

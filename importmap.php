@@ -40,6 +40,10 @@ return [
         'path' => './assets/pages/mes-demandes.js',
         'entrypoint' => true,
     ],
+    'reset-password' => [
+        'path' => './assets/pages/reset-password.js',
+        'entrypoint' => true,
+    ],
     'admin-app' => [
         'path' => './assets/admin-app.js',
         'entrypoint' => true,

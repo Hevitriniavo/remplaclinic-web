@@ -1,0 +1,33 @@
+{% extends 'base-page-node.html.twig' %}
+
+{% block title %}
+Compte utilisateur | Remplaclinic
+{% endblock %}
+
+{% block importmap %}
+    {{ importmap('reset-password') }}
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px]">Compte utilisateur</h1>
+{% endblock %}
+
+{% block article_content %}
+<div class="pt-7">
+    <div class="flex flex-col gap-7 w-[830px] mr-14">
+        <form action="{{ path('api_reset_password_link') }}" method="post" id="form-reset-password">
+            <div class="w-96 flex flex-col gap-2">
+                <label for="reset-password-email">Courriel <span class="required">*</span></label>
+                <input type="email" class="form-text p-1 w-64 outline-none form-reset-password-element"
+                    data-required="true" id="reset-password-email" name="email" placeholder="Identifiant">
+            </div>
+            <div class="mt-5">
+                <button type="submit" class="relative text-xl form-submit text-white py-2 px-10 form-reset-password-btn-submit">
+                    <span class="btn-spinner hidden absolute top-3 left-3 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span>Envoyer nouveau mot de passe par courriel</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

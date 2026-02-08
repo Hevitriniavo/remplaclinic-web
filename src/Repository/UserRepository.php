@@ -25,6 +25,28 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findByEmail(string $email): ?User
+    {
+        $query = $this->createQueryBuilder('u')
+            ->distinct()
+            ->addSelect('a')
+            ->addSelect('s')
+            ->addSelect('e')
+            ->addSelect('sub')
+            // ->addSelect('r')
+            ->leftJoin('u.address', 'a')
+            ->leftJoin('u.speciality', 's')
+            ->leftJoin('u.establishment', 'e')
+            ->leftJoin('u.subscription', 'sub')
+            // ->leftJoin('u.roles', 'r')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
     public function findAllDataTables(?int $roleId, DataTableParams $params): DataTableResponse
     {
         $sortBy = $params->getOrderColumn(['u.id', 'u.id', 'u.status', 'u.name', 'u.email', 'u.createAt', 's.name'], 'u.id');

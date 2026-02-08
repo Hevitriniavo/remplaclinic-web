@@ -7,6 +7,7 @@ class EmailEvents
     const USER_INSCRIPTION = 'user:inscription';
     const USER_INSCRIPTION_NOTIFICATION = 'user:inscription:admin';
     const USER_DESINSCRIPTION = 'user:desinscription';
+    const USER_RESET_PASSWORD = 'user:reset-password';
 
     // request
     const REQUEST_CREATION = 'demande:creation';
@@ -34,6 +35,7 @@ class EmailEvents
             self::USER_INSCRIPTION,
             self::USER_INSCRIPTION_NOTIFICATION,
             self::USER_DESINSCRIPTION,
+            self::USER_RESET_PASSWORD,
 
             self::REQUEST_CREATION,
             self::REQUEST_CLOTURATION,

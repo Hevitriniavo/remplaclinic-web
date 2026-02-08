@@ -19,7 +19,7 @@ final class SecurityUserProvider implements UserProviderInterface, PasswordUpgra
 
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $identifier]);
+        $user = $this->em->getRepository(User::class)->findByEmail($identifier);
 
         if (!$user) {
             throw new UserNotFoundException();
