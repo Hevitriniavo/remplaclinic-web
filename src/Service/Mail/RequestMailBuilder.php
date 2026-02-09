@@ -10,6 +10,7 @@ use App\Repository\AdminEmailRepository;
 use App\Repository\RequestRepository;
 use App\Repository\UserRepository;
 use App\Service\Mail\Contact\ContactNotificationAdminEmail;
+use App\Service\Mail\RequestEmail\ArchiverRequestEmail;
 use App\Service\Mail\RequestEmail\ValiderRequestEmail;
 use App\Service\Mail\RequestEmail\RenvoyerRequestEmail;
 use App\Service\Mail\RequestEmail\RelancerRequestEmail;
@@ -44,6 +45,7 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::REQUEST_VALIDATION => ValiderRequestEmail::class,
             EmailEvents::REQUEST_RENVOIE => RenvoyerRequestEmail::class,
             EmailEvents::REQUEST_RELANCE => RelancerRequestEmail::class,
+            EmailEvents::REQUEST_ARCHIVAGE => ArchiverRequestEmail::class,
             EmailEvents::USER_INSCRIPTION => InscriptionUserInfosEmail::class,
             EmailEvents::USER_INSCRIPTION_NOTIFICATION => InscriptionNotificationAdminEmail::class,
             EmailEvents::USER_CREATION_REQUEST_REPLACEMENT => InscriptionRequestReplacementEmail::class,

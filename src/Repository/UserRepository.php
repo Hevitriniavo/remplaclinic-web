@@ -412,7 +412,16 @@ class UserRepository extends ServiceEntityRepository
     public function findLatestOrderByCreatedAt(int $size): array
     {
         return $this->createQueryBuilder('u')
+            ->distinct()
+            ->addSelect('a')
+            ->addSelect('s')
+            ->addSelect('e')
+            ->addSelect('sub')
+            ->addSelect('r')
+            ->leftJoin('u.address', 'a')
             ->join('u.speciality', 's')
+            ->leftJoin('u.establishment', 'e')
+            ->leftJoin('u.subscription', 'sub')
             ->join('u.roles', 'r', Expr\Join::WITH, 'r.id = :role_replacement_id')
             ->where('u.status = :status_active')
             ->setParameter('status_active', true)

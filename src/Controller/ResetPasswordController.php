@@ -42,7 +42,6 @@ class ResetPasswordController extends AbstractController
     #[Route('reset-password/confirmation', name: 'app_reset_password_new_success')]
     public function resetPasswordSuccess(): Response
     {
-        // @TODO: process change password here
         return $this->render('reset-password/new_password_success.html.twig');
     }
 }
