@@ -1,0 +1,41 @@
+{% extends 'mails/base.html.twig' %}
+
+{% block body %}
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif; text-align:center;padding:15px;font-size:18px;">Alerte expiration abonnement</td>
+</tr>
+<tr>
+	<td colspan="2" style="font-family: 'ubuntu', sans-serif;text-align:left;padding:15px;">
+		Voici la liste des comptes arrivant à expiration dans moins de 3 mois :
+		<br><br>
+		{% for user in users %}
+			{% if user.role_id is same as(5) %}
+			- <a href="{{ url('app_admin_clinic_show', {id: user.id}) }}">{{ user.name }}</a><br>
+			{% else %}
+			- <a href="{{ url('app_admin_doctor_show', {id: user.id}) }}">{{ user.name }}</a><br>
+			{% endif %}
+		{% endfor %}
+	</td>
+</tr>
+<tr>
+	<td style="vertical-align:middle;padding:15px;text-align:center;font-family: 'ubuntu', sans-serif;" colspan="2">
+		<a href="{{ url('app_admin_clinic') }}" style="background-color:#5d5d5d;
+						border:2px solid #6b6b6b;
+						border-radius: 3px;
+						font-family: 'ubuntu', sans-serif;
+						line-height: normal;
+						margin-right:5px;
+						padding:5px 10px 7px;
+						vertical-align: middle;
+						color: #FFF;
+						text-align:center;
+						width:300px;
+						height:45px;
+						text-decoration:none;
+						text-align:center;
+						font-size:18px;
+						font-weight:normal;
+						cursor:pointer;">Accéder au tableau de bord</a>
+	</td>
+</tr>
+{% endblock %}

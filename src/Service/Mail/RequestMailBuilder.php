@@ -20,6 +20,7 @@ use App\Service\Mail\UserRequestEmail\InscriptionRequestInstallationEmail;
 use App\Service\Mail\UserRequestEmail\InscriptionRequestReplacementEmail;
 use App\Service\Mail\UserEmail\InscriptionUserInfosEmail;
 use App\Service\Mail\UserEmail\ResetPasswordEmail;
+use App\Service\Mail\UserEmail\AbonnementExpirationAdminEmail;
 use App\Service\Mail\UserRequestEmail\RequestResponseCoordonneeEmail;
 use App\Service\Mail\UserRequestEmail\RequestResponseNotificationAdminEmail;
 use App\Service\Mail\UserRequestEmail\RequestResponseOwnerNotificationEmail;
@@ -51,6 +52,7 @@ class RequestMailBuilder implements RequestMessageMailBuilderInterface
             EmailEvents::USER_CREATION_REQUEST_REPLACEMENT => InscriptionRequestReplacementEmail::class,
             EmailEvents::USER_CREATION_REQUEST_INSTALLATION => InscriptionRequestInstallationEmail::class,
             EmailEvents::USER_RESET_PASSWORD => ResetPasswordEmail::class,
+            EmailEvents::USER_ABONNEMENT_EXPIRATION => AbonnementExpirationAdminEmail::class,
             EmailEvents::REQUEST_CREATION => RequestNotificationAdminEmail::class,
             EmailEvents::REQUEST_REPONSE_DEMANDEUR => RequestResponseOwnerNotificationEmail::class,
             EmailEvents::REQUEST_REPONSE_COORDONNEE => RequestResponseCoordonneeEmail::class,

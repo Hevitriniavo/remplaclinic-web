@@ -119,8 +119,6 @@ class UserDelete
             ]);
         }
 
-
-
         // delete user
         $this->db->delete('user', [
             'id' => $user->getId(),
