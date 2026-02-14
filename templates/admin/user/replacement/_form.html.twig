@@ -285,30 +285,38 @@
                                                                 </label>
                                                                 <twig:SelectCurrentSpeciality id="replacement-current-speciality"
                                                                     class="form-control"
-                                                                    v-model="userData.currentSpeciality"
-                                                                    >
-                                                                    {# :class="getErrorClass('currentSpeciality')"> #}
+                                                                    v-model="userData.currentSpeciality">
                                                                     <option :value="null">- Choisir un valeur -</option>
                                                                 </twig:SelectCurrentSpeciality>
+                                                                <div v-if="getErrorClass('currentSpeciality') === 'is-invalid'"
+                                                                    class="text-danger">
+                                                                    Choisir un statut
+                                                                </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="col-6">
                                                             <div class="form-group">
                                                                 <label for="replacement-speciality">Spécialité *
                                                                 </label>
                                                                 <twig:SelectSpeciality
                                                                     class="form-control select2-input"
                                                                     id="replacement-speciality"
-                                                                    v-model="userData.speciality">
+                                                                    v-model="userData.speciality"
+                                                                    data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}"
+                                                                >
                                                                     <option></option>
                                                                 </twig:SelectSpeciality>
+                                                                <div v-if="getErrorClass('speciality') === 'is-invalid'"
+                                                                    class="text-danger">
+                                                                    Choisir une spécialité
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
+                                                            <div class="form-group" v-if="userData.speciality">
                                                                 <label for="replacement-sub-specialities">Sous
                                                                     spécialité
                                                                 </label>
                                                                 <twig:SelectSpeciality
-                                                                    class="form-control select2-input" multiple="true"
+                                                                    class="form-control" multiple="true"
                                                                     id="replacement-sub-specialities"
                                                                     v-model="userData.subSpecialities">
                                                                     <option></option>
@@ -322,6 +330,10 @@
                                                                     v-model="userData.mobility">
                                                                     <option></option>
                                                                 </twig:SelectRegion>
+                                                                <div v-if="getErrorClass('mobility') === 'is-invalid'"
+                                                                    class="text-danger">
+                                                                    Choisir une région
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

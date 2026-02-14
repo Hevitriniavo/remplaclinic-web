@@ -46,7 +46,7 @@ class InscriptionNotificationAdminEmail
         ];
 
         if ($this->user->getRole()->getId() === User::ROLE_REPLACEMENT_ID) {
-            $viewData['specialites'] = $this->user->getSpeciality()->getName();
+            $viewData['specialites'] = $this->templateValue($this->user->getSpeciality()?->getName());
         }
         
         return $this->twig->render(

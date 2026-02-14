@@ -25,7 +25,6 @@ use App\Service\Mail\RequestMailBuilder;
 use App\Service\Taches\AppConfigurationService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -91,6 +90,8 @@ class Registration
         if (!empty($replacementDto->speciality)) {
             $specialities = $this->specialityService->getSpecialities([$replacementDto->speciality]);
             $user->setSpeciality($specialities[0]);
+        } else {
+            throw ApiException::make('Un remplaçant doit avoir une spécialité', 'REGISTRATION_SPECIALITY');
         }
 
         foreach ($this->specialityService->getSpecialities($replacementDto->subSpecialities) as $speciality) {

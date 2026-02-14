@@ -1,4 +1,4 @@
-const { createApp, ref, onMounted } = Vue;
+const { createApp, ref, onMounted, nextTick } = Vue;
 
 const app = createApp({
   setup() {
@@ -50,6 +50,8 @@ const app = createApp({
       status: (value) => value == 1 || value == 0,
       roles: (value) => !!value && value.length > 0,
       currentSpeciality: (value) => !!value && parseInt(value) > 0,
+      speciality: (value) => !!value && parseInt(value) > 0,
+      mobility: (value) => !!value && value.length > 0,
     };
     const userErrors = ref({
       validated: false,
@@ -161,6 +163,7 @@ const app = createApp({
               "code",
               data.userComment
             );
+            initSousSpecialiteSelectOptions(data.subSpecialities ? data.subSpecialities : [])
           })
           .catch(() => {});
       }
@@ -169,19 +172,6 @@ const app = createApp({
     }
 
     function onCreateUser() {
-      userData.value.comment = jQuery("#replacement-comment").summernote(
-        "code"
-      );
-      userData.value.userComment = jQuery("#replacement-comments").summernote(
-        "code"
-      );
-
-      userData.value.speciality = jQuery("#replacement-speciality").val();
-      userData.value.subSpecialities = jQuery(
-        "#replacement-sub-specialities"
-      ).val();
-      userData.value.mobility = jQuery("#replacement-mobility").val();
-
       const payload = toFormData();
 
       if (!validateFormData()) {
@@ -198,6 +188,36 @@ const app = createApp({
       } else {
         window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
+    }
+
+    function initSousSpecialiteSelectOptions(options) {
+      options.forEach(function(item) {
+        const option = new Option(item.name, item.id, true, true)
+        jQuery('#replacement-sub-specialities').append(option)
+      })
+    }
+
+    async function initSousSpecialiteSelect() {
+
+      await nextTick()
+
+      jQuery('#replacement-sub-specialities').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: '- Choisir une option -',
+        ajax: {
+          beforeSend: null,
+          url: window.getCleanUrl(jQuery('#replacement-speciality').data('spsUrl'), userData.value.speciality),
+          type: 'get',
+          dataType: 'json',
+          delay: 200,
+          processResults: function(data) {
+            return {
+              results: data.map(sp => ({ id: sp.id, text: sp.name }))
+            }
+          }
+        },
+      })
     }
 
     onMounted(() => {
@@ -221,8 +241,35 @@ const app = createApp({
           allowClear: true,
           placeholder: "- Choisir une option -",
         });
-      });
-    });
+
+        jQuery("#replacement-speciality").on('change', function() {
+          userData.value.speciality = jQuery(this).val()
+
+          initSousSpecialiteSelect()
+        })
+
+        jQuery("#replacement-mobility").on('change', function() {
+          userData.value.mobility = jQuery(this).val().filter(val => !!val)
+        })
+
+        jQuery("#replacement-sub-specialities").on('change', function() {
+          userData.value.subSpecialities = jQuery(this).val().filter(val => !!val)
+        })
+
+        $('#replacement-comment').on('summernote.change', function(we, contents, $editable) {
+          userData.value.comment = contents
+        })
+
+        $('#replacement-comments').on('summernote.change', function(we, contents, $editable) {
+          userData.value.userComment = contents
+        })
+
+        // pour modification
+        if (userData.value.speciality) {
+          initSousSpecialiteSelect()
+        }
+      })
+    })
 
     return {
       requesting,

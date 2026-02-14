@@ -60,6 +60,7 @@ class ReplacementDto
         #[Assert\NotNull(groups: ['create'])]
         public ?string $currentSpeciality,
         
+        #[Assert\NotNull(groups: ['create'])]
         public ?int $speciality,
 
         public ?array $subSpecialities,
