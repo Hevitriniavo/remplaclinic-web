@@ -78,8 +78,8 @@ class MessengerService
     public function delete(int $id): ?int
     {   
         return $this->connection->createQueryBuilder()
-            ->delete('messenger_messages', 'm')
-            ->where('m.id = :id')
+            ->delete('messenger_messages')
+            ->where('id = :id')
             ->setParameter('id', $id)
             ->executeStatement();
     }
@@ -87,10 +87,10 @@ class MessengerService
     public function deleteMultiple(array $ids): int
     {
         $qb = $this->connection->createQueryBuilder()
-            ->delete('messenger_messages', 'm');
+            ->delete('messenger_messages');
 
         for($i = 0, $len = count($ids); $i < $len; $i++) {
-            $qb->orWhere('m.id = :id_' . $i)
+            $qb->orWhere('id = :id_' . $i)
                 ->setParameter('id_' . $i, $ids[$i]);
         }
         
