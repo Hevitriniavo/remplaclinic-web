@@ -416,16 +416,34 @@ const app = createApp({
         requestData.value.subSpecialities = jQuery(this).val().filter(val => !!val)
       })
 
-      jQuery("#request-started-at, #request-end-at").datepicker({
+      jQuery('#request-started-at, #request-end-at').datepicker({
         format: "dd/mm/yyyy",
         startDate: '0d',
         autoclose: true,
       })
       jQuery("#request-started-at-input").on("change", function () {
-        requestData.value.startedAt = jQuery(this).val()
+        const startDate = jQuery(this).val()
+        const dateParts = startDate ? startDate.split('/') : []
+
+        if (!startDate || dateParts.length < 3) {
+          window.showAlert('La date de début doit respecter le format dd/mm/yyyy.', 'warning')
+        } else{
+          requestData.value.startedAt = startDate
+          
+          jQuery('#request-end-at').datepicker('setStartDate', startDate)
+        }
       })
       jQuery("#request-end-at-input").on("change", function () {
-        requestData.value.endAt = jQuery(this).val()
+        const endDate = jQuery(this).val()
+        const dateParts = endDate ? endDate.split('/') : []
+
+        if (!endDate || dateParts.length < 3) {
+          window.showAlert('La date de fin doit respecter le format dd/mm/yyyy.', 'warning')
+        } else{
+          requestData.value.endAt = endDate
+          
+          jQuery('#request-started-at').datepicker('setEndDate', endDate)
+        }
       })
     }
 

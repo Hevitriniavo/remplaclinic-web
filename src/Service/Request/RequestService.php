@@ -13,6 +13,7 @@ use App\Entity\RequestReplacementType;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
 use App\Entity\UserSubscription;
+use App\Exceptions\ApiException;
 use App\Repository\RequestRepository;
 use App\Service\Mail\MailService;
 use App\Service\Mail\RequestMailBuilder;
@@ -59,6 +60,9 @@ class RequestService
             ->setStatus(Request::CREATED)
         ;
 
+        // step 11: check date
+        $this->checkRequestDate($request);
+
         foreach ($this->specialityService->getSpecialities($replacementDto->subSpecialities) as $speciality) {
             $request->addSubSpeciality($speciality);
         }
@@ -88,6 +92,9 @@ class RequestService
             ->setShowEndAt(false)
             ->setStatus(Request::CREATED)
         ;
+
+        // step 11: check date
+        $this->checkRequestDate($request);
 
         $this->populateReasons($request, $installationDto->raison, $installationDto->raisonValue);
 
@@ -130,6 +137,8 @@ class RequestService
             ->setStatus($requestDto->status)
         ;
 
+        $this->checkRequestDate($request);
+
         if (!empty($requestDto->subSpecialities)) {
             $subSpecialities = $this->specialityService->getSpecialities($requestDto->subSpecialities);
 
@@ -161,6 +170,8 @@ class RequestService
             ->setShowEndAt(!is_null($requestDto->endAt))
             ->setStatus($requestDto->status)
         ;
+
+        $this->checkRequestDate($request);
 
         $this->populateReasons($request, $requestDto->raison, $requestDto->raisonValue);
 
@@ -253,6 +264,24 @@ class RequestService
         if (!empty($subscription)) {
             $subscription->decrementInstallationCount();
             $this->entityManager->flush();
+        }
+    }
+
+    private function checkRequestDate(Request $request): void
+    {
+        $now = new DateTime();
+        $now->setTime(0, 0, 0, 0);
+
+        if ($request->getStartedAt() < $now) {
+            throw ApiException::make("La date de début ne peut pas être antérieure à aujourd'hui.", 'REQUEST_STARTED_AT_INVALID');
+        }
+
+        if (!empty($request->getEndAt()) && $request->getEndAt() < $now) {
+            throw ApiException::make("La date de fin ne peut pas être antérieure à aujourd'hui.", 'REQUEST_END_AT_INVALID');
+        }
+
+        if (!empty($request->getEndAt()) && $request->getEndAt() < $request->getStartedAt()) {
+            throw ApiException::make('La date de fin ne peut pas être antérieure à la date de début.', 'REQUEST_END_AT_INVALID');
         }
     }
 
