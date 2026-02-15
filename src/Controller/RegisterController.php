@@ -24,12 +24,20 @@ class RegisterController extends AbstractController
     #[Route('/inscription/clinic', name: 'app_register_clinic', methods: ['GET'])]
     public function registerClinic(): Response
     {
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_user_espace_perso');
+        }
+
         return $this->render('register/new_clinic.html.twig');
     }
 
     #[Route('/inscription/service-clinique', name: 'app_register_service_clinic', methods: ['GET'])]
     public function registerServiceClinic(): Response
     {
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_user_espace_perso');
+        }
+
         return $this->render('register/new_clinic.html.twig', [
             'withService' => true
         ]);
@@ -38,12 +46,20 @@ class RegisterController extends AbstractController
     #[Route('/inscription/doctor', name: 'app_register_doctor', methods: ['GET'])]
     public function registerDoctor(): Response
     {
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_user_espace_perso');
+        }
+
         return $this->render('register/new_doctor.html.twig');
     }
 
     #[Route('/inscription/remplacant', name: 'app_register_replacement', methods: ['GET'])]
     public function registerReplacement(RegionRepository $regionRepository): Response
     {
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_user_espace_perso');
+        }
+        
         $regions = $regionRepository->findAll();
         return $this->render('register/new_replacement.html.twig', [
             'regions' => $regions,
