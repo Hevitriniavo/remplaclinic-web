@@ -118,4 +118,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return true
         }
     })
+
+    // cloturer demande
+    new RemplaModal('modal-confirmation-cloturer', {
+        beforeOpenAsync: async (e, activator) => {
+            e.preventDefault()
+            
+            const btnConfirm = document.querySelector('.btn-confirm-cloturer')
+            btnConfirm.href = activator.href
+
+            return true
+        }
+    })
+
+    const btnConfirmCloturer = document.querySelector('.btn-confirm-cloturer')
+    if (btnConfirmCloturer) {
+        btnConfirmCloturer.addEventListener('click', e => {
+            e.preventDefault()
+
+            axios.put(btnConfirmCloturer.href)
+                .then(() => {
+                    window.location.reload()
+                })
+                .catch(() => {})
+        })
+    }
 })

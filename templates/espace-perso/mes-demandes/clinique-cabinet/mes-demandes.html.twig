@@ -81,7 +81,7 @@ Mes demandes de remplacement | Remplaclinic
                                 <td class="px-4 py-2">{{ row.request.statusAsText }}</td>
                                 <td class="px-4 py-2">
                                     {% if row.request.status is not same as(2) %}
-                                        <a class="form-submit text-white py-1 px-4">
+                                        <a href="{{ path('api_request_operation_execute', { requestId: row.request.id, eventName: 'demande:cloturation', requestType: 'replacement' }) }}" class="form-submit text-white py-1 px-4 modal-confirmation-cloturer-activator">
                                             Clôturer
                                         </a>
                                     {% else %}
@@ -114,5 +114,6 @@ Mes demandes de remplacement | Remplaclinic
     </div>
 
     {% include 'espace-perso/mes-demandes/clinique-cabinet/_detail-demande.html.twig' with { requestType: 'replacement' } %}
+    {% include 'espace-perso/mes-demandes/clinique-cabinet/_confirmation-cloturer.html.twig' %}
 </div>
 {% endblock %}

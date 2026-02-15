@@ -223,7 +223,7 @@ class RequestController extends AbstractController
     }
 
     #[Route(
-        '/admin/requests-{requestType}/{eventName}/multiple',
+        '/api/requests-{requestType}/{eventName}/multiple',
         name: 'api_request_taf_execute',
         requirements: [
             'requestType' => 'replacement|installation',
@@ -248,6 +248,32 @@ class RequestController extends AbstractController
         return $this->json([
             'ok' => true,
             'message' => sprintf("L'operation %s sur les %s est en cours d'execution.", $eventName, $requestType === RequestType::REPLACEMENT ? 'demandes de remplacement' : "propositions d'installation")
+        ]);
+    }
+
+    #[Route(
+        '/api/requests-{requestType}/{requestId}/{eventName}',
+        name: 'api_request_operation_execute',
+        requirements: [
+            'requestType' => 'replacement|installation',
+            'requestId' => '\d+',
+            'eventName' => EmailEvents::REQUEST_CLOTURATION
+        ],
+        methods: ['PUT']
+    )]
+    public function operationExecution(
+        string $requestType,
+        int $requestId,
+        string $eventName
+    ): Response
+    {
+        $requestType = RequestType::from($requestType);
+
+        $this->operationExecutor->handle($requestId, $eventName);
+
+        return $this->json([
+            'ok' => true,
+            'message' => sprintf("L'operation %s sur la %s est en cours d'execution.", $eventName, $requestType === RequestType::REPLACEMENT ? 'demande de remplacement' : "proposition d'installation")
         ]);
     }
 }
