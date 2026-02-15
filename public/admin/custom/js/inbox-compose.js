@@ -1,4 +1,6 @@
-const { createApp, ref, onMounted, computed, watchEffect, nextTick } = Vue
+import { initSummernote } from 'admin-app'
+
+const { createApp, ref, computed, watchEffect, nextTick } = Vue
 
 const app = createApp({
     setup() {
@@ -17,18 +19,8 @@ const app = createApp({
         })
 
         function initHtmlEditor() {
-            jQuery('#compose-textarea').summernote({
+            initSummernote('#compose-textarea', {
                 height: 350,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'italic', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']],
-                ]
             })
         }
 

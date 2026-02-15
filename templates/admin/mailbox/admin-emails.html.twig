@@ -116,5 +116,5 @@ Remplaclinic :: Admin :: Admin Emails
 {% block bodyjs %}
 {{ parent() }}
 <script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
-<script src="{{ versioned_asset('admin/custom/js/admin-emails.js') }}"></script>
+<script type="module" src="{{ versioned_asset('admin/custom/js/admin-emails.js') }}"></script>
 {% endblock %}

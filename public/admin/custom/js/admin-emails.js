@@ -1,3 +1,5 @@
+import { getCleanUrl, initDataTable, initSelect2 } from 'admin-app'
+
 function openAdminEmailModal(id, url, detailUrl) {
   $('#admin-email-modal').modal('show')
   const inputName = $('#admin-email-name')
@@ -48,28 +50,11 @@ $(function () {
   const formAdminEmail = $('#admin-email-form-detail')
 
   // select events
-  $('#admin-email-events').select2({
-    theme: 'bootstrap4',
-    allowClear: true,
+  initSelect2('#admin-email-events', {
     placeholder: 'Choisir une ou des option(s)'
   })
 
-  const adminEmailDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const adminEmailDatatable = initDataTable('', tblDom, null, {
     columnDefs: [
       {
         targets: 0,
@@ -125,12 +110,6 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
   })
 
   // delete

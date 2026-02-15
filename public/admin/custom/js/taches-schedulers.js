@@ -1,3 +1,5 @@
+import { initDataTable, getCleanUrl } from 'admin-app'
+
 function openTachesSchedulersModal(id, url, detailUrl) {
   $('#taches-schedulers-modal').modal('show')
   const inputLabel = $('#taches-schedulers-label')
@@ -59,22 +61,7 @@ $(function () {
   const btnSaveScriptScheduler = $('#btn-taches-schedulers-detail-save')
   const formScriptScheduler = $('#taches-schedulers-form-detail')
 
-  const schedulerDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const schedulerDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -155,12 +142,6 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
   })
 
   // delete

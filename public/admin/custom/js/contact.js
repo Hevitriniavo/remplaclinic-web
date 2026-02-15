@@ -1,3 +1,5 @@
+import { initDataTable, formatDate, getCleanUrl } from 'admin-app'
+
 $(function () {
   const tblDom = $("#tbl-contacts");
   const mapTypes = {
@@ -8,22 +10,7 @@ $(function () {
     '1085' : 'Installation',
   }
 
-  const contactDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const contactDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -62,7 +49,7 @@ $(function () {
             return "";
           }
 
-          return window.formatDate(data, true);
+          return formatDate(data, true);
         }
       },
       {
@@ -108,13 +95,7 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data('url'), { params: data })
-          .then(response => callback(response.data))
-          .catch(() => callback({ data: [] }))
-    },
-  });
+  })
 
   // delete
   $(document).on('deletedEvent', function() {
@@ -133,7 +114,7 @@ $(function () {
           email: res.data.email,
           telephone: res.data.telephone,
           contact_type: mapTypes[res.data.contact_type] ? mapTypes[res.data.contact_type] : 'Contact',
-          submitted_at: window.formatDate(res.data.submitted_at, true),
+          submitted_at: formatDate(res.data.submitted_at, true),
           remote_addr: res.data.remote_addr,
           object: res.data.object ? res.data.object.join(', ') : '',
           fonction: res.data.fonction,

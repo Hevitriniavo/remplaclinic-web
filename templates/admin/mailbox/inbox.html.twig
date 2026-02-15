@@ -71,5 +71,5 @@ Emails Envoyes
 
 {% block bodyjs %}
 {{ parent() }}
-<script src="{{ versioned_asset('admin/custom/js/inbox-emails.js') }}"></script>
+<script type="module" src="{{ versioned_asset('admin/custom/js/inbox-emails.js') }}"></script>
 {% endblock %}

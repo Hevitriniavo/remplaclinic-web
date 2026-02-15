@@ -1,3 +1,5 @@
+import { initDataTable, getCleanUrl } from 'admin-app'
+
 function openTachesAppConfigModal(id, url, detailUrl) {
   $('#taches-app-config-modal').modal('show')
   const inputName = $('#taches-app-config-name')
@@ -80,22 +82,7 @@ $(function () {
 
   toggleTachesAppConfigurations()
 
-  const adminEmailDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const adminEmailDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'asc']],
     columnDefs: [
       {
@@ -154,12 +141,6 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
   })
 
   // delete

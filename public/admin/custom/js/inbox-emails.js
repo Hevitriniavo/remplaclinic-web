@@ -1,22 +1,9 @@
+import { initDataTable, getCleanUrl, formatDate } from 'admin-app'
+
 $(function () {
   const tblDom = $("#tbl-inbox-emails");
 
-  const inboxEmailsDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const inboxEmailsDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -130,13 +117,7 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
-  });
+  })
 
   // delete
   $(document).on('deletedEvent', function() {

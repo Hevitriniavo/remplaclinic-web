@@ -1,3 +1,5 @@
+import { initDataTable, getCleanUrl, formatDate } from 'admin-app'
+
 function openTachesImportationsModal(id, url, detailUrl) {
   $('#taches-importations-modal').modal('show')
   const inputLabel = $('#taches-importations-label')
@@ -59,22 +61,7 @@ $(function () {
   const btnSaveScriptImportation = $('#btn-taches-importations-detail-save')
   const formScriptImportation = $('#taches-importations-form-detail')
 
-  const importationDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const importationDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -183,12 +170,6 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
   })
 
   // delete
