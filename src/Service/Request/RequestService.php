@@ -132,10 +132,16 @@ class RequestService
             ->setStartedAt(DateUtil::parseDate('d/m/Y', $requestDto->startedAt, true))
             ->setEndAt(DateUtil::parseDate('d/m/Y', $requestDto->endAt, true))
             ->setReplacementType(RequestReplacementType::tryFrom($requestDto->replacementType))
-            ->setTitle($requestDto->title)
             ->setShowEndAt(!is_null($requestDto->endAt))
-            ->setStatus($requestDto->status)
         ;
+
+        if (!empty($requestDto->title)) {
+            $request->setTitle($requestDto->title);
+        }
+
+        if (!is_null($requestDto->status)) {
+            $request->setStatus($requestDto->status);
+        }
 
         $this->checkRequestDate($request);
 
@@ -166,10 +172,16 @@ class RequestService
             ->setRemuneration($requestDto->remuneration)
             ->setComment($requestDto->comment)
             ->setStartedAt(DateUtil::parseDate('d/m/Y', $requestDto->startedAt, true))
-            ->setTitle($requestDto->title)
             ->setShowEndAt(!is_null($requestDto->endAt))
-            ->setStatus($requestDto->status)
         ;
+
+        if (!empty($requestDto->title)) {
+            $request->setTitle($requestDto->title);
+        }
+
+        if (!is_null($requestDto->status)) {
+            $request->setStatus($requestDto->status);
+        }
 
         $this->checkRequestDate($request);
 

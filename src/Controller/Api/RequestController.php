@@ -77,6 +77,7 @@ class RequestController extends AbstractController
         return $this->json([
             'id' => $request->getId(),
             '_redirect' => $this->generateUrl('app_user_requets_replacement'),
+            '_edit' => $this->generateUrl('api_request_replacement_update', [ 'id' => $request->getId() ])
         ], Response::HTTP_CREATED);
     }
 
@@ -103,7 +104,8 @@ class RequestController extends AbstractController
         // redirect to my request
         return $this->json([
             'id' => $request->getId(),
-            '_redirect' => $this->generateUrl('app_user_requets_installation')
+            '_redirect' => $this->generateUrl('app_user_requets_installation'),
+            '_edit' => $this->generateUrl('api_request_installation_update', [ 'id' => $request->getId() ])
         ], Response::HTTP_CREATED);
     }
 
@@ -161,14 +163,22 @@ class RequestController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canCreateOrUpdateUser($this->security, $request->getApplicant()->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $requestService->updateReplacement($request, $requestDto);
 
-        return $this->json(
-            $request,
-            Response::HTTP_OK,
-            [],
-            ['groups' => 'datatable']
-        );
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($request, Response::HTTP_OK, [], ['groups' => 'datatable']);
+        }
+
+        // redirect to my request
+        return $this->json([
+            'id' => $request->getId(),
+            '_redirect' => $this->generateUrl('app_user_requets_replacement'),
+            '_edit' => $this->generateUrl('api_request_replacement_update', [ 'id' => $request->getId() ])
+        ], Response::HTTP_OK);
     }
 
     #[Route('/api/request-installations/{id}', name: 'api_request_installation_update', methods: ['POST'], requirements: ['id' => '\d+'])]
@@ -185,19 +195,29 @@ class RequestController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canCreateOrUpdateUser($this->security, $request->getApplicant()->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $requestService->updateInstallation($request, $requestDto);
 
-        return $this->json(
-            $request,
-            Response::HTTP_OK,
-            [],
-            ['groups' => 'datatable']
-        );
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->json($request, Response::HTTP_OK, [], ['groups' => 'datatable']);
+        }
+
+        // redirect to my request
+        return $this->json([
+            'id' => $request->getId(),
+            '_redirect' => $this->generateUrl('app_user_requets_installation'),
+            '_edit' => $this->generateUrl('api_request_installation_update', [ 'id' => $request->getId() ])
+        ], Response::HTTP_OK);
     }
 
     #[Route('/api/requests/{id}', name: 'api_request_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function remove(int $id, RequestService $requestService): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $deleted = $requestService->deleteRequest($id);
 
         return $this->json(
@@ -214,6 +234,8 @@ class RequestController extends AbstractController
         )] IdListDto $requests
     ): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $deleted = $requestService->deleteMultipleRequest($requests->ids);
 
         return $this->json(
@@ -239,6 +261,8 @@ class RequestController extends AbstractController
         string $eventName
     ): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $requestType = RequestType::from($requestType);
 
         foreach($requests->ids as $requestId) {
@@ -267,6 +291,18 @@ class RequestController extends AbstractController
         string $eventName
     ): Response
     {
+        /**
+         * @var EntityRequest
+         */
+        $request = $this->requestRepository->find($requestId);
+        if (is_null($request)) {
+            return $this->json(null, Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$this->canCreateOrUpdateUser($this->security, $request->getApplicant()->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $requestType = RequestType::from($requestType);
 
         $this->operationExecutor->handle($requestId, $eventName);

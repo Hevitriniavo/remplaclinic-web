@@ -6,7 +6,7 @@
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold">Sélection des remplaçants</h2>
-            <!--button class="text-gray-500 hover:text-gray-700 close">&times;</button-->
+            <button class="text-gray-500 hover:text-gray-700 close">&times;</button>
         </div>
 
         <!-- Modal Body -->
@@ -15,7 +15,7 @@
             <div>
                 <span class="font-bold text-lg" id="tbl-search-replacements-selection-count">0</span> remplaçant(s) sélectionné(s) sur <span class="font-bold text-lg" id="tbl-search-replacements-total-records">{{ 10 }}</span>. 
             </div>
-            <div class="max-h-[500px] overflow-y-auto">
+            <div class="max-h-[400px] overflow-y-auto">
                 <table
                     id="tbl-search-replacements"
                     class="w-full border border-gray-200 text-sm"
@@ -60,6 +60,9 @@
 
         <!-- Modal Footer (Optional) -->
         <div class="mt-4 flex">
+            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded close">
+               Précedent
+            </button>
             <button
                 class="relative form-submit text-xl text-white py-2 px-10 btn-validate-selection"
                 data-init-response-url="{{ path('api_request_personne_contacte_add', { requestId: '0000000000' }) }}"

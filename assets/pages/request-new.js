@@ -189,10 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = new RemplaModal('selection-remplacant-modal')
     const modalDetail = new RemplaModal('remplacant-detail-modal')
 
-    form.setSubmitSuccessHandler(({ id, _redirect }) => {
+    form.setSubmitSuccessHandler(({ id, _redirect, _edit }) => {
         const url = document.getElementById('tbl-search-replacements').dataset.listUrl
         const specialite = document.querySelector('#request-specialite')
         const region = document.querySelector('#request-region')
+
+        // update form url
+        document.getElementById('form-request').setAttribute('action', _edit)
 
         initSelectRemplacantModal(
             modal,
