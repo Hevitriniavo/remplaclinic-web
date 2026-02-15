@@ -1,25 +1,12 @@
+import { initDataTable, getCleanUrl, formatDate, isEmptyValue, initSelect2, initDatepicker, showAlert } from 'admin-app'
+
 $(function () {
   const tblDom = $("#tbl-requests")
 
   // search params
   const requestFiltres = initSearchFilters()
 
-  const requestDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const requestDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -113,7 +100,7 @@ $(function () {
             return ""
           }
 
-          return window.formatDate(data, false)
+          return formatDate(data, false)
         },
       },
       {
@@ -123,10 +110,10 @@ $(function () {
         render: function (data, type, row, meta) {
           const dates = []
           if (data) {
-            dates.push(window.formatDate(data, false))
+            dates.push(formatDate(data, false))
           }
           if (row.requestType !== 'installation' && row.endAt) {
-            dates.push(window.formatDate(row.endAt, false))
+            dates.push(formatDate(row.endAt, false))
           }
 
           return dates.join(' - ')
@@ -141,7 +128,7 @@ $(function () {
             return ""
           }
 
-          return window.formatDate(data, false)
+          return formatDate(data, false)
         },
       },
       {
@@ -223,16 +210,18 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
     ajax: function (data, callback) {
       axios.get(tblDom.data("url"), { params: { filters: requestFiltres.getFilters(), ...data }})
-          .then(response => {
+        .then(response => {
 
-            $('#request-selection-tout').prop('checked', false)
+          $('#request-selection-tout').prop('checked', false)
 
-            return callback(response.data)
-          })
-          .catch(() => callback({ data: [] }))
+          return callback(response.data)
+        })
+        .catch((err) => {
+          console.error('DATATABLE ERROR: ', err)
+          callback({ data: [] })
+        })
     },
   })
 
@@ -253,7 +242,7 @@ $(function () {
       inputIds.forEach(element => { ids.push(element.value) })
 
       if (ids.length === 0) {
-        window.showAlert('Veuillez selectionner au moins un ligne !', 'warning')
+        showAlert('Veuillez selectionner au moins un ligne !', 'warning')
       } else {
         axios.put(btnRequestOperation.href, { ids })
         .then(() => {
@@ -292,10 +281,6 @@ function initSearchFilters() {
     count: 0,
   }
 
-  function isEmptyValue(filterValue) {
-    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0)
-  }
-
   function loadFromUrl() {
     const urlQueryParams = new URLSearchParams(window.location.href.indexOf('?') >= 0 ? window.location.href.substring(window.location.href.indexOf('?')) : '')
     urlQueryParams.forEach((value, key) => {
@@ -323,15 +308,11 @@ function initSearchFilters() {
   }
 
   function addSearchElementEventListener (searchFn) {
-    $('.select2-input').select2({
-      theme: "bootstrap4",
-      allowClear: true,
+    initSelect2('.select2-input', {
       placeholder: "- Tous -",
     })
 
-    $("#filtre-request-demandeur").select2({
-      theme: "bootstrap4",
-      allowClear: true,
+    initSelect2('#filtre-request-demandeur', {
       placeholder: "- Tous -",
       ajax: {
         beforeSend: null,
@@ -353,10 +334,7 @@ function initSearchFilters() {
       },
     })
 
-    $(".datepicker-wrapper").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-    })
+    initDatepicker('.datepicker-wrapper')
 
     $('#btn-request-search').on('click', function (e) {
       e.preventDefault()

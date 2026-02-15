@@ -1,4 +1,4 @@
-import { initSummernote } from 'admin-app'
+import { initSummernote, showAlert } from 'admin-app'
 
 const { createApp, ref, onMounted } = Vue
 
@@ -68,7 +68,7 @@ const app = createApp({
             requesting.value = false
           })
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning')
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning')
       }
     }
 

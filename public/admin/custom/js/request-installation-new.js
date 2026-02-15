@@ -1,3 +1,5 @@
+import { initDataTable, getCleanUrl, toFormData as windowToFormData, formatDate, showAlert, initSelect2, initDatepicker, initSummernote } from 'admin-app'
+
 const { createApp, ref, onMounted, computed, shallowRef, nextTick } = Vue
 
 const app = createApp({
@@ -86,7 +88,7 @@ const app = createApp({
     }
 
     function toFormData() {
-      return window.toFormData(requestData.value)
+      return windowToFormData(requestData.value)
     }
 
     async function getRequestDetail() {
@@ -108,8 +110,8 @@ const app = createApp({
           speciality: response.data.speciality.id,
           region: response.data.region.id,
           remuneration: response.data.remuneration,
-          startedAt: window.formatDate(response.data.startedAt, false),
-          endAt: response.data.endAt ? window.formatDate(response.data.endAt, false) : null,
+          startedAt: formatDate(response.data.startedAt, false),
+          endAt: response.data.endAt ? formatDate(response.data.endAt, false) : null,
           raison: [],
           raisonValue: '',
         }
@@ -148,8 +150,6 @@ const app = createApp({
     }
 
     function onCreateRequest() {
-      requestData.value.comment = jQuery("#request-comment").summernote("code")
-
       const payload = toFormData()
       
       if (!validateFormData()) {
@@ -165,13 +165,11 @@ const app = createApp({
             requesting.value = false
           })
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
     function onEditRequest() {
-      requestData.value.comment = jQuery("#request-comment").summernote("code")
-
       const payload = toFormData()
 
       if (!validateFormData()) {
@@ -187,7 +185,7 @@ const app = createApp({
             requesting.value = false
           })
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
@@ -202,22 +200,7 @@ const app = createApp({
         const tblDom = $("#tbl-personne-contacte")
         const url = tblDom.data("listUrl")
 
-        personneContacteDatatable.value = tblDom.DataTable({
-          paging: true,
-          searching: true,
-          ordering: true,
-          responsive: true,
-          language: {
-            lengthMenu: "Afficher _MENU_ ligne par page",
-            zeroRecords: "Aucun entré trouvé",
-            infoFiltered: "(Nombre de lignes: _MAX_)",
-            infoEmpty: "",
-            info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-            paginate: {
-              previous: "<<",
-              next: ">>",
-            },
-          },
+        personneContacteDatatable.value = initDataTable('', tblDom, url, {
           order: [[1, 'desc']],
           columnDefs: [
             {
@@ -253,9 +236,6 @@ const app = createApp({
               targets: 4,
               data: 'user.speciality.name',
               width: '25%',
-              // render: function (data, type, row, meta) {
-              //   return row.specialityParent ? row.specialityParent.name : ''
-              // }
             },
             {
               targets: 5,
@@ -291,12 +271,6 @@ const app = createApp({
               },
             },
           ],
-          serverSide: true,
-          ajax: function (data, callback) {
-            axios.get(url, { params: data })
-              .then(response => callback(response.data))
-              .catch(() => callback({ data: [] }))
-          },
         })
 
         // delete
@@ -305,10 +279,7 @@ const app = createApp({
         })
 
         // add user to a request
-        jQuery("#request-user-new").select2({
-          theme: "bootstrap4",
-          allowClear: true,
-          placeholder: "- Choisir une option -",
+        initSelect2('#request-user-new', {
           ajax: {
             beforeSend: null,
             url: $('#request-user-new').data("url"),
@@ -370,10 +341,7 @@ const app = createApp({
     }
 
     function createUserApplicantSelect2(selector) {
-      jQuery(selector).select2({
-        theme: "bootstrap4",
-        allowClear: true,
-        placeholder: "- Choisir une option -",
+      initSelect2(selector, {
         ajax: {
           beforeSend: null,
           url: formEl.value.dataset.applicantUrl,
@@ -397,11 +365,7 @@ const app = createApp({
 
     function initFormView(data) {
       // select 2
-      jQuery(".select2-input").select2({
-        theme: "bootstrap4",
-        allowClear: true,
-        placeholder: "- Choisir une option -",
-      })
+      initSelect2('.select2-input')
 
       initAndSetApplicant(data?.applicant)
 
@@ -415,17 +379,15 @@ const app = createApp({
         requestData.value.region = jQuery(this).val()
       })
       
-      jQuery('#request-started-at, #request-end-at').datepicker({
-        format: "dd/mm/yyyy",
+      initDatepicker('#request-started-at, #request-end-at', {
         startDate: '0d',
-        autoclose: true,
       })
       jQuery("#request-started-at-input").on("change", function () {
         const startDate = jQuery(this).val()
         const dateParts = startDate ? startDate.split('/') : []
 
         if (!startDate || dateParts.length < 3) {
-          window.showAlert('La date de début doit respecter le format dd/mm/yyyy.', 'warning')
+          showAlert('La date de début doit respecter le format dd/mm/yyyy.', 'warning')
         } else{
           requestData.value.startedAt = startDate
           
@@ -437,12 +399,16 @@ const app = createApp({
         const dateParts = endDate ? endDate.split('/') : []
 
         if (!endDate || dateParts.length < 3) {
-          window.showAlert('La date de fin doit respecter le format dd/mm/yyyy.', 'warning')
+          showAlert('La date de fin doit respecter le format dd/mm/yyyy.', 'warning')
         } else{
           requestData.value.endAt = endDate
           
           jQuery('#request-started-at').datepicker('setEndDate', endDate)
         }
+      })
+
+      $('#request-comment').on('summernote.change', function(we, contents, $editable) {
+        requestData.value.comment = contents
       })
     }
 
@@ -456,18 +422,8 @@ const app = createApp({
     }
 
     onMounted(() => {
-      jQuery(".editor").summernote({
+      initSummernote('.editor', {
         height: 200,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'italic', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']],
-        ],
       })
 
       getRequestDetail().then((data) => {
@@ -535,23 +491,8 @@ function openSelectUserModal(requestId, speciality, mobility) {
   const tblDom = $('#tbl-select-users')
   const listPersonneUrl = tblDom.data('listUrl')
 
-  tableSelectionUsers = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
+  tableSelectionUsers = initDataTable('', tblDom, listPersonneUrl, {
     order: [[1, 'asc']],
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
     columnDefs: [
       {
         targets: 0,
@@ -596,11 +537,13 @@ function openSelectUserModal(requestId, speciality, mobility) {
         },
       },
     ],
-    serverSide: true,
     ajax: function (data, callback) {
       axios.get(listPersonneUrl, { params: { ...data, ...getFiltreParametres() }})
         .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
+        .catch((err) => {
+          console.error('DATATABLE ERROR: ', err)
+          callback({ data: [] })
+        })
     },
   })
 }
