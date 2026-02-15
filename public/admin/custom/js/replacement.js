@@ -1,25 +1,12 @@
+import { initDataTable, getCleanUrl, formatDate, isEmptyValue, initSelect2, initDatepicker } from 'admin-app'
+
 $(function () {
   const tblDom = $("#tbl-replacements");
 
   // search params
   const userFiltres = initSearchFilters()
 
-  const replacementDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const replacementDatatable = initDataTable('', tblDom, null, {
     order: [[1, 'desc']],
     columnDefs: [
       {
@@ -77,7 +64,7 @@ $(function () {
             return '';
           }
 
-          return window.formatDate(data);
+          return formatDate(data);
         }
       },
       {
@@ -112,13 +99,15 @@ $(function () {
         },
       },
     ],
-    serverSide: true,
     ajax: function (data, callback) {
       axios.get(tblDom.data("url"), { params: { filters: userFiltres.getFilters(), ...data }})
         .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
+        .catch((err) => {
+          console.error('DATATABLE ERROR: ', err)
+          callback({ data: [] })
+        })
     },
-  });
+  })
 
   // delete
   $(document).on('deletedEvent', function() {
@@ -146,10 +135,6 @@ function initSearchFilters() {
     count: 0,
   };
 
-  function isEmptyValue(filterValue) {
-    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0);
-  }
-
   function loadFromUrl() {
     const urlQueryParams = new URLSearchParams(window.location.href.indexOf('?') >= 0 ? window.location.href.substring(window.location.href.indexOf('?')) : '');
     urlQueryParams.forEach((value, key) => {
@@ -175,16 +160,11 @@ function initSearchFilters() {
   }
 
   function addSearchElementEventListener (searchFn) {
-    $('.select2-input').select2({
-      theme: "bootstrap4",
-      allowClear: true,
+    initSelect2('.select2-input', {
       placeholder: "- Tous -",
-    });
+    })
 
-    $("#filtre-user-created-from, #filtre-user-created-to").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-    });
+    initDatepicker('#filtre-user-created-from, #filtre-user-created-to')
 
     $('#btn-replacement-search').on('click', function (e) {
       e.preventDefault();

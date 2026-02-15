@@ -37,11 +37,6 @@ class UserEstablishment
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $per = null;
 
-    // @TODO: Delete this property because it's the same as speciality
-    #[Groups(['datatable'])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $serviceName = null;
-
     #[Groups(['datatable'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $chiefServiceName = null;
@@ -107,18 +102,6 @@ class UserEstablishment
     public function setPer(?string $per): static
     {
         $this->per = $per;
-
-        return $this;
-    }
-
-    public function getServiceName(): ?string
-    {
-        return $this->serviceName;
-    }
-
-    public function setServiceName(?string $serviceName): static
-    {
-        $this->serviceName = $serviceName;
 
         return $this;
     }

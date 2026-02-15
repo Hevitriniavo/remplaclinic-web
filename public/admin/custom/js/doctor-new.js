@@ -1,3 +1,5 @@
+import { formatDate, initSelect2, initDatepicker, initSummernote, showAlert, toFormData as windowToFormData } from 'admin-app'
+
 const { createApp, ref, onMounted } = Vue;
 
 const app = createApp({
@@ -94,38 +96,7 @@ const app = createApp({
     }
 
     function toFormData() {
-      const formData = userData.value;
-      const result = new FormData();
-      for (const key in formData) {
-        if (Object.prototype.hasOwnProperty.call(formData, key)) {
-          const value = formData[key];
-          if (Array.isArray(value)) {
-            let index = 0;
-            for (const aValue of value) {
-              result.append(`${key}[${index}]`, aValue);
-              index++;
-            }
-          } else if (value) {
-            result.append(key, value);
-          }
-        }
-      }
-      return result;
-    }
-
-    function formatDate(data, withHour = true) {
-      const date = new Date(data);
-      const options = {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      };
-      if (withHour) {
-        options['hour'] = '2-digit';
-        options['minute'] = '2-digit';
-      }
-      const formatter = new Intl.DateTimeFormat("fr-FR", options);
-      return formatter.format(date);
+      return windowToFormData(userData.value)
     }
 
     function getUserDetail() {
@@ -171,11 +142,6 @@ const app = createApp({
     }
 
     function onCreateUser() {
-      userData.value.comment = jQuery("#doctor-comment").summernote(
-        "code"
-      );
-      userData.value.speciality = jQuery("#doctor-speciality").val();
-
       const payload = toFormData();
 
       if (!validateFormData()) {
@@ -190,40 +156,33 @@ const app = createApp({
             requesting.value = false;
           });
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
     onMounted(() => {
-      jQuery(".editor").summernote({
+      initSummernote('.editor', {
         height: 200,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'italic', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']],
-        ],
-      });
+      })
 
       getUserDetail().then(() => {
-        jQuery("#doctor-subscription-end").datepicker({
-          format: "dd/mm/yyyy",
-          autoclose: true,
-        });
-        jQuery(".select2-input").select2({
-          theme: "bootstrap4",
-          allowClear: true,
-          placeholder: "- Choisir une option -",
-        });
+        initSelect2('.select2-input')
+
+        initDatepicker('#doctor-subscription-end')
+
+        jQuery('#doctor-speciality').on('change', function() {
+          userData.value.speciality = jQuery(this).val()
+        })
+
         jQuery("#doctor-subscription-end-input").on('change', function () {
-          userData.value.subscriptionEndAt = jQuery(this).val();
-        });
-      });
-    });
+          userData.value.subscriptionEndAt = jQuery(this).val()
+        })
+
+        $('#doctor-comment').on('summernote.change', function(we, contents, $editable) {
+          userData.value.comment = contents
+        })
+      })
+    })
 
     return {
       requesting,

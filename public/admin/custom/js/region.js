@@ -1,51 +1,38 @@
-function openRegionModal(id, url, detailUrl) {
-  $('#region-modal').modal('show');
-  const inputName = $('#region-name');
-  const formRegion = $('#region-form-detail');
-  const btnSaveRegion = $('#btn-region-detail-save');
+import { initDataTable, getCleanUrl } from 'admin-app'
 
-  inputName[0].classList.remove('is-valid', 'is-invalid');
-  formRegion[0].classList.remove('was-validated');
+function openRegionModal(id, url, detailUrl) {
+  $('#region-modal').modal('show')
+  const inputName = $('#region-name')
+  const formRegion = $('#region-form-detail')
+  const btnSaveRegion = $('#btn-region-detail-save')
+
+  inputName[0].classList.remove('is-valid', 'is-invalid')
+  formRegion[0].classList.remove('was-validated')
   
-  btnSaveRegion.attr('data-url', url);
+  btnSaveRegion.attr('data-url', url)
   if (id && detailUrl) {
-    btnSaveRegion.attr('data-method', 'PUT');
+    btnSaveRegion.attr('data-method', 'PUT')
     axios.get(detailUrl)
       .then(res => {
-        inputName.val(res.data.name);
+        inputName.val(res.data.name)
       })
   } else {
-    btnSaveRegion.attr('data-method', 'POST');
-    inputName.val('');
+    btnSaveRegion.attr('data-method', 'POST')
+    inputName.val('')
   }
 }
 
 function hideRegionModal() {
-  $('#region-modal').modal('hide');
+  $('#region-modal').modal('hide')
 }
 
 $(function () {
-  const tblDom = $("#tbl-regions");
-  const btnNew = $('#btn-region-new');
-  const btnSaveRegion = $('#btn-region-detail-save');
-  const formRegion = $('#region-form-detail');
+  const tblDom = $("#tbl-regions")
+  const btnNew = $('#btn-region-new')
+  const btnSaveRegion = $('#btn-region-detail-save')
+  const formRegion = $('#region-form-detail')
 
-  const regionDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+  const regionDatatable = initDataTable('#tbl-regions', tblDom, null, {
     columnDefs: [
       {
         targets: 0,
@@ -64,51 +51,45 @@ $(function () {
         className: "text-right",
         width: '10%',
         render: function (data, type, row, meta) {
-          const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id']);
-          const editUrl = getCleanUrl(tblDom.data('edit-url'), row['id']);
-          const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
+          const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id'])
+          const editUrl = getCleanUrl(tblDom.data('edit-url'), row['id'])
+          const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id'])
           return (
             "<div>" +
             '<a class="btn btn-sm btn-outline-info btn-edit" data-url="'+ editUrl +'" data-detail-url="'+ detailUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-edit"></i></a>' +
             '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
             "</div>"
-          );
+          )
         },
       },
     ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
-  });
+  })
 
   // delete
   $(document).on('deletedEvent', function() {
-    regionDatatable.draw();
+    regionDatatable.draw()
   })
 
   $(document).on('click', '.btn-edit', function() {
-    const btn = $(this);
-    const id = btn.data('id');
-    const url = getCleanUrl(btn.data('url'), id);
-    const detailUrl = getCleanUrl(btn.data('detail-url'), id);
-    openRegionModal(id, url, detailUrl);
+    const btn = $(this)
+    const id = btn.data('id')
+    const url = getCleanUrl(btn.data('url'), id)
+    const detailUrl = getCleanUrl(btn.data('detail-url'), id)
+    openRegionModal(id, url, detailUrl)
   })
 
   // the modal
   btnNew.on('click', function (e) {
-    openRegionModal(null,  $(this).data('url'));
-  });
+    openRegionModal(null,  $(this).data('url'))
+  })
 
   btnSaveRegion.on('click', function(e) {
     if (!formRegion[0].checkValidity()) {
       e.preventDefault()
       e.stopPropagation()
-      formRegion[0].classList.add('was-validated');
+      formRegion[0].classList.add('was-validated')
     } else {
-      const inputs = new FormData(formRegion[0]);
+      const inputs = new FormData(formRegion[0])
       const payload = {
         name: inputs.get('name'),
       }
@@ -119,8 +100,8 @@ $(function () {
       })
         .then(() => {
           hideRegionModal()
-          regionDatatable.draw();
-        });
+          regionDatatable.draw()
+        })
     }
-  });
-});
+  })
+})

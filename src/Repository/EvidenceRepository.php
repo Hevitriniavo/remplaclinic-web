@@ -30,7 +30,7 @@ class EvidenceRepository extends ServiceEntityRepository
             ->setFirstResult($params->offset);
 
         if (!empty($params->value)) {
-            $qb->where('e.name LIKE :value')
+            $qb
                 ->orWhere('e.clinicName LIKE :value')
                 ->orWhere('e.specialityName LIKE :value')
                 ->orWhere('e.title LIKE :value')

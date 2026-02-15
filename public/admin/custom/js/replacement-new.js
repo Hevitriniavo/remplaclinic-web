@@ -1,3 +1,5 @@
+import { getCleanUrl, initSelect2, initSummernote, showAlert, toFormData as windowToFormData } from 'admin-app'
+
 const { createApp, ref, onMounted, nextTick } = Vue;
 
 const app = createApp({
@@ -26,12 +28,16 @@ const app = createApp({
       speciality: null,
       subSpecialities: [],
       mobility: [],
-      cv: null,
-      diplom: null,
-      licence: null,
       comment: null,
       userComment: null,
     });
+
+    const userAttachment = ref({
+      cv: null,
+      diplom: null,
+      licence: null,
+    })
+
     const userValidators = {
       civility: (value) => value === "M" || value === "Mme" || value == "Mlle",
       surname: (value) => !!value,
@@ -100,27 +106,22 @@ const app = createApp({
     }
 
     function toFormData() {
-      const formData = userData.value;
-      const result = new FormData();
-      for (const key in formData) {
-        if (Object.prototype.hasOwnProperty.call(formData, key)) {
-          const value = formData[key];
-          if (Array.isArray(value)) {
-            let index = 0;
-            for (const aValue of value) {
-              result.append(`${key}[${index}]`, aValue);
-              index++;
-            }
-          } else if (value) {
-            result.append(key, value);
-          }
+      const result = windowToFormData(userData.value)
+
+      for (const fieldName in userAttachment.value) {
+        if (!Object.hasOwn(userAttachment.value, fieldName)) continue
+
+        const file = userAttachment.value[fieldName]
+        if (file) {
+          result.append(fieldName, file)
         }
       }
+
       return result;
     }
 
     function handleFileUpload(field, event) {
-      userData.value[field] = event.target.files[0];
+      userAttachment.value[field] = event.target.files[0];
     }
 
     function getUserDetail() {
@@ -186,7 +187,7 @@ const app = createApp({
             requesting.value = false;
           });
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
@@ -201,13 +202,10 @@ const app = createApp({
 
       await nextTick()
 
-      jQuery('#replacement-sub-specialities').select2({
-        theme: 'bootstrap4',
-        allowClear: true,
-        placeholder: '- Choisir une option -',
+      initSelect2('#replacement-sub-specialities', {
         ajax: {
           beforeSend: null,
-          url: window.getCleanUrl(jQuery('#replacement-speciality').data('spsUrl'), userData.value.speciality),
+          url: getCleanUrl(jQuery('#replacement-speciality').data('spsUrl'), userData.value.speciality),
           type: 'get',
           dataType: 'json',
           delay: 200,
@@ -221,26 +219,12 @@ const app = createApp({
     }
 
     onMounted(() => {
-      jQuery(".editor").summernote({
+      initSummernote('.editor', {
         height: 200,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'italic', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']],
-        ],
-      });
+      })
 
       getUserDetail().then(() => {
-        jQuery(".select2-input").select2({
-          theme: "bootstrap4",
-          allowClear: true,
-          placeholder: "- Choisir une option -",
-        });
+        initSelect2('.select2-input')
 
         jQuery("#replacement-speciality").on('change', function() {
           userData.value.speciality = jQuery(this).val()
@@ -274,6 +258,7 @@ const app = createApp({
     return {
       requesting,
       userData,
+      userAttachment,
       formEl,
       shownCollapse,
 

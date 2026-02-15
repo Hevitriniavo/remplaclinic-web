@@ -1,3 +1,5 @@
+import { formatDate, initSelect2, initDatepicker, initSummernote, showAlert, toFormData as windowToFormData } from 'admin-app'
+
 const { createApp, ref, onMounted } = Vue;
 
 const app = createApp({
@@ -16,7 +18,7 @@ const app = createApp({
       passwordConfirmation: null,
       status: 1,
       roles: [5],
-      serviceName: null,
+      speciality: null,
       chiefServiceName: null,
       establishmentName: null,
       bedsCount: null,
@@ -95,38 +97,7 @@ const app = createApp({
     }
 
     function toFormData() {
-      const formData = userData.value;
-      const result = new FormData();
-      for (const key in formData) {
-        if (Object.prototype.hasOwnProperty.call(formData, key)) {
-          const value = formData[key];
-          if (Array.isArray(value)) {
-            let index = 0;
-            for (const aValue of value) {
-              result.append(`${key}[${index}]`, aValue);
-              index++;
-            }
-          } else if (value) {
-            result.append(key, value);
-          }
-        }
-      }
-      return result;
-    }
-
-    function formatDate(data, withHour = true) {
-      const date = new Date(data);
-      const options = {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      };
-      if (withHour) {
-        options['hour'] = '2-digit';
-        options['minute'] = '2-digit';
-      }
-      const formatter = new Intl.DateTimeFormat("fr-FR", options);
-      return formatter.format(date);
+      return windowToFormData(userData.value);
     }
 
     function getUserDetail() {
@@ -149,7 +120,7 @@ const app = createApp({
               postalCode: data.address ? data.address.postal_code : null,
               locality: data.address ? data.address.locality : null,
               fax: data.fax,
-              serviceName: data.establishment ? data.establishment.serviceName : null,
+              speciality: data.speciality ? data.speciality.id : null,
               email: data.email,
               status: data.status ? 1 : 0,
               roles: data.roles ? data.roles.map((r) => r.id) : [],
@@ -173,10 +144,6 @@ const app = createApp({
     }
 
     function onCreateUser() {
-      userData.value.comment = jQuery("#clinic-comment").summernote(
-        "code"
-      );
-
       const payload = toFormData();
 
       if (!validateFormData()) {
@@ -191,38 +158,31 @@ const app = createApp({
             requesting.value = false;
           });
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
     onMounted(() => {
-      jQuery(".editor").summernote({
+      initSummernote('.editor', {
         height: 200,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'italic', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']],
-        ],
-      });
+      })
 
       getUserDetail().then(() => {
-        jQuery("#clinic-subscription-end").datepicker({
-          format: "dd/mm/yyyy",
-          autoclose: true,
-        });
-        jQuery(".select2-input").select2({
-          theme: "bootstrap4",
-          allowClear: true,
-          placeholder: "- Choisir une option -",
-        });
-        jQuery("#clinic-subscription-end-input").on('change', function () {
+        initSelect2('.select2-input')
+
+        initDatepicker('#clinic-subscription-end')
+
+        jQuery('#clinic-speciality').on('change', function() {
+          userData.value.speciality = jQuery(this).val()
+        })
+
+        jQuery('#clinic-subscription-end-input').on('change', function () {
           userData.value.subscriptionEndAt = jQuery(this).val();
         });
+
+        $('#clinic-comment').on('summernote.change', function(we, contents, $editable) {
+          userData.value.comment = contents
+        })
       });
     });
 

@@ -1,15 +1,17 @@
-const { createApp, ref, onMounted } = Vue;
+import { initSummernote } from 'admin-app'
+
+const { createApp, ref, onMounted } = Vue
 
 const app = createApp({
   setup() {
-    const requesting = ref(false);
-    const formEvidenceEl = ref(null);
+    const requesting = ref(false)
+    const formEvidenceEl = ref(null)
     const evidenceData = ref({
       title: "",
       clinicName: "",
       specialityName: "",
       body: "",
-    });
+    })
     const formError = ref({
       error: false,
       validated: false,
@@ -19,33 +21,33 @@ const app = createApp({
         specialityName: false,
         body: false,
       },
-    });
+    })
 
     function validateFormData() {
-      formError.value.validated = true;
-      const formData = evidenceData.value;
-      let hasError = false;
+      formError.value.validated = true
+      const formData = evidenceData.value
+      let hasError = false
       for (const key of ["title", "clinicName", "specialityName", "body"]) {
         if (!formData[key]) {
-          hasError = true;
-          formError.value.details[key] = true;
+          hasError = true
+          formError.value.details[key] = true
         } else {
-          formError.value.details[key] = false;
+          formError.value.details[key] = false
         }
       }
-      formError.value.error = hasError;
+      formError.value.error = hasError
 
-      return hasError;
+      return hasError
     }
 
     function getEvidenceDetail() {
-      const url = formEvidenceEl.value.dataset.detailUrl;
+      const url = formEvidenceEl.value.dataset.detailUrl
       if (url) {
-        requesting.value = true;
+        requesting.value = true
         return axios.get(url)
             .then((res) => {
-              evidenceData.value = res.data;
-              requesting.value = false;
+              evidenceData.value = res.data
+              requesting.value = false
               jQuery("#reference-body").summernote('code', evidenceData.value.body)
             })
             .catch(() => {})
@@ -53,33 +55,33 @@ const app = createApp({
     }
 
     function onCreateEvidence() {
-      evidenceData.value.body = jQuery("#reference-body").summernote('code');
+      evidenceData.value.body = jQuery("#reference-body").summernote('code')
 
       if (!validateFormData()) {
-        requesting.value = true;
-        const action = formEvidenceEl.value.action;
+        requesting.value = true
+        const action = formEvidenceEl.value.action
         axios.post(action, evidenceData.value)
           .then(() => {
-            jQuery("#btn-reference-list")[0].click();
+            jQuery("#btn-reference-list")[0].click()
           })
           .catch(() => {
-            requesting.value = false;
+            requesting.value = false
           })
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning')
       }
     }
 
     function getErrorClass(fieldName) {
       if (formError.value.error && formError.value.validated) {
-        return formError.value.details[fieldName] ? "is-invalid" : "is-valid";
+        return formError.value.details[fieldName] ? "is-invalid" : "is-valid"
       }
-      return "";
+      return ""
     }
 
     onMounted(() => {
-      getEvidenceDetail();
-    });
+      getEvidenceDetail()
+    })
 
     return {
       evidenceData,
@@ -89,24 +91,12 @@ const app = createApp({
 
       onCreateEvidence,
       getErrorClass,
-    };
+    }
   },
-});
-app.mount("#root");
+})
+app.mount("#root")
 
 $(function () {
-  $("#reference-body").summernote({
-    height: 300,
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'italic', 'clear']],
-      ['fontname', ['fontname']],
-      ['color', ['color']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['table', ['table']],
-      ['insert', ['link', 'picture', 'video']],
-      ['view', ['fullscreen', 'codeview', 'help']],
-    ],
-  });
-});
+  initSummernote('#reference-body')
+})
 

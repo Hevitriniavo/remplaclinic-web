@@ -133,7 +133,7 @@ function hideLoader() {
 }
 
 
-window.getCleanUrl = (url, id) => {
+const getCleanUrl = (url, id) => {
   let result = url
   if (result) {
     result = result.replace('0000000000', id)
@@ -141,7 +141,7 @@ window.getCleanUrl = (url, id) => {
   return result
 }
 
-window.formatDate = (data, withHour = true) => {
+const formatDate = (data, withHour = true) => {
   const date = new Date(data)
   const options = {
     day: "2-digit",
@@ -164,12 +164,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initSelectionToutCheckbox()
 })
 
+export { getCleanUrl, formatDate }
+
 /**************************/
 /**** FORM DATA HELPER ****/
 /**************************/
-window.toQueryParams = (data, baseUrl = '') => {
+const toQueryParams = (data, baseUrl = '') => {
   const builder = new URLSearchParams()
-  const dataArrayLike = window.toArrayDataLike(data)
+  const dataArrayLike = toArrayDataLike(data)
   for (const line of dataArrayLike) {
     builder.append(line.name, line.value)
   }
@@ -184,16 +186,16 @@ window.toQueryParams = (data, baseUrl = '') => {
   return `${baseUrl}?${params}`
 }
 
-window.toFormData = (data, parsed = false) => {
+const toFormData = (data, parsed = false) => {
   const builder = new FormData()
-  const dataArrayLike = parsed ? data : window.toArrayDataLike(data)
+  const dataArrayLike = parsed ? data : toArrayDataLike(data)
   for (const line of dataArrayLike) {
     builder.append(line.name, line.value)
   }
   return builder
 }
 
-window.toArrayDataLike = (data, rootName = '') => {
+const toArrayDataLike = (data, rootName = '') => {
   let results = []
   for (const key in data) {
     if (Object.hasOwnProperty.call(data, key)) {
@@ -208,7 +210,7 @@ window.toArrayDataLike = (data, rootName = '') => {
       //   path = `${path}${path ? '.' : ''}${key}`
       // }
       if (Array.isArray(element) || typeof element === 'object') {
-        results = results.concat(window.toArrayDataLike(element, path))
+        results = results.concat(toArrayDataLike(element, path))
       } else {
         results.push({
           name: path,
@@ -219,6 +221,12 @@ window.toArrayDataLike = (data, rootName = '') => {
   }
   return results
 }
+
+const isEmptyValue = (filterValue) => {
+    return filterValue === '' || filterValue === null || filterValue === undefined || (Array.isArray(filterValue) && filterValue.length === 0);
+}
+
+export { toQueryParams, toFormData, toArrayDataLike, isEmptyValue }
 
 /**************************/
 /**** Add axios loader ****/
@@ -304,9 +312,107 @@ function showAlert(message, type = 'error', duration = 5000) {
     if (alertTimeout) clearTimeout(alertTimeout)
     alertTimeout = setTimeout(hideAlert, duration)
 }
-window.showAlert = showAlert
 
 function hideAlert() {
     document.getElementById('alert-container').style.display = 'none'
 }
-window.hideAlert = hideAlert
+
+export { showAlert, hideAlert }
+
+/**********************************/
+/**** DATATABLE INITIALIZATION ****/
+/**********************************/
+const initDataTable = (selector, jQueryDom = null, url = null, options = {}) => {
+    const tblDom = jQueryDom ? jQueryDom : jQuery(selector)
+    const tblApiUrl = url ? url : tblDom.data('url')
+    const defaultOptions = {
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        language: {
+            lengthMenu: "Afficher _MENU_ ligne par page",
+            zeroRecords: "Aucun entré trouvé",
+            infoFiltered: "(Nombre de lignes: _MAX_)",
+            infoEmpty: "",
+            info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
+            paginate: {
+                previous: "<<",
+                next: ">>",
+            },
+        },
+        serverSide: true,
+        ajax: function (data, callback) {
+            axios.get(tblApiUrl, { params: data })
+                .then(response => callback(response.data))
+                .catch((err) => {
+                    console.error('DATATABLE ERROR: ', err)
+                    callback({ data: [] })
+                })
+        },
+    }
+
+    Object.assign(defaultOptions, options)
+
+    return tblDom.DataTable(defaultOptions)
+}
+
+export { initDataTable }
+
+/********************************/
+/**** SELECT2 INITIALIZATION ****/
+/********************************/
+const initSelect2 = (selector, options = {}) => {
+    const defaultOptions = {
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: '- Choisir une option -'
+    }
+
+    Object.assign(defaultOptions, options)
+
+    jQuery(selector).select2(defaultOptions)
+}
+
+export { initSelect2 }
+
+/***********************************/
+/**** DATEPICKER INITIALIZATION ****/
+/***********************************/
+const initDatepicker = (selector, options = {}) => {
+    const defaultOptions = {
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }
+
+    Object.assign(defaultOptions, options)
+
+    jQuery(selector).datepicker(defaultOptions)
+}
+
+export { initDatepicker }
+
+/***********************************/
+/**** SUMMERNOTE INITIALIZATION ****/
+/***********************************/
+const initSummernote = (selector, options = {}) => {
+    const defaultOptions = {
+        height: 300,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'italic', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']],
+        ],
+    }
+
+    Object.assign(defaultOptions, options)
+
+    jQuery(selector).summernote(defaultOptions)
+}
+
+export { initSummernote }

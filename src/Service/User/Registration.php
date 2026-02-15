@@ -137,7 +137,6 @@ class Registration
         ;
 
         $userEstablishment
-            ->setServiceName($clinicDto->serviceName)
             ->setChiefServiceName($clinicDto->chiefServiceName)
             ->setName($clinicDto->establishmentName)
             ->setBedsCount($clinicDto->bedsCount)
@@ -171,6 +170,11 @@ class Registration
 
         foreach ($this->roleService->getRoles($clinicDto->roles) as $role) {
             $user->addRole($role);
+        }
+
+        if (!empty($clinicDto->speciality)) {
+            $specialities = $this->specialityService->getSpecialities([$clinicDto->speciality]);
+            $user->setSpeciality($specialities[0]);
         }
 
         $this->entityManager->persist($user);

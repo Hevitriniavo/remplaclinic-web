@@ -1,22 +1,9 @@
-$(function () {
-  const tblDom = $("#tbl-references");
+import { initDataTable, getCleanUrl } from 'admin-app'
 
-  const specialityDatatable = tblDom.DataTable({
-    paging: true,
-    searching: true,
-    ordering: true,
-    responsive: true,
-    language: {
-      lengthMenu: "Afficher _MENU_ ligne par page",
-      zeroRecords: "Aucun entré trouvé",
-      infoFiltered: "(Nombre de lignes: _MAX_)",
-      infoEmpty: "",
-      info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
-      paginate: {
-        previous: "<<",
-        next: ">>",
-      },
-    },
+$(function () {
+  const tblDom = $("#tbl-references")
+
+  const referenceDatatable = initDataTable('', tblDom, null, {
     columnDefs: [
       {
         targets: 0,
@@ -45,7 +32,7 @@ $(function () {
         render: function (data, type, row, meta) {
           return (
             "<div>" + data + "</div>"
-          );
+          )
         }
       },
       {
@@ -55,27 +42,21 @@ $(function () {
         className: "text-right",
         width: '10%',
         render: function (data, type, row, meta) {
-          const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id']);
-          const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
+          const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id'])
+          const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id'])
           return (
             "<div>" +
             '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'"><i class="fas fa-edit"></i></a>' +
             '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
             "</div>"
-          );
+          )
         },
       },
-    ],
-    serverSide: true,
-    ajax: function (data, callback) {
-      axios.get(tblDom.data("url"), { params: data })
-        .then(response => callback(response.data))
-        .catch(() => callback({ data: [] }))
-    },
-  });
+    ]
+  })
 
   // delete
   $(document).on('deletedEvent', function() {
-    specialityDatatable.draw();
-  });
-});
+    referenceDatatable.draw()
+  })
+})

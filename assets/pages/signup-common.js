@@ -56,7 +56,6 @@ export const loadUserInfos = function () {
                     'user-mobile': res.data.telephone2,
                     'user-fax': res.data.fax,
                     'user-chief-service-name': res.data.establishment ? res.data.establishment.chiefServiceName : '',
-                    'user-service-name': res.data.establishment ? res.data.establishment.serviceName : '',
                     'user-establishment-name': res.data.establishment ? res.data.establishment.name : '',
                     'user-beds-count': res.data.establishment ? res.data.establishment.bedsCount : '',
                     'user-site-web': res.data.establishment ? res.data.establishment.siteWeb : '',

@@ -1,3 +1,5 @@
+import { formatDate, initSelect2, initDatepicker, initSummernote, showAlert, toFormData as windowToFormData } from 'admin-app'
+
 const { createApp, ref, onMounted, computed, nextTick } = Vue;
 
 const app = createApp({
@@ -94,25 +96,10 @@ const app = createApp({
     }
 
     function toFormData() {
-      return window.toFormData({
+      return windowToFormData({
         ...userData.value,
         cliniques: userData.value.cliniques.map(c => c.id).filter(id => !!id)
       })
-    }
-
-    function formatDate(data, withHour = true) {
-      const date = new Date(data);
-      const options = {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      };
-      if (withHour) {
-        options['hour'] = '2-digit';
-        options['minute'] = '2-digit';
-      }
-      const formatter = new Intl.DateTimeFormat("fr-FR", options);
-      return formatter.format(date);
     }
 
     function getUserDetail() {
@@ -185,10 +172,7 @@ const app = createApp({
 
     function createUserClinicSelect2(selector) {
       // add user to a request
-      jQuery(selector).select2({
-        theme: "bootstrap4",
-        allowClear: true,
-        placeholder: "- Choisir une option -",
+      initSelect2(selector, {
         ajax: {
           beforeSend: null,
           url: formEl.value.dataset.clinicUrl,
@@ -213,11 +197,6 @@ const app = createApp({
     }
 
     function onCreateUser() {
-      userData.value.comment = jQuery("#director-comment").summernote(
-        "code"
-      );
-      userData.value.speciality = jQuery("#director-speciality").val();
-
       const payload = toFormData();
 
       if (!validateFormData()) {
@@ -232,30 +211,22 @@ const app = createApp({
             requesting.value = false;
           });
       } else {
-        window.showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
+        showAlert('Veuillez saisir tous les informations qui sont requises !', 'warning');
       }
     }
 
     onMounted(() => {
-      jQuery(".editor").summernote({
+      initSummernote('.editor', {
         height: 200,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'italic', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']],
-        ],
-      });
+      })
 
       getUserDetail().then(() => {
-        jQuery("#director-subscription-end").datepicker({
-          format: "dd/mm/yyyy",
-          autoclose: true,
-        });
+        initDatepicker('#director-subscription-end')
+        
+        jQuery('#director-speciality').on('change', function() {
+          userData.value.speciality = jQuery(this).val()
+        })
+
         jQuery("#director-subscription-end-input").on('change', function () {
           userData.value.subscriptionEndAt = jQuery(this).val();
         });
@@ -263,6 +234,10 @@ const app = createApp({
         jQuery(document).on('change', '.director-clinique', e => {
           const el = jQuery(e.target)
           userData.value.cliniques[el.data('keyIndex')] = { id: el.val() }
+        })
+
+        $('#director-comment').on('summernote.change', function(we, contents, $editable) {
+          userData.value.comment = contents
         })
       });
     });

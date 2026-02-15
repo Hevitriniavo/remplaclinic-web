@@ -28,5 +28,5 @@ Détail d'un temoignage
 {% block bodyjs %}
 {{ parent() }}
 <script src="{{ asset('admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
-<script src="{{ versioned_asset('admin/custom/js/reference-new.js') }}"></script>
+<script type="module" src="{{ versioned_asset('admin/custom/js/reference-new.js') }}"></script>
 {% endblock %}

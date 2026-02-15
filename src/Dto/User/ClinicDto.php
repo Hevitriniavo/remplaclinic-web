@@ -49,7 +49,7 @@ class ClinicDto
         #[Assert\NotNull(groups: ['create'])]
         public ?array $roles,
 
-        public ?string $serviceName,
+        public ?int $speciality,
 
         public ?string $chiefServiceName,
         

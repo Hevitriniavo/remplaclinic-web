@@ -111,3 +111,8 @@ TODO: (27/12/2025)
 - [import] Add support for log and event
     * auto actualise the table to check the status
     * Retry system
+
+TODO: (15/02/2026)
+- make vue to use import map
+- make axios to use import map
+- add QA test

@@ -135,13 +135,12 @@ class UserUpdate
             $user->setAddress($userAddress);
         }
 
-        $updated1 = $this->updateAttribute($userEstablishment, 'setServiceName', $clinicDto->serviceName);
-        $updated2 = $this->updateAttribute($userEstablishment, 'setChiefServiceName', $clinicDto->chiefServiceName);
-        $updated3 = $this->updateAttribute($userEstablishment, 'setName', $clinicDto->establishmentName);
-        $updated4 = $this->updateAttribute($userEstablishment, 'setBedsCount', $clinicDto->bedsCount);
-        $updated5 = $this->updateAttribute($userEstablishment, 'setSiteWeb', $clinicDto->siteWeb);
+        $updated1 = $this->updateAttribute($userEstablishment, 'setChiefServiceName', $clinicDto->chiefServiceName);
+        $updated2 = $this->updateAttribute($userEstablishment, 'setName', $clinicDto->establishmentName);
+        $updated3 = $this->updateAttribute($userEstablishment, 'setBedsCount', $clinicDto->bedsCount);
+        $updated4 = $this->updateAttribute($userEstablishment, 'setSiteWeb', $clinicDto->siteWeb);
         
-        if ($updated1 || $updated2 || $updated3 || $updated4 || $updated5) {
+        if ($updated1 || $updated2 || $updated3 || $updated4) {
             $user->setEstablishment($userEstablishment);
         }
 
@@ -170,6 +169,11 @@ class UserUpdate
             foreach ($this->roleService->getRoles($clinicDto->roles) as $role) {
                 $user->addRole($role);
             }
+        }
+
+        if (!empty($clinicDto->speciality)) {
+            $specialities = $this->specialityService->getSpecialities([$clinicDto->speciality]);
+            $user->setSpeciality($specialities[0]);
         }
 
         $this->updatePassword($user, $clinicDto->password);
