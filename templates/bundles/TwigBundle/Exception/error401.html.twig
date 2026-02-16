@@ -1,0 +1,13 @@
+{% extends 'bundles/TwigBundle/Exception/base-error-page.html.twig' %}
+
+{% block title %}
+Erreur 401 | Remplaclinic
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px] text-center">Erreur 401</h1>
+{% endblock %}
+
+{% block article_content %}
+    {% include 'bundles/TwigBundle/Exception/_error-body.html.twig' with { code: 401, errorMessage: "Cette page est reservee aux utilisateurs authentifies !" } %}
+{% endblock %}

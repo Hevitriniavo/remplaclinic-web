@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .error-code {
+            color: #c8c8c8;
+            font-weight: normal;
+            font-size: 300px;
+            line-height: 275px;
+            letter-spacing: -10px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main class="w-[1170px] mx-auto flex flex-col">
+        <div class="page-nav clearfix pt-7">
+            {% block page_nav %}{% endblock %}
+        </div>
+        <article class="pb-12 mb-12">
+            {% block article_content %}{% endblock %}
+        </article>
+    </main>
+{% endblock %}
+
+{% block bodyjs %}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const errorBtn = document.querySelector('.error-btn a')
+            if (errorBtn) {
+                errorBtn.addEventListener('click', (e) => {
+                    e.preventDefault()
+
+                    window.history.back()
+                })
+            }
+        })
+    </script>
+{% endblock %}

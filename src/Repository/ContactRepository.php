@@ -21,7 +21,7 @@ class ContactRepository extends ServiceEntityRepository
 
     public function findAllDataTables(DataTableParams $params): DataTableResponse
     {
-        $sortBy = $params->getOrderColumn(['c.id', 'c.id', 'c.contact_type', 'c.submitted_at', 'c.remote_addr', 'c.name', 'c.surname', 'c.email', 'c.telephone'], 'c');
+        $sortBy = $params->getOrderColumn(['c.id', 'c.id', 'c.contact_type', 'c.submitted_at', 'c.remote_addr', 'c.name', 'c.surname', 'c.email', 'c.telephone'], 'c.id');
         
         $qb = $this->createQueryBuilder('c')
             ->orderBy($sortBy, $params->getOrderDir())

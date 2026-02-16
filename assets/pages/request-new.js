@@ -158,25 +158,25 @@ function initSelectRemplacantModal(modal, modalDetail, initRequestOptions, reque
 
     // validate selection
     const btnValidateSelection = document.querySelector('.btn-validate-selection')
-    btnValidateSelection.addEventListener('click', () => {
-            if (getSelectionCount() <= 0) {
-                showToast('Vous devez sélectionner au moins un remplaçant.', 'warning')
-            } else {
-                updateBtnSubmitStatus(btnValidateSelection, true)
+    btnValidateSelection.onclick = () => {
+        if (getSelectionCount() <= 0) {
+            showToast('Vous devez sélectionner au moins un remplaçant.', 'warning')
+        } else {
+            updateBtnSubmitStatus(btnValidateSelection, true)
 
-                axios.post(getCleanUrl(btnValidateSelection.dataset.initResponseUrl, initRequestOptions.params.request_id), {
-                    all: remplacantsSelection.all,
-                    users: Array.from(remplacantsSelection.all ? remplacantsSelection.exclus : remplacantsSelection.ids),
+            axios.post(getCleanUrl(btnValidateSelection.dataset.initResponseUrl, initRequestOptions.params.request_id), {
+                all: remplacantsSelection.all,
+                users: Array.from(remplacantsSelection.all ? remplacantsSelection.exclus : remplacantsSelection.ids),
+            })
+                .then(() => {})
+                .catch(() => {})
+                .finally(() => {
+                    updateBtnSubmitStatus(btnValidateSelection, false)
+                    modal.close()
+                    window.location.href = initRequestOptions._redirect
                 })
-                    .then(() => {})
-                    .catch(() => {})
-                    .finally(() => {
-                        updateBtnSubmitStatus(btnValidateSelection, false)
-                        modal.close()
-                        window.location.href = initRequestOptions._redirect
-                    })
-            }
-        })
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

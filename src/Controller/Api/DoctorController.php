@@ -29,6 +29,8 @@ class DoctorController extends AbstractController
     #[Route('/api/doctors', name: 'api_doctor_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $params = DataTableParams::fromRequest($request->query->all());
         return $this->json($this->userRepository->findAllDataTables(User::ROLE_DOCTOR_ID, $params), 200, [], ['groups' => 'datatable']);
     }
@@ -56,11 +58,19 @@ class DoctorController extends AbstractController
     #[Route('/api/doctors/{id}', name: 'api_doctor_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getDetail(int $id): Response
     {
-        $evidence = $this->userRepository->find($id);
+        $doctor = $this->userRepository->find($id);
+
+        if (is_null($doctor)) {
+            return $this->json(null, Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$this->canUpdateUser($this->security, $doctor->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
 
         return $this->json(
-            $evidence,
-            is_null($evidence) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            $doctor,
+            is_null($doctor) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
             [],
             ['groups' => ['datatable', 'full']]
         );

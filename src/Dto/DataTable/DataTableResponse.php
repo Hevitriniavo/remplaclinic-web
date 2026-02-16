@@ -35,7 +35,7 @@ class DataTableResponse
         return self::make($data, count($data), 0);
     }
 
-    public static function make(array $data = [], int $total, int $draw = 0): DataTableResponse
+    public static function make(array $data = [], int $total = 0, int $draw = 0): DataTableResponse
     {
         $result = new DataTableResponse();
         $result->recordsFiltered = $total;
