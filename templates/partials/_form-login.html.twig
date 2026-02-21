@@ -6,9 +6,11 @@
 	<div class="pl-[45px]">
 		<ul>
 			<li class="py-2">Bonjour {{ app.user.user.fullName }}</li>
+			{% if not is_granted('ROLE_ADMIN') %}
 			<li class="pt-1">
 				<a class="blue-span" href="{{ url('app_user_espace_perso') }}">Mon espace personnel</a>
 			</li>
+			{% endif %}
 			<li class="pt-1">
 				<a class="blue-span" href="{{ url('app_user_logout') }}">Se déconnecter</a>
 			</li>
