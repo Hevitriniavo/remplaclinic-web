@@ -6,9 +6,9 @@
 <body background="#5db8de" style="padding-bottom:50px;padding-top:50px;background-color:#5db8de;margin:0;">
 	<div align="center">
 		<table style="max-width:700px;margin-top:10px;margin-bottom:10px;background-color:#FFFFFF;" background="#FFFFFF" width="700" border="0" cellspacing="0" style="order-collapse:collapse;">
-			<tr height="120" style="background-image:url({{ asset('imgs/mails/bg_email.jpg') }}">
-				<td style="text-align:right;"><a href="www.remplaclinic.fr"><img src="{{ asset('imgs/mails/logo.jpg') }}"></a></td>
-				<td style="text-align:left;"><a href="www.instalclinic.fr"><img src="{{ asset('imgs/mails/logo2.jpg') }}"></a></td>
+			<tr height="120" style="background-image:url({{ absolute_url(asset('imgs/mails/bg_email.jpg')) }}">
+				<td style="text-align:right;"><a href="www.remplaclinic.fr"><img src="{{ absolute_url(asset('imgs/mails/logo.jpg')) }}"></a></td>
+				<td style="text-align:left;"><a href="www.instalclinic.fr"><img src="{{ absolute_url(asset('imgs/mails/logo2.jpg')) }}"></a></td>
 			</tr>
 			{% block body %}{% endblock %}
 			<tr>
