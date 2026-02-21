@@ -71,7 +71,7 @@ class DashboardService
             'director' => User::ROLE_DIRECTOR_ID,
         ];
 
-        $sql = 'select r.user_role_id AS role, count(u.id) AS total FROM user_user_role r JOIN user u ON r.user_id = u.id WHERE r.user_role_id IN ('.  implode(',', array_values($roles)) .') GROUP BY r.user_role_id';
+        $sql = 'select r.user_role_id AS role, count(u.id) AS total FROM user_user_role r JOIN user u ON r.user_id = u.id WHERE r.user_role_id IN ('.  implode(',', array_values($roles)) .') and u.status = 1 GROUP BY r.user_role_id';
 
         $query = $this->connection->prepare($sql);
 
