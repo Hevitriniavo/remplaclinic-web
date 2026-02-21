@@ -31,6 +31,7 @@ const app = createApp({
       error: false,
       details: {},
     })
+    const requestOperationIsCreated = ref(false)
 
     const raisons = [
       { id: 1, label: "Recrutement afin de compléter l'équipe actuelle" },
@@ -96,12 +97,16 @@ const app = createApp({
 
       if (!url) {
         // create new request
+        requestOperationIsCreated.value = true
+
         return Promise.resolve()
       }
 
       const response = await axios.get(url)
 
       if (response.data) {
+        requestOperationIsCreated.value = false
+
         requestData.value = {
           id: response.data.id,
           title: response.data.title,
@@ -159,6 +164,7 @@ const app = createApp({
           .post(action, payload)
           .then((res) => {
             requesting.value = false
+            requestData.value.id = res.data.id
             openSelectUserModal(res.data.id, requestData.value.speciality, requestData.value.region)
           })
           .catch(() => {
@@ -174,12 +180,16 @@ const app = createApp({
 
       if (!validateFormData()) {
         requesting.value = true
-        const action = $('#root').data('updateUrl')
+        const action = getCleanUrl($('#root').data('updateUrl'), requestData.value.id)
         axios
           .post(action, payload)
           .then(() => {
             requesting.value = false
-            jQuery("#btn-request-list")[0].click()
+            if (requestOperationIsCreated.value) {
+              openSelectUserModal(requestData.value.id, requestData.value.speciality, requestData.value.region)
+            } else {
+              jQuery("#btn-request-list")[0].click()
+            }
           })
           .catch(() => {
             requesting.value = false
