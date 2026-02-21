@@ -6,13 +6,13 @@ use App\Message\Request\RequestMessageMailSenderInterface;
 use App\Service\Taches\AppConfigurationService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MailService implements RequestMessageMailSenderInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly HttpClientInterface $httpClient,
+        private readonly Mailjet3Service $mailjet3,
+        private readonly Mailjet31Service $mailjet31,
         private readonly AppConfigurationService $appConfig,
     )
     {}
@@ -26,6 +26,7 @@ class MailService implements RequestMessageMailSenderInterface
         $this->em->flush();
 
         // send mail to mailjet
+        $this->sendMail($mail);
 
         return $mail;
     }
@@ -46,5 +47,29 @@ class MailService implements RequestMessageMailSenderInterface
                 'email' => $this->appConfig->getValue('APP_EMAIL_FROM_EMAIL')
             ]);
         }
+    }
+
+    private function sendMail(MailLog $mailLog): void
+    {
+        $this->appConfig->loadAll([
+            'MAILJET_API_KEY',
+            'MAILJET_API_VERSION',
+            'MAILJET_SECRET_KEY',
+            'MAILJET_BASE_URL',
+            'APP_MAILJET_ACTIVE',
+            'MAILJET_REPLY_TO'
+        ]);
+
+        $isActive = $this->appConfig->getValue('APP_MAILJET_ACTIVE');
+
+        if ($isActive === '1') {
+            $apiVersion = $this->appConfig->getValue('MAILJET_API_VERSION');
+
+            if ($apiVersion === '31') {
+                $this->mailjet31->send($mailLog);
+            } else {
+                $this->mailjet3->send($mailLog);
+            }
+        }   
     }
 }

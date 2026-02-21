@@ -62,6 +62,13 @@ class MailLog
         return $this->id;
     }
 
+    /**
+     * Available key:
+     *  - name
+     *  - email
+     * 
+     * @return array
+     */
     public function getSender(): array
     {
         return $this->sender;

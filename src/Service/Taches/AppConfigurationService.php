@@ -14,6 +14,12 @@ class AppConfigurationService
         'USER_INSCRIPTION_TARGET_EMAIL',
         'REQUEST_NOTIFICATION_TARGET_EMAIL',
         'CONTACT_NOTIFICATION_TARGET_EMAIL',
+        'MAILJET_API_KEY',
+        'MAILJET_API_VERSION',
+        'MAILJET_SECRET_KEY',
+        'MAILJET_BASE_URL',
+        'APP_MAILJET_ACTIVE',
+        'MAILJET_REPLY_TO'
     ];
 
     /**
