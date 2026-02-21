@@ -72,7 +72,8 @@ class UserRepository extends ServiceEntityRepository
                         'u.name LIKE :value',
                         'u.surname LIKE :value',
                         'u.email LIKE :value',
-                        's.name LIKE :value'
+                        's.name LIKE :value',
+                        'e.name LIKE :value',
                     )
                 )
                 ->setParameter('value', '%' . $params->value . '%');
