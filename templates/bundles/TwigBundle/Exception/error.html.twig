@@ -1,0 +1,13 @@
+{% extends 'bundles/TwigBundle/Exception/base-error-page.html.twig' %}
+
+{% block title %}
+Erreur {{ status_code }} | Remplaclinic
+{% endblock %}
+
+{% block page_nav %}
+<h1 class="blue-span text-3xl py-[10px] text-center">Erreur {{ status_code }} - {{ status_text }}</h1>
+{% endblock %}
+
+{% block article_content %}
+    {% include 'bundles/TwigBundle/Exception/_error-body.html.twig' with { code: status_code, errorMessage: is defined (exception) ? exception.message : "Une erreur est survenue lors d'affichage de la page!" } %}
+{% endblock %}
