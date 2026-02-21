@@ -105,10 +105,14 @@ Mes demandes de remplacement | Remplaclinic
             {% endif %}
         </div>
         <div class="mes-demandes-footer mt-5">
-            <div class="footer-message bg-[#68b8dc] border-solid border border-[#d2d2d2] p-4">
-                <p class="my-2">Pour effectuer une nouvelle demande de remplacement, contactez-nous par téléphone au <span class="text-red-500 text-xl">04 72 14 07 40</span> ou par mail à <span class="text-red-500 text-xl">contact@remplaclinic.com</span>.</p>
-                <p class="my-4">Un tarif personnalisé adapté à la taille de votre cabinet médical ou de votre établissement de santé vous sera proposé.</p>
-                <p class="my-4">Si vous avez un abonnement Remplaclinic en cours, contactez directement votre interlocuteur privilégié.</p>
+            <div class="footer-message bg-[#68b8dc] border-solid border border-[#d2d2d2] px-4 py-10">
+                <a class="relative text-xl form-submit text-white py-2 px-10" href="{{ path('app_user_espace_perso') }}">
+                    <span class="arrow-back"></span>
+                    Mon Compte
+                </a>
+                <a class="text-xl form-submit text-white py-2 px-10 ml-5" href="{{ path('app_user_requets_replacement_new') }}">
+                    Effectuer une nouvelle demande
+                </a>
             </div>
         </div>
     </div>
