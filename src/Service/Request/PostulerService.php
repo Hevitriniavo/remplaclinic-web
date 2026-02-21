@@ -77,14 +77,14 @@ class PostulerService
                     'dashboard_url' => $dashboardUrl,
                     'message1' => 'Votre réponse a été traitée avec succès !',
                     'message2' => "Merci d'avoir postulé à la demande. <br/> L'équipe d'Instalclinic reviendra vers vous dans les plus brefs délais.",
-                    'message3' => "Envoyez votre CV, en indiquant la référence de l'offre (<b>" . $requestResponse->getRequest()->getId() . "</b>), par mail à l'adresse suivante : <b>contact2@remplaclinic.fr</b>.",
+                    'message3' => "Envoyez votre CV, en indiquant la référence de l'offre (<b>" . $requestResponse->getRequest()->getId() . "</b>), par mail à l'adresse suivante : <b>contact2@remplaclinic.com</b>.",
                 ];
             } else {
                 $messages = [
                     'dashboard_url' => $dashboardUrl,
                     'message1' => 'Votre réponse a été traitée avec succès !',
                     'message2' => "Un message vous a été envoyé à l'adresse suivante : <b>" . $requestResponse->getUser()->getEmail() . "</b>.",
-                    'message3' => "Envoyez votre CV, en indiquant la référence de l'offre (<b>" . $requestResponse->getRequest()->getId() . "</b>), par mail à l'adresse suivante : <b>conseil@remplaclinic.fr</b>.",
+                    'message3' => "Envoyez votre CV, en indiquant la référence de l'offre (<b>" . $requestResponse->getRequest()->getId() . "</b>), par mail à l'adresse suivante : <b>conseil@remplaclinic.com</b>.",
                 ];
             }
         }
