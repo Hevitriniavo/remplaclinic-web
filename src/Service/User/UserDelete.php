@@ -74,6 +74,12 @@ class UserDelete
 
     private function deleteUser(User $user)
     {
+
+        // delete reset password token
+        $this->db->delete('user_reset_password_token', [
+            'user_id' => $user->getId(),
+        ]);
+
         // delete request response
         $this->db->delete('request_response', [
             'user_id' => $user->getId(),
