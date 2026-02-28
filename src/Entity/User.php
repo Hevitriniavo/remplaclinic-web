@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -822,5 +823,41 @@ class User
         }
 
         return $this;
+    }
+
+    public function isSubscriptionActive(): bool
+    {
+        $abonnement = $this->getSubscription();
+
+        if (!is_null($abonnement) && !is_null($abonnement->isStatus())) {
+            return $abonnement->isStatus();
+        }
+
+        return false;
+    }
+
+    public function isSubscriptionEnded($endedIfNoEndDate = true): bool
+    {
+        $abonnement = $this->getSubscription();
+        
+        if (!is_null($abonnement) && !empty($abonnement->getEndAt())) {
+
+            $now = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d 23:59'));
+            
+            return $abonnement->getEndAt() < $now;
+        }
+
+        return $endedIfNoEndDate;
+    }
+
+    public function getInstallationCount(): int
+    {
+        $abonnement = $this->getSubscription();
+        
+        if (!is_null($abonnement) && !is_null($abonnement->getInstallationCount())) {
+            return $abonnement->getInstallationCount();
+        }
+
+        return 0;
     }
 }

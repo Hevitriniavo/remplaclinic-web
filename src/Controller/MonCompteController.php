@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MonCompteController extends AbstractController
@@ -49,19 +49,34 @@ class MonCompteController extends AbstractController
         ];
 
         if ($this->isGranted('ROLE_DOCTOR') || $this->isGranted('ROLE_CLINIC')) {
-            array_push(
-                $accountLinks,
-                [
+
+            if ($this->isGranted('ROLE_USER_ABONNEMENT_ACTIF')) {
+                array_push($accountLinks, [
                     'icon' => 'nouvelle-demande-remplacement.png',
                     'url' => $this->generateUrl('app_user_requets_replacement_new'),
                     'text' => 'Effectuer une nouvelle demande de remplacement',
-                ],
-                [
-                    'icon' => 'nouvelle-demande-remplacement.png',
-                    'url' => $this->generateUrl('app_user_requets_installation_new'),
-                    'text' => "Effectuer une nouvelle proposition d'installation",
-                ]
-            );
+                ]);
+
+                if ($this->isGranted('ROLE_USER_INSTALLATION')) {
+                    array_push($accountLinks, [
+                        'icon' => 'nouvelle-demande-remplacement.png',
+                        'url' => $this->generateUrl('app_user_requets_installation_new'),
+                        'text' => "Effectuer une nouvelle proposition d'installation",
+                    ]);
+                } else {
+                    array_push($accountLinks, [
+                        'icon' => 'icon_je_cherche.png',
+                        'url' => $this->generateUrl('app_replacement_search_show'),
+                        'text' => "J'ai une nouvelle proposition d'installation",
+                    ]);
+                }
+            } else {
+                array_push($accountLinks, [
+                    'icon' => 'icon_je_cherche.png',
+                    'url' => $this->generateUrl('app_replacement_search_show'),
+                    'text' => 'Je cherche un remplaçant',
+                ]);
+            }
         }
 
         return $this->render('espace-perso/index.html.twig', [

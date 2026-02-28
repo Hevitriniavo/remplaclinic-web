@@ -1,7 +1,7 @@
 {% extends 'base-page-node.html.twig' %}
 
 {% block title %}
-Rechercher des remplacants | Remplaclinic
+Rechercher des remplaçants | Remplaclinic
 {% endblock %}
 
 {% block importmap %}
@@ -9,7 +9,7 @@ Rechercher des remplacants | Remplaclinic
 {% endblock %}
 
 {% block page_nav %}
-<h1 class="blue-span text-3xl py-[10px]">Rechercher des remplacants</h1>
+<h1 class="blue-span text-3xl py-[10px]">Rechercher des remplaçants</h1>
 {% endblock %}
 
 {% block article_content %}
@@ -23,7 +23,7 @@ Rechercher des remplacants | Remplaclinic
 		automatiquement des demandes de remplacements et/ou d'installation.
 	</p>
 	<p class=" text-[24px] p-[30px] mx-auto text-center">
-		<a href="{{ path('app_register') }}" class="blue-span font-medium">
+		<a href="{{ path(is_granted('ROLE_USER') ? 'app_user_espace_perso' : 'app_register') }}" class="blue-span font-medium">
 			Inscrivez-vous pour contacter des remplaçants
 		</a>
 	</p>

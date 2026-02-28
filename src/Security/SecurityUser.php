@@ -2,6 +2,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -35,6 +36,25 @@ final class SecurityUser implements UserInterface, PasswordAuthenticatedUserInte
         foreach($roles as $role) {
             if (array_key_exists($role->getId(), $allRoles)) {
                 $result[] = 'ROLE_' . $allRoles[$role->getId()];
+            }
+        }
+
+        if (in_array('ROLE_CLINIC', $result) || in_array('ROLE_DOCTOR', $result)) {
+            // check status abonnement
+            if ($this->user->isSubscriptionActive()) {
+                $result[] = 'ROLE_USER_ABONNEMENT';
+            }
+
+            // check date abonnement
+            if ($this->user->isSubscriptionEnded(true)) {
+                $result[] = 'ROLE_USER_ABONNEMENT_EXPIRED';
+            } else {
+                $result[] = 'ROLE_USER_ABONNEMENT_ACTIF';
+            }
+
+            // check installation available
+            if ($this->user->getInstallationCount() > 0) {
+                $result[] = 'ROLE_USER_INSTALLATION';
             }
         }
 
