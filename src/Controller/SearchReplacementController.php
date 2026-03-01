@@ -37,6 +37,6 @@ class SearchReplacementController extends AbstractController
     #[Route('mon-compte/je-cherche-un-remplacant', name: 'app_replacement_search_show', methods: ['GET'])]
     public function monCompteSearchRemplacant(): Response
     {
-        return $this->render('replacement/search.html.twig');
+        return $this->render('search_replacement/espace-perso-search.html.twig');
     }
 }

@@ -1,0 +1,35 @@
+{% extends 'base-page-register.html.twig' %}
+
+{% block title %}
+	Recherche des remplaçants | Remplaclinic
+{% endblock %}
+
+{% block page_nav %}
+	<h1 class="blue-span text-3xl py-[10px]">Espace personnel</h1>
+{% endblock %}
+
+{% block article_content %}
+	<div class="pt-7">
+        <div class="flex flex-col">
+            <h2 class="blue-span text-3xl py-[10px]">Recherche des remplaçants</h2>
+
+            <form class="flex flex-col gap-5" method="get" action="{{ path('app_search_replacement') }}">
+                <div class="pt-4">
+                    Mon établissement de santé ou mon cabinet situé en
+                    <twig:SelectRegion class="w-28 p-2 border rounded-md text-base outline-none" name="region">
+                        <option value="All" selected="selected">Région</option>
+                    </twig:SelectRegion>
+                    et je recherche un remplaçant spécialisé en
+                    <twig:SelectSpeciality class="w-28 p-2 border rounded-md text-base outline-none" name="specialite">
+                        <option value="All" selected="selected">Spécialité</option>
+                    </twig:SelectSpeciality>
+                </div>
+                <div>
+                    <button type="submit" class="text-xl form-submit text-white py-2 px-10">
+                        Rechercher
+                    </button>
+                </div>
+            </form>
+        </div>
+	</div>
+{% endblock %}
