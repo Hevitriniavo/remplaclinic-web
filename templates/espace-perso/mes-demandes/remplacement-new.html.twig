@@ -27,11 +27,21 @@ Nouvelle demande de remplacement | Remplaclinic
                             Spécialité
                             <span class="required">*</span>
                         </label>
+                        {% if is_granted('ROLE_DOCTOR') %}
+                        <twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true"
+                            class="w-[240px] p-1 outline-none form-text form-request-element"
+                            data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}"
+                            disabled
+                        >
+                            <option value="">- Choisir un valeur -</option>
+                        </twig:SelectSpeciality>
+                        {% else %}
                         <twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true"
                             class="w-[240px] p-1 outline-none form-text form-request-element"
                             data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}">
                             <option value="">- Choisir un valeur -</option>
                         </twig:SelectSpeciality>
+                        {% endif %}
                     </div>
 
                     <div class="flex-row gap-2 hidden" id="request-sous-specialite-wrapper">

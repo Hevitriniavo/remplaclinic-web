@@ -284,4 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
             todayHighlight: true,
         })
     })
+
+    // fill speciality and region
+    if (specialiteSelect && specialiteSelect.dataset.userDefaultValue) {
+        specialiteSelect.value = specialiteSelect.dataset.userDefaultValue
+        specialiteSelect.dispatchEvent(new CustomEvent('change'))
+    }
 })

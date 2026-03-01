@@ -1,4 +1,4 @@
-<select {{ attributes }}>
+<select {{ attributes }} {% if is_granted('ROLE_USER') and app.user.user.speciality is not empty %} data-user-default-value="{{ app.user.user.speciality.id }}" {% endif %}>
     {% block content %} {% endblock %}
     {% for speciality in this.specialities %}
         <option value="{{ speciality.id }}" {{ speciality.id is same as(this.activeSpeciality) ? 'selected' : '' }}>{{ speciality.name }}</option>
