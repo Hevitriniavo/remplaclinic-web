@@ -142,6 +142,10 @@ const getCleanUrl = (url, id) => {
 }
 
 const formatDate = (data, withHour = true) => {
+  if (!data) {
+    return ''
+  }
+
   const date = new Date(data)
   const options = {
     day: "2-digit",

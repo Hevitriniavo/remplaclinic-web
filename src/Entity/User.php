@@ -842,9 +842,10 @@ class User
         
         if (!is_null($abonnement) && !empty($abonnement->getEndAt())) {
 
-            $now = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d 23:59'));
+            $abonnementDate = DateTime::createFromFormat('Y-m-d H:i', $abonnement->getEndAt()->format('Y-m-d 23:59'));
+            $now = new DateTime();
             
-            return $abonnement->getEndAt() < $now;
+            return $abonnementDate < $now;
         }
 
         return $endedIfNoEndDate;

@@ -40,20 +40,25 @@ final class SecurityUser implements UserInterface, PasswordAuthenticatedUserInte
         }
 
         if (in_array('ROLE_CLINIC', $result) || in_array('ROLE_DOCTOR', $result)) {
+            $installationAvailable = true;
+
             // check status abonnement
             if ($this->user->isSubscriptionActive()) {
                 $result[] = 'ROLE_USER_ABONNEMENT';
+            } else {
+                $installationAvailable = false;
             }
 
             // check date abonnement
             if ($this->user->isSubscriptionEnded(true)) {
                 $result[] = 'ROLE_USER_ABONNEMENT_EXPIRED';
+                $installationAvailable = false;
             } else {
                 $result[] = 'ROLE_USER_ABONNEMENT_ACTIF';
             }
 
             // check installation available
-            if ($this->user->getInstallationCount() > 0) {
+            if ($installationAvailable && $this->user->getInstallationCount() > 0) {
                 $result[] = 'ROLE_USER_INSTALLATION';
             }
         }

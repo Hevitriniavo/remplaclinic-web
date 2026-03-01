@@ -144,8 +144,8 @@ class UserUpdate
             $user->setEstablishment($userEstablishment);
         }
 
-        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $clinicDto->subscriptionEndAt, true));
-        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $clinicDto->status);
+        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $clinicDto->subscriptionEndAt, true), true);
+        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $clinicDto->subscriptionStatus);
         $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $clinicDto->subscriptionEndNotification);
         $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $clinicDto->installationCount);
         
@@ -222,8 +222,8 @@ class UserUpdate
             $user->setEstablishment($userEstablishment);
         }
 
-        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $doctorDto->subscriptionEndAt, true));
-        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $doctorDto->status);
+        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $doctorDto->subscriptionEndAt, true), true);
+        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $doctorDto->subscriptionStatus);
         $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $doctorDto->subscriptionEndNotification);
         $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $doctorDto->installationCount);
         
@@ -328,9 +328,9 @@ class UserUpdate
         return $user;
     }
 
-    private function updateAttribute($entity, $setter, $value)
+    private function updateAttribute($entity, $setter, $value, $allowNull = false)
     {
-        if (!is_null($value)) {
+        if ($allowNull || !is_null($value)) {
             $entity->$setter($value);
 
             return true;

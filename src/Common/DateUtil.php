@@ -10,6 +10,12 @@ class DateUtil
         if (is_null($input)) {
             return $nullable ? null : new DateTime();
         }
-        return DateTime::createFromFormat($format, $input);
+        $result = DateTime::createFromFormat($format, $input);
+
+        if ($result === false) {
+            return null;
+        }
+
+        return $result;
     }
 }
