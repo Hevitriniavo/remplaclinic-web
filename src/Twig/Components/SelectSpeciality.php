@@ -16,7 +16,7 @@ class SelectSpeciality
 
     public function getSpecialities(): array
     {
-        return $this->specialityRepository->findAll();
+        return $this->specialityRepository->findAllSpecialite();
     }
 
     public function getActiveSpeciality(): ?int

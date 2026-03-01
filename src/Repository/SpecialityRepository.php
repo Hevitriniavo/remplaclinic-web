@@ -100,6 +100,20 @@ class SpecialityRepository extends ServiceEntityRepository
             ->join('s.specialityParent', 'p')
             ->where('p.id = :speciality_id')
             ->setParameter('speciality_id', $id)
+            ->orderBy('s.name', 'asc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Speciality[]
+     */
+    public function findAllSpecialite(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.specialityParent', 'p')
+            ->where('p.id IS NULL')
+            ->orderBy('s.name', 'asc')
             ->getQuery()
             ->getResult();
     }
