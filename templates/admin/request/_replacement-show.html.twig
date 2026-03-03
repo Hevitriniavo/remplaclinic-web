@@ -78,21 +78,27 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="request-speciality">Spécialité *</label>
-                                    <twig:SelectSpeciality class="form-control select2-input" id="request-speciality"
-                                        v-model="requestData.speciality">
+                                    <twig:SelectSpeciality
+                                        class="form-control select2-input"
+                                        id="request-speciality"
+                                        v-model="requestData.speciality"
+                                        data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}"
+                                    >
                                         <option></option>
                                     </twig:SelectSpeciality>
                                     <div class="text-danger" v-if="getErrorClass('speciality') === 'is-invalid'">Choisir
                                         une spécialité</div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group d-none" id="request-sub-specialities-wrapper">
                                     <label for="request-sub-specialities">Sous spécialité</label>
-                                    <twig:SelectSpeciality
-                                        class="form-control select2-input" multiple="true"
+                                    <select
+                                        class="form-control"
+                                        multiple
                                         id="request-sub-specialities"
-                                        v-model="requestData.subSpecialities">
+                                        v-model="requestData.subSpecialities"
+                                    >
                                         <option></option>
-                                    </twig:SelectSpeciality>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="request-region">Mobilité *</label>

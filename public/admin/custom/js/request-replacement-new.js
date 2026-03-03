@@ -394,6 +394,37 @@ const app = createApp({
       }
     }
 
+    function onSpecialityFilled () {
+      const selectSpeciality = jQuery('#request-speciality')
+      const sousSpecialiteWrapper = jQuery('#request-sub-specialities-wrapper')
+
+      const specialite = selectSpeciality.val()
+      if (specialite) {
+        const url = getCleanUrl(selectSpeciality.data('spsUrl'), selectSpeciality.val())
+        axios.get(url)
+          .then((res) => {
+            const selectSousSpecialite = jQuery('#request-sub-specialities')
+            let optionsListe = ['<option></option>']
+            res.data.forEach(el => {
+              optionsListe.push(`<option value="${el.id}">${el.name}</option>`)
+            })
+
+            selectSousSpecialite.html(optionsListe.join(''))
+
+            initSelect2('#request-sub-specialities')
+
+            selectSousSpecialite.val(requestData.value.subSpecialities).trigger('change')
+
+            sousSpecialiteWrapper.removeClass('d-none')
+          })
+          .catch(() => {
+            sousSpecialiteWrapper.addClass('d-none')
+          })
+      } else {
+        sousSpecialiteWrapper.addClass('d-none')
+      }
+    }
+
     function initFormView(data) {
       initSelect2('.select2-input')
 
@@ -401,6 +432,8 @@ const app = createApp({
 
       jQuery("#request-speciality").on('change', function() {
         requestData.value.speciality = jQuery(this).val()
+
+        onSpecialityFilled()
       })
       jQuery("#request-applicant").on('change', function() {
         requestData.value.applicant = jQuery(this).val()
@@ -465,6 +498,8 @@ const app = createApp({
 
       getRequestDetail().then((data) => {
         initFormView(data)
+
+        jQuery('#request-speciality').trigger('change')
       })
     })
 

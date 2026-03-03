@@ -29,13 +29,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="request-speciality">Spécialité *</label>
-                                    <twig:SelectSpeciality class="form-control select2-input" id="request-speciality"
-                                        v-model="requestData.speciality">
+                                    <twig:SelectSpeciality
+                                        class="form-control select2-input"
+                                        id="request-speciality"
+                                        v-model="requestData.speciality"
+                                        data-sps-url="{{ path('api_speciality_sub_specialites', { id: '0000000000' }) }}"
+                                    >
                                         <option></option>
                                     </twig:SelectSpeciality>
                                     <div class="text-danger" v-if="getErrorClass('speciality') === 'is-invalid'">Choisir
                                         une spécialité</div>
                                 </div>
+
+                                <div class="form-group d-none" id="request-sub-specialities-wrapper">
+                                    <label for="request-sub-specialities">Sous spécialité</label>
+                                    <select id="request-sub-specialities" class="form-control" multiple v-model="subSpecialities">
+                                        <option></option>
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="request-region">Mobilité *</label>
                                     <twig:SelectRegion class="form-control select2-input" id="request-region"
