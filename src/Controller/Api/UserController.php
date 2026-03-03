@@ -5,7 +5,9 @@ namespace App\Controller\Api;
 use App\Dto\IdListDto;
 use App\Repository\UserRepository;
 use App\Security\SecurityUser;
+use App\Service\User\RegionService;
 use App\Service\User\UserDelete;
+use App\Service\User\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,5 +71,20 @@ class UserController extends AbstractController
         $params = $request->query->all();
 
         return $this->json($userRepository->findAllForSelect($params));
+    }
+
+    #[Route('/api/users/for-select/{id}', name: 'api_user_detail_select', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function getDetailForSelect(int $id, UserService $userService, RegionService $regionService): Response
+    {
+        $user = $userService->getUser($id);
+
+        $result = ['speciality' => $user->getSpeciality(), 'region' => null];
+
+        $codePostale = $user->getAddress()->getPostalCode();
+        if (!empty($codePostale)) {
+            $result['region'] = $regionService->getRegionByCodePostal($codePostale);
+        }
+
+        return $this->json($result, 200, [], ['groups' => ['datatable']]);
     }
 }

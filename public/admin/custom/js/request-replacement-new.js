@@ -375,6 +375,25 @@ const app = createApp({
       })
     }
 
+    function onAutoFillSpecialityRegion () {
+      if (requestData.value.id === null) {
+        // autofill speciality and user for creation only
+        const selectApplicant = jQuery('#request-applicant')
+        const url = getCleanUrl(selectApplicant.data('detailUrl'), selectApplicant.val())
+        axios.get(url)
+          .then((res) => {
+            if (res.data.speciality) {
+              jQuery("#request-speciality").val(res.data.speciality.id).trigger('change')
+            }
+
+            if (res.data.region) {
+              jQuery("#request-region").val(res.data.region.id).trigger('change')
+            }
+          })
+          .catch(() => {})
+      }
+    }
+
     function initFormView(data) {
       initSelect2('.select2-input')
 
@@ -385,6 +404,8 @@ const app = createApp({
       })
       jQuery("#request-applicant").on('change', function() {
         requestData.value.applicant = jQuery(this).val()
+
+        onAutoFillSpecialityRegion()
       })
       jQuery("#request-region").on('change', function() {
         requestData.value.region = jQuery(this).val()
