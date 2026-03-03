@@ -211,7 +211,7 @@ const app = createApp({
         const url = tblDom.data("listUrl")
 
         personneContacteDatatable.value = initDataTable('', tblDom, url, {
-          order: [[1, 'desc']],
+          order: [[0, 'desc']],
           columnDefs: [
             {
               targets: 0,
