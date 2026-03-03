@@ -39,4 +39,20 @@ class SearchReplacementController extends AbstractController
     {
         return $this->render('search_replacement/espace-perso-search.html.twig');
     }
+
+    #[Route('mon-compte/rechercher-remplacants', name: 'app_replacement_search_result')]
+    public function monCompteSearchRemplacantResult (Request $request): Response
+    {
+        $params = $this->getSearchParams($request);
+
+        $routeParams = $params['extra_options'];
+        $routeParams['limit'] = $params['limit'];
+
+        return $this->render('search_replacement/espace-perso-search.html.twig', [
+            'result' => $this->userRepository->findAllByParams($params),
+            'params' => array_merge($params, [
+                '_url' => $this->generateUrl('app_replacement_search_result', $routeParams)
+            ]),
+        ]);
+    }
 }
