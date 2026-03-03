@@ -1,4 +1,4 @@
-<select {{ attributes }}>
+<select {{ attributes }} data-user-default-value="{{ this.userRegion }}">
     {% block content %} {% endblock %}
     {% for region in this.regions %}
         <option value="{{ region.id }}" {{ region.id is same as(this.activeRegion) ? 'selected' : '' }}>{{ region.name }}</option>

@@ -74,4 +74,27 @@ class RegionRepository extends ServiceEntityRepository
 
         return false;
     }
+
+    /**
+     * Find all region
+     * 
+     * @return Region[]
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.name', 'asc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findOneByName(string $name): ?Region
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.name = :name')
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -32,4 +32,57 @@ class RegionService
 
         return $this->getRegions([$regionId])[0];
     }
+
+    public function getRegionByCodePostal(string $codePostale): ?Region
+    {
+        $numDept = (int) substr($codePostale, 0, 2);
+        if ($numDept > 95) {
+            $numDept = (int) substr($codePostale, 0, 3);
+        }
+
+        $regionsNumDept = [];
+
+        $regionsNumDept['Alsace'] = '67,68';
+        $regionsNumDept['Aquitaine'] = '24,33,40,47,64';
+        $regionsNumDept['Auvergne'] = '03,15,43,63';
+        $regionsNumDept['Basse-Normandie'] = '14,50,61';
+        $regionsNumDept['Bourgogne'] = '21,58,71,89';
+        $regionsNumDept['Bretagne'] = '22,29,35,56';
+        $regionsNumDept['Centre'] = '18,28,36,37,41,45';
+        $regionsNumDept['Champagne-Ardenne'] = '08,10,51,52';
+        $regionsNumDept['Corse'] = '2A,2B,20';
+        $regionsNumDept['Franche-Comté'] = '25,39,70,90';
+        $regionsNumDept['Haute-Normandie'] = '27,76';
+        $regionsNumDept['Ile-de-France'] = '75,77,78,91,92,93,94,95';
+        $regionsNumDept['Languedoc-Roussillon'] = '11,30,34,48,66';
+        $regionsNumDept['Limousin'] = '19,23,87';
+        $regionsNumDept['Lorraine'] = '54,55,57,88';
+        $regionsNumDept['Midi-Pyrénées'] = '09,12,31,32,46,65,81,82';
+        $regionsNumDept['Nord-Pas-de-Calais'] = '59,62';
+        $regionsNumDept['Pays de la Loire'] = '44,49,53,72,85';
+        $regionsNumDept['Picardie'] = '02,60,80';
+        $regionsNumDept['Poitou-Charentes'] = '16,17,79,86';
+        $regionsNumDept['Provence-Alpes-Côte-d\'Azur'] = '04,05,06,13,83,84';
+        $regionsNumDept['Rhône-Alpes'] = '01,07,26,38,42,69,73,74';
+        $regionsNumDept['Guadeloupe'] = '971';
+        $regionsNumDept['Guyane'] = '973';
+        $regionsNumDept['La Réunion'] = '974';
+        $regionsNumDept['Martinique'] = '972';
+        $regionsNumDept['Mayotte'] = '976';
+        $regionsNumDept['Nouvelle-Calédonie'] = '988';
+        $regionsNumDept['Polynésie Française'] = '987';
+        $regionsNumDept['Terres Australes et Antarctiques'] = '984';
+        $regionsNumDept['Wallis et Futuna'] = '986';
+
+        $departementRegions = array();
+
+        foreach($regionsNumDept as $key => $numDepartements){	
+            $departements = explode(',', $numDepartements);
+            foreach($departements as $dept){
+                $departementRegions[$dept] = $key;
+            }
+        }
+
+        return $this->regionRepository->findOneByName($departementRegions[$numDept]);
+    }
 }

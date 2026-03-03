@@ -285,9 +285,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    // fill speciality and region
+    // fill speciality
     if (specialiteSelect && specialiteSelect.dataset.userDefaultValue) {
         specialiteSelect.value = specialiteSelect.dataset.userDefaultValue
         specialiteSelect.dispatchEvent(new CustomEvent('change'))
+    }
+
+    // fill region
+    const regionSelect = document.querySelector('#request-region')
+    if (regionSelect && regionSelect.dataset.userDefaultValue) {
+        regionSelect.value = regionSelect.dataset.userDefaultValue
+        regionSelect.dispatchEvent(new CustomEvent('change'))
     }
 })

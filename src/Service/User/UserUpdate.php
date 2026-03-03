@@ -17,6 +17,7 @@ use App\Security\SecurityUser;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserUpdate
@@ -29,6 +30,7 @@ class UserUpdate
         private readonly RegionRepository $regionRepository,
         private readonly FileUploader $fileUploader,
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly Security $security,
     ) {}
 
     public function update(User $user, ReplacementDto $replacementDto, UserFilesDto $files)
@@ -144,13 +146,15 @@ class UserUpdate
             $user->setEstablishment($userEstablishment);
         }
 
-        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $clinicDto->subscriptionEndAt, true), true);
-        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $clinicDto->subscriptionStatus);
-        $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $clinicDto->subscriptionEndNotification);
-        $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $clinicDto->installationCount);
-        
-        if ($updated1 || $updated2 || $updated3 || $updated4) {
-            $user->setSubscription($userSubscription);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $clinicDto->subscriptionEndAt, true), true);
+            $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $clinicDto->subscriptionStatus);
+            $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $clinicDto->subscriptionEndNotification);
+            $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $clinicDto->installationCount);
+            
+            if ($updated1 || $updated2 || $updated3 || $updated4) {
+                $user->setSubscription($userSubscription);
+            }
         }
 
         $this->updateAttribute($user, 'setPosition', $clinicDto->position);
@@ -222,13 +226,15 @@ class UserUpdate
             $user->setEstablishment($userEstablishment);
         }
 
-        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $doctorDto->subscriptionEndAt, true), true);
-        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $doctorDto->subscriptionStatus);
-        $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $doctorDto->subscriptionEndNotification);
-        $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $doctorDto->installationCount);
-        
-        if ($updated1 || $updated2 || $updated3 || $updated4) {
-            $user->setSubscription($userSubscription);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $doctorDto->subscriptionEndAt, true), true);
+            $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $doctorDto->subscriptionStatus);
+            $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $doctorDto->subscriptionEndNotification);
+            $updated4 = $this->updateAttribute($userSubscription, 'setInstallationCount', $doctorDto->installationCount);
+            
+            if ($updated1 || $updated2 || $updated3 || $updated4) {
+                $user->setSubscription($userSubscription);
+            }
         }
 
         $this->updateAttribute($user, 'setOrdinaryNumber', $doctorDto->ordinaryNumber);
@@ -287,12 +293,14 @@ class UserUpdate
             $user->setAddress($userAddress);
         }
 
-        $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $directorDto->subscriptionEndAt, true));
-        $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $directorDto->status);
-        $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $directorDto->subscriptionEndNotification);
-        
-        if ($updated1 || $updated2 || $updated3 || $updated4) {
-            $user->setSubscription($userSubscription);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $updated1 = $this->updateAttribute($userSubscription, 'setEndAt', DateUtil::parseDate('d/m/Y', $directorDto->subscriptionEndAt, true));
+            $updated2 = $this->updateAttribute($userSubscription, 'setStatus', $directorDto->status);
+            $updated3 = $this->updateAttribute($userSubscription, 'setEndNotification', $directorDto->subscriptionEndNotification);
+            
+            if ($updated1 || $updated2 || $updated3 || $updated4) {
+                $user->setSubscription($userSubscription);
+            }
         }
 
         $this->updateAttribute($user, 'setPosition', $directorDto->position);
