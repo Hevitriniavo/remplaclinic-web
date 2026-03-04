@@ -50,7 +50,7 @@ class MonCompteController extends AbstractController
 
         if ($this->isGranted('ROLE_DOCTOR') || $this->isGranted('ROLE_CLINIC')) {
 
-            if ($this->isGranted('ROLE_USER_ABONNEMENT_ACTIF')) {
+            if ($this->isGranted('ROLE_USER_ABONNEMENT') && $this->isGranted('ROLE_USER_ABONNEMENT_ACTIF')) {
                 array_push($accountLinks, [
                     'icon' => 'nouvelle-demande-remplacement.png',
                     'url' => $this->generateUrl('app_user_requets_replacement_new'),

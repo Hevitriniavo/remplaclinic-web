@@ -217,8 +217,8 @@ class DrupalMigrationUsers extends DrupalMigrationBase
         $subscriptionData = [
             'id' => $user['uid'],
             'end_at' => $valableJusquAu,
-            'status' => $statut ? 0 : 1,
-            'end_notification' => $emailFin ? 0 : 1,
+            'status' => $statut ? 1 : 0,
+            'end_notification' => $emailFin ? 1 : 0,
             'installation_count' => $nombreInstallationRestante,
         ];
 

@@ -289,6 +289,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (specialiteSelect && specialiteSelect.dataset.userDefaultValue) {
         specialiteSelect.value = specialiteSelect.dataset.userDefaultValue
         specialiteSelect.dispatchEvent(new CustomEvent('change'))
+
+        // disabled input does not send by form
+        const specialiteHolder = document.querySelector('#request-specialite-id')
+        if (specialiteHolder) {
+            specialiteHolder.value = specialiteSelect.dataset.userDefaultValue
+        }
     }
 
     // fill region

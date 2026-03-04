@@ -35,6 +35,7 @@ Nouvelle demande de remplacement | Remplaclinic
                         >
                             <option value="">- Choisir un valeur -</option>
                         </twig:SelectSpeciality>
+                        <input type="hidden" name="speciality" value="" id="request-specialite-id">
                         {% else %}
                         <twig:SelectSpeciality id="request-specialite" name="speciality" data-required="true"
                             class="w-[240px] p-1 outline-none form-text form-request-element"

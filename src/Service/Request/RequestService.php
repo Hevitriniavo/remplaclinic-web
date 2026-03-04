@@ -12,6 +12,7 @@ use App\Entity\RequestReason;
 use App\Entity\RequestReplacementType;
 use App\Entity\RequestResponse;
 use App\Entity\RequestType;
+use App\Entity\User;
 use App\Entity\UserSubscription;
 use App\Exceptions\ApiException;
 use App\Repository\RequestRepository;
@@ -41,7 +42,10 @@ class RequestService
     {
         // step 1: store request
         $request = new Request();
-        $request->setApplicant($this->userService->getUser($replacementDto->applicant))
+
+        $this->setApplicant($request, $replacementDto->applicant);
+
+        $request
             ->setSpeciality($this->specialityService->getSpeciality($replacementDto->speciality))
             ->setRegion($this->regionService->getRegion($replacementDto->region))
             ->setPositionCount($replacementDto->positionCount)
@@ -80,7 +84,10 @@ class RequestService
     {
         // step 1: store request
         $request = new Request();
-        $request->setApplicant($this->userService->getUser($installationDto->applicant))
+
+        $this->setApplicant($request, $installationDto->applicant);
+
+        $request
             ->setSpeciality($this->specialityService->getSpeciality($installationDto->speciality))
             ->setRegion($this->regionService->getRegion($installationDto->region))
             ->setRemuneration($installationDto->remuneration)
@@ -198,6 +205,21 @@ class RequestService
         $this->entityManager->flush();
 
         return $request;
+    }
+
+    private function setApplicant(Request $request, int $applicantId, bool $withInstallation = false) {
+        /**
+         * @var User
+         */
+        $user = $this->userService->getUser($applicantId);
+        $hasAccessReplacement = $user->isSubscriptionActive() && !$user->isSubscriptionEnded(true);
+        $hasAccessInstallation = !$withInstallation || $user->getInstallationCount() > 0;
+
+        if (!($hasAccessReplacement && $hasAccessInstallation)) {
+            throw ApiException::make("L'utilisateur doit disposer d'un abonnement actif pour pouvoir créer une nouvelle demande.", 400);
+        }
+
+        $request->setApplicant($user);
     }
 
     public function deleteRequest(int $requestId): bool

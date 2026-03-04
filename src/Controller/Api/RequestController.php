@@ -12,6 +12,7 @@ use App\Entity\EmailEvents;
 use App\Entity\Request as EntityRequest;
 use App\Entity\RequestReason;
 use App\Entity\RequestType;
+use App\Exceptions\ApiException;
 use App\Repository\RequestRepository;
 use App\Service\Request\OperationExecutor;
 use App\Service\Request\RequestService;
@@ -63,7 +64,9 @@ class RequestController extends AbstractController
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] NewReplacementDto $replacementDto
     ): Response {
-        if (!$this->canCreateOrUpdateUser($this->security, $replacementDto->applicant)) {
+        if ($this->canCreateOrUpdateUser($this->security, $replacementDto->applicant)) {
+            $this->checkUserAbonnement($this->security);
+        } else {
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }
 
@@ -88,10 +91,9 @@ class RequestController extends AbstractController
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
         )] NewInstallationDto $installationDto
     ): Response {
-        if (!$this->canCreateOrUpdateUser($this->security, $installationDto->applicant)) {
-            
-            // @TODO: check user abonnement here
-
+        if ($this->canCreateOrUpdateUser($this->security, $installationDto->applicant)) {
+            $this->checkUserAbonnement($this->security, true);
+        } else {
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }
 
