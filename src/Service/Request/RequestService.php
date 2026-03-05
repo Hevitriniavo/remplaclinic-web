@@ -273,7 +273,7 @@ class RequestService
         if (!is_null($end)) {
             $dates[] = $end;
         }
-        return ($type === RequestType::INSTALLATION ? "Proposition d'installation à partir du " : 'Demande de remplaçement du ') . join(' au ', $dates);
+        return ($type === RequestType::INSTALLATION ? "Proposition d'installation à partir du " : 'Demande de remplacement du ') . join(' au ', $dates);
     }
 
     private function populateReasons(Request $request, ?array $reasons, ?string $raisonValue)

@@ -15,7 +15,7 @@ class RequestController extends AbstractController
     #[Route('/admin/request-replacements', name: 'app_admin_request_replacement')]
     public function replacement(): Response
     {
-        $breadcrumbs = $this->getBreadcrumbs('Demande de remplaçement');
+        $breadcrumbs = $this->getBreadcrumbs('Demande de remplacement');
         return $this->render('admin/request/replacement.html.twig', [
             'breadcrumbs' => $breadcrumbs,
         ]);
@@ -42,12 +42,12 @@ class RequestController extends AbstractController
     #[Route('/admin/request-replacements/new', name: 'app_admin_request_replacement_new')]
     public function newReplacement(): Response
     {
-        $breadcrumbs = $this->getBreadcrumbs('Demande de remplaçement');
+        $breadcrumbs = $this->getBreadcrumbs('Demande de remplacement');
         $breadcrumbs[1] = [
             'url' => $this->generateUrl('app_admin_request_replacement'),
-            'text' => 'Demande de remplaçement',
+            'text' => 'Demande de remplacement',
         ];
-        $breadcrumbs[] = 'Nouvelle demande de remplaçement';
+        $breadcrumbs[] = 'Nouvelle demande de remplacement';
         return $this->render('admin/request/replacement-new.html.twig', [
             'breadcrumbs' => $breadcrumbs,
         ]);
@@ -75,12 +75,12 @@ class RequestController extends AbstractController
             throw new EntityNotFoundException('No entity found for #' . $id);
         }
 
-        $breadcrumbs = $this->getBreadcrumbs('Demande de remplaçement');
+        $breadcrumbs = $this->getBreadcrumbs('Demande de remplacement');
         $breadcrumbs[1] = [
             'url' => $this->generateUrl('app_admin_request_replacement'),
-            'text' => 'Demande de remplaçement',
+            'text' => 'Demande de remplacement',
         ];
-        $breadcrumbs[] = sprintf('Demande de remplaçement #%d', $request->getId());
+        $breadcrumbs[] = sprintf('Demande de remplacement #%d', $request->getId());
         return $this->render('admin/request/replacement-show.html.twig', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,

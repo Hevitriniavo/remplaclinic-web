@@ -49,7 +49,7 @@ $(function () {
           const requestType =
             data.toUpperCase() == "INSTALLATION"
               ? "Proposition d'installation"
-              : "Demande de remplaçement"
+              : "Demande de remplacement"
 
           return "<div>" + requestType + "</div>"
         },
