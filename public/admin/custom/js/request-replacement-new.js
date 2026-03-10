@@ -384,10 +384,14 @@ const app = createApp({
           .then((res) => {
             if (res.data.speciality) {
               jQuery("#request-speciality").val(res.data.speciality.id).trigger('change')
+            } else {
+              jQuery("#request-speciality").val(null).trigger('change')
             }
 
             if (res.data.region) {
               jQuery("#request-region").val(res.data.region.id).trigger('change')
+            } else {
+              jQuery("#request-region").val(null).trigger('change')
             }
           })
           .catch(() => {})

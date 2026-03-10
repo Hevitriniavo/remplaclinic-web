@@ -35,9 +35,9 @@ class RegionService
 
     public function getRegionByCodePostal(string $codePostale): ?Region
     {
-        $numDept = (int) substr($codePostale, 0, 2);
-        if ($numDept > 95) {
-            $numDept = (int) substr($codePostale, 0, 3);
+        $numDept = $this->getDepartmentCodeFromPostalCode($codePostale);
+        if (is_null($numDept)) {
+            return null;
         }
 
         $regionsNumDept = [];
@@ -83,6 +83,38 @@ class RegionService
             }
         }
 
+        if (!array_key_exists($numDept, $departementRegions)) {
+            return null;
+        }
+
         return $this->regionRepository->findOneByName($departementRegions[$numDept]);
+    }
+
+    public function getDepartmentCodeFromPostalCode(string $postalCode): ?string
+    {
+        $postalCode = substr($postalCode, 0, 5);
+
+        if (!preg_match('/^\d{5}$/', $postalCode)) {
+            return null;
+        }
+
+        // Departement d'outre mer (971–989)
+        if (preg_match('/^(97|98)/', $postalCode)) {
+            return substr($postalCode, 0, 3);
+        }
+
+        // Corse
+        if (str_starts_with($postalCode, '20')) {
+            $num = (int) $postalCode;
+
+            if ($num <= 20199) {
+                return '2A';
+            }
+
+            return '2B';
+        }
+
+        // Departement metropolitaine
+        return substr($postalCode, 0, 2);
     }
 }
