@@ -33,6 +33,7 @@ $(function () {
   const formRegion = $('#region-form-detail')
 
   const regionDatatable = initDataTable('#tbl-regions', tblDom, null, {
+    order: [[1, 'asc']],
     columnDefs: [
       {
         targets: 0,
