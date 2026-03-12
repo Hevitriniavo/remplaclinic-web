@@ -46,7 +46,7 @@ class RequestResponseRepository extends ServiceEntityRepository
             ->executeQuery()
             ->fetchNumeric();
         
-        $data = $queryBuilder
+        $queryBuilder
             ->leftJoin('c', 'user_user_role', 'uur', 'c.id = uur.user_id AND uur.user_role_id IN ('. implode(', ', [User::ROLE_CLINIC_ID, User::ROLE_DOCTOR_ID]) . ')')
             ->leftJoin('c', 'user_establishment', 'ue', 'c.establishment_id = ue.id')
             ->addSelect(
@@ -71,8 +71,18 @@ class RequestResponseRepository extends ServiceEntityRepository
                 'c.surname AS applicant_surname',
                 'uur.user_role_id AS applicant_role_id',
                 'ue.name AS applicant_establishment_name',
-            )
-            ->orderBy($sortBy, $params->getOrderDir())
+            );
+        
+        // order: status and date by default
+        if (is_null($params->order_column)) {
+            $queryBuilder
+                ->addOrderBy('CASE WHEN a.status = '. RequestResponse::EN_COURS .' THEN 1 ELSE 0 END', 'asc')
+                ->addOrderBy('a.updated_at', 'desc');
+        } else {
+            $queryBuilder->addOrderBy($sortBy, $params->getOrderDir());
+        }
+
+        $data = $queryBuilder
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset ? $params->offset : 0)
             ->executeQuery()
@@ -94,7 +104,6 @@ class RequestResponseRepository extends ServiceEntityRepository
             ->leftJoin('a.request', 'r')
             ->where('r.id = :requestId')
             ->setParameter('requestId', $requestId)
-            ->orderBy($sortBy, $params->getOrderDir())
             ->setMaxResults($params->limit)
             ->setFirstResult($params->offset);
         
@@ -111,6 +120,15 @@ class RequestResponseRepository extends ServiceEntityRepository
                 ->setParameter('value', '%' . $params->value . '%');
         }
         
+        // order: status and date by default
+        if (is_null($params->order_column)) {
+            $qb
+                ->addOrderBy('CASE WHEN a.status = '. RequestResponse::EN_COURS .' THEN 1 ELSE 0 END', 'asc')
+                ->addOrderBy('a.updatedAt', 'desc');
+        } else {
+            $qb->addOrderBy($sortBy, $params->getOrderDir());
+        }
+
         $paginator = new Paginator($qb->getQuery());
         
         $result = [];

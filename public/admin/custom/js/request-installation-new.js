@@ -211,7 +211,7 @@ const app = createApp({
         const url = tblDom.data("listUrl")
 
         personneContacteDatatable.value = initDataTable('', tblDom, url, {
-          order: [[0, 'desc']],
+          order: [],
           columnDefs: [
             {
               targets: 0,
@@ -290,6 +290,7 @@ const app = createApp({
 
         // add user to a request
         initSelect2('#request-user-new', {
+          placeholder: 'Utilisateur',
           ajax: {
             beforeSend: null,
             url: $('#request-user-new').data("url"),

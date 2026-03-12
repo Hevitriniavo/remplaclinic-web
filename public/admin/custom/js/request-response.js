@@ -7,7 +7,7 @@ $(function () {
   const requestFiltres = initSearchFilters();
 
   const requestResponseDatatable = initDataTable('', tblDom, null, {
-    order: [[1, 'desc']],
+    order: [],
     columnDefs: [
       {
         targets: 0,
