@@ -290,7 +290,7 @@ const app = createApp({
 
         // add user to a request
         initSelect2('#request-user-new', {
-          placeholder: 'Utilisateur',
+          placeholder: 'Rechercher un utilisateur',
           ajax: {
             beforeSend: null,
             url: $('#request-user-new').data("url"),
