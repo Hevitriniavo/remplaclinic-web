@@ -43,6 +43,7 @@ $(function () {
   const formSpeciality = $('#speciality-form-detail')
 
   const specialityDatatable = initDataTable('#tbl-specilities', tblDom, null, {
+    order: [[1, 'asc']],
     columnDefs: [
       {
         targets: 0,
