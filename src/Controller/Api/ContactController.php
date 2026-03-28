@@ -24,7 +24,7 @@ class ContactController extends AbstractController
         private readonly ContactService $contactService,
     ) {}
     
-    #[Route('/api/contacts', name: 'api_contacts_get', methods: ['GET'])]
+    #[Route('/admin/api/contacts', name: 'api_contacts_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -69,7 +69,7 @@ class ContactController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
-    #[Route('/api/contacts/{id}', name: 'api_contacts_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/contacts/{id}', name: 'api_contacts_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getDetail(int $id): Response
     {
         $contact = $this->contactRepository->find($id);
@@ -82,7 +82,7 @@ class ContactController extends AbstractController
         );
     }
 
-    #[Route('/api/contacts/{id}', name: 'api_contacts_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/contacts/{id}', name: 'api_contacts_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function remove(int $id): Response
     {
         $deleted = $this->contactService->deleteContact($id);
@@ -93,7 +93,7 @@ class ContactController extends AbstractController
         );
     }
 
-    #[Route('/api/contacts/delete-multiple', name: 'api_contacts_delete_multiple', methods: ['DELETE'])]
+    #[Route('/admin/api/contacts/delete-multiple', name: 'api_contacts_delete_multiple', methods: ['DELETE'])]
     public function removeMultiple(
         #[MapRequestPayload(
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST

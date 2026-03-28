@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
+#[Route('/admin')]
 class ReferenceController extends AbstractController
 {
     public function __construct(

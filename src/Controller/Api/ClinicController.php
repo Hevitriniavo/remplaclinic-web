@@ -26,7 +26,7 @@ class ClinicController extends AbstractController
         private readonly Security $security,
     ) {}
 
-    #[Route('/api/clinics', name: 'api_clinic_get', methods: ['GET'])]
+    #[Route('/admin/api/clinics', name: 'api_clinic_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());

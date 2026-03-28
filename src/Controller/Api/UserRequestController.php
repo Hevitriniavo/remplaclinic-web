@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Api;
 
+use App\Controller\Trait\RequestCheckAccessTrait;
 use App\Dto\DataTable\DataTableParams;
 use App\Dto\IdListDto;
 use App\Dto\Request\AddUsersToDto;
@@ -13,6 +14,7 @@ use App\Repository\UserRepository;
 use App\Service\Request\DeleteRequestResponseService;
 use App\Service\Request\RequestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -22,13 +24,16 @@ class UserRequestController extends AbstractController
 {
     const JSON_LIST_GROUPS = ['request:datatable'];
 
+    use RequestCheckAccessTrait;
+
     public function __construct(
         private readonly RequestRepository $requestRepository,
         private readonly RequestResponseRepository $requestResponseRepository,
         private readonly UserRepository $userRepository,
+        private readonly Security $security,
     ) {}
 
-    #[Route('/api/requests/responses', name: 'api_request_response_list', methods: ['GET'])]
+    #[Route('/admin/api/requests/responses', name: 'api_request_response_list', methods: ['GET'])]
     public function getRequestResponseListe(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -38,7 +43,7 @@ class UserRequestController extends AbstractController
         return $this->json($response, 200, [], ['groups' => ['datatable', 'request:datatable', 'request:with-title', 'user:simple']]);
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
+    #[Route('/admin/api/requests/{requestId}/personne-contacte', name: 'api_request_personne_contacte_list', methods: ['GET'], requirements: ['requestId' => '\d+'])]
     public function getRequestPersonneContactesAdmin(Request $request, int $requestId): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -68,7 +73,7 @@ class UserRequestController extends AbstractController
         ]);
     }
 
-    #[Route('/api/requests/personne-contacte', name: 'api_request_personne_contacte_all', methods: ['GET'])]
+    #[Route('/admin/api/requests/personne-contacte', name: 'api_request_personne_contacte_all', methods: ['GET'])]
     public function getAllUsersForRequest(Request $request): Response
     {
         $queryParams = $request->query->all();
@@ -77,7 +82,7 @@ class UserRequestController extends AbstractController
         return $this->json($this->userRepository->findAllDataTablesForRequest(User::ROLE_REPLACEMENT_ID, $params, $queryParams), 200, [], ['groups' => self::JSON_LIST_GROUPS]);
     }
 
-    #[Route('/api/requests/personne-contacte/ids', name: 'api_request_personne_contacte_ids', methods: ['GET'])]
+    #[Route('/admin/api/requests/personne-contacte/ids', name: 'api_request_personne_contacte_ids', methods: ['GET'])]
     public function getAllUsersIdForRequest(Request $request): Response
     {
         $params = $request->query->all();
@@ -103,6 +108,10 @@ class UserRequestController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canCreateOrUpdateUser($this->security, $request->getApplicant()->getId())) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }
+
         $users = $addUsersDto->users;
 
         if ($addUsersDto->all) {
@@ -122,7 +131,7 @@ class UserRequestController extends AbstractController
         return $this->json('ok');
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte/missing', name: 'api_request_personne_contacte_missing', methods: ['GET'], requirements: ['requestId' => '\d+'])]
+    #[Route('/admin/api/requests/{requestId}/personne-contacte/missing', name: 'api_request_personne_contacte_missing', methods: ['GET'], requirements: ['requestId' => '\d+'])]
     public function getUsersNotAttachedToRequest(int $requestId, Request $request): Response
     {
         $searchTerm = $request->query->get('search', '');
@@ -132,7 +141,7 @@ class UserRequestController extends AbstractController
         return $this->json($users);
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte/{id}', name: 'api_request_personne_contacte_delete', methods: ['DELETE'], requirements: ['id' => '\d+', 'requestId' => '\d+'])]
+    #[Route('/admin/api/requests/{requestId}/personne-contacte/{id}', name: 'api_request_personne_contacte_delete', methods: ['DELETE'], requirements: ['id' => '\d+', 'requestId' => '\d+'])]
     public function remove(int $id, DeleteRequestResponseService $deleteRequestResponse): Response
     {
         $deleted = $deleteRequestResponse->delete($id);
@@ -143,7 +152,7 @@ class UserRequestController extends AbstractController
         );
     }
 
-    #[Route('/api/requests/{requestId}/personne-contacte/delete-multiple', name: 'api_request_personne_contacte_delete_multiple', methods: ['DELETE'], requirements: ['requestId' => '\d+'])]
+    #[Route('/admin/api/requests/{requestId}/personne-contacte/delete-multiple', name: 'api_request_personne_contacte_delete_multiple', methods: ['DELETE'], requirements: ['requestId' => '\d+'])]
     public function removeMultiple(
         DeleteRequestResponseService $deleteRequestResponse,
         #[MapRequestPayload(

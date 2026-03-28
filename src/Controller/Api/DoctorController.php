@@ -26,7 +26,7 @@ class DoctorController extends AbstractController
         private readonly Security $security,
     ) {}
 
-    #[Route('/api/doctors', name: 'api_doctor_get', methods: ['GET'])]
+    #[Route('/admin/api/doctors', name: 'api_doctor_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

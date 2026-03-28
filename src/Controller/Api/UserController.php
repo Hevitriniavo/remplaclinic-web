@@ -47,7 +47,7 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route('/api/users/delete-multiple', name: 'api_user_delete_multiple', methods: ['DELETE'])]
+    #[Route('/admin/api/users/delete-multiple', name: 'api_user_delete_multiple', methods: ['DELETE'])]
     public function removeMultiple(
         UserDelete $userDelete,
         #[MapRequestPayload(

@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 
+#[Route('/admin')]
 class PartenaireController extends AbstractController
 {
     public function __construct(

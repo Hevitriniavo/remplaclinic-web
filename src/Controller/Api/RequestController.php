@@ -35,7 +35,7 @@ class RequestController extends AbstractController
         private readonly OperationExecutor $operationExecutor,
     ) {}
 
-    #[Route('/api/request-replacements', name: 'api_request_replacement_get', methods: ['GET'])]
+    #[Route('/admin/api/request-replacements', name: 'api_request_replacement_get', methods: ['GET'])]
     public function replacement(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -46,7 +46,7 @@ class RequestController extends AbstractController
         return $this->json($this->requestRepository->findAllDataTables(RequestType::REPLACEMENT, $params), 200, [], ['groups' => $groups]);
     }
 
-    #[Route('/api/request-installations', name: 'api_request_installation_get', methods: ['GET'])]
+    #[Route('/admin/api/request-installations', name: 'api_request_installation_get', methods: ['GET'])]
     public function installation(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
@@ -215,7 +215,7 @@ class RequestController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/api/requests/{id}', name: 'api_request_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/requests/{id}', name: 'api_request_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function remove(int $id, RequestService $requestService): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -228,7 +228,7 @@ class RequestController extends AbstractController
         );
     }
 
-    #[Route('/api/requests/delete-multiple', name: 'api_request_delete_multiple', methods: ['DELETE'])]
+    #[Route('/admin/api/requests/delete-multiple', name: 'api_request_delete_multiple', methods: ['DELETE'])]
     public function removeMultiple(
         RequestService $requestService,
         #[MapRequestPayload(
@@ -247,7 +247,7 @@ class RequestController extends AbstractController
     }
 
     #[Route(
-        '/api/requests-{requestType}/{eventName}/multiple',
+        '/admin/api/requests-{requestType}/{eventName}/multiple',
         name: 'api_request_taf_execute',
         requirements: [
             'requestType' => 'replacement|installation',

@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class SidebarStateController extends AbstractController
 {
-    #[Route('/api/sidebar-state/save', name: 'app_sidebar_state_save', methods: ['PUT'])]
+    #[Route('/admin/api/sidebar-state/save', name: 'app_sidebar_state_save', methods: ['PUT'])]
     public function save(Request $request): Response
     {
         $session = $request->getSession();

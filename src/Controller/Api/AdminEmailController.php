@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
+
+#[Route('/admin')]
 class AdminEmailController extends AbstractController
 {
     public function __construct(

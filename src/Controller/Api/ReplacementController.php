@@ -30,7 +30,7 @@ class ReplacementController extends AbstractController
         private readonly Security $security,
     ) {}
 
-    #[Route('/api/replacements', name: 'api_replacement_get', methods: ['GET'])]
+    #[Route('/admin/api/replacements', name: 'api_replacement_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
