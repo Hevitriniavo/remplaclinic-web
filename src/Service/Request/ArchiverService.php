@@ -22,7 +22,16 @@ class ArchiverService
     public function execute(): void
     {
         $this->executeArchiveRequests(RequestType::REPLACEMENT);
-        $this->executeArchiveRequests(RequestType::INSTALLATION);
+        /**
+         * Retour client: 04/04/2026
+         * Les propositions d'installation ne devraient pas être archivées automatiquement,
+         * ces dernières seront archivées manuellement uniquement.
+         * 
+         * En effet, les dates de fin sur le back office est précisée une fois que les admins auront les détails de l'annonce.
+         * Donc pas de date de fin éventuelle.
+         * 
+         */
+        // $this->executeArchiveRequests(RequestType::INSTALLATION);
     }
 
     private function executeArchiveRequests(RequestType $requestType)
