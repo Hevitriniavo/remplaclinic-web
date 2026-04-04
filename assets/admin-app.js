@@ -363,9 +363,11 @@ const initDataTable = (selector, jQueryDom = null, url = null, options = {}) => 
 
     // scroll datatable to the top when change page
     table.on('page.dt', function () {
-        $('html, body').animate({
-            scrollTop: $(jQueryDom).offset().top
-        }, 300)
+        table.one('draw.dt', function () {
+            jQuery('html, body').animate({
+              scrollTop: jQueryDom.offset().top
+            }, 300)
+        })
     })
 
     return table
