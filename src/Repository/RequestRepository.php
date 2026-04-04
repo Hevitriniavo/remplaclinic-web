@@ -53,7 +53,8 @@ class RequestRepository extends ServiceEntityRepository
                         'a.name LIKE :value',
                         'a.surname LIKE :value',
                         'a.email LIKE :value',
-                        's.name LIKE :value'
+                        's.name LIKE :value',
+                        'es.name LIKE :value'
                     )
                 )
                 ->setParameter('value', '%' . $params->value . '%');
