@@ -121,6 +121,7 @@ const app = createApp({
           replacementType: response.data.replacementType,
           accomodationIncluded: response.data.accomodationIncluded,
           transportCostRefunded: response.data.transportCostRefunded,
+          comment: response.data.comment,
           subSpecialities: [],
         }
 
@@ -174,6 +175,8 @@ const app = createApp({
 
     function onEditRequest() {
       const payload = toFormData()
+
+      console.log('REQUEST DATA: ', JSON.stringify({ data: requestData.value, payload }))
 
       if (!validateFormData()) {
         requesting.value = true

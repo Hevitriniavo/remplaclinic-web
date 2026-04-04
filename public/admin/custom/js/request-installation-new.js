@@ -119,6 +119,7 @@ const app = createApp({
           endAt: response.data.endAt ? formatDate(response.data.endAt, false) : null,
           raison: [],
           raisonValue: '',
+          comment: response.data.comment
         }
 
         jQuery("#request-comment").summernote("code", response.data.comment)
