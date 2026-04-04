@@ -336,7 +336,7 @@ const initDataTable = (selector, jQueryDom = null, url = null, options = {}) => 
         responsive: true,
         language: {
             lengthMenu: "Afficher _MENU_ ligne par page",
-            zeroRecords: "Aucun entré trouvé",
+            zeroRecords: "Aucune entrée trouvée",
             infoFiltered: "(Nombre de lignes: _MAX_)",
             infoEmpty: "",
             info: "Ligne _START_ à _END_ sur _TOTAL_ lignes.",
