@@ -31,7 +31,7 @@ class RenvoyerRequestEmail
     {
         if ($this->request->getRequestType() === RequestType::REPLACEMENT) {
             return sprintf(
-                'Remplaclinic - Postuler pour la demande de remplacement du  %s au %s à %s',
+                'Remplaclinic - Postuler pour la demande de remplacement du %s au %s à %s',
                 $this->request->getStartedAtFr(false),
                 $this->request->getEndAtFr(false),
                 $this->getApplicantLocality(),

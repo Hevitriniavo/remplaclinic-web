@@ -31,7 +31,7 @@ class ValiderRequestEmail
     {
         if ($this->request->getRequestType() === RequestType::REPLACEMENT) {
             return sprintf(
-                'Remplaclinic : une demande de remplacement  du %s au %s à %s vous attend !',
+                'Remplaclinic : une demande de remplacement du %s au %s à %s vous attend !',
                 $this->request->getStartedAtFr(false),
                 $this->request->getEndAtFr(false),
                 $this->getApplicantLocality(),
