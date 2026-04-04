@@ -359,7 +359,16 @@ const initDataTable = (selector, jQueryDom = null, url = null, options = {}) => 
 
     Object.assign(defaultOptions, options)
 
-    return tblDom.DataTable(defaultOptions)
+    const table = tblDom.DataTable(defaultOptions)
+
+    // scroll datatable to the top when change page
+    table.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(jQueryDom).offset().top
+        }, 300)
+    })
+
+    return table
 }
 
 export { initDataTable }
