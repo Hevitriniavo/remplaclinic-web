@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<style type="text/css">
+
+
+		body{font-size: 12px;font-family: 'Arial';font-weight: normal;}
+		#main_tab{width: 100%;}
+		.td_head{padding: 5px;font-size: 22px;padding-bottom: 30px;color:#5bb7df;font-weight: bold;}
+		.td_head span{font-size: 12px;color:#292929;}
+		h2{font-size: 26px;color:#5bb7df;padding-top:15px;font-family: 'Arial';}
+		.td_head:first-child{width:320px;}
+		.sub_tab{border:1px solid #292929;width: 95%;padding:10px;}
+		.label{font-weight: bold;color:#2d8eb8;}
+		/*.logod{margin-top:-30px;margin-left: -35px;}*/
+		.droite{width:330px;height:80px;margin-left:10px;}
+		.gauche{width:330px;height:80px;}
+		td{width:345px;}
+
+		</style>
+
+	</head>
+	
+	<body>
+	<table id="main_tab">
+	<tr class="tr_lvl1">
+		<td class="td_lvl1 td_head"><a alt="Remplaclinic" href="https://remplaclinic.fr"><img class="gauche"  src="{{ absolute_url(asset('imgs/pdfs/remplaclinicpdf.jpg')) }}" /></a></td>
+		<td class="td_lvl1 td_head"><img class="droite" src="{{ absolute_url(asset('imgs/pdfs/instalclinicpdf.jpg')) }}" /></td>
+		
+	</tr>
+	
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<h2>Coordonnées</h2>
+		</td>
+	</tr>
+		
+	
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<table class="sub_tab" id="sub_tab1">
+				<tr>
+					<td><span class="label">Nom</span> : {{ user.civility ~ ' ' ~ user.surname ~ ' ' ~ user.name }}<br/><br/>
+						<span class="label">Adresse</span> : {{ user.address.thoroughfare }}<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user.address.postalCode ~ ' ' ~ user.address.locality }}<br/><br/>
+						<span class="label">Téléphone</span> : {{ user.telephone ~ ' / ' ~ user.telephone2 }}<br/>
+						<span class="label">Mail</span> : {{ user.email }}						
+					</td>
+					<td>
+						<span class="label">Né(e) en</span> : {{ user.yearOfBirth }}<br/>
+						<span class="label">Nationalité</span> : {{ user.nationality }}<br/><br/>
+						
+						<span class="label">N° d'inscription à l'ordre des médecins</span> : {{ user.ordinaryNumber }}<br/>
+						<span class="label">Année d'obtention de l'internat</span> : {{ user.yearOfAlternance }}<br/>
+						<span class="label">Statut actuel</span> : {{ user.currentSpecialityAsText }}
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>	
+	
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<h2>Informations</h2>
+		</td>
+	</tr>
+	
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<table class="sub_tab" id="sub_tab2">
+				<tr>
+					<td>
+						<span class="label">Spécialité</span> : {{ user.speciality.name }}<br/><br/>
+						<span class="label">Sous-spécialités</span> :
+                        <ul>
+                        {% for ss_spe in user.subSpecialities %}
+							<li>{{ ss_spe.name }}</li>
+						{% endfor %}
+						</ul>
+					</td>
+					<td>
+						<span class="label">Mobilité</span> :
+                        <ul>
+                        {% for mobilite in user.mobilities %}
+							<li>{{ mobilite.name }}</li>
+						{% endfor %}
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	{% if user.userComment is not empty %}
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<h2>Commentaires</h2>
+		</td>
+	</tr>
+	
+	<tr class="tr_lvl1">
+		<td class="td_lvl1" colspan="2">
+			<table class="sub_tab" id="sub_tab3">
+				<tr>
+					<td>{{ user.userComment }}</td>
+				</tr>
+			</table>
+		</td>
+	</tr>	
+	{% endif %}
+	</table>
+	</body>
+</html>

@@ -90,10 +90,12 @@ $(function () {
         render: function (data, type, row, meta) {
           const deleteUrl = getCleanUrl(tblDom.data('delete-url'), row['id']);
           const detailUrl = getCleanUrl(tblDom.data('detail-url'), row['id']);
+          const ficheUtilisateurUrl = getCleanUrl(tblDom.data('fiche-utilisateur-url'), row['id']);
           return (
             "<div>" +
-            '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'"><i class="fas fa-edit"></i></a>' +
-            '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'"><i class="fas fa-trash"></i></a>' +
+            '<a class="btn btn-sm btn-outline-info btn-edit" href="'+ detailUrl +'" title="Modifier l\'utilisateur"><i class="fas fa-edit"></i></a>' +
+            '<a class="btn btn-sm btn-outline-info ml-2" href="'+ ficheUtilisateurUrl +'" target="_blank" title="Fiche utilisateur"><i class="fas fa-file"></i></a>' +
+            '<a class="btn btn-sm btn-outline-danger ml-2 btn-delete" data-url="'+ deleteUrl +'" data-id="'+ row['id'] +'" title="Supprimer l\'utilisateur"><i class="fas fa-trash"></i></a>' +
             "</div>"
           );
         },

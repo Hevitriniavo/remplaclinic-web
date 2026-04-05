@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Repository\UserRepository;
+use App\Service\User\FicheUtilisateurService;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -182,6 +183,18 @@ class UserCrudController extends AbstractController
             'breadcrumbs' => $breadcrumbs,
             'user' => $user,
         ]);
+    }
+
+    #[Route('/admin/fiche-utilisateur/{id}', name: 'app_admin_fiche_utilisateur_pdf', requirements: ['id' => '\d+'])]
+    public function generateFicheUtilisateurPdf(int $id, FicheUtilisateurService $ficheUtilisateur)
+    {
+        $user = $this->userRepository->find($id);
+        if (empty($user)) {
+            throw new EntityNotFoundException('No entity found for #' . $id);
+        }
+
+        $ficheUtilisateur->generate($user);
+        exit();
     }
 
     private function getBreadcrumbs(string $title)

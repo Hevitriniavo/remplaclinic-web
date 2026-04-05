@@ -552,7 +552,13 @@ class User
 
     public function getUserComment(): ?string
     {
-        return $this->userComment;
+        $result = '';
+
+        if (!empty($this->userComment)) {
+            $result = str_replace('&#039;', "'", $this->userComment);
+        }
+
+        return $result;
     }
 
     public function setUserComment(?string $userComment): static
