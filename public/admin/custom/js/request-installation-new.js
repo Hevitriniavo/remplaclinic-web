@@ -427,16 +427,27 @@ const app = createApp({
           jQuery('#request-end-at').datepicker('setStartDate', startDate)
         }
       })
+
       jQuery("#request-end-at-input").on("change", function () {
         const endDate = jQuery(this).val()
         const dateParts = endDate ? endDate.split('/') : []
 
         if (!endDate || dateParts.length < 3) {
           showAlert('La date de fin doit respecter le format dd/mm/yyyy.', 'warning')
+          requestData.value.endAt = null
         } else{
           requestData.value.endAt = endDate
           
           jQuery('#request-started-at').datepicker('setEndDate', endDate)
+        }
+      })
+      // clear endAt on blur
+      jQuery("#request-end-at-input").on("blur", function () {
+        const value = jQuery(this).val()
+
+        // If datepicker cleared it silently → sync your state
+        if (!value) {
+          requestData.value.endAt = null
         }
       })
 

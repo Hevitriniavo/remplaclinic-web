@@ -179,6 +179,7 @@ class RequestService
             ->setRemuneration($requestDto->remuneration)
             ->setComment($requestDto->comment)
             ->setStartedAt(DateUtil::parseDate('d/m/Y', $requestDto->startedAt, true))
+            ->setEndAt(DateUtil::parseDate('d/m/Y', $requestDto->endAt, true))
             ->setShowEndAt(!is_null($requestDto->endAt))
         ;
 
