@@ -55,7 +55,7 @@ class ClinicDto
         
         public ?string $establishmentName,
 
-        public ?int $bedsCount,
+        public ?string $bedsCount,
         
         public ?string $siteWeb,
         
