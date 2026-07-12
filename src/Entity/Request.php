@@ -601,4 +601,18 @@ class Request
 
         return $this;
     }
+
+    /**
+     * Pour bloquer les candidatures sur les demandes dans le passe.
+     */
+    public function isOutdated(): bool
+    {
+        $today = new \DateTimeImmutable('today');
+
+        $date = new \DateTimeImmutable(
+            ($this->getEndAt() ?? $this->getStartedAt())->format('Y-m-d')
+        );
+
+        return $date < $today;
+    }
 }
