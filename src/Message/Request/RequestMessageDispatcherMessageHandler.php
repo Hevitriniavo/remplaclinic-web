@@ -2,36 +2,45 @@
 namespace App\Message\Request;
 
 use App\Entity\Request;
+use App\Repository\RequestRepository;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class RequestMessageDispatcher
+#[AsMessageHandler()]
+class RequestMessageDispatcherMessageHandler
 {
-    const SEND_EMAIL_BLOC_COUNT = 10;
-
     public function __construct(
+        private readonly RequestRepository $requestRepository,
         private readonly MessageBusInterface $messageBus,
-    )
-    {}
+    ) {}
 
-    public function dispatchSendEmailMessage(string $eventName, Request $request, array $usersId)
+    public function __invoke(RequestMessageDispatcherMessage $message)
     {
-        $usersCount = count($usersId);
+        // verifier les remplacants
+        $usersCount = count($message->getUsers());
 
         if ($usersCount < 1) {
             return;
         }
 
+        // verifier la demande
+        $request = $this->requestRepository->find($message->getRequestId());
+        if (is_null($request)) {
+            return;
+        }
+
+        // separer l'envoi d'email par bloc de 10
         $bloc = [];
         $blocCount = 0;
 
         for($i = 0; $i < $usersCount; $i++) {
-            $bloc[] = $usersId[$i];
+            $bloc[] = $message->getUsers()[$i];
             $blocCount++;
 
-            if ($blocCount === self::SEND_EMAIL_BLOC_COUNT) {
+            if ($blocCount === $message->getBlocCount()) {
                 
                 $this->messageBus->dispatch(new RequestMessage(
-                    $eventName,
+                    $message->getEventName(),
                     $request->getId(),
                     $request->getRequestType(),
                     $bloc
@@ -44,7 +53,7 @@ class RequestMessageDispatcher
 
         if ($blocCount > 0) {
             $this->messageBus->dispatch(new RequestMessage(
-                $eventName,
+                $message->getEventName(),
                 $request->getId(),
                 $request->getRequestType(),
                 $bloc

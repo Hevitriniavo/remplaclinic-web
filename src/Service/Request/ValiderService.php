@@ -5,20 +5,20 @@ use App\Entity\EmailEvents;
 use App\Entity\Request;
 use App\Entity\RequestHistory;
 use App\Exceptions\ApiException;
-use App\Message\Request\RequestMessageDispatcher;
+use App\Message\Request\RequestMessageDispatcherMessage;
 use App\Repository\RequestResponseRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ValiderService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly RequestResponseRepository $requestResponseRepository,
-        private readonly RequestMessageDispatcher $messageDispatcher,
-    )
-    {}
+        private readonly MessageBusInterface $messageBus,
+    ) {}
 
     public function execute(int $id): Request
     {
@@ -62,10 +62,11 @@ class ValiderService
 
     private function dispatchSendEmailMessage(Request $request, array $usersId)
     {
-        $this->messageDispatcher->dispatchSendEmailMessage(
+        $this->messageBus->dispatch(new RequestMessageDispatcherMessage(
             EmailEvents::REQUEST_VALIDATION,
-            $request,
+            $request->getId(),
+            $request->getRequestType(),
             $usersId
-        );
+        ));
     }
 }
