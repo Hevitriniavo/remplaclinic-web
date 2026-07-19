@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
+        {% include 'google/_head.html.twig' %}
+
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="shortcut icon" href="{{ asset('images/favicon_0.ico') }}" type="image/vnd.microsoft.icon">
@@ -12,6 +14,8 @@
         {% endblock %}
     </head>
     <body class="{% if is_granted('ROLE_ADMIN') and not (app.request.pathinfo starts with '/admin') %} pt-14 {% endif %} {% if cookie_consent() is null %} pb-16 {% endif %}">
+        {% include 'google/_body-start.html.twig' %}
+
         {% if is_granted('ROLE_ADMIN') and not (app.request.pathinfo starts with '/admin') %}
             {% include 'partials/admin_banner.html.twig' %}
         {% endif %}

@@ -4,7 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    app.version: '%env(APP_VERSION)%' # Load from .env
+    app.version: '%env(APP_VERSION)%'
+    app.google.active: '%env(APP_GOOGLE_ACTIVE)%'
+    app.google.id: '%env(APP_GOOGLE_ID)%'
     document_folder: '%kernel.cache_dir%/fiche-utilisateurs'
 
 services:
