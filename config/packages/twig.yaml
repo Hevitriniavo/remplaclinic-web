@@ -2,6 +2,11 @@ twig:
     file_name_pattern: '*.twig'
     form_themes: ['tailwind_2_layout.html.twig']
 
+    # global variables
+    globals:
+        app_google_active: '%app.google.active%'
+        app_google_id: '%app.google.id%'
+
 when@test:
     twig:
         strict_variables: true
