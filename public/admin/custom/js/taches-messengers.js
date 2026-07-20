@@ -7,6 +7,13 @@ $(function () {
   const replacementDetailUrl = tblDom.data('detailReplacementUrl')
   const installationDetailUrl = tblDom.data('detailReplacementUrl')
 
+  const _getRequestDetailUrl = (id, type) => {
+    const requestType = type === 'installation' ? "Proposition d'installation" : 'Demande de remplacement'
+    const detailUrl = type === 'installation' ? installationDetailUrl : replacementDetailUrl
+
+    return `<div><span>${requestType}: </span><a href="${ getCleanUrl(detailUrl, id) }"><span class="text-bold">${id}</span></a></div>`
+  }
+
   const parseDecodedMessage = (decoded, type, row) => {
     const result = {
       eventName: '',
@@ -19,10 +26,8 @@ $(function () {
     switch(type) {
       case 'App\\Message\\Request\\RequestMessage':
 
-        const requestType = decoded.requestType === 'installation' ? "Proposition d'installation" : 'Demande de remplacement'
-        const detailUrl = decoded.requestType === 'installation' ? installationDetailUrl : replacementDetailUrl
         const payload = [
-          `<div><span>${requestType}: </span><a href="${ getCleanUrl(detailUrl, decoded.requestId) }"><span class="text-bold">${decoded.requestId}</span></a></div>`
+          _getRequestDetailUrl(decoded.requestId, decoded.requestType)
         ]
 
         if (decoded.users && decoded.users.length > 0) {
@@ -33,6 +38,14 @@ $(function () {
         result.payload = payload.join('')
 
         break
+      case 'App\\Message\\Request\\RequestMessageDispatcherMessage':
+        result.eventName = decoded.eventName
+        result.payload = [
+          _getRequestDetailUrl(decoded.requestId, decoded.requestType),
+          `<div><span>Nombre des remplacants: ${decoded.users.length}</span></div>`
+        ].join('')
+        
+        break;
       case 'App\\Message\\Ping\\PingMessage':
 
         result.eventName = 'ping:pong'
