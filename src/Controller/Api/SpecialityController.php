@@ -11,19 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
-#[Route('/admin')]
 class SpecialityController extends AbstractController
 {
     public function __construct(private SpecialityRepository $specialityRepository) {}
     
-    #[Route('/api/specialities', name: 'api_speciality_get', methods: ['GET'])]
+    #[Route('/admin/api/specialities', name: 'api_speciality_get', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $params = DataTableParams::fromRequest($request->query->all());
         return $this->json($this->specialityRepository->findAllDataTables($params), 200, [], ['groups' => 'datatable']);
     }
 
-    #[Route('/api/specialities', name: 'api_speciality_new', methods: ['POST'])]
+    #[Route('/admin/api/specialities', name: 'api_speciality_new', methods: ['POST'])]
     public function create(
         #[MapRequestPayload(
             validationFailedStatusCode: Response::HTTP_BAD_REQUEST
@@ -32,7 +31,7 @@ class SpecialityController extends AbstractController
         return $this->json($this->specialityRepository->save($specialityDto), Response::HTTP_CREATED, [], ['groups' => 'datatable']);
     }
 
-    #[Route('/api/specialities/{id}', name: 'api_speciality_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/specialities/{id}', name: 'api_speciality_detail', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getDetail(int $id): Response
     {
         $speciality = $this->specialityRepository->find($id);
@@ -58,7 +57,7 @@ class SpecialityController extends AbstractController
         );
     }
 
-    #[Route('/api/specialities/{id}', name: 'api_speciality_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/specialities/{id}', name: 'api_speciality_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function update(
         int $id,
         #[MapRequestPayload(
@@ -81,7 +80,7 @@ class SpecialityController extends AbstractController
         );
     }
 
-    #[Route('/api/specialities/{id}', name: 'api_speciality_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/specialities/{id}', name: 'api_speciality_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function remove(int $id): Response
     {
         $deleted = $this->specialityRepository->remove($id);
